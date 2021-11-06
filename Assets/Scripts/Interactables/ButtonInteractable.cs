@@ -33,7 +33,7 @@ public class ButtonInteractable : InteractableObject
         }
     }
 
-    public override void IntiateInteract() 
+    protected override void OnInteract() 
     {
         if (!buttonPushed) 
         {

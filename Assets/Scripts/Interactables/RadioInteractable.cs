@@ -8,7 +8,7 @@ public class RadioInteractable : InteractableObject
     public Animator radioAnimatorBack;
 
     public bool radioOn;
-    public override void IntiateInteract()
+    protected override void OnInteract()
     {
         radioOn = !radioOn;
 

@@ -141,7 +141,10 @@ public class CG_CharacterController : MonoBehaviour
                 {
                     currentInteractableGameObject = lookedAtObject.collider.gameObject;
                     currentInteractable = currentInteractableGameObject.GetComponent<InteractableObject>();
-                    interactionPrompt.text = controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " + currentInteractable.ObjectName;
+                    
+                    interactionPrompt.text = currentInteractable.IsInteractable ? 
+                        controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " + currentInteractable.ObjectName 
+                        : "";
                 }
             }
             else
