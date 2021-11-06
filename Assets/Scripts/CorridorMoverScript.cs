@@ -43,9 +43,6 @@ public class CorridorMoverScript : MonoBehaviour
 
             CreateCorridorPrafabForSection(section);
         }
-        //foreach(CorridorSection section in corridorSections) section.toNotifyOnPlayerEnter = this;
-
-
     }
 
     private void CreateCorridorPrafabForSection(CorridorSection section) 
@@ -53,7 +50,6 @@ public class CorridorMoverScript : MonoBehaviour
         if (corridorVarientPrefabs.Any()) 
         {
             CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
-            //layoutGameObj.InitiateLayout();
         }
     }
 
@@ -134,7 +130,8 @@ public class CorridorMoverScript : MonoBehaviour
             
             otherDoors[0].fakeParent = null;
             otherDoors[1].fakeParent = sectionToMove.CorridorStartEnd[1];
-            
+            otherDoors[1].ResetDoor(); //Always reset the door that is moved
+
             sectionToMove.SetAllWavyness(0);
             sectionToMove.FakeParent = section.CorridorStartEnd[1]; //parent the new section to the front of the front section
             sectionToMove.FlipSection = false; //flip it so its facing forward
@@ -182,6 +179,7 @@ public class CorridorMoverScript : MonoBehaviour
 
             otherDoors[0].fakeParent = null;
             otherDoors[1].fakeParent = sectionToMove.CorridorStartEnd[1];
+            otherDoors[1].ResetDoor();
 
             sectionToMove.SetAllWavyness(0);
             sectionToMove.FakeParent = section.CorridorStartEnd[1];

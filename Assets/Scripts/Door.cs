@@ -76,6 +76,14 @@ public class Door : MonoBehaviour
         }
     }
 
+    public void ResetDoor() 
+    {
+        openOnInteract = false;
+        doorAnimator.Play("doorClosed");
+        doorIsOpen = false;
+        doorLocked = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!openOnInteract)
