@@ -1,0 +1,11 @@
+Sounds needed:
+Footstep(s)
+Radio on sound?
+Radio off sound
+Notepad equip sound
+Notepad scribble sound (for when drawing)
+Door opening sound
+Door closing sound
+Door rattle sound (for when it is locked but the player tries to open it?)
+Numpad sound
+Access granted sound?
