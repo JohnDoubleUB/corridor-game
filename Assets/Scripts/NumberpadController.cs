@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class NumberpadController : MonoBehaviour
 {
-    public string password = "2222222";
+    public string password = "12345";
     public Text DisplayText;
     public char passwordGapCharacter = '_';
+
+    public Door doorToLock;
 
     public bool AccessGranted { get { return accessGranted; } } //Shows if the access has been granted, i.e. the correct code has been entered
 
@@ -34,6 +36,7 @@ public class NumberpadController : MonoBehaviour
         {
             DisplayText.text = "Access Granted";
             accessGranted = true;
+            if (doorToLock) doorToLock.doorLocked = false;
         }
         else 
         {
@@ -46,6 +49,12 @@ public class NumberpadController : MonoBehaviour
     {
         blankPassword = new string(passwordGapCharacter, password.Length);
         if (DisplayText != null) DisplayText.text = blankPassword;
+        
+        if (doorToLock != null) 
+        { 
+            doorToLock.doorLocked = true;
+            doorToLock.openOnInteract = true;
+        }
     }
 
     public void InputCharacter(char character)

@@ -16,6 +16,7 @@ public class CG_CharacterController : MonoBehaviour
     public float lookXLimit = 45.0f;
 
     public GameObject playerPencil;
+    public Image playerCrosshair;
 
     public Text interactionPrompt;
 
@@ -121,6 +122,7 @@ public class CG_CharacterController : MonoBehaviour
             Cursor.visible = false;
             NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
             playerPencil.SetActive(!canMove);
+            playerCrosshair.enabled = canMove;
         }
 
     }
