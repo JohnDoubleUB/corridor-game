@@ -105,8 +105,6 @@ public class CorridorMoverScript : MonoBehaviour
         Door[] currentSectionDoors = new Door[0];
         Door[] otherDoors;
 
-        print("Player entered section " + section.name);
-
         foreach (Door corrDoor in corridorDoorSegments) corrDoor.SetWavyness(0);
 
         if (section.sectionType == SectionType.Front)
@@ -129,19 +127,14 @@ public class CorridorMoverScript : MonoBehaviour
             };
             
             otherDoors[0].fakeParent = null;
-            otherDoors[1].fakeParent = sectionToMove.CorridorStartEnd[1];
-            otherDoors[1].ResetDoor(); //Always reset the door that is moved
 
-            sectionToMove.SetAllWavyness(0);
-            sectionToMove.FakeParent = section.CorridorStartEnd[1]; //parent the new section to the front of the front section
-            sectionToMove.FlipSection = false; //flip it so its facing forward
-            sectionToMove.sectionType = SectionType.Front;  //set to be new front
-            sectionToMove.CorridorNumber = section.CorridorNumber + 1;
-            sectionToMove.name = "corridor(" + sectionToMove.CorridorNumber + ")";
-            sectionToMove.SetCorridorStretch(1);
-            sectionToMove.FlipCorridorX = Random.Range(0f, 1f) > 0.5f;
-            sectionToMove.FlipCorridorZ = Random.Range(0f, 1f) > 0.5f;
-            sectionToMove.HasWarped = false;
+
+            CreateNextSection(
+                sectionToMove, 
+                section, 
+                true, 
+                corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
+            );
 
             newEndSection.sectionType = SectionType.Back; //set old middle to be new back
             section.sectionType = SectionType.Middle; //Set current section to middle
@@ -151,12 +144,6 @@ public class CorridorMoverScript : MonoBehaviour
 
             newEndSection.FlipSection = true; //flip back section to be facing away
             newEndSection.FakeParent = section.CorridorStartEnd[0]; //move to link up with last section
-
-            //Destroy the old corridor prefab interior
-            CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
-            foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
-            Destroy(sectionCorridorPrefab.gameObject);
-            CreateCorridorPrafabForSection(sectionToMove);
         }
         else if (section.sectionType == SectionType.Back) 
         {
@@ -178,19 +165,13 @@ public class CorridorMoverScript : MonoBehaviour
             };
 
             otherDoors[0].fakeParent = null;
-            otherDoors[1].fakeParent = sectionToMove.CorridorStartEnd[1];
-            otherDoors[1].ResetDoor();
 
-            sectionToMove.SetAllWavyness(0);
-            sectionToMove.FakeParent = section.CorridorStartEnd[1];
-            sectionToMove.FlipSection = true;
-            sectionToMove.sectionType = SectionType.Back;
-            sectionToMove.CorridorNumber = section.CorridorNumber - 1;
-            sectionToMove.name = "corridor(" + sectionToMove.CorridorNumber + ")";
-            sectionToMove.SetCorridorStretch(1);
-            sectionToMove.FlipCorridorX = Random.Range(0f, 1f) > 0.5f;
-            sectionToMove.FlipCorridorZ = Random.Range(0f, 1f) > 0.5f;
-            sectionToMove.HasWarped = false;
+            CreateNextSection(
+                sectionToMove, 
+                section, 
+                false, 
+                corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
+            );
 
             newEndSection.sectionType = SectionType.Front;
             section.sectionType = SectionType.Middle;
@@ -200,12 +181,6 @@ public class CorridorMoverScript : MonoBehaviour
 
             newEndSection.FlipSection = false;
             newEndSection.FakeParent = section.CorridorStartEnd[0];
-
-            //Destroy the old corridor prefab interior
-            CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
-            foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
-            Destroy(sectionCorridorPrefab.gameObject);
-            CreateCorridorPrafabForSection(sectionToMove);
         }
 
         //Initiate weird extendo times;
@@ -229,6 +204,32 @@ public class CorridorMoverScript : MonoBehaviour
 
             section.HasWarped = true;
         }
+    }
+
+    private void CreateNextSection(CorridorSection sectionToMove, CorridorSection middleSection, bool directionPositive, Door newSectionEndDoor)
+    {
+        newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
+        newSectionEndDoor.ResetDoor();
+
+        sectionToMove.SetAllWavyness(0);
+        sectionToMove.FakeParent = middleSection.CorridorStartEnd[1]; //parent the new section to the front of the front section
+
+        //These change based on if the section is moving in a positive direction or not
+        sectionToMove.FlipSection = !directionPositive; //flip it so its facing forward
+        sectionToMove.sectionType = directionPositive ? SectionType.Front : SectionType.Back;  //set to be new front
+        sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + 1 : middleSection.CorridorNumber - 1;
+
+        sectionToMove.name = "corridor(" + sectionToMove.CorridorNumber + ")";
+        sectionToMove.SetCorridorStretch(1);
+        sectionToMove.HasWarped = false;
+        sectionToMove.FlipCorridorX = Random.Range(0f, 1f) > 0.5f;
+        sectionToMove.FlipCorridorZ = Random.Range(0f, 1f) > 0.5f;
+
+        //Remove old objects and add new
+        CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
+        foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
+        Destroy(sectionCorridorPrefab.gameObject);
+        CreateCorridorPrafabForSection(sectionToMove);
     }
 
     public void OnPlayerExit(CorridorSection section) 
