@@ -12,6 +12,8 @@ public class Door : MonoBehaviour
     public bool openOnInteract;
     public bool doorLocked;
 
+    public GameObject parentIndicator;
+
     public bool IsOpen { get { return doorIsOpen; } }
 
     private bool doorIsOpen;
@@ -45,6 +47,8 @@ public class Door : MonoBehaviour
             doorInteractable.IsInteractable = openOnInteract;
             openOnInteractLast = openOnInteract;
         }
+
+        if (parentIndicator != null) parentIndicator.SetActive(fakeParent == null);
     }
 
     public void SetWavyness(float value)

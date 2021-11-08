@@ -28,6 +28,13 @@ public class CorridorMoverScript : MonoBehaviour
     private CorridorSection sectionToMakeWavy;
     private Door[] doorsToMakeWavy = new Door[0];
 
+    private GameObject corridorGameParent;
+    private Vector3 playerInitialPosition;
+    private List<Transform> corridorGameChildren = new List<Transform>();
+    private float playerMaxDistance = 1000;
+    private bool playerReachedMaxDistance;
+
+
 
     private void Awake()
     {
@@ -43,6 +50,21 @@ public class CorridorMoverScript : MonoBehaviour
 
             CreateCorridorPrafabForSection(section);
         }
+    }
+
+    private void Start()
+    {
+        playerTransform = GameManager.current.player.transform;
+        //create parent object
+        corridorGameParent = new GameObject("GameParent");
+        corridorGameParent.transform.position = Vector3.zero;
+
+        //track player position inital
+        playerInitialPosition = playerTransform.position;
+        //parent everything under it!
+        corridorGameChildren.Add(playerTransform);
+        corridorGameChildren.AddRange(corridorSections.Select(x => x.transform).Concat(corridorDoorSegments.Select(x => x.transform)).ToArray());
+        foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
     private void CreateCorridorPrafabForSection(CorridorSection section) 
@@ -95,20 +117,47 @@ public class CorridorMoverScript : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if (playerReachedMaxDistance) 
+        {
+            Vector3 playerCurrentPos = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
+            Vector3 playerIntialPos = new Vector3(playerInitialPosition.x, 0, playerInitialPosition.z);
+
+            corridorGameParent.transform.position = playerIntialPos - playerCurrentPos;
+            foreach (Transform child in corridorGameChildren) child.SetParent(null);
+            corridorGameParent.transform.position = Vector3.zero;
+            foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
+
+            playerReachedMaxDistance = false;
+        }
+    }
+
     public void OnPlayerEnter(CorridorSection section, Transform playerTransform) 
     {
+        //Check
+        CheckPlayerDistance();
+
 
         //Get furthest away corridor piece
         CorridorSection sectionToMove;
         CorridorSection newEndSection;
         CorridorSection[] orderedSections = GetOrderedSections;
         Door[] currentSectionDoors = new Door[0];
-        Door[] otherDoors;
+        Door newEndDoor;
+
+
 
         foreach (Door corrDoor in corridorDoorSegments) corrDoor.SetWavyness(0);
 
         if (section.sectionType == SectionType.Front)
         {
+            print("forward");
+            //Get section to move and new end section i.e last middle
+            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Back);
+            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
+
+
             currentSectionDoors = new Door[] {
                 corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[0].position, x.transform.position)).First(),
                 corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[1].position, x.transform.position)).First()
@@ -117,17 +166,10 @@ public class CorridorMoverScript : MonoBehaviour
             currentSectionDoors[0].fakeParent = section.CorridorStartEnd[0];
             currentSectionDoors[1].fakeParent = section.CorridorStartEnd[1];
 
-            //Get section to move and new end section i.e last middle
-            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Back);
-            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
 
-            otherDoors = new Door[] {
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First(),
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
-            };
-            
-            otherDoors[0].fakeParent = null;
 
+            newEndDoor = corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First();
+            newEndDoor.fakeParent = null;
 
             CreateNextSection(
                 sectionToMove, 
@@ -144,9 +186,13 @@ public class CorridorMoverScript : MonoBehaviour
 
             newEndSection.FlipSection = true; //flip back section to be facing away
             newEndSection.FakeParent = section.CorridorStartEnd[0]; //move to link up with last section
+
         }
         else if (section.sectionType == SectionType.Back) 
         {
+            print("backward");
+            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Front);
+            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
 
             currentSectionDoors = new Door[] {
                 corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[0].position, x.transform.position)).First(),
@@ -156,15 +202,8 @@ public class CorridorMoverScript : MonoBehaviour
             currentSectionDoors[0].fakeParent = section.CorridorStartEnd[0];
             currentSectionDoors[1].fakeParent = section.CorridorStartEnd[1];
 
-            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Front);
-            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
-
-            otherDoors = new Door[] {
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First(),
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
-            };
-
-            otherDoors[0].fakeParent = null;
+            newEndDoor = corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First();
+            newEndDoor.fakeParent = null;
 
             CreateNextSection(
                 sectionToMove, 
@@ -188,7 +227,7 @@ public class CorridorMoverScript : MonoBehaviour
         {
             if (Random.Range(0f, 1f) > 0.3 && !section.HasWarped)
             {
-                this.playerTransform = playerTransform;
+                //this.playerTransform = playerTransform;
                 stretchTimer = 0;
                 sectionToStretch = section;
                 stretchTarget = Random.Range(1, 5);
@@ -230,6 +269,11 @@ public class CorridorMoverScript : MonoBehaviour
         foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
         Destroy(sectionCorridorPrefab.gameObject);
         CreateCorridorPrafabForSection(sectionToMove);
+    }
+
+    public void CheckPlayerDistance() 
+    {
+        if (Vector3.Distance(playerTransform.position, playerInitialPosition) > playerMaxDistance) playerReachedMaxDistance = true;
     }
 
     public void OnPlayerExit(CorridorSection section) 

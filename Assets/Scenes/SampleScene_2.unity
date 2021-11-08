@@ -1350,6 +1350,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40609098bf359b445bd491a85e3d7d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1213126420 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1891356514287639261}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1237934483
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,6 +2253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
+      propertyPath: FakeParent
+      value: 
+      objectReference: {fileID: 1213126420}
+    - target: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
+        type: 3}
       propertyPath: FlipSection
       value: 1
       objectReference: {fileID: 0}
@@ -2302,7 +2313,7 @@ Transform:
   m_GameObject: {fileID: 2067456595}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 4, y: 0.766, z: -0.04}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0000002, y: 1, z: 1.0000002}
   m_Children:
   - {fileID: 963194228}
   - {fileID: 1583393752}
