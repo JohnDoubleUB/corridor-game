@@ -62,9 +62,11 @@ public class CorridorMoverScript : MonoBehaviour
     private void Start()
     {
         playerTransform = GameManager.current.player.transform;
+
         //create parent object
-        corridorGameParent = new GameObject("GameParent");
-        corridorGameParent.transform.position = Vector3.zero;
+        //corridorGameParent = new GameObject("GameParent");
+        //corridorGameParent.transform.position = Vector3.zero;
+        corridorGameParent = GameManager.current.GameParent;
 
         //track player position inital
         playerInitialPosition = playerTransform.position;
@@ -78,9 +80,10 @@ public class CorridorMoverScript : MonoBehaviour
     {
         if (corridorVarientPrefabs.Any()) 
         {
-            CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
+            CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
             layoutGameObj.SectionDoor = sectionDoor;
             layoutGameObj.InitiateLayout(section.FlipSection);
+
         }
     }
 

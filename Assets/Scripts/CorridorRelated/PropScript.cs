@@ -6,6 +6,11 @@ public class PropScript : MonoBehaviour
 {
     public Transform FakeParent;
     public bool flipXZIfCorridorFlip;
+
+    private void Start()
+    {
+        transform.SetParent(GameManager.current.GameParent.transform);
+    }
     // Update is called once per frame
     void Update()
     {

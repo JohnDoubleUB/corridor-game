@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public CG_CharacterController playerController;
     public Camera trueCamera;
     public TVManController tvMan;
+    public GameObject GameParent;
 
     public float maximumTVManEffectDistance = 10f;
     public bool tvManEffectEnabled = true;
