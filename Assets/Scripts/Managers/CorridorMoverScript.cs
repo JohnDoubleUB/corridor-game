@@ -48,8 +48,15 @@ public class CorridorMoverScript : MonoBehaviour
             if (i == 0) section.sectionType = SectionType.Back;
             else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
 
-            CreateCorridorPrafabForSection(section);
+            CreateCorridorPrafabForSection(section, InitialMappingsForDoorSegments(i));
         }
+    }
+
+    private Door InitialMappingsForDoorSegments(int corridorPiece) 
+    {
+        if (corridorPiece == 0) return corridorDoorSegments[0];
+        else if (corridorPiece == 1) return corridorDoorSegments[2];
+        else return corridorDoorSegments[3];
     }
 
     private void Start()
@@ -67,11 +74,13 @@ public class CorridorMoverScript : MonoBehaviour
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrafabForSection(CorridorSection section) 
+    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor) 
     {
         if (corridorVarientPrefabs.Any()) 
         {
             CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
+            layoutGameObj.SectionDoor = sectionDoor;
+            layoutGameObj.InitiateLayout(section.FlipSection);
         }
     }
 
@@ -268,7 +277,9 @@ public class CorridorMoverScript : MonoBehaviour
         CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
         foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
         Destroy(sectionCorridorPrefab.gameObject);
-        CreateCorridorPrafabForSection(sectionToMove);
+
+        //TODO: Change this so that it does some fancy creation stuff
+        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor);
     }
 
     public void CheckPlayerDistance() 

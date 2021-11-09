@@ -103,7 +103,11 @@ public class Door : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !openOnInteract && doorIsOpen && !doorLocked) PlayDoorCloseAnimation();
+        if (other.gameObject.tag == "Player")
+        {
+            if (!doorLocked && openOnInteract) openOnInteract = false;
+            if (!openOnInteract && doorIsOpen && !doorLocked) PlayDoorCloseAnimation();
+        }
     }
 
 

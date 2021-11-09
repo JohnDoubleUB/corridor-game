@@ -1,23 +1,17 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumberpadController : MonoBehaviour
+public class NumberpadController : PuzzleElementController
 {
     public string password = "12345";
     public Text DisplayText;
     public char passwordGapCharacter = '_';
 
-    public Door doorToLock;
-
-    public bool AccessGranted { get { return accessGranted; } } //Shows if the access has been granted, i.e. the correct code has been entered
-
     private string blankPassword;
     private string currentGuessCharacters = "";
     private bool checkingPassword;
 
-    private bool accessGranted;
 
     private IEnumerator ClearEnteredCodeAfterDelay(float waitTime = 1f) 
     {
@@ -35,8 +29,7 @@ public class NumberpadController : MonoBehaviour
         if (currentGuessCharacters == password)
         {
             DisplayText.text = "Access Granted";
-            accessGranted = true;
-            if (doorToLock) doorToLock.doorLocked = false;
+            PuzzleSolved = true;
         }
         else 
         {
@@ -47,14 +40,18 @@ public class NumberpadController : MonoBehaviour
 
     private void Awake()
     {
+        UpdateBlankPassword();
+    }
+
+    private void Update()
+    {
+        if (blankPassword.Length != password.Length || blankPassword[0] != passwordGapCharacter) UpdateBlankPassword();
+    }
+
+    private void UpdateBlankPassword() 
+    {
         blankPassword = new string(passwordGapCharacter, password.Length);
         if (DisplayText != null) DisplayText.text = blankPassword;
-        
-        if (doorToLock != null) 
-        { 
-            doorToLock.doorLocked = true;
-            doorToLock.openOnInteract = true;
-        }
     }
 
     public void InputCharacter(char character)
