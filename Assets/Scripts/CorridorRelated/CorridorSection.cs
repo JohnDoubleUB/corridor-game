@@ -100,6 +100,17 @@ public class CorridorSection : MonoBehaviour
         }
     }
 
+    public void TogglePropFlip() 
+    {
+        Vector3 currentScale = corridorProps.transform.localScale;
+        corridorProps.transform.localScale = new Vector3(currentScale.x > 0 ? -1 : 1, currentScale.y, currentScale.z);
+    }
+
+    public void SetPropSectionFlip(bool flip)
+    {
+        Vector3 currentScale = corridorProps.transform.localScale;
+        corridorProps.transform.localScale = new Vector3(flip ? -1 : 1, currentScale.y, currentScale.z);
+    }
 
     public void SetCorridorStretch(float scaleX) 
     {

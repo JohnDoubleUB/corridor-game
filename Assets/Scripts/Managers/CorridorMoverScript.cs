@@ -193,6 +193,7 @@ public class CorridorMoverScript : MonoBehaviour
             section.FakeParent = null; //Remove fake parenting
             newEndSection.FakeParent = null;
 
+            if (!newEndSection.FlipSection) newEndSection.TogglePropFlip();
             newEndSection.FlipSection = true; //flip back section to be facing away
             newEndSection.FakeParent = section.CorridorStartEnd[0]; //move to link up with last section
 
@@ -227,6 +228,7 @@ public class CorridorMoverScript : MonoBehaviour
             section.FakeParent = null;
             newEndSection.FakeParent = null;
 
+            if (newEndSection.FlipSection) newEndSection.TogglePropFlip();
             newEndSection.FlipSection = false;
             newEndSection.FakeParent = section.CorridorStartEnd[0];
         }
@@ -259,6 +261,7 @@ public class CorridorMoverScript : MonoBehaviour
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
         newSectionEndDoor.ResetDoor();
 
+        sectionToMove.SetPropSectionFlip(false);
         sectionToMove.SetAllWavyness(0);
         sectionToMove.FakeParent = middleSection.CorridorStartEnd[1]; //parent the new section to the front of the front section
 
