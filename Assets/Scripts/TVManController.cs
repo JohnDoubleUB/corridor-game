@@ -9,7 +9,7 @@ public class TVManController : MonoBehaviour
     public float minumumDistance = 1f;
     private void Update()
     {
-        if (GameManager.current.player != null) 
+        if (GameManager.current != null && GameManager.current.player != null) 
         {
             Vector3 playerPosition = GameManager.current.player.transform.position;
             Vector3 newLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);

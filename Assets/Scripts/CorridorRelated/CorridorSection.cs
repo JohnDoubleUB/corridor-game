@@ -49,12 +49,12 @@ public class CorridorSection : MonoBehaviour
 
     private void Start()
     {
-        MaterialManager.current.TrackMaterials(meshMaterials);
+        if(MaterialManager.current != null) MaterialManager.current.TrackMaterials(meshMaterials);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player") 
+        if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null) 
         {
             toNotifyOnPlayerEnter.OnPlayerEnter(this, other.transform);
         }

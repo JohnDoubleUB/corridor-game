@@ -1,0 +1,49 @@
+Puzzles:
+- Keypad <DONE>
+
+- getting keys for keypad
+- Plynth Items
+- Key lock
+
+Pickupable objects: (These all need doing)
+- Keypad key
+- Momentos (various pickupable items)
+- Key
+- Plynth Items
+
+Interactables:
+- Notes
+
+features, rooms repeat if you don't see a clue
+
+- Rooms repeat if you don't see a clue
+
+
+
+
+
+
+Number based key pad puzzles
+Clues around the rooms
+TV Man following - Means death/game over
+Repeating rooms if you miss a clue/don't complete puzzles that don't include locked doors
+Unsolved puzzles will have clues in opposite directions
+Tutorial keypad puzzle - Room that has the code on the wall will change the second time the user sees it
+Keypad with multiple answers, each answer takes you to a story based room - Unique door
+TV man comes into play after a certain door is unlocked 
+Side character guiding you through through writings etc is a bit of a dick
+Doors open in proximity to TV man
+Objects react to TV man, giving clues. Things don't appear/keypads don't work
+Hidden keys around to open TV Man's room, no important until that point
+Items on Stands to unlock doors
+Keypad missing keys, have to find them
+ambient footsteps
+Your actions impact mystery man, so picking up the notepad makes him lose his, opening TV man door opens it for him
+Rooms with notes are the same apart from slight changes to item placement to make it look like someone's been in the room
+//you lose your notebook at some point
+1 item at a time, putting an item in the correct place and going to get another one, mystery man will steal it and leave a note saying fuck you.
+Intercoms with very simple dialogue choices
+Choose the ending, stay in the hallway and become part of TV man, or leave and eventually die
+Finding belongings of pervious people and giving them to TV man makes him not kill you
+only 1 item slot for everything including puzzles
+fianl room is black with just TV man, he asks you if you want to stay or go
