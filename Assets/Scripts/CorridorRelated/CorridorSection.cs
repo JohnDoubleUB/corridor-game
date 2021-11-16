@@ -56,7 +56,7 @@ public class CorridorSection : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null) 
         {
-            toNotifyOnPlayerEnter.OnPlayerEnter(this, other.transform);
+            toNotifyOnPlayerEnter.OnPlayerEnter(this);
         }
     }
 

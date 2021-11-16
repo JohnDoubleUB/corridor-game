@@ -20,6 +20,9 @@ public class CorridorLayoutHandler : MonoBehaviour
     public PropScript[] Props;
 
     public Door sectionDoor;
+
+    public bool IsPuzzleSection { get { return PuzzleElements != null && PuzzleElements.Any(); } }
+
     private bool layoutIntitated;
 
     public PuzzleElementController[] PuzzleElements;

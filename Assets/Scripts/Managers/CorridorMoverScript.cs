@@ -7,7 +7,7 @@ public class CorridorMoverScript : MonoBehaviour
 {
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
-    public GameObject[] corridorVarientPrefabs; 
+    public GameObject[] corridorVarientPrefabs;
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
@@ -38,13 +38,13 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < corridorSections.Count; i++) 
+        for (int i = 0; i < corridorSections.Count; i++)
         {
             CorridorSection section = corridorSections[i];
             section.toNotifyOnPlayerEnter = this;
             section.name = "corridor(" + i + ")";
             section.CorridorNumber = i;
-            
+
             if (i == 0) section.sectionType = SectionType.Back;
             else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
 
@@ -52,7 +52,7 @@ public class CorridorMoverScript : MonoBehaviour
         }
     }
 
-    private Door InitialMappingsForDoorSegments(int corridorPiece) 
+    private Door InitialMappingsForDoorSegments(int corridorPiece)
     {
         if (corridorPiece == 0) return corridorDoorSegments[0];
         else if (corridorPiece == 1) return corridorDoorSegments[2];
@@ -62,23 +62,20 @@ public class CorridorMoverScript : MonoBehaviour
     private void Start()
     {
         playerTransform = GameManager.current.player.transform;
-
-        //create parent object
-        //corridorGameParent = new GameObject("GameParent");
-        //corridorGameParent.transform.position = Vector3.zero;
         corridorGameParent = GameManager.current.GameParent;
 
         //track player position inital
         playerInitialPosition = playerTransform.position;
+
         //parent everything under it!
         corridorGameChildren.Add(playerTransform);
         corridorGameChildren.AddRange(corridorSections.Select(x => x.transform).Concat(corridorDoorSegments.Select(x => x.transform)).ToArray());
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor) 
+    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor)
     {
-        if (corridorVarientPrefabs.Any()) 
+        if (corridorVarientPrefabs.Any())
         {
             CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
             layoutGameObj.SectionDoor = sectionDoor;
@@ -89,7 +86,7 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void Update()
     {
-        if (sectionToStretch != null) 
+        if (sectionToStretch != null)
         {
 
             if (Mathf.Abs(sectionToStretch.transform.localScale.x) < Mathf.Abs(stretchTarget))
@@ -99,14 +96,14 @@ public class CorridorMoverScript : MonoBehaviour
 
                 sectionToStretch.SetCorridorStretch(currentStretch);
             }
-            else 
+            else
             {
                 stretchTimer = 0;
                 sectionToStretch = null;
             }
         }
 
-        if (sectionToMakeWavy != null) 
+        if (sectionToMakeWavy != null)
         {
             if (currentWavy < wavyTarget)
             {
@@ -117,7 +114,7 @@ public class CorridorMoverScript : MonoBehaviour
                 foreach (Door secDoor in doorsToMakeWavy) secDoor.SetWavyness(currentWavy);
 
             }
-            else 
+            else
             {
                 currentWavy = 0;
                 wavyTimer = 0;
@@ -131,7 +128,7 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (playerReachedMaxDistance) 
+        if (playerReachedMaxDistance)
         {
             Vector3 playerCurrentPos = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
             Vector3 playerIntialPos = new Vector3(playerInitialPosition.x, 0, playerInitialPosition.z);
@@ -145,117 +142,77 @@ public class CorridorMoverScript : MonoBehaviour
         }
     }
 
-    public void OnPlayerEnter(CorridorSection section, Transform playerTransform) 
+    public void OnPlayerEnter(CorridorSection currentSection)
     {
-        //Check
+        //Check if player has traveled too far from world origin
         CheckPlayerDistance();
 
-
         //Get furthest away corridor piece
-        CorridorSection sectionToMove;
-        CorridorSection newEndSection;
-        CorridorSection[] orderedSections = GetOrderedSections;
         Door[] currentSectionDoors = new Door[0];
-        Door newEndDoor;
 
-
-
+        //Stop all wavyness on doors
         foreach (Door corrDoor in corridorDoorSegments) corrDoor.SetWavyness(0);
 
-        if (section.sectionType == SectionType.Front)
+        if (currentSection.sectionType != SectionType.Middle)
         {
-            print("forward");
-            //Get section to move and new end section i.e last middle
-            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Back);
-            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
+            bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
+            SectionType sectionToMoveType = sectionToMoveWasFront ? SectionType.Back : SectionType.Front;
+            CorridorSection[] orderedSections = GetOrderedSections;
+            CorridorSection sectionToMove = orderedSections.Single(x => x.sectionType == sectionToMoveType);
+            CorridorSection newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
 
 
             currentSectionDoors = new Door[] {
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[0].position, x.transform.position)).First(),
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[1].position, x.transform.position)).First()
+                corridorDoorSegments.OrderBy(x => Vector3.Distance(currentSection.CorridorStartEnd[0].position, x.transform.position)).First(),
+                corridorDoorSegments.OrderBy(x => Vector3.Distance(currentSection.CorridorStartEnd[1].position, x.transform.position)).First()
             };
 
-            currentSectionDoors[0].fakeParent = section.CorridorStartEnd[0];
-            currentSectionDoors[1].fakeParent = section.CorridorStartEnd[1];
+            currentSectionDoors[0].fakeParent = currentSection.CorridorStartEnd[0];
+            currentSectionDoors[1].fakeParent = currentSection.CorridorStartEnd[1];
 
-
-
-            newEndDoor = corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First();
+            Door newEndDoor = corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First();
             newEndDoor.fakeParent = null;
 
             CreateNextSection(
-                sectionToMove, 
-                section, 
-                true, 
+                sectionToMove,
+                currentSection,
+                sectionToMoveWasFront,
                 corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
             );
 
-            newEndSection.sectionType = SectionType.Back; //set old middle to be new back
-            section.sectionType = SectionType.Middle; //Set current section to middle
+            newEndSection.sectionType = sectionToMoveType; //set old middle to be new front/back
+            currentSection.sectionType = SectionType.Middle; //Set current section to middle
 
-            section.FakeParent = null; //Remove fake parenting
+            currentSection.FakeParent = null;
             newEndSection.FakeParent = null;
 
-            if (!newEndSection.FlipSection) newEndSection.TogglePropFlip();
-            newEndSection.FlipSection = true; //flip back section to be facing away
-            newEndSection.FakeParent = section.CorridorStartEnd[0]; //move to link up with last section
 
-        }
-        else if (section.sectionType == SectionType.Back) 
-        {
-            print("backward");
-            sectionToMove = orderedSections.Single(x => x.sectionType == SectionType.Front);
-            newEndSection = orderedSections.Single(x => x.sectionType == SectionType.Middle);
+            if(sectionToMoveWasFront != newEndSection.FlipSection) newEndSection.TogglePropFlip();
 
-            currentSectionDoors = new Door[] {
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[0].position, x.transform.position)).First(),
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(section.CorridorStartEnd[1].position, x.transform.position)).First()
-            };
-
-            currentSectionDoors[0].fakeParent = section.CorridorStartEnd[0];
-            currentSectionDoors[1].fakeParent = section.CorridorStartEnd[1];
-
-            newEndDoor = corridorDoorSegments.OrderBy(x => Vector3.Distance(newEndSection.CorridorStartEnd[0].position, x.transform.position)).First();
-            newEndDoor.fakeParent = null;
-
-            CreateNextSection(
-                sectionToMove, 
-                section, 
-                false, 
-                corridorDoorSegments.OrderBy(x => Vector3.Distance(sectionToMove.CorridorStartEnd[1].position, x.transform.position)).First()
-            );
-
-            newEndSection.sectionType = SectionType.Front;
-            section.sectionType = SectionType.Middle;
-
-            section.FakeParent = null;
-            newEndSection.FakeParent = null;
-
-            if (newEndSection.FlipSection) newEndSection.TogglePropFlip();
-            newEndSection.FlipSection = false;
-            newEndSection.FakeParent = section.CorridorStartEnd[0];
+            newEndSection.FlipSection = sectionToMoveWasFront; //flip back section to be facing away
+            newEndSection.FakeParent = currentSection.CorridorStartEnd[0]; //move to link up with last section
         }
 
         //Initiate weird extendo times;
-        if (section.CorridorNumber % 2 == 0) 
+        if (currentSection.CorridorNumber % 2 == 0)
         {
-            if (Random.Range(0f, 1f) > 0.3 && !section.HasWarped)
+            if (Random.Range(0f, 1f) > 0.3 && !currentSection.HasWarped)
             {
                 //this.playerTransform = playerTransform;
                 stretchTimer = 0;
-                sectionToStretch = section;
+                sectionToStretch = currentSection;
                 stretchTarget = Random.Range(1, 5);
             }
 
             if (Random.Range(0f, 1f) > 0.3)
             {
                 wavyTimer = 0;
-                sectionToMakeWavy = section;
+                sectionToMakeWavy = currentSection;
                 currentWavy = 0;
                 doorsToMakeWavy = currentSectionDoors;
             }
 
-            section.HasWarped = true;
+            currentSection.HasWarped = true;
         }
     }
 
@@ -288,12 +245,12 @@ public class CorridorMoverScript : MonoBehaviour
         CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor);
     }
 
-    public void CheckPlayerDistance() 
+    public void CheckPlayerDistance()
     {
         if (Vector3.Distance(playerTransform.position, playerInitialPosition) > playerMaxDistance) playerReachedMaxDistance = true;
     }
 
-    public void OnPlayerExit(CorridorSection section) 
+    public void OnPlayerExit(CorridorSection section)
     {
         print("Player exited section " + section.name);
     }
