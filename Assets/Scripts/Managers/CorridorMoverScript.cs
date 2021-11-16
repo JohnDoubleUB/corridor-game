@@ -66,7 +66,7 @@ public class CorridorMoverScript : MonoBehaviour
     {
         if (Levels.Any() && CurrentLevel < Levels.Length)
         {
-            levelCorridorPrefabs = Levels[CurrentLevel].CorridorLayouts;
+            levelCorridorPrefabs = Levels[CurrentLevel-1].CorridorLayouts;
         }
 
         currentLevelChangeTracking = CurrentLevel;

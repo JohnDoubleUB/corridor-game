@@ -2051,6 +2051,10 @@ MonoBehaviour:
   - {fileID: 7863090247449907744, guid: 6152166423ec1a4439672afad9c3cb85, type: 3}
   - {fileID: 1719918666097567818, guid: d66597fb31a6bd843b9b08c407f498ef, type: 3}
   OnlyUseRandomAssortedCorridorLayouts: 0
+  Levels:
+  - {fileID: 11400000, guid: f5459b8a6ed3d8d47941bf1258a66758, type: 2}
+  - {fileID: 11400000, guid: 50df7f653cf53194e85d40108f3b6bd6, type: 2}
+  CurrentLevel: 1
   levelCorridorPrefabs:
   - {fileID: 5706549757614248288, guid: 466fbd33209de4849912f30878ec7d5a, type: 3}
   - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
