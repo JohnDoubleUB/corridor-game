@@ -64,13 +64,16 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void UpdateLevel() 
     {
-        if (Levels.Any() && CurrentLevel < Levels.Length)
+        if (Levels.Any())
         {
-            levelCorridorPrefabs = Levels[CurrentLevel-1].CorridorLayouts;
+            print("this happens too");
+            levelCorridorPrefabs = CurrentLevelData.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
         }
 
         currentLevelChangeTracking = CurrentLevel;
     }
+
+    private LevelDataScriptableObject CurrentLevelData { get { return Levels.First(x => x.LevelNumber == CurrentLevel); } }
 
     private void RenumberSections() 
     {
@@ -205,8 +208,9 @@ public class CorridorMoverScript : MonoBehaviour
         if (currentSection.sectionType != SectionType.Middle)
         {
             //Check if we are in a trigger section or not
-            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && Levels[CurrentLevel].GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange)) 
+            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && CurrentLevelData.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange)) 
             {
+                print("happening changing to level: " + levelChange);
                 RenumberSections();
                 CurrentLevel = levelChange;
                 UpdateLevel();
