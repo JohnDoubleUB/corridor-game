@@ -5,6 +5,9 @@ using System.Linq;
 
 public class CorridorLayoutHandler : MonoBehaviour
 {
+    public int layoutLevelNumber;
+    public int layoutNumber;
+
     public Door SectionDoor
     { 
         set 

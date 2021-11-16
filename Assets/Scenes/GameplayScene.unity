@@ -2044,13 +2044,19 @@ MonoBehaviour:
   - {fileID: 1835833469}
   - {fileID: 1972671495}
   - {fileID: 212955298}
-  corridorVarientPrefabs:
-  - {fileID: 7418575949572918993, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
-  - {fileID: 2166366578630329059, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
-  - {fileID: 7418575949572918993, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
-  - {fileID: 8154456997183828407, guid: d66597fb31a6bd843b9b08c407f498ef, type: 3}
-  - {fileID: 3962222547799503442, guid: d0ba5138f2b382342b8d7fae4f33fa8f, type: 3}
-  - {fileID: 6701050057769128175, guid: 6152166423ec1a4439672afad9c3cb85, type: 3}
+  corridorRandomPrefabs:
+  - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
+  - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
+  - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
+  - {fileID: 7863090247449907744, guid: 6152166423ec1a4439672afad9c3cb85, type: 3}
+  - {fileID: 1719918666097567818, guid: d66597fb31a6bd843b9b08c407f498ef, type: 3}
+  OnlyUseRandomAssortedCorridorLayouts: 0
+  levelCorridorPrefabs:
+  - {fileID: 5706549757614248288, guid: 466fbd33209de4849912f30878ec7d5a, type: 3}
+  - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
+  - {fileID: 8502516513757351436, guid: 438caa5ee7d4dc34c9107b6174ec553a, type: 3}
+  - {fileID: 8720562560379247226, guid: 26c5111db5ba16845a254b7206999fb9, type: 3}
+  - {fileID: 1028531646186853634, guid: 4baa1ffb0799d5a4bb00affe842b32a8, type: 3}
 --- !u!114 &1838609638
 MonoBehaviour:
   m_ObjectHideFlags: 0

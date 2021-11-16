@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf94e1f253f0a5448f4e037304e92d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layoutLevelNumber: 1
+  layoutNumber: 1
   Props: []
   sectionDoor: {fileID: 0}
   PuzzleElements: []

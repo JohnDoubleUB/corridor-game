@@ -7,7 +7,15 @@ public class CorridorMoverScript : MonoBehaviour
 {
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
-    public GameObject[] corridorVarientPrefabs;
+
+    public CorridorLayoutHandler[] corridorRandomPrefabs;
+    public bool OnlyUseRandomAssortedCorridorLayouts;
+
+    public LevelDataScriptableObject[] Levels;
+    public int CurrentLevel = 1;
+    private int currentLevelChangeTracking;
+
+    public CorridorLayoutHandler[] levelCorridorPrefabs;
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
@@ -38,6 +46,8 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void Awake()
     {
+        UpdateLevel();
+
         for (int i = 0; i < corridorSections.Count; i++)
         {
             CorridorSection section = corridorSections[i];
@@ -48,7 +58,29 @@ public class CorridorMoverScript : MonoBehaviour
             if (i == 0) section.sectionType = SectionType.Back;
             else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
 
-            CreateCorridorPrafabForSection(section, InitialMappingsForDoorSegments(i));
+            CreateCorridorPrafabForSection(section, InitialMappingsForDoorSegments(i), i);
+        }
+    }
+
+    private void UpdateLevel() 
+    {
+        if (Levels.Any() && CurrentLevel < Levels.Length)
+        {
+            levelCorridorPrefabs = Levels[CurrentLevel].CorridorLayouts;
+        }
+
+        currentLevelChangeTracking = CurrentLevel;
+    }
+
+    private void RenumberSections() 
+    {
+        CorridorSection[] orderedSections = GetOrderedSections;
+
+        for (int i = 0; i < orderedSections.Length; i++) 
+        {
+            CorridorSection oSection = orderedSections[i];
+            oSection.name = "corridor(" + i + ")";
+            oSection.CorridorNumber = i;
         }
     }
 
@@ -73,14 +105,24 @@ public class CorridorMoverScript : MonoBehaviour
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor)
+    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor, int index)
     {
-        if (corridorVarientPrefabs.Any())
+        CorridorLayoutHandler layoutGameObj = null;
+
+        if (OnlyUseRandomAssortedCorridorLayouts && corridorRandomPrefabs.Any())
         {
-            CorridorLayoutHandler layoutGameObj = Instantiate(corridorVarientPrefabs[Random.Range(0, corridorVarientPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform).GetComponent<CorridorLayoutHandler>();
+            layoutGameObj = Instantiate(corridorRandomPrefabs[Random.Range(0, corridorRandomPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+        }
+        else if (levelCorridorPrefabs != null && levelCorridorPrefabs.Any())
+        {
+            layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+        }
+
+        if (layoutGameObj != null)
+        {
             layoutGameObj.SectionDoor = sectionDoor;
             layoutGameObj.InitiateLayout(section.FlipSection);
-
+            section.CurrentLayout = layoutGameObj;
         }
     }
 
@@ -121,9 +163,15 @@ public class CorridorMoverScript : MonoBehaviour
                 sectionToMakeWavy = null;
                 doorsToMakeWavy = new Door[0];
             }
-
-
         }
+
+
+        if (currentLevelChangeTracking != CurrentLevel) 
+        {
+            RenumberSections();
+            UpdateLevel(); 
+        }
+
     }
 
     private void LateUpdate()
@@ -153,8 +201,18 @@ public class CorridorMoverScript : MonoBehaviour
         //Stop all wavyness on doors
         foreach (Door corrDoor in corridorDoorSegments) corrDoor.SetWavyness(0);
 
+
         if (currentSection.sectionType != SectionType.Middle)
         {
+            //Check if we are in a trigger section or not
+            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && Levels[CurrentLevel].GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange)) 
+            {
+                RenumberSections();
+                CurrentLevel = levelChange;
+                UpdateLevel();
+            }
+
+
             bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
             SectionType sectionToMoveType = sectionToMoveWasFront ? SectionType.Back : SectionType.Front;
             CorridorSection[] orderedSections = GetOrderedSections;
@@ -186,15 +244,14 @@ public class CorridorMoverScript : MonoBehaviour
             currentSection.FakeParent = null;
             newEndSection.FakeParent = null;
 
-
-            if(sectionToMoveWasFront != newEndSection.FlipSection) newEndSection.TogglePropFlip();
+            if (sectionToMoveWasFront != newEndSection.FlipSection) newEndSection.TogglePropFlip();
 
             newEndSection.FlipSection = sectionToMoveWasFront; //flip back section to be facing away
             newEndSection.FakeParent = currentSection.CorridorStartEnd[0]; //move to link up with last section
         }
 
         //Initiate weird extendo times;
-        if (currentSection.CorridorNumber % 2 == 0)
+        if (false && currentSection.CorridorNumber % 2 == 0)
         {
             if (Random.Range(0f, 1f) > 0.3 && !currentSection.HasWarped)
             {
@@ -228,7 +285,11 @@ public class CorridorMoverScript : MonoBehaviour
         //These change based on if the section is moving in a positive direction or not
         sectionToMove.FlipSection = !directionPositive; //flip it so its facing forward
         sectionToMove.sectionType = directionPositive ? SectionType.Front : SectionType.Back;  //set to be new front
-        sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + 1 : middleSection.CorridorNumber - 1;
+        int corridorNumberChange = middleSection.CorridorNumber == 0 ? 2 : 1;
+        sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + corridorNumberChange : middleSection.CorridorNumber - corridorNumberChange;
+        //sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + 1 : middleSection.CorridorNumber - 1;
+        //sectionToMove.CorridorNumber = corridorNumberChange;
+
 
         sectionToMove.name = "corridor(" + sectionToMove.CorridorNumber + ")";
         sectionToMove.SetCorridorStretch(1);
@@ -242,7 +303,7 @@ public class CorridorMoverScript : MonoBehaviour
         Destroy(sectionCorridorPrefab.gameObject);
 
         //TODO: Change this so that it does some fancy creation stuff
-        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor);
+        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber);
     }
 
     public void CheckPlayerDistance()
