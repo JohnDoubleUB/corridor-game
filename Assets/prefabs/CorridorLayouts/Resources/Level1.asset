@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Level1_Data
-  m_EditorClassIdentifier: Assembly-CSharp::LevelDataScriptableObject
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level1
+  m_EditorClassIdentifier: 
   LevelNumber: 1
   CorridorLayouts:
   - {fileID: 5706549757614248288, guid: 466fbd33209de4849912f30878ec7d5a, type: 3}
@@ -20,6 +20,6 @@ MonoBehaviour:
   - {fileID: 8720562560379247226, guid: 26c5111db5ba16845a254b7206999fb9, type: 3}
   - {fileID: 1028531646186853634, guid: 4baa1ffb0799d5a4bb00affe842b32a8, type: 3}
   CompleteLevelTriggerOnLayoutNumber:
-  - Name: Change to level 2
+  - Name: 
     LayoutNumberTrigger: 3
     LevelChange: 2

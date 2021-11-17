@@ -11,7 +11,8 @@ public class CorridorMoverScript : MonoBehaviour
     public CorridorLayoutHandler[] corridorRandomPrefabs;
     public bool OnlyUseRandomAssortedCorridorLayouts;
 
-    public LevelDataScriptableObject[] Levels;
+    public List<LevelData> Levels;
+
     public int CurrentLevel = 1;
     private int currentLevelChangeTracking;
 
@@ -62,24 +63,29 @@ public class CorridorMoverScript : MonoBehaviour
         }
     }
 
-    private void UpdateLevel() 
+    private void UpdateLevel()
     {
-        if (Levels.Any())
-        {
-            print("this happens too");
-            levelCorridorPrefabs = CurrentLevelData.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
+        if (Levels != null && Levels.Any())
+        { 
+            levelCorridorPrefabs = GetCurrentLevelData.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
         }
 
         currentLevelChangeTracking = CurrentLevel;
     }
 
-    private LevelDataScriptableObject CurrentLevelData { get { return Levels.First(x => x.LevelNumber == CurrentLevel); } }
+    private LevelData GetCurrentLevelData
+    {
+        get 
+        {
+            return Levels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
+        }
+    }
 
-    private void RenumberSections() 
+    private void RenumberSections()
     {
         CorridorSection[] orderedSections = GetOrderedSections;
 
-        for (int i = 0; i < orderedSections.Length; i++) 
+        for (int i = 0; i < orderedSections.Length; i++)
         {
             CorridorSection oSection = orderedSections[i];
             oSection.name = "corridor(" + i + ")";
@@ -169,10 +175,10 @@ public class CorridorMoverScript : MonoBehaviour
         }
 
 
-        if (currentLevelChangeTracking != CurrentLevel) 
+        if (currentLevelChangeTracking != CurrentLevel)
         {
             RenumberSections();
-            UpdateLevel(); 
+            UpdateLevel();
         }
 
     }
@@ -208,7 +214,7 @@ public class CorridorMoverScript : MonoBehaviour
         if (currentSection.sectionType != SectionType.Middle)
         {
             //Check if we are in a trigger section or not
-            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && CurrentLevelData.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange)) 
+            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && GetCurrentLevelData.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange))
             {
                 print("happening changing to level: " + levelChange);
                 RenumberSections();
@@ -255,7 +261,7 @@ public class CorridorMoverScript : MonoBehaviour
         }
 
         //Initiate weird extendo times;
-        if (false && currentSection.CorridorNumber % 2 == 0)
+        if (currentSection.CorridorNumber % 2 == 0)
         {
             if (Random.Range(0f, 1f) > 0.3 && !currentSection.HasWarped)
             {
@@ -291,8 +297,6 @@ public class CorridorMoverScript : MonoBehaviour
         sectionToMove.sectionType = directionPositive ? SectionType.Front : SectionType.Back;  //set to be new front
         int corridorNumberChange = middleSection.CorridorNumber == 0 ? 2 : 1;
         sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + corridorNumberChange : middleSection.CorridorNumber - corridorNumberChange;
-        //sectionToMove.CorridorNumber = directionPositive ? middleSection.CorridorNumber + 1 : middleSection.CorridorNumber - 1;
-        //sectionToMove.CorridorNumber = corridorNumberChange;
 
 
         sectionToMove.name = "corridor(" + sectionToMove.CorridorNumber + ")";

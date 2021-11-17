@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Level_Data", menuName = "ScriptableObjects/LevelDataScriptableObject", order = 1)]
-public class LevelDataScriptableObject : ScriptableObject
+[CreateAssetMenu(fileName = "LevelData", menuName = "ScriptableObjects/LevelDataScriptableObject", order = 1)]
+public class LevelData : ScriptableObject
 {
     public int LevelNumber;
     public CorridorLayoutHandler[] CorridorLayouts;
