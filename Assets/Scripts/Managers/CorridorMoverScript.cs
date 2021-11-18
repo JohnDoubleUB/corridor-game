@@ -12,6 +12,7 @@ public class CorridorMoverScript : MonoBehaviour
     public bool OnlyUseRandomAssortedCorridorLayouts;
 
     public List<LevelData> Levels;
+    private List<LevelData_Loaded> LoadedLevels;
 
     public int CurrentLevel = 1;
     private int currentLevelChangeTracking;
@@ -47,6 +48,9 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void Awake()
     {
+        //Load levels
+        LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+
         UpdateLevel();
 
         for (int i = 0; i < corridorSections.Count; i++)
@@ -73,13 +77,16 @@ public class CorridorMoverScript : MonoBehaviour
         currentLevelChangeTracking = CurrentLevel;
     }
 
-    private LevelData GetCurrentLevelData
+    private LevelData_Loaded GetCurrentLevelData
     {
         get 
         {
-            return Levels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
+            cachedCurrentLevelData = LoadedLevels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
+            return cachedCurrentLevelData;
         }
     }
+
+    private LevelData_Loaded cachedCurrentLevelData;
 
     private void RenumberSections()
     {
@@ -130,7 +137,9 @@ public class CorridorMoverScript : MonoBehaviour
         if (layoutGameObj != null)
         {
             layoutGameObj.SectionDoor = sectionDoor;
-            layoutGameObj.InitiateLayout(section.FlipSection);
+            //layoutGameObj.
+            layoutGameObj.InitiateLayout(section.FlipSection, cachedCurrentLevelData);
+
             section.CurrentLayout = layoutGameObj;
         }
     }
@@ -261,7 +270,7 @@ public class CorridorMoverScript : MonoBehaviour
         }
 
         //Initiate weird extendo times;
-        if (currentSection.CorridorNumber % 2 == 0)
+        if (false && currentSection.CorridorNumber % 2 == 0)
         {
             if (Random.Range(0f, 1f) > 0.3 && !currentSection.HasWarped)
             {

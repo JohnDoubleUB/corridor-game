@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class CorridorLayoutHandler : MonoBehaviour
 {
     public int layoutLevelNumber;
     public int layoutNumber;
+
+    private LevelData_Loaded levelData;
 
     public Door SectionDoor
     { 
@@ -22,6 +25,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     }
     public PropScript[] Props;
 
+
     public Door sectionDoor;
 
     public bool IsPuzzleSection { get { return PuzzleElements != null && PuzzleElements.Any(); } }
@@ -33,13 +37,30 @@ public class CorridorLayoutHandler : MonoBehaviour
     {
         Props = GetComponentsInChildren<PropScript>();
         //InitiateLayout();
-        foreach (PuzzleElementController puzzleElement in PuzzleElements) puzzleElement.LayoutHandler = this;
+        //foreach (PuzzleElementController puzzleElement in PuzzleElements) 
+        //{ 
+        //    puzzleElement.LayoutHandler = this;
+            
+        //    //Set the passwords and store in the layout!
+        //    if (puzzleElement is NumberpadController) 
+        //    {
+        //        NumberpadController numberpadElement = (NumberpadController)puzzleElement;
+        //        //NumberPads.Add(puzzleElement);
+        //        print("New password is: " + numberpadElement.password);
+        //    }
+        //}
+
+
+
     }
 
-    public void InitiateLayout(bool sectionIsFlipped = false) 
+    public void InitiateLayout(bool sectionIsFlipped, LevelData_Loaded levelData) 
     {
         if (!layoutIntitated)
         {
+            this.levelData = levelData;
+            
+            //Setup prop parenting
             foreach (PropScript prop in Props)
             {
                 GameObject trueChild = new GameObject(prop.name + "_TrueChild");
@@ -49,8 +70,28 @@ public class CorridorLayoutHandler : MonoBehaviour
                 prop.transform.SetParent(null);
                 prop.FakeParent = trueChild.transform;
                 prop.AccountForCorridorFlip(sectionIsFlipped); //Ensure meshes account for flip if needed
-                //prop.transform.localScale = Vector3.one; //Ensure meshes aren't reversed
             }
+
+            int numberPadCount = 0;
+
+            //Setup codes
+            foreach (PuzzleElementController puzzleElement in PuzzleElements)
+            {
+                puzzleElement.LayoutHandler = this;
+
+                //Set the passwords and store in the layout!
+                if (puzzleElement is NumberpadController && levelData != null)
+                {
+                    NumberpadController numberpadElement = (NumberpadController)puzzleElement;
+                    numberpadElement.password = levelData.NumberpadPasswords[numberPadCount];
+                    numberPadCount++;
+                    print("password is: " + numberpadElement.password);
+                }
+
+                //TODO: set some new thing that displays the code somewhere!
+            }
+
+
             layoutIntitated = true;
         }
     }

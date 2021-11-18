@@ -370,7 +370,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158676736}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 34, y: 0, z: 0}
+  m_LocalPosition: {x: 34, y: 0, z: -13.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124715450}
@@ -389,11 +389,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefd7dcff3cd57449bf5613145e663c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTowardPlayer: 1
+  moveTowardPlayer: 0
   movementSpeed: 2
   minumumDistance: 1
   xTeleportDistanceFromPlayer: 60
-  teleportAwayWhenAtMinimumDistance: 1
+  teleportAwayWhenAtMinimumDistance: 0
 --- !u!1 &199754982 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3163950216028485538, guid: f32b440fe64c6d84fa9187a259a644f3,

@@ -23,3 +23,6 @@ MonoBehaviour:
   - Name: 
     LayoutNumberTrigger: 3
     LevelChange: 2
+  NumberpadPasswords:
+  - possibleCharacters: 0123456789
+    passwordLength: 6
