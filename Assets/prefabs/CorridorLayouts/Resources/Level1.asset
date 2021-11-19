@@ -25,4 +25,4 @@ MonoBehaviour:
     LevelChange: 2
   NumberpadPasswords:
   - possibleCharacters: 0123456789
-    passwordLength: 6
+    passwordLength: 5

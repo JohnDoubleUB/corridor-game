@@ -13,6 +13,14 @@ public class TVManController : MonoBehaviour
 
     private bool playerFacingPositive;
 
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+
     private void Start()
     {
         if(teleportAwayWhenAtMinimumDistance) TeleportXAwayFromPosition(xTeleportDistanceFromPlayer);
@@ -20,6 +28,8 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
+        if (audioSource.enabled != moveTowardPlayer) audioSource.enabled = moveTowardPlayer;
+
         if (GameManager.current != null && GameManager.current.player != null) 
         {
             //print("player forward vector: " + GameManager.current.player.transform.forward);
