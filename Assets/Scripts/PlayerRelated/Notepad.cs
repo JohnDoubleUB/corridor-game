@@ -10,12 +10,19 @@ public class Notepad : MonoBehaviour
     public List<Vector3> linePositions;
     public bool CanWrite; // Animation related
     public bool PencilOverPadArea; //To Keep track of if the pencil is over the pad
+    
+    public AudioSource pencilDrawingSource;
+    public AudioClip eraseLineSound;
+    public AudioClip drawingSound;
+
+    private bool newLine;
 
     private bool isWriting;
 
     public LineRenderer lineRenderer;
 
     private Vector3 currentPlayerLinePosition;
+    private Vector3 lastFrameLinePosition;
 
     private List<LineRenderer> lineRenderers = new List<LineRenderer>();
     private List<WritingObject> writingObjects = new List<WritingObject>();
@@ -36,7 +43,6 @@ public class Notepad : MonoBehaviour
                 {
                     UpdateLine(tempLinePos);
                 }
-
                 isWriting = true;
             }
             else 
@@ -53,11 +59,36 @@ public class Notepad : MonoBehaviour
                     {
                         writingObjects.Remove(closestWriting);
                         Destroy(closestWriting.LineRenderer.gameObject);
+                        AudioManager.current.PlayClipAt(eraseLineSound, transform.position, 1f, true);
                     }
                 }
             }
+
+
+            PlayDrawingSound(isWriting && lastFrameLinePosition != currentPlayerLinePosition);
+            lastFrameLinePosition = currentPlayerLinePosition;
+
         }
 
+    }
+
+    public void PlayDrawingSound(bool playSound = true) 
+    {
+        pencilDrawingSource.transform.localPosition = currentPlayerLinePosition;
+
+        if (playSound)
+        {
+            if (!pencilDrawingSource.isPlaying)
+            {
+                pencilDrawingSource.clip = drawingSound;
+                pencilDrawingSource.pitch = Random.Range(0.85f, 1f);
+                pencilDrawingSource.Play();
+            }
+        }
+        else 
+        {
+            pencilDrawingSource.Stop();
+        }
     }
 
     public void DrawAt(Vector3 drawlocation) 
@@ -87,6 +118,7 @@ public class Notepad : MonoBehaviour
         lineRenderer.SetPosition(1, linePositions[1]);
         lineRenderers.Add(lineRenderer);
         writingObjects.Add(new WritingObject(lineRenderer));
+        newLine = true;
     }
 
     void UpdateLine(Vector3 newLinePos) 
