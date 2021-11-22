@@ -309,10 +309,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c155e80dbff77499901806f651fc63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LayoutHandler: {fileID: 0}
+  DoorToLock: {fileID: 0}
   password: 12345
   DisplayText: {fileID: 1636822479183181211}
   passwordGapCharacter: 95
-  doorToLock: {fileID: 0}
+  buttonPressSound: {fileID: 8300000, guid: e653ef01418a9c44f9a43fc007ccfa6a, type: 3}
+  numberPadCorrectSound: {fileID: 8300000, guid: 164447ca67cae02459e8515f80e6471b,
+    type: 3}
+  numberPadIncorrectSound: {fileID: 8300000, guid: ec3f3c5e3794c3d4688581e895c636d9,
+    type: 3}
+  incorrectSound: {fileID: 8300000, guid: 4c37c0cdf7be46b4da163d6b0b7e1db1, type: 3}
 --- !u!1001 &1636822477766001828
 PrefabInstance:
   m_ObjectHideFlags: 0

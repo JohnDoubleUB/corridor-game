@@ -18,7 +18,7 @@ public class CorridorLayoutHandler : MonoBehaviour
             sectionDoor = value;
             if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved)) 
             {
-                sectionDoor.doorLocked = true;
+                sectionDoor.DoorLocked = true;
                 sectionDoor.openOnInteract = true;
             } 
         } 
@@ -36,22 +36,6 @@ public class CorridorLayoutHandler : MonoBehaviour
     private void Awake()
     {
         Props = GetComponentsInChildren<PropScript>();
-        //InitiateLayout();
-        //foreach (PuzzleElementController puzzleElement in PuzzleElements) 
-        //{ 
-        //    puzzleElement.LayoutHandler = this;
-            
-        //    //Set the passwords and store in the layout!
-        //    if (puzzleElement is NumberpadController) 
-        //    {
-        //        NumberpadController numberpadElement = (NumberpadController)puzzleElement;
-        //        //NumberPads.Add(puzzleElement);
-        //        print("New password is: " + numberpadElement.password);
-        //    }
-        //}
-
-
-
     }
 
     public void InitiateLayout(bool sectionIsFlipped, LevelData_Loaded levelData) 
@@ -100,7 +84,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     {
         if (!PuzzleElements.Any(x => !x.PuzzleSolved)) 
         {
-            sectionDoor.doorLocked = false;
+            sectionDoor.DoorLocked = false;
         }
     }
 }

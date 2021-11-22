@@ -27,18 +27,21 @@ public class GameManager : MonoBehaviour
 
     private void TVManEffectUpdate() 
     {
-        if (tvMan != null && player != null && MaterialManager.current != null) 
+        if (tvMan != null && player != null && MaterialManager.current != null && AudioManager.current != null) 
         {
             float distanceFromPlayer = Vector3.Distance(tvMan.transform.position, player.transform.position);
 
-            if (distanceFromPlayer <= maximumTVManEffectDistance && tvManEffectEnabled)
+            if (distanceFromPlayer <= maximumTVManEffectDistance && tvManEffectEnabled && tvMan.moveTowardPlayer)
             {
                 float remappedValue = distanceFromPlayer.Remap(maximumTVManEffectDistance, tvMan.minumumDistance + 0.5f, 0f, 1f);
                 MaterialManager.current.alternateBlend = remappedValue;
+                AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, remappedValue);
+
             }
-            else if (MaterialManager.current.alternateBlend != 0) 
+            else if (MaterialManager.current.alternateBlend != 0 || AudioManager.current.FirstPersonPlayerSource.isPlaying) 
             {
                 MaterialManager.current.alternateBlend = 0;
+                AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, 0f);
             }
             //MaterialManager.current.alternateBlend = Mathf.Lerp(0f, 1f, )
 

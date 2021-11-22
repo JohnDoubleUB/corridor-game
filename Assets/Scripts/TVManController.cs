@@ -28,7 +28,17 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
-        if (audioSource.enabled != moveTowardPlayer) audioSource.enabled = moveTowardPlayer;
+        if (audioSource.isPlaying != moveTowardPlayer) 
+        {
+            if (moveTowardPlayer)
+            {
+                audioSource.Play();
+            }
+            else 
+            {
+                audioSource.Stop();
+            }
+        }
 
         if (GameManager.current != null && GameManager.current.player != null) 
         {

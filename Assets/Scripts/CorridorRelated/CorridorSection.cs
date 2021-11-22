@@ -65,7 +65,7 @@ public class CorridorSection : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            print("Player exited");
+            //print("Player exited");
         }
     }
 

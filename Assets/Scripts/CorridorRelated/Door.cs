@@ -8,15 +8,34 @@ public class Door : MonoBehaviour
     public DoorInteractable doorInteractable;
     private int relativePlayerDirection = -1;
     public Transform fakeParent;
+
+    public AudioClip correctOpenSound;
+
+    public AudioClip openSound;
+    public AudioClip closeSound;
+    public AudioClip rattleSound;
+    public AudioClip slamCloseSound;
     
     public bool openOnInteract;
-    public bool doorLocked;
 
     public bool IsOpen { get { return doorIsOpen; } }
 
+    public bool DoorLocked 
+    {
+        get { return doorLocked; }
+        set 
+        {
+            if (!value && doorLocked) justUnlocked = true;
+            doorLocked = value;
+        }
+    }
+
+    private bool doorLocked;
     private bool doorIsOpen;
     private Material[] meshMaterials;
     private bool openOnInteractLast;
+    private bool justUnlocked;
+    private bool doorIsClosing;
 
 
     private void Awake()
@@ -45,6 +64,12 @@ public class Door : MonoBehaviour
             doorInteractable.IsInteractable = openOnInteract;
             openOnInteractLast = openOnInteract;
         }
+
+        if (doorIsClosing && doorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f) 
+        {
+            AudioManager.current.PlayClipAt(slamCloseSound, transform.position, 0.4f, true);
+            doorIsClosing = false;
+        }
     }
 
     public void SetWavyness(float value)
@@ -60,6 +85,11 @@ public class Door : MonoBehaviour
             {
                 UpdateRelativePlayerDirection();
                 PlayDoorOpenAnimation();
+                if (justUnlocked) 
+                {
+                    AudioManager.current.PlayClipAt(correctOpenSound, transform.position, 1f, false);
+                    justUnlocked = false;
+                }
             }
             else
             {
@@ -110,18 +140,22 @@ public class Door : MonoBehaviour
     private void PlayDoorOpenAnimation() 
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "openForward" : "openBackward");
+        AudioManager.current.PlayClipAt(openSound, transform.position, 0.4f, true);
         doorIsOpen = true;
     }
 
     private void PlayDoorCloseAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "closeForward" : "closeBackward");
+        AudioManager.current.PlayClipAt(closeSound, transform.position, 0.4f, true);
+        doorIsClosing = true;
         doorIsOpen = false;
     }
 
     private void PlayDoorRattleAnimation() 
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "rattleForward" : "rattleBackward");
+        AudioManager.current.PlayClipAt(rattleSound, transform.position, 1f, true);
     }
 
     private void UpdateRelativePlayerDirection(Transform player = null) 

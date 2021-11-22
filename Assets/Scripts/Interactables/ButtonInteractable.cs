@@ -40,7 +40,7 @@ public class ButtonInteractable : InteractableObject
         if (!buttonPushed) 
         {
             buttonPushed = true;
-            if (numberPadController != null) numberPadController.InputCharacter(ObjectName.ToCharArray()[0]);
+            if (numberPadController != null) numberPadController.InputCharacter(ObjectName.ToCharArray()[0], transform);
             //timer = 0;
         }
     }

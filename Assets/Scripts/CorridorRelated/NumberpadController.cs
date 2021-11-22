@@ -8,6 +8,12 @@ public class NumberpadController : PuzzleElementController
     public Text DisplayText;
     public char passwordGapCharacter = '_';
 
+    public AudioClip buttonPressSound;
+    public AudioClip numberPadCorrectSound;
+    public AudioClip numberPadIncorrectSound;
+    
+    public AudioClip incorrectSound;
+
     private string blankPassword;
     private string currentGuessCharacters = "";
     private bool checkingPassword;
@@ -30,10 +36,13 @@ public class NumberpadController : PuzzleElementController
         {
             DisplayText.text = "Access Granted";
             PuzzleSolved = true;
+            AudioManager.current.PlayClipAt(numberPadCorrectSound, transform.position, 0.5f, false);
         }
         else 
         {
             DisplayText.text = "Access Denied";
+            AudioManager.current.PlayClipAt(numberPadIncorrectSound, transform.position, 0.5f, false);
+            AudioManager.current.PlayClipAt(incorrectSound, GameManager.current.player.transform.position, 1f, false);
             StartCoroutine(ClearEnteredCodeAfterDelay());
         }
     }
@@ -54,7 +63,7 @@ public class NumberpadController : PuzzleElementController
         if (DisplayText != null) DisplayText.text = blankPassword;
     }
 
-    public void InputCharacter(char character)
+    public void InputCharacter(char character, Transform inputLocation = null)
     {
         if (!checkingPassword)
         {
@@ -81,6 +90,7 @@ public class NumberpadController : PuzzleElementController
             }
 
             UpdateDisplay();
+            PlayPressSoundAtLocation(inputLocation);
         }
 
     }
@@ -93,5 +103,10 @@ public class NumberpadController : PuzzleElementController
             for (int i = 0; i < password.Length; i++) result += i < currentGuessCharacters.Length ? currentGuessCharacters[i] : passwordGapCharacter;
             DisplayText.text = !string.IsNullOrEmpty(result) ? result : blankPassword;
         }
+    }
+
+    private void PlayPressSoundAtLocation(Transform locationTransform = null) 
+    {
+        if (buttonPressSound != null) AudioManager.current.PlayClipAt(buttonPressSound, locationTransform != null ? locationTransform.position : transform.position, 0.5f, true);
     }
 }

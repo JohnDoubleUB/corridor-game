@@ -6,8 +6,20 @@ public class RadioInteractable : InteractableObject
 {
     public Animator radioAnimatorFront;
     public Animator radioAnimatorBack;
+    
+    public AudioClip RadioOnOffSound;
+    public AudioClip RadioDroneSound;
+    
+    public AudioSource RadioSpeaker;
+    public float RadioSpeakerDefaultVolume = 0.5f;
 
     public bool radioOn;
+
+    private void Awake()
+    {
+        RadioSpeaker.clip = RadioDroneSound;
+        RadioSpeaker.volume = RadioSpeakerDefaultVolume;
+    }
     protected override void OnInteract()
     {
         radioOn = !radioOn;
@@ -20,6 +32,17 @@ public class RadioInteractable : InteractableObject
         if (radioAnimatorBack != null) 
         {
             radioAnimatorBack.Play(radioOn ? "On" : "Off");
+        }
+
+        AudioManager.current.PlayClipAt(RadioOnOffSound, transform.position, 1f, true);
+
+        if (radioOn)
+        {
+            RadioSpeaker.Play();
+        }
+        else 
+        {
+            RadioSpeaker.Stop();
         }
     }
 }

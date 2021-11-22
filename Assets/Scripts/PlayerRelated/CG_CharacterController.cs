@@ -7,7 +7,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour
 {
-    private InputMaster controls;
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
@@ -15,12 +14,18 @@ public class CG_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
 
+    public bool IsJumping { get { return characterIsJumping; } }
+
+
     public GameObject playerPencil;
     public Image playerCrosshair;
 
     public Text interactionPrompt;
 
     public Animator NotepadAnimator;
+
+    public Transform footStepPosition;
+    public AudioClip playerLandSound; 
 
     CharacterController characterController;
     [HideInInspector]
@@ -30,6 +35,8 @@ public class CG_CharacterController : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
 
+    private InputMaster controls;
+
     private GameObject currentInteractableGameObject;
     private InteractableObject currentInteractable;
 
@@ -37,6 +44,7 @@ public class CG_CharacterController : MonoBehaviour
     private Notepad notepadObject;
 
     private int pencilLayerMask;
+    private bool characterIsJumping;
 
     private void OnEnable()
     {
@@ -85,9 +93,16 @@ public class CG_CharacterController : MonoBehaviour
             float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
+            if (characterIsJumping) 
+            {
+                characterIsJumping = false;
+                if (playerLandSound != null) AudioManager.current.PlayClipAt(playerLandSound, footStepPosition.position, 0.1f, true);
+            }
+
             if (Input.GetButtonDown("Jump") && canMove)
             {
                 moveDirection.y = jumpSpeed;
+                characterIsJumping = true;
             }
         }
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
