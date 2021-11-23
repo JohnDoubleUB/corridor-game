@@ -16,13 +16,13 @@ public static class ExtensionMethods
             {
                 Texture2D newText = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
                 Color[] colors = newText.GetPixels();
-                Debug.Log("sprite x: " + sprite.textureRect.x);
+                //Debug.Log("sprite x: " + sprite.textureRect.x);
 
                 Color[] newColors = sprite.texture.GetPixels((int)System.Math.Ceiling(sprite.rect.x),
                                                              (int)System.Math.Ceiling(sprite.rect.y),
                                                              (int)System.Math.Ceiling(sprite.rect.width),
                                                              (int)System.Math.Ceiling(sprite.rect.height));
-                Debug.Log(colors.Length + "_" + newColors.Length);
+                //Debug.Log(colors.Length + "_" + newColors.Length);
                 newText.SetPixels(newColors);
                 newText.Apply();
                 return newText;

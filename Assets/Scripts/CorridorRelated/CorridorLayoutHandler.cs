@@ -35,6 +35,8 @@ public class CorridorLayoutHandler : MonoBehaviour
     private bool layoutIntitated;
 
     public PuzzleElementController[] PuzzleElements;
+    public DecalClueObject[] DecalClueObjects;
+
     private void Awake()
     {
         Props = GetComponentsInChildren<PropScript>();
@@ -74,12 +76,14 @@ public class CorridorLayoutHandler : MonoBehaviour
                     print("password is: " + numberpadElement.password);
                     numberPadPasswords.Add(numberpadElement.password);
                 }
-
-                //TODO: set some new thing that displays the code somewhere!
-
-
             }
 
+
+            foreach (DecalClueObject clueObject in DecalClueObjects)
+            {
+                print("set clue to: " + levelData.NumberpadPasswords[clueObject.ClueNumber]);
+                clueObject.clue = levelData.NumberpadPasswords[clueObject.ClueNumber];
+            }
 
             layoutIntitated = true;
         }

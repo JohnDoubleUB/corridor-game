@@ -44,7 +44,7 @@ public class SpriteDecal : MonoBehaviour
 
     private void OnDestroy()
     {
-        print("I'm being destroyed, but don't worry, the material I have won't stick around! (Delete this message later)");
+        //print("I'm being destroyed, but don't worry, the material I have won't stick around! (Delete this message later)");
         Destroy(decalProjector.material);
     }
 }

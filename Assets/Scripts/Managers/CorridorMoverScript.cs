@@ -70,7 +70,7 @@ public class CorridorMoverScript : MonoBehaviour
     private void UpdateLevel()
     {
         if (Levels != null && Levels.Any())
-        { 
+        {
             levelCorridorPrefabs = GetCurrentLevelData.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
         }
 
@@ -190,6 +190,12 @@ public class CorridorMoverScript : MonoBehaviour
             UpdateLevel();
         }
 
+        //Because I'm lazy
+        if (CurrentLevel == 2 && !GameManager.current.tvMan.moveTowardPlayer)
+        {
+            GameManager.current.tvMan.moveTowardPlayer = true;
+        }
+
     }
 
     private void LateUpdate()
@@ -225,7 +231,6 @@ public class CorridorMoverScript : MonoBehaviour
             //Check if we are in a trigger section or not
             if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && GetCurrentLevelData.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange))
             {
-                print("happening changing to level: " + levelChange);
                 RenumberSections();
                 CurrentLevel = levelChange;
                 UpdateLevel();

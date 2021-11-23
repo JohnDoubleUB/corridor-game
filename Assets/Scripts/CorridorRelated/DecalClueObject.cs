@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DecalClueObject : MonoBehaviour
 {
+    public int ClueNumber;
+
     public string clue;
     private string lastClue;
 
