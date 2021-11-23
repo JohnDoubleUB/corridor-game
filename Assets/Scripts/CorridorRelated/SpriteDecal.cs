@@ -8,6 +8,8 @@ public class SpriteDecal : MonoBehaviour
     private DecalProjector decalProjector;
 
     public char character;
+    public DecalProjector DecalProjector { get { return decalProjector; } }
+
 
     private char lastCharacter;
     private string decalNumbers = "1234567890";
@@ -38,5 +40,11 @@ public class SpriteDecal : MonoBehaviour
             decalProjector.material.SetTexture("_MainTex", newTexture);
             lastCharacter = character;
         }
+    }
+
+    private void OnDestroy()
+    {
+        print("I'm being destroyed, but don't worry, the material I have won't stick around! (Delete this message later)");
+        Destroy(decalProjector.material);
     }
 }
