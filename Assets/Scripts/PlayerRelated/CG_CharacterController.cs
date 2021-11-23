@@ -20,6 +20,9 @@ public class CG_CharacterController : MonoBehaviour
     public GameObject playerPencil;
     public Image playerCrosshair;
 
+    public Sprite crosshairNormal;
+    public Sprite crosshairInteract;
+
     public Text interactionPrompt;
 
     public Animator NotepadAnimator;
@@ -162,6 +165,8 @@ public class CG_CharacterController : MonoBehaviour
                     interactionPrompt.text = currentInteractable.IsInteractable ? 
                         controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " + currentInteractable.ObjectName 
                         : "";
+
+                    if(currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
                 }
             }
             else
@@ -173,6 +178,7 @@ public class CG_CharacterController : MonoBehaviour
                     currentInteractableGameObject = null;
                     currentInteractable = null;
                     interactionPrompt.text = "";
+                    playerCrosshair.sprite = crosshairNormal;
                 }
             }
         }
