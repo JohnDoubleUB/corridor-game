@@ -15,8 +15,6 @@ public class Notepad : MonoBehaviour
     public AudioClip eraseLineSound;
     public AudioClip drawingSound;
 
-    private bool newLine;
-
     private bool isWriting;
 
     public LineRenderer lineRenderer;
@@ -118,7 +116,6 @@ public class Notepad : MonoBehaviour
         lineRenderer.SetPosition(1, linePositions[1]);
         lineRenderers.Add(lineRenderer);
         writingObjects.Add(new WritingObject(lineRenderer));
-        newLine = true;
     }
 
     void UpdateLine(Vector3 newLinePos) 

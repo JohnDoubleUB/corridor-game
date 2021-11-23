@@ -11,6 +11,8 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private LevelData_Loaded levelData;
 
+    private List<string> numberPadPasswords = new List<string>();
+
     public Door SectionDoor
     { 
         set 
@@ -70,9 +72,12 @@ public class CorridorLayoutHandler : MonoBehaviour
                     numberpadElement.password = levelData.NumberpadPasswords[numberPadCount];
                     numberPadCount++;
                     print("password is: " + numberpadElement.password);
+                    numberPadPasswords.Add(numberpadElement.password);
                 }
 
                 //TODO: set some new thing that displays the code somewhere!
+
+
             }
 
 

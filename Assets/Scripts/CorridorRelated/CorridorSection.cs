@@ -37,6 +37,8 @@ public class CorridorSection : MonoBehaviour
 
     private float defaultVariationAmplitude;
 
+    private BoxCollider boxCol;
+
     private void Awake()
     {
         defaultCorX = corridorTransform.localScale.x;
@@ -46,6 +48,7 @@ public class CorridorSection : MonoBehaviour
         currentFlipZ = FlipCorridorZ;
         currentSectionFlip = FlipSection;
         defaultVariationAmplitude = meshMaterials[0].GetFloat("_VariationAmplitude");
+        boxCol = GetComponent<BoxCollider>();
     }
 
     private void Start()

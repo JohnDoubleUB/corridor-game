@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,10 +15,24 @@ public class GameManager : MonoBehaviour
     public float maximumTVManEffectDistance = 10f;
     public bool tvManEffectEnabled = true;
 
+    public Sprite[] DecalNumberSprites;
+
+    public Texture[] DecalNumberTextures { get { return decalNumberTextures; } }
+
+    private Texture[] decalNumberTextures;
+
     private void Awake()
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
+
+        //Load the decal numbers
+
+        if (DecalNumberSprites != null && DecalNumberSprites.Any() && decalNumberTextures == null || !decalNumberTextures.Any()) 
+        {
+            decalNumberTextures = DecalNumberSprites.Select(x => x.ConvertSpriteToTexture()).ToArray();
+            foreach (Texture decalNoTex in decalNumberTextures) decalNoTex.filterMode = FilterMode.Point;
+        }
     }
 
     private void Update()
