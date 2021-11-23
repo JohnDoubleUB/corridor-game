@@ -40,7 +40,7 @@ public class Door : MonoBehaviour
 
     private void Awake()
     {
-        meshMaterials = GetComponent<MeshRenderer>().materials;
+        meshMaterials = GetComponent<MeshRenderer>().sharedMaterials;
         doorInteractable.door = this;
 
         openOnInteractLast = openOnInteract;

@@ -19,17 +19,17 @@ public class MaterialTracker : MonoBehaviour
     {
         if (meshRenderer != null && MaterialManager.current != null) 
         {
-            MaterialManager.current.TrackMaterials(meshRenderer.materials);
+            MaterialManager.current.TrackMaterials(meshRenderer.sharedMaterials);
         }
 
         if (spriteRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.TrackMaterials(spriteRenderer.materials);
+            MaterialManager.current.TrackMaterials(spriteRenderer.sharedMaterials);
         }
 
         if (otherObjectRenderers.Any() && MaterialManager.current != null) 
         {
-            MaterialManager.current.TrackMaterials(otherObjectRenderers.SelectMany(x => x.materials).ToArray());
+            MaterialManager.current.TrackMaterials(otherObjectRenderers.SelectMany(x => x.sharedMaterials).ToArray());
         }
 
     }
@@ -38,17 +38,17 @@ public class MaterialTracker : MonoBehaviour
     {
         if (meshRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.UntrackMaterials(meshRenderer.materials);
+            MaterialManager.current.UntrackMaterials(meshRenderer.sharedMaterials);
         }
 
         if (spriteRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.UntrackMaterials(spriteRenderer.materials);
+            MaterialManager.current.UntrackMaterials(spriteRenderer.sharedMaterials);
         }
 
         if (otherObjectRenderers.Any() && MaterialManager.current != null)
         {
-            MaterialManager.current.UntrackMaterials(otherObjectRenderers.SelectMany(x => x.materials).ToArray());
+            MaterialManager.current.UntrackMaterials(otherObjectRenderers.SelectMany(x => x.sharedMaterials).ToArray());
         }
     }
 }
