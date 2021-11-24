@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6829092650830547027}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.085128784, y: -0.012666883, z: -0.090506464}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FakeParent: {fileID: 0}
-  flipXZIfCorridorFlip: 1
+  flipXZIfCorridorFlip: 0
 --- !u!1 &7544100642754596095
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
   Props: []
   sectionDoor: {fileID: 0}
   PuzzleElements: []
+  DecalClueObjects: []
 --- !u!1001 &2490920411167244644
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -221,17 +222,17 @@ PrefabInstance:
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}

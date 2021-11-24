@@ -19,10 +19,15 @@ MonoBehaviour:
   - {fileID: 8502516513757351436, guid: 438caa5ee7d4dc34c9107b6174ec553a, type: 3}
   - {fileID: 8720562560379247226, guid: 26c5111db5ba16845a254b7206999fb9, type: 3}
   - {fileID: 1028531646186853634, guid: 4baa1ffb0799d5a4bb00affe842b32a8, type: 3}
-  CompleteLevelTriggerOnLayoutNumber:
-  - Name: 
-    LayoutNumberTrigger: 3
-    LevelChange: 2
+  BackwardOnlyLayouts: []
   NumberpadPasswords:
   - possibleCharacters: 0123456789
     passwordLength: 5
+  CompleteLevelTriggerOnLayoutNumber:
+  - Name: Change to level 2
+    LayoutNumberTrigger: 3
+    LevelChange: 2
+  CompleteLevelOnTraveledSectionCount:
+  - Name: Change to 3
+    SectionCount: 8
+    LevelChange: 1

@@ -59,12 +59,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true) 
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f) 
     {
-        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1);
+        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds);
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch)
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch, float delayInSeconds)
     {
         GameObject tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
@@ -73,7 +73,7 @@ public class AudioManager : MonoBehaviour
         aSource.pitch = pitch;
         aSource.volume = volume;
 
-        aSource.Play(); // start the sound
+        aSource.PlayDelayed(delayInSeconds); // start the sound
         Destroy(tempGO, clip.length); // destroy object after clip duration
         return aSource; // return the AudioSource reference
     }

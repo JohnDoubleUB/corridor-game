@@ -67,7 +67,7 @@ public class Door : MonoBehaviour
 
         if (doorIsClosing && doorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f) 
         {
-            AudioManager.current.PlayClipAt(slamCloseSound, transform.position, 0.4f, true);
+            transform.PlayClipAtTransform(slamCloseSound, true, 0.4f, true);
             doorIsClosing = false;
         }
     }
@@ -87,7 +87,7 @@ public class Door : MonoBehaviour
                 PlayDoorOpenAnimation();
                 if (justUnlocked) 
                 {
-                    AudioManager.current.PlayClipAt(correctOpenSound, transform.position, 1f, false);
+                    transform.PlayClipAtTransform(correctOpenSound, true, 1f, false, 0.3f);
                     justUnlocked = false;
                 }
             }
@@ -140,14 +140,14 @@ public class Door : MonoBehaviour
     private void PlayDoorOpenAnimation() 
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "openForward" : "openBackward");
-        AudioManager.current.PlayClipAt(openSound, transform.position, 0.4f, true);
+        transform.PlayClipAtTransform(openSound, true, 0.4f);
         doorIsOpen = true;
     }
 
     private void PlayDoorCloseAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "closeForward" : "closeBackward");
-        AudioManager.current.PlayClipAt(closeSound, transform.position, 0.4f, true);
+        transform.PlayClipAtTransform(closeSound, true, 0.4f);
         doorIsClosing = true;
         doorIsOpen = false;
     }
@@ -155,7 +155,7 @@ public class Door : MonoBehaviour
     private void PlayDoorRattleAnimation() 
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "rattleForward" : "rattleBackward");
-        AudioManager.current.PlayClipAt(rattleSound, transform.position, 1f, true);
+        transform.PlayClipAtTransform(rattleSound);
     }
 
     private void UpdateRelativePlayerDirection(Transform player = null) 

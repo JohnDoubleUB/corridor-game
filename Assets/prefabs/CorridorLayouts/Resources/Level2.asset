@@ -17,4 +17,11 @@ MonoBehaviour:
   - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
   - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
   - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
+  BackwardOnlyLayouts: []
+  NumberpadPasswords: []
   CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount:
+  - Name: Change back to level 1
+    SectionCount: 6
+    LevelChange: 1
+    RandomSectionRange: 2

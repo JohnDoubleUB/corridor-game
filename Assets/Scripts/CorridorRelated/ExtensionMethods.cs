@@ -36,4 +36,13 @@ public static class ExtensionMethods
         }
     }
 
+    public static void PlayClipAtTransform(this Transform transform, AudioClip clip, bool parentToTransform = true, float volume = 1f, bool withPitchVariation = true, float delayInSeconds = 0f) 
+    {
+        if (AudioManager.current != null) 
+        {
+            AudioSource audio = AudioManager.current.PlayClipAt(clip, transform.position, volume, withPitchVariation, delayInSeconds);
+            if (parentToTransform) audio.transform.parent = transform;
+        }
+    }
+
 }

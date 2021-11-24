@@ -16,6 +16,11 @@ public class CorridorSection : MonoBehaviour
     public CorridorLayoutHandler CurrentLayout;
     public Door DoorPrefab;
     public bool HasWarped;
+    
+    public bool WillStretch;
+    
+    public bool WillWave;
+
 
     public int CorridorNumber;
 

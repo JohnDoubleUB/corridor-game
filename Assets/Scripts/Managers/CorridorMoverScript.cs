@@ -18,6 +18,7 @@ public class CorridorMoverScript : MonoBehaviour
     private int currentLevelChangeTracking;
 
     public CorridorLayoutHandler[] levelCorridorPrefabs;
+    public CorridorLayoutHandler[] levelCorridorBackwardPrefabs;
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
@@ -43,6 +44,8 @@ public class CorridorMoverScript : MonoBehaviour
     private List<Transform> corridorGameChildren = new List<Transform>();
     private float playerMaxDistance = 1000;
     private bool playerReachedMaxDistance;
+
+    public int sectionsTraveledOnCurrentLevel = 0;
 
 
 
@@ -71,7 +74,9 @@ public class CorridorMoverScript : MonoBehaviour
     {
         if (Levels != null && Levels.Any())
         {
-            levelCorridorPrefabs = GetCurrentLevelData.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
+            LevelData_Loaded temp = GetCurrentLevelData;
+            levelCorridorPrefabs = temp.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
+            levelCorridorBackwardPrefabs = temp.BackwardOnlyLayouts;
         }
 
         currentLevelChangeTracking = CurrentLevel;
@@ -121,7 +126,7 @@ public class CorridorMoverScript : MonoBehaviour
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor, int index)
+    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
     {
         CorridorLayoutHandler layoutGameObj = null;
 
@@ -131,15 +136,21 @@ public class CorridorMoverScript : MonoBehaviour
         }
         else if (levelCorridorPrefabs != null && levelCorridorPrefabs.Any())
         {
-            layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+            if (directionPositive || !levelCorridorBackwardPrefabs.Any())
+            {
+                layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+            }
+            else 
+            {
+                layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                section.CorridorNumber = 0;
+            }
         }
 
         if (layoutGameObj != null)
         {
             layoutGameObj.SectionDoor = sectionDoor;
-            //layoutGameObj.
             layoutGameObj.InitiateLayout(section.FlipSection, cachedCurrentLevelData);
-
             section.CurrentLayout = layoutGameObj;
         }
     }
@@ -228,9 +239,13 @@ public class CorridorMoverScript : MonoBehaviour
 
         if (currentSection.sectionType != SectionType.Middle)
         {
+            sectionsTraveledOnCurrentLevel++;
             //Check if we are in a trigger section or not
-            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && GetCurrentLevelData.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out int levelChange))
+            LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
+            int levelChange = -1;
+            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange) || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
+                sectionsTraveledOnCurrentLevel = 0;
                 RenumberSections();
                 CurrentLevel = levelChange;
                 UpdateLevel();
@@ -325,7 +340,7 @@ public class CorridorMoverScript : MonoBehaviour
         Destroy(sectionCorridorPrefab.gameObject);
 
         //TODO: Change this so that it does some fancy creation stuff
-        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber);
+        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
     }
 
     public void CheckPlayerDistance()

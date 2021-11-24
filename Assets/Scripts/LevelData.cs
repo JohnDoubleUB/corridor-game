@@ -8,8 +8,20 @@ public class LevelData : ScriptableObject
 {
     public int LevelNumber;
     public CorridorLayoutHandler[] CorridorLayouts;
-    public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber;
+    public CorridorLayoutHandler[] BackwardOnlyLayouts;
     public NumberpadPassword[] NumberpadPasswords;
+
+    public bool SectionOrdersAreRandom;
+
+    [Header("Room Effects - Random")]
+    public bool AllowRandomScaling;
+    public bool AllowRandomWaving;
+    public int MaxScaleEffectCount;
+    public int MaxWaveEffectCount;
+
+    [Header("LevelChanging")]
+    public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber;
+    public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount;
 
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
@@ -28,6 +40,29 @@ public class LevelData : ScriptableObject
         return false;
     }
 
+    public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo)
+    {
+        if (CompleteLevelOnTraveledSectionCount.Any()) 
+        {
+
+            LevelSectionCountTrigger countTrigger = CompleteLevelOnTraveledSectionCount.FirstOrDefault(cT => 
+            {
+                int generatedSectionCount = cT.RandomSectionRange > 0 ? Mathf.Clamp(Random.Range(cT.SectionCount - cT.RandomSectionRange, cT.SectionCount + -cT.RandomSectionRange), 1, 100) : cT.SectionCount;
+                return generatedSectionCount <= currentSectionCount; 
+            });
+
+            if (countTrigger != null) 
+            {
+                LevelToChangeTo = countTrigger.LevelChange;
+                return true;
+            }
+        }
+
+
+        LevelToChangeTo = -1;
+        return false;
+    }
+
     public static implicit operator LevelData_Loaded(LevelData levelData) 
     {
 
@@ -40,11 +75,25 @@ public class LevelData_Loaded
     private LevelData levelData;
     public int LevelNumber { get { return levelData.LevelNumber; } }
     public CorridorLayoutHandler[] CorridorLayouts { get {return levelData.CorridorLayouts; } }
+    public CorridorLayoutHandler[] BackwardOnlyLayouts { get { return levelData.BackwardOnlyLayouts; } }
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber { get { return levelData.CompleteLevelTriggerOnLayoutNumber; } }
+    public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount { get { return levelData.CompleteLevelOnTraveledSectionCount; } }
+
+    public bool SectionOrdersAreRandom { get { return levelData.SectionOrdersAreRandom; } }
+    public bool AllowRandomScaling { get { return levelData.AllowRandomScaling; } }
+    public bool AllowRandomWaving { get { return levelData.AllowRandomWaving; } }
+    public int MaxScaleEffectCount { get { return levelData.MaxScaleEffectCount; } }
+    public int MaxWaveEffectCount { get { return levelData.MaxWaveEffectCount; } }
+
     public string[] NumberpadPasswords;
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
+    }
+
+    public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo) 
+    {
+        return levelData.GetIfLevelCountTriggerAndReturnLevelChange(currentSectionCount, out LevelToChangeTo);
     }
 
     public LevelData_Loaded(LevelData levelData) 
@@ -61,6 +110,15 @@ public class LevelSwitchTrigger
     public string Name = "LevelChangeTrigger";
     public int LayoutNumberTrigger;
     public int LevelChange;
+}
+
+[System.Serializable]
+public class LevelSectionCountTrigger 
+{
+    public string Name = "LevelSectionCountTrigger";
+    public int SectionCount;
+    public int LevelChange;
+    public int RandomSectionRange;
 }
 
 [System.Serializable]
