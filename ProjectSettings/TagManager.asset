@@ -20,8 +20,8 @@ TagManager:
   - NonWritingArea
   - RenderTexture
   - Pickupables
-  - 
-  - 
+  - CameraEffect1
+  - CameraEffect2
   - 
   - 
   - 
