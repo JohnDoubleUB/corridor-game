@@ -17,8 +17,14 @@ MonoBehaviour:
   - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
   - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
   - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
-  BackwardOnlyLayouts: []
+  BackwardOnlyLayouts:
+  - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
   NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount:
   - Name: Change back to level 1
