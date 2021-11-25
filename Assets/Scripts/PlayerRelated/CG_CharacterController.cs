@@ -163,7 +163,7 @@ public class CG_CharacterController : MonoBehaviour
                     currentInteractable = currentInteractableGameObject.GetComponent<InteractableObject>();
                     
                     interactionPrompt.text = currentInteractable.IsInteractable ? 
-                        controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " + currentInteractable.ObjectName 
+                        /*controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " +*/ currentInteractable.ObjectName 
                         : "";
 
                     if(currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
