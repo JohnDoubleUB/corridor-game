@@ -21,6 +21,7 @@ public class PickupableInteractable : InteractableObject
 
         if (isStandardMomento ? InventoryManager.current.AnyFreeInventorySlots : InventoryManager.current.AnyFreeMomentoSlots)
         {
+            print("yes");
             transform.parent = null;
             currentSlot = InventoryManager.current.MoveInteractableToInventory(this);
             IsInteractable = false;
@@ -29,7 +30,7 @@ public class PickupableInteractable : InteractableObject
             positionValue = 0;
         }
 
-        if (pickupCollider.enabled != beingPickedUp) pickupCollider.enabled = beingPickedUp;
+        if (pickupCollider.enabled != !beingPickedUp) pickupCollider.enabled = !beingPickedUp;
     }
 
     private void Awake()

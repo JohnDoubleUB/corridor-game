@@ -25,7 +25,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6445c7dd789c8ac46baff299f26b2fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectName: Test Object
+  ObjectName: Strange Picture
   IsInteractable: 1
   pickupType: 1
   currentSlot:
@@ -664,7 +664,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b32d3f1cdbeb436499eb6bce2c4f8d34,
         type: 3}
       propertyPath: m_Name
-      value: PictureframePrefab_Pickup
+      value: PictureframePickup
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b32d3f1cdbeb436499eb6bce2c4f8d34,
         type: 3}
