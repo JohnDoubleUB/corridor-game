@@ -30,13 +30,16 @@ public class InventoryManager : MonoBehaviour
 
     public InventorySlot MoveInteractableToInventory(PickupableInteractable interactable, out InteractableObject replacedObject)
     {
+        //Depending on the type of item put in that inventory
+        InventorySlot[] inventoryToHandle = interactable.pickupType == PickupType.Standard ? inventorySlots : momentoSlots;
         replacedObject = null;
         InventorySlot freeSlot = null;
+        
         //Find a free inventory slot
-        if (inventorySlots != null && inventorySlots.Any())
+        if (inventoryToHandle != null && inventoryToHandle.Any())
         {
             //Check for free slot
-            freeSlot = inventorySlots.FirstOrDefault(x => !x.SlotOccupied);
+            freeSlot = inventoryToHandle.FirstOrDefault(x => !x.SlotOccupied);
 
             if (freeSlot != null)
             {
@@ -44,7 +47,7 @@ public class InventoryManager : MonoBehaviour
             }
             else if (AllowReplace)
             {
-                freeSlot = inventorySlots[0].ReplaceItemToContent(interactable, out replacedObject);
+                freeSlot = inventoryToHandle[0].ReplaceItemToContent(interactable, out replacedObject);
             }
         }
 
@@ -54,34 +57,6 @@ public class InventoryManager : MonoBehaviour
     public InventorySlot MoveInteractableToInventory(PickupableInteractable interactable)
     {
         return MoveInteractableToInventory(interactable, out InteractableObject _);
-    }
-
-    public InventorySlot MoveInteractableToMomentos(PickupableInteractable interactable, bool replaceIfPresent, out InteractableObject replacedObject)
-    {
-        replacedObject = null;
-        InventorySlot freeSlot = null;
-        //Find a free inventory slot
-        if (inventorySlots != null && momentoSlots.Any())
-        {
-            //Check for free slot
-            freeSlot = momentoSlots.FirstOrDefault(x => !x.SlotOccupied);
-
-            if (freeSlot != null)
-            {
-                freeSlot.ReplaceItemToContent(interactable, out replacedObject);
-            }
-            else if (replaceIfPresent)
-            {
-                freeSlot = momentoSlots[0].ReplaceItemToContent(interactable, out replacedObject);
-            }
-        }
-
-        return freeSlot;
-    }
-
-    public InventorySlot MoveInteractableToMomentos(PickupableInteractable interactable)
-    {
-        return MoveInteractableToMomentos(interactable, false, out InteractableObject _);
     }
 }
 

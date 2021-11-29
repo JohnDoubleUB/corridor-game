@@ -86,6 +86,7 @@ public class LevelData_Loaded
     public int MaxWaveEffectCount { get { return levelData.MaxWaveEffectCount; } }
 
     public string[] NumberpadPasswords;
+
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);

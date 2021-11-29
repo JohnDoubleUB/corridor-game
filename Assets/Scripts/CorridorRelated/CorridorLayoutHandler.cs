@@ -13,6 +13,17 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private List<string> numberPadPasswords = new List<string>();
 
+    private string layoutId = "";
+
+    public string LayoutID 
+    { 
+        get 
+        {
+            if (string.IsNullOrEmpty(layoutId)) layoutId = layoutLevelNumber + "_" + layoutNumber;
+            return layoutId;
+        } 
+    }
+
     public Door SectionDoor
     { 
         set 
@@ -25,10 +36,10 @@ public class CorridorLayoutHandler : MonoBehaviour
             } 
         } 
     }
-    public PropScript[] Props;
-
 
     public Door sectionDoor;
+
+    public PropScript[] Props;
 
     public bool IsPuzzleSection { get { return PuzzleElements != null && PuzzleElements.Any(); } }
 
@@ -36,6 +47,8 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public PuzzleElementController[] PuzzleElements;
     public DecalClueObject[] DecalClueObjects;
+
+    public PickupSpawn[] Pickups;
 
     private void Awake()
     {
@@ -85,6 +98,8 @@ public class CorridorLayoutHandler : MonoBehaviour
                 clueObject.clue = levelData.NumberpadPasswords[clueObject.ClueNumber];
             }
 
+            PlacePickupables();
+
             layoutIntitated = true;
         }
     }
@@ -96,4 +111,33 @@ public class CorridorLayoutHandler : MonoBehaviour
             sectionDoor.DoorLocked = false;
         }
     }
+
+    private void PlacePickupables() 
+    {
+        foreach (PickupSpawn pickup in Pickups)
+        {
+            if (pickup.PickupItemPrefab != null && pickup.PotentialSpawnPositions.Any())
+            {
+                pickup.SpawnedPickup = new PickupAndParent();
+                pickup.SpawnedPickup.Parent = pickup.PotentialSpawnPositions[UnityEngine.Random.Range(0, pickup.PotentialSpawnPositions.Length)];
+                pickup.SpawnedPickup.Pickup = Instantiate(pickup.PickupItemPrefab, pickup.SpawnedPickup.Parent);
+                pickup.SpawnedPickup.Pickup.transform.localPosition = Vector3.zero;
+                pickup.SpawnedPickup.Pickup.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            }
+        }
+    }
+}
+
+[System.Serializable]
+public class PickupSpawn 
+{
+    public InteractableObject PickupItemPrefab;
+    public Transform[] PotentialSpawnPositions;
+    public PickupAndParent SpawnedPickup;
+}
+
+public struct PickupAndParent
+{
+    public InteractableObject Pickup;
+    public Transform Parent;
 }

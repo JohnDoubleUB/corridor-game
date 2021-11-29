@@ -27,9 +27,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Test Object
   IsInteractable: 1
-  pickupType: 0
+  pickupType: 1
   currentSlot:
     slotContent: {fileID: 0}
+  pickupSpeedMultiplier: 4
 --- !u!1 &6095512033395845602
 GameObject:
   m_ObjectHideFlags: 0
