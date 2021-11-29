@@ -19,6 +19,7 @@ public class CG_CharacterController : MonoBehaviour
 
     public GameObject playerPencil;
     public Image playerCrosshair;
+    public Text momentoText;
 
     public Sprite crosshairNormal;
     public Sprite crosshairInteract;
@@ -84,7 +85,7 @@ public class CG_CharacterController : MonoBehaviour
     void Update()
     {
         UpdateInteractable();
-
+        if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
         if (!canMove) UpdateDraw();
 
         if (characterController.isGrounded)
@@ -162,11 +163,10 @@ public class CG_CharacterController : MonoBehaviour
                     currentInteractableGameObject = lookedAtObject.collider.gameObject;
                     currentInteractable = currentInteractableGameObject.GetComponent<InteractableObject>();
                     
-                    interactionPrompt.text = currentInteractable.IsInteractable ? 
-                        /*controls.Player.Interact.GetBindingDisplayString(0) + " to " + controls.Player.Interact.name + " with " +*/ currentInteractable.ObjectName 
-                        : "";
+                    interactionPrompt.text = currentInteractable.IsInteractable ? currentInteractable.ObjectName : "";
 
                     if(currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
+
                 }
             }
             else

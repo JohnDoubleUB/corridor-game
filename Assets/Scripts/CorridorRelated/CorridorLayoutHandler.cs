@@ -10,6 +10,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     public int layoutNumber;
 
     private LevelData_Loaded levelData;
+    private LayoutLevelData layoutData;
 
     private List<string> numberPadPasswords = new List<string>();
 
@@ -55,12 +56,31 @@ public class CorridorLayoutHandler : MonoBehaviour
         Props = GetComponentsInChildren<PropScript>();
     }
 
+    private void Update()
+    {
+        if (layoutIntitated) 
+        {
+            for (int i = 0; i < Pickups.Length; i++) 
+            {
+                PickupSpawn currentPickup = Pickups[i];
+                if (currentPickup.PickedUp) continue;
+                if (currentPickup.SpawnedPickup.ParentChanged) 
+                {
+                    currentPickup.PickedUp = true;
+                    layoutData.collectedItems.Add(i);
+                }
+
+            }
+        }
+    }
+
     public void InitiateLayout(bool sectionIsFlipped, LevelData_Loaded levelData) 
     {
         if (!layoutIntitated)
         {
             this.levelData = levelData;
-            
+            layoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
+
             //Setup prop parenting
             foreach (PropScript prop in Props)
             {
@@ -114,30 +134,50 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private void PlacePickupables() 
     {
-        foreach (PickupSpawn pickup in Pickups)
+        for ( int i = 0; i < Pickups.Length; i++)
         {
+            PickupSpawn pickup = Pickups[i];
+
             if (pickup.PickupItemPrefab != null && pickup.PotentialSpawnPositions.Any())
             {
-                pickup.SpawnedPickup = new PickupAndParent();
-                pickup.SpawnedPickup.Parent = pickup.PotentialSpawnPositions[UnityEngine.Random.Range(0, pickup.PotentialSpawnPositions.Length)];
-                pickup.SpawnedPickup.Pickup = Instantiate(pickup.PickupItemPrefab, pickup.SpawnedPickup.Parent);
-                pickup.SpawnedPickup.Pickup.transform.localPosition = Vector3.zero;
-                pickup.SpawnedPickup.Pickup.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                if (layoutData.collectedItems.Contains(i) || pickup.PickupItemPrefab.pickupType == PickupType.Momento && !InventoryManager.current.AnyFreeMomentoSlots)
+                {
+                    pickup.PickedUp = true;
+                }
+                else 
+                {
+                    pickup.SpawnedPickup = new PickupAndParent();
+                    pickup.SpawnedPickup.Parent = pickup.PotentialSpawnPositions[UnityEngine.Random.Range(0, pickup.PotentialSpawnPositions.Length)];
+                    pickup.SpawnedPickup.Pickup = Instantiate(pickup.PickupItemPrefab, pickup.SpawnedPickup.Parent);
+                    pickup.SpawnedPickup.Pickup.transform.localPosition = Vector3.zero;
+                    pickup.SpawnedPickup.Pickup.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                }
             }
         }
     }
+
+
 }
 
 [System.Serializable]
 public class PickupSpawn 
 {
-    public InteractableObject PickupItemPrefab;
+    public PickupableInteractable PickupItemPrefab;
     public Transform[] PotentialSpawnPositions;
     public PickupAndParent SpawnedPickup;
+    public bool PickedUp;
 }
 
 public struct PickupAndParent
 {
     public InteractableObject Pickup;
     public Transform Parent;
+
+    public bool ParentChanged 
+    {
+        get 
+        {
+            return Pickup.transform.parent != Parent;
+        } 
+    }
 }

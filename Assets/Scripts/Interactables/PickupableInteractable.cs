@@ -21,7 +21,6 @@ public class PickupableInteractable : InteractableObject
 
         if (isStandardMomento ? InventoryManager.current.AnyFreeInventorySlots : InventoryManager.current.AnyFreeMomentoSlots)
         {
-            print("yes");
             transform.parent = null;
             currentSlot = InventoryManager.current.MoveInteractableToInventory(this);
             IsInteractable = false;

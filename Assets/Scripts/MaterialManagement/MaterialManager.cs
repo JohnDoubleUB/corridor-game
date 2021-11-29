@@ -32,7 +32,7 @@ public class MaterialManager : MonoBehaviour
 
     public void UntrackMaterials(params Material[] materials) 
     {
-        if(materials.Any()) worldMaterials = worldMaterials.Where(x => !materials.Contains(x)).ToList();
+        //if(materials.Any()) worldMaterials = worldMaterials.Where(x => !materials.Contains(x)).ToList();
     }
 
     public void TrackMaterials(IEnumerable<Material> materials)

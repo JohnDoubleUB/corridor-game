@@ -17,6 +17,8 @@ public class InventoryManager : MonoBehaviour
     public bool AnyFreeInventorySlots { get { return inventorySlots.Any(x => !x.SlotOccupied) || AllowReplace; } }
     public bool AnyFreeMomentoSlots { get { return momentoSlots.Any(x => !x.SlotOccupied) || AllowReplace; } }
 
+    public bool HasMomento;
+
     private void Awake()
     {
         //Important instance things
@@ -50,6 +52,9 @@ public class InventoryManager : MonoBehaviour
                 freeSlot = inventoryToHandle[0].ReplaceItemToContent(interactable, out replacedObject);
             }
         }
+
+
+        HasMomento = !AnyFreeMomentoSlots;
 
         return freeSlot;
     }

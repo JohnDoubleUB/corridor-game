@@ -87,6 +87,8 @@ public class LevelData_Loaded
 
     public string[] NumberpadPasswords;
 
+    public LayoutLevelData[] CorridorLayoutData;
+
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
@@ -102,6 +104,10 @@ public class LevelData_Loaded
         this.levelData = levelData;
         //generate all the passwords for this level
         NumberpadPasswords = levelData.NumberpadPasswords.Select(x => x.GenerateRandomPassword()).ToArray();
+
+        //Generate LevelLayoutData for all the layouts
+        CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
+
     }
 }
 
@@ -138,5 +144,16 @@ public class NumberpadPassword
         string newPassword = "";
         for (int i = 0; i < passwordLength; i++) newPassword += possibleCharacters[Random.Range(0, possibleCharacters.Length)];
         return newPassword;
+    }
+}
+
+public class LayoutLevelData 
+{
+    public string LayoutID;
+    public List<int> collectedItems = new List<int>();
+
+    public LayoutLevelData(string layoutID) 
+    {
+        LayoutID = layoutID;
     }
 }
