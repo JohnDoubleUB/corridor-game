@@ -5,7 +5,7 @@ using UnityEngine;
 public class PuzzleElementController : MonoBehaviour
 {
     public CorridorLayoutHandler LayoutHandler;
-    public Door DoorToLock;
+   // public Door DoorToLock;
 
     private bool puzzleSolved;
     public bool PuzzleSolved 
@@ -17,7 +17,7 @@ public class PuzzleElementController : MonoBehaviour
         set 
         { 
             puzzleSolved = value;
-            if(puzzleSolved && LayoutHandler != null) LayoutHandler.CheckPuzzleCompletion();
+            if(puzzleSolved && LayoutHandler != null) LayoutHandler.CheckPuzzleCompletion(this);
         }
     }
 

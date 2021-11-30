@@ -149,8 +149,8 @@ public class CorridorMoverScript : MonoBehaviour
 
         if (layoutGameObj != null)
         {
-            layoutGameObj.SectionDoor = sectionDoor;
-            layoutGameObj.InitiateLayout(section.FlipSection, cachedCurrentLevelData);
+            //layoutGameObj.SectionDoor = sectionDoor;
+            layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
             section.CurrentLayout = layoutGameObj;
         }
     }

@@ -34,8 +34,8 @@ public class NumberpadController : PuzzleElementController
         yield return new WaitForSeconds(waitTime);
         if (currentGuessCharacters == password)
         {
-            DisplayText.text = "Access Granted";
             PuzzleSolved = true;
+            checkingPassword = false;
             AudioManager.current.PlayClipAt(numberPadCorrectSound, transform.position, 0.5f, false);
         }
         else 
@@ -55,6 +55,7 @@ public class NumberpadController : PuzzleElementController
     private void Update()
     {
         if (blankPassword.Length != password.Length || blankPassword[0] != passwordGapCharacter) UpdateBlankPassword();
+        if (PuzzleSolved && DisplayText.text != "Access Granted") DisplayText.text = "Access Granted";
     }
 
     private void UpdateBlankPassword() 
@@ -65,7 +66,7 @@ public class NumberpadController : PuzzleElementController
 
     public void InputCharacter(char character, Transform inputLocation = null)
     {
-        if (!checkingPassword)
+        if (!checkingPassword && !PuzzleSolved)
         {
             switch (character)
             {

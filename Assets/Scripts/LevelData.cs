@@ -151,6 +151,7 @@ public class LayoutLevelData
 {
     public string LayoutID;
     public List<int> collectedItems = new List<int>();
+    public List<int> completedPuzzles = new List<int>();
 
     public LayoutLevelData(string layoutID) 
     {

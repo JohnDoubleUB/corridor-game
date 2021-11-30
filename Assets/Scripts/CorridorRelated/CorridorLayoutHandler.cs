@@ -30,11 +30,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         set 
         { 
             sectionDoor = value;
-            if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved)) 
-            {
-                sectionDoor.DoorLocked = true;
-                sectionDoor.openOnInteract = true;
-            } 
+            InitateDoorStatus();
         } 
     }
 
@@ -46,7 +42,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private bool layoutIntitated;
 
-    public PuzzleElementController[] PuzzleElements;
+    public List<PuzzleElementController> PuzzleElements;
     public DecalClueObject[] DecalClueObjects;
 
     public PickupSpawn[] Pickups;
@@ -74,30 +70,29 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    public void InitiateLayout(bool sectionIsFlipped, LevelData_Loaded levelData) 
+    public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded levelData) 
     {
         if (!layoutIntitated)
         {
+            this.sectionDoor = sectionDoor;
             this.levelData = levelData;
             layoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
 
+            
+
             //Setup prop parenting
-            foreach (PropScript prop in Props)
-            {
-                GameObject trueChild = new GameObject(prop.name + "_TrueChild");
-                trueChild.transform.SetParent(transform);
-                trueChild.transform.position = prop.transform.position;
-                prop.name = prop.name + "_FakeChild";
-                prop.transform.SetParent(null);
-                prop.FakeParent = trueChild.transform;
-                prop.AccountForCorridorFlip(sectionIsFlipped); //Ensure meshes account for flip if needed
-            }
+            IntiatePropParenting(sectionIsFlipped);
 
             int numberPadCount = 0;
+            PuzzleElementController puzzleElement;
 
-            //Setup codes
-            foreach (PuzzleElementController puzzleElement in PuzzleElements)
+            for (int i = 0; i < PuzzleElements.Count; i++) 
             {
+                puzzleElement = PuzzleElements[i];
+                if (layoutData.completedPuzzles.Contains(i)) 
+                {
+                    puzzleElement.PuzzleSolved = true;
+                }
                 puzzleElement.LayoutHandler = this;
 
                 //Set the passwords and store in the layout!
@@ -119,17 +114,29 @@ public class CorridorLayoutHandler : MonoBehaviour
             }
 
             PlacePickupables();
+            InitateDoorStatus();
 
             layoutIntitated = true;
         }
     }
 
-    public void CheckPuzzleCompletion() 
+    public void CheckPuzzleCompletion(PuzzleElementController puzzleElement = null) 
     {
+        if (puzzleElement != null && puzzleElement.PuzzleSolved) 
+        {
+            int puzzleIndex = PuzzleElements.IndexOf(puzzleElement);
+            if (!layoutData.completedPuzzles.Contains(puzzleIndex)) layoutData.completedPuzzles.Add(puzzleIndex);
+        }
+
         if (!PuzzleElements.Any(x => !x.PuzzleSolved)) 
         {
             sectionDoor.DoorLocked = false;
         }
+    }
+
+    public void UpdatePuzzleStatus() 
+    {
+
     }
 
     private void PlacePickupables() 
@@ -156,6 +163,29 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
+
+    private void InitateDoorStatus() 
+    {
+        if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved))
+        {
+            sectionDoor.DoorLocked = true;
+            sectionDoor.openOnInteract = true;
+        }
+    }
+
+    private void IntiatePropParenting(bool sectionIsFlipped) 
+    {
+        foreach (PropScript prop in Props)
+        {
+            GameObject trueChild = new GameObject(prop.name + "_TrueChild");
+            trueChild.transform.SetParent(transform);
+            trueChild.transform.position = prop.transform.position;
+            prop.name = prop.name + "_FakeChild";
+            prop.transform.SetParent(null);
+            prop.FakeParent = trueChild.transform;
+            prop.AccountForCorridorFlip(sectionIsFlipped); //Ensure meshes account for flip if needed
+        }
+    }
 
 }
 
