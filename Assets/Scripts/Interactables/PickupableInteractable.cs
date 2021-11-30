@@ -7,6 +7,7 @@ public class PickupableInteractable : InteractableObject
     public PickupType pickupType;
     public InventorySlot currentSlot;
     public float pickupSpeedMultiplier = 4f;
+    public float pickupScaleMultiplier = 1f;
 
     private Vector3 PositionAtTimeOfPickup;
     private float positionValue = 0;
@@ -14,6 +15,7 @@ public class PickupableInteractable : InteractableObject
 
     private Collider pickupCollider;
 
+    private Vector3 defaultScale;
 
     protected override void OnInteract()
     {
@@ -32,12 +34,13 @@ public class PickupableInteractable : InteractableObject
         if (pickupCollider.enabled != !beingPickedUp) pickupCollider.enabled = !beingPickedUp;
     }
 
-    private void Awake()
+    protected void Awake()
     {
+        defaultScale = transform.localScale;
         pickupCollider = GetComponent<Collider>();
     }
 
-    private void Update()
+    protected void Update()
     {
         //Vector3 cameraPosition = GameManager.current.playerController.playerCamera.transform.position;
         //transform.LookAt(cameraPosition);
@@ -53,7 +56,7 @@ public class PickupableInteractable : InteractableObject
             }
             else 
             {
-                print("hi");
+                transform.localScale = transform.localScale * pickupScaleMultiplier;
                 if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
                 beingPickedUp = false;
             }

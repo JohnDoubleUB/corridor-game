@@ -7,7 +7,7 @@ Puzzles:
 
 Pickupable objects: (These all need doing)
 - Keypad key
-- Momentos (various pickupable items)
+- Momentos (various pickupable items) <DONE>
 - Key
 - Plynth Items
 
@@ -19,7 +19,9 @@ features, rooms repeat if you don't see a clue
 - Rooms repeat if you don't see a clue
 
 
-
+Other features:
+- persistent items <DONE>
+- persistent puzzle completion <DONE>
 
 
 

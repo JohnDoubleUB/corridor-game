@@ -23,8 +23,6 @@ public class ButtonInteractable : InteractableObject
     {
         if (ButtonMeshTransform != null) 
         {
-            //buttonOutPosition = ButtonMeshTransform.position;
-            //buttonInPosition = new Vector3(buttonOutPosition.x + buttonInAmount, buttonOutPosition.y, buttonOutPosition.z);
             buttonOutPosition = ButtonMeshTransform.localPosition;
             buttonInPosition = new Vector3(buttonOutPosition.x + buttonInAmount, buttonOutPosition.y, buttonOutPosition.z);
         }
