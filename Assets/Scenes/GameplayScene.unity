@@ -3067,12 +3067,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dospin: 0
---- !u!4 &1053103835 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7968833478274302962, guid: 440e7b231c2e59146b273e1ca30e3fa5,
-    type: 3}
-  m_PrefabInstance: {fileID: 6260422600300655046}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1079649740 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
@@ -5378,21 +5372,6 @@ PrefabInstance:
     - target: {fileID: 1636822479379277471, guid: 440e7b231c2e59146b273e1ca30e3fa5,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7968833478274302964, guid: 440e7b231c2e59146b273e1ca30e3fa5,
-        type: 3}
-      propertyPath: ButtonMeshTransform
-      value: 
-      objectReference: {fileID: 1053103835}
-    - target: {fileID: 7968833478274302967, guid: 440e7b231c2e59146b273e1ca30e3fa5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8743578639393450848, guid: 440e7b231c2e59146b273e1ca30e3fa5,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

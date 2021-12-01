@@ -1727,7 +1727,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonMeshTransform
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7968833478274302962}
     - target: {fileID: 2841342758071465357, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
         type: 3}
       propertyPath: numberPadController
@@ -1741,6 +1741,11 @@ PrefabInstance:
     - target: {fileID: 2841342758071465358, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3508286030786649369, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
