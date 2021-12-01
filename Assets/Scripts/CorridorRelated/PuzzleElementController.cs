@@ -21,6 +21,11 @@ public class PuzzleElementController : MonoBehaviour
         }
     }
 
+    public virtual void Notify() 
+    {
+        print("Not implemented!");
+    }
+
     public virtual void GenerateRandomSolution() 
     {
         print("Not implemented!");

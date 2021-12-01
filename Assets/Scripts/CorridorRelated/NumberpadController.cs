@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +13,24 @@ public class NumberpadController : PuzzleElementController
     public AudioClip buttonPressSound;
     public AudioClip numberPadCorrectSound;
     public AudioClip numberPadIncorrectSound;
-    
     public AudioClip incorrectSound;
+
+    public ButtonInteractable[] Buttons;
+    public GameObject keyPadInteractor;
+
+    public ButtonInteractable inertKey;
+
+    public List<char> disabledButtons = new List<char>();
+    private char[] lastDisabledButtons = new char[0];
 
     private string blankPassword;
     private string currentGuessCharacters = "";
     private bool checkingPassword;
 
+    private bool placingKey;
+    private char keyToPlace;
+    private Transform keyToPlaceTarget;
+    private float positionValue;
 
     private IEnumerator ClearEnteredCodeAfterDelay(float waitTime = 1f) 
     {
@@ -25,6 +38,30 @@ public class NumberpadController : PuzzleElementController
         DisplayText.text = blankPassword;
         currentGuessCharacters = "";
         checkingPassword = false;
+    }
+
+    public override void Notify()
+    {
+        if (!placingKey) 
+        {
+            // Check player inventory for key
+            InventorySlot key = InventoryManager.current.inventorySlots.Where(x => x.SlotOccupied && disabledButtons.Contains(x.slotContent.ObjectName[0])).FirstOrDefault();
+            
+            //Check that a key was found
+            if (key != null) 
+            {
+                inertKey.buttonMesh.enabled = true;
+                //Store key value
+                keyToPlace = key.slotContent.ObjectName[0];
+                keyToPlaceTarget = Buttons.First(x => x.ObjectName[0] == keyToPlace).transform;
+                //Destroy inventory object
+                Destroy(key.RemoveItemFromContents().gameObject);
+                //TODO: Method in InventoryManager to reorganize inventory;
+                positionValue = 0f;
+                placingKey = true;
+                inertKey.ObjectName = keyToPlace.ToString();
+            }
+        }
     }
 
     private IEnumerator VerifyEnteredCodeAfterDelay(float waitTime = 1f) 
@@ -50,12 +87,53 @@ public class NumberpadController : PuzzleElementController
     private void Awake()
     {
         UpdateBlankPassword();
+        //UpdateDisabledButtons();
     }
 
     private void Update()
     {
         if (blankPassword.Length != password.Length || blankPassword[0] != passwordGapCharacter) UpdateBlankPassword();
         if (PuzzleSolved && DisplayText.text != "Access Granted") DisplayText.text = "Access Granted";
+        UpdateKeyPlaceAnimation();
+        UpdateDisabledButtons();
+    }
+
+    private void UpdateKeyPlaceAnimation() 
+    {
+        if (placingKey) 
+        {
+            if (positionValue < 0.8f)
+            {
+
+                positionValue += Time.deltaTime * 4f;
+                float smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+                Vector3 cameraPosition = GameManager.current.playerController.playerCamera.transform.position - new Vector3(0, 0.6f, 0);
+                inertKey.transform.position = Vector3.Lerp(cameraPosition, keyToPlaceTarget.position, smoothedPositionValue);
+                inertKey.transform.rotation = Quaternion.RotateTowards(GameManager.current.player.transform.rotation, keyToPlaceTarget.rotation, smoothedPositionValue * 50f);
+            }
+            else 
+            {
+                disabledButtons.Remove(keyToPlace);
+                placingKey = false;
+                inertKey.buttonMesh.enabled = false;
+            }
+        }
+    }
+
+    private void UpdateDisabledButtons() 
+    {
+        if (!Enumerable.SequenceEqual(disabledButtons.OrderBy(e => e), lastDisabledButtons.OrderBy(e => e))) 
+        {
+            print("update!");
+            //Enable the interactor if a key is disabled
+            if (keyPadInteractor != null) keyPadInteractor.SetActive(disabledButtons.Any());
+
+            //set various elements as active or not
+            foreach (ButtonInteractable button in Buttons) button.gameObject.SetActive(!disabledButtons.Contains(button.ObjectName[0]));
+            
+            //update the last disabled buttons check
+            lastDisabledButtons = disabledButtons.ToArray();
+        }
     }
 
     private void UpdateBlankPassword() 

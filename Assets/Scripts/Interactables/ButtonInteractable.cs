@@ -12,6 +12,7 @@ public class ButtonInteractable : InteractableObject
     public Text buttonText;
 
     public NumberpadController numberPadController;
+    public MeshRenderer buttonMesh;
 
     private bool buttonPushed;
     private float timer = 0;

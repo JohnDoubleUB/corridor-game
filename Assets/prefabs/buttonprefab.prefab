@@ -59,10 +59,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectName: 
+  IsInteractable: 1
   ButtonMeshTransform: {fileID: 2370234060986328694}
   buttonInAmount: 0.009
   timeInMultiplier: 4
   buttonText: {fileID: 2841342758473947235}
+  numberPadController: {fileID: 0}
+  buttonMesh: {fileID: 3508286030786649369}
 --- !u!1 &2841342758473947236
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +315,12 @@ PrefabInstance:
 --- !u!4 &2370234060986328694 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
+    type: 3}
+  m_PrefabInstance: {fileID: 2841342759231701405}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3508286030786649369 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
     type: 3}
   m_PrefabInstance: {fileID: 2841342759231701405}
   m_PrefabAsset: {fileID: 0}
