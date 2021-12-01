@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11f1d9de639f064391f5e91f43753b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectName: 
+  ObjectName: Replace Key
   IsInteractable: 1
   puzzleToNotify: {fileID: 1636822479379277464}
 --- !u!1 &1636822477742015568
