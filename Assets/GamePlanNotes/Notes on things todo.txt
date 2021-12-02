@@ -28,8 +28,8 @@ Other features:
 
 
 Things to do:
-- Plynth Items + puzzle
-- Key lock puzzle + Key
+- Plynth Items + puzzle (also 3d models)
+- Key lock puzzle + Key (also 3d models)
 - Notes
 - Offices
 - Integrate stretching, wavyness with levels
