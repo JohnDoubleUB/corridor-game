@@ -32,6 +32,8 @@ Things to do:
 - Key lock puzzle + Key
 - Notes
 - Offices
+- Integrate stretching, wavyness with levels
+- Add finding notepad feature
 
 
 Number based key pad puzzles
