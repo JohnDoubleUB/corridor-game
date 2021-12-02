@@ -136,7 +136,7 @@ public class CorridorLayoutHandler : MonoBehaviour
             print("change level trigger!");
             if (levelData.GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(this, out int levelChange)) 
             {
-
+                CorridorChangeManager.current.LevelChange(levelChange);
             }
             //Trigger level change?
         }

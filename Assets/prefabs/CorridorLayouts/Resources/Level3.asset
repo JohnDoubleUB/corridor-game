@@ -30,3 +30,7 @@ MonoBehaviour:
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete:
+  - Name: Go back to 1
+    LayoutNumberTrigger: 0
+    LevelChange: 1

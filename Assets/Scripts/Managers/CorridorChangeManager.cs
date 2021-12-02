@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CorridorMoverScript : MonoBehaviour
+public class CorridorChangeManager : MonoBehaviour
 {
+    public static CorridorChangeManager current;
+
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
 
@@ -51,6 +53,9 @@ public class CorridorMoverScript : MonoBehaviour
 
     private void Awake()
     {
+        if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
+        current = this;
+
         //Load levels
         LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
 
@@ -66,7 +71,7 @@ public class CorridorMoverScript : MonoBehaviour
             if (i == 0) section.sectionType = SectionType.Back;
             else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
 
-            CreateCorridorPrafabForSection(section, InitialMappingsForDoorSegments(i), i);
+            CreateCorridorPrefabForSection(section, InitialMappingsForDoorSegments(i), i);
         }
     }
 
@@ -126,7 +131,7 @@ public class CorridorMoverScript : MonoBehaviour
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrafabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
+    private void CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
     {
         CorridorLayoutHandler layoutGameObj = null;
 
@@ -344,7 +349,7 @@ public class CorridorMoverScript : MonoBehaviour
         Destroy(sectionCorridorPrefab.gameObject);
 
         //TODO: Change this so that it does some fancy creation stuff
-        CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
+        CreateCorridorPrefabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
     }
 
     public void LevelChange(int newLevel) 

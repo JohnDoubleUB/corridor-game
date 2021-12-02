@@ -12,7 +12,7 @@ public class CorridorSection : MonoBehaviour
     public GameObject corridorProps;
     
     public Transform[] CorridorStartEnd;
-    public CorridorMoverScript toNotifyOnPlayerEnter;
+    public CorridorChangeManager toNotifyOnPlayerEnter;
     public CorridorLayoutHandler CurrentLayout;
     public Door DoorPrefab;
     public bool HasWarped;
