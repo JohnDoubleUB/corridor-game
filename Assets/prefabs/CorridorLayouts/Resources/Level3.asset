@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level2
+  m_Name: Level3
   m_EditorClassIdentifier: 
-  LevelNumber: 2
+  LevelNumber: 3
   CorridorLayouts:
-  - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
-  - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
-  - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
-  BackwardOnlyLayouts:
-  - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
-  NumberpadPasswords: []
+  - {fileID: 395630380, guid: f5d70ed2bcb9f68469fe4c12c69f73d8, type: 3}
+  - {fileID: 395630380, guid: e66e21336bde09c408e17d09b24c76d7, type: 3}
+  - {fileID: 8711203481728457502, guid: 229f6d6bfcbbd3b4f9bc91c3376cf0f1, type: 3}
+  BackwardOnlyLayouts: []
+  NumberpadPasswords:
+  - possibleCharacters: 6
+    passwordLength: 3
+  - possibleCharacters: 1
+    passwordLength: 1
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
-  CompleteLevelOnTraveledSectionCount:
-  - Name: Change to level 3
-    SectionCount: 6
-    LevelChange: 3
-    RandomSectionRange: 2
+  CompleteLevelOnTraveledSectionCount: []

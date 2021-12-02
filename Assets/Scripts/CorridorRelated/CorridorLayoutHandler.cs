@@ -123,9 +123,22 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public void CheckPuzzleCompletion(PuzzleElementController puzzleElement = null, PuzzleElementControllerData puzzleData = null)
     {
-        if (!PuzzleElements.Any(x => !x.PuzzleSolved))
+        IEnumerable<PuzzleElementController>[] levelTriggerSplitList = PuzzleElements.Partition(x => !x.IsLevelTrigger).ToArray();
+
+        if (!levelTriggerSplitList[0].Any(x => !x.PuzzleSolved))
         {
             sectionDoor.DoorLocked = false;
+        }
+
+        //Any on this list AND none that match
+        if (levelTriggerSplitList[1].AnyAndAllMatchPredicate(x => x.PuzzleSolved)) 
+        {
+            print("change level trigger!");
+            if (levelData.GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(this, out int levelChange)) 
+            {
+
+            }
+            //Trigger level change?
         }
     }
 
@@ -174,7 +187,8 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private void InitateDoorStatus()
     {
-        if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved))
+        if(PuzzleElements.AnyAndAnyMatchPredicate(x => !x.PuzzleSolved && !x.IsLevelTrigger))
+        //if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved))
         {
             sectionDoor.DoorLocked = true;
             sectionDoor.openOnInteract = true;

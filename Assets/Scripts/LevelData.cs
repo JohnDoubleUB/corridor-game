@@ -22,12 +22,30 @@ public class LevelData : ScriptableObject
     [Header("LevelChanging")]
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber;
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount;
+    public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutPuzzleComplete;
 
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         if (CompleteLevelTriggerOnLayoutNumber.Any())
         {
             LevelSwitchTrigger switchTrigger = CompleteLevelTriggerOnLayoutNumber.FirstOrDefault(x => x.LayoutNumberTrigger == corridorLayout.layoutNumber && corridorLayout.layoutLevelNumber == LevelNumber);
+
+            if (switchTrigger != null)
+            {
+                LevelToChangeTo = switchTrigger.LevelChange;
+                return true;
+            }
+        }
+
+        LevelToChangeTo = -1;
+        return false;
+    }
+
+    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo) 
+    {
+        if (CompleteLevelTriggerOnLayoutPuzzleComplete.Any())
+        {
+            LevelSwitchTrigger switchTrigger = CompleteLevelTriggerOnLayoutPuzzleComplete.FirstOrDefault(x => x.LayoutNumberTrigger == corridorLayout.layoutNumber && corridorLayout.layoutLevelNumber == LevelNumber);
 
             if (switchTrigger != null)
             {
@@ -92,6 +110,11 @@ public class LevelData_Loaded
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
+    }
+
+    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo) 
+    {
+        return levelData.GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
     }
 
     public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo) 

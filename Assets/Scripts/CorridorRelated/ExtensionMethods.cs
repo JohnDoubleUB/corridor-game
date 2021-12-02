@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public static class ExtensionMethods
 {
@@ -45,4 +48,56 @@ public static class ExtensionMethods
         }
     }
 
+    public static IEnumerable<IEnumerable<TSource>> Partition<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+    {
+        List<TSource> result1 = new List<TSource>();
+        List<TSource> result2 = new List<TSource>();
+
+        foreach (TSource sourceItem in source) 
+        {
+            if (predicate(sourceItem))
+            {
+                result1.Add(sourceItem);
+            }
+            else 
+            {
+                result2.Add(sourceItem);
+            }
+        }
+
+        yield return result1;
+        yield return result2;
+    }
+
+    public static bool AnyAndAllMatchPredicate<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
+    {
+        bool hasItems = false;
+
+        foreach (TSource sourceItem in source) 
+        {
+            hasItems = true;
+            
+            if (!predicate(sourceItem)) 
+            {
+                return false;
+            }
+        }
+
+        return hasItems;
+    }
+
+
+    public static bool AnyAndAnyMatchPredicate<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+    {
+
+        foreach (TSource sourceItem in source)
+        {
+            if (predicate(sourceItem))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

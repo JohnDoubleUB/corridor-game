@@ -202,10 +202,10 @@ public class CorridorMoverScript : MonoBehaviour
         }
 
         //Because I'm lazy
-        if (CurrentLevel == 2 && !GameManager.current.tvMan.moveTowardPlayer)
-        {
-            GameManager.current.tvMan.moveTowardPlayer = true;
-        }
+        //if (CurrentLevel == 2 && !GameManager.current.tvMan.moveTowardPlayer)
+        //{
+        //    GameManager.current.tvMan.moveTowardPlayer = true;
+        //}
 
     }
 
@@ -243,12 +243,16 @@ public class CorridorMoverScript : MonoBehaviour
             //Check if we are in a trigger section or not
             LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
             int levelChange = -1;
-            if (!OnlyUseRandomAssortedCorridorLayouts && currentSection.CurrentLayout != null && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange) || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
+            if (!OnlyUseRandomAssortedCorridorLayouts 
+                && currentSection.CurrentLayout != null 
+                && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange) 
+                || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
-                sectionsTraveledOnCurrentLevel = 0;
-                RenumberSections();
-                CurrentLevel = levelChange;
-                UpdateLevel();
+                LevelChange(levelChange);
+                //sectionsTraveledOnCurrentLevel = 0;
+                //RenumberSections();
+                //CurrentLevel = levelChange;
+                //UpdateLevel();
             }
 
 
@@ -341,6 +345,14 @@ public class CorridorMoverScript : MonoBehaviour
 
         //TODO: Change this so that it does some fancy creation stuff
         CreateCorridorPrafabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
+    }
+
+    public void LevelChange(int newLevel) 
+    {
+        sectionsTraveledOnCurrentLevel = 0;
+        RenumberSections();
+        CurrentLevel = newLevel;
+        UpdateLevel();
     }
 
     public void CheckPlayerDistance()

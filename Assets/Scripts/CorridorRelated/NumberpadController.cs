@@ -205,7 +205,6 @@ public class NumberpadController : PuzzleElementController
 
     public override void OnPuzzleUpdated()
     {
-        print("puzzle updated!");
         LayoutHandler.UpdatePuzzleData(this, (NumberpadControllerData)this);
     }
 }
