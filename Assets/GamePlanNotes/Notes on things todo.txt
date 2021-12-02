@@ -34,6 +34,7 @@ Things to do:
 - Offices
 - Integrate stretching, wavyness with levels
 - Add finding notepad feature
+- Integrate missing keys with random code system
 
 
 Number based key pad puzzles
