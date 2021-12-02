@@ -153,6 +153,8 @@ public class LayoutLevelData
     public List<int> collectedItems = new List<int>();
     public List<int> completedPuzzles = new List<int>();
 
+    public List<PuzzleElementControllerData> puzzleData = new List<PuzzleElementControllerData>();
+
     public LayoutLevelData(string layoutID) 
     {
         LayoutID = layoutID;

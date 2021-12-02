@@ -292,7 +292,7 @@ public class CorridorMoverScript : MonoBehaviour
         //Initiate weird extendo times;
         if (false && currentSection.CorridorNumber % 2 == 0)
         {
-            if (Random.Range(0f, 1f) > 0.3 && !currentSection.HasWarped)
+            if ((Random.Range(0f, 1f) > 0.3) && !currentSection.HasWarped)
             {
                 //this.playerTransform = playerTransform;
                 stretchTimer = 0;

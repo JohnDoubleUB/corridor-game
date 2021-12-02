@@ -17,7 +17,11 @@ public class PuzzleElementController : MonoBehaviour
         set 
         { 
             puzzleSolved = value;
-            if(puzzleSolved && LayoutHandler != null) LayoutHandler.CheckPuzzleCompletion(this);
+            if (puzzleSolved && LayoutHandler != null) 
+            {
+                OnPuzzleUpdated();
+                LayoutHandler.CheckPuzzleCompletion();
+            }
         }
     }
 
@@ -26,8 +30,29 @@ public class PuzzleElementController : MonoBehaviour
         print("Not implemented!");
     }
 
-    public virtual void GenerateRandomSolution() 
+    public virtual void LoadPuzzleData(PuzzleElementControllerData puzzleData) 
     {
-        print("Not implemented!");
+        PuzzleSolved = puzzleData.PuzzleSolved;
+    }
+
+    public virtual void OnPuzzleUpdated() 
+    {
+        LayoutHandler.UpdatePuzzleData(this, this);
+    }
+}
+
+public class PuzzleElementControllerData
+{
+    public int PuzzleIndex;
+    public bool PuzzleSolved;
+
+    public PuzzleElementControllerData(PuzzleElementController puzzleElementController) 
+    {
+        PuzzleSolved = puzzleElementController.PuzzleSolved;
+    }
+
+    public static implicit operator PuzzleElementControllerData(PuzzleElementController puzzleElementController) 
+    {
+        return new PuzzleElementControllerData(puzzleElementController);
     }
 }

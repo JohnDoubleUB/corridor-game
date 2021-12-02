@@ -51,6 +51,7 @@ public class NumberpadController : PuzzleElementController
             if (key != null) 
             {
                 inertKey.buttonMesh.enabled = true;
+                inertKey.buttonText.enabled = true;
                 //Store key value
                 keyToPlace = key.slotContent.ObjectName[0];
                 keyToPlaceTarget = Buttons.First(x => x.ObjectName[0] == keyToPlace).transform;
@@ -116,6 +117,8 @@ public class NumberpadController : PuzzleElementController
                 disabledButtons.Remove(keyToPlace);
                 placingKey = false;
                 inertKey.buttonMesh.enabled = false;
+                inertKey.buttonText.enabled = false;
+                if(LayoutHandler != null) OnPuzzleUpdated();
             }
         }
     }
@@ -187,5 +190,37 @@ public class NumberpadController : PuzzleElementController
     private void PlayPressSoundAtLocation(Transform locationTransform = null) 
     {
         if (buttonPressSound != null) AudioManager.current.PlayClipAt(buttonPressSound, locationTransform != null ? locationTransform.position : transform.position, 0.5f, true);
+    }
+
+    public override void LoadPuzzleData(PuzzleElementControllerData puzzleData)
+    {
+        NumberpadControllerData numberpadData = puzzleData as NumberpadControllerData;
+        if (numberpadData != null) 
+        {
+            disabledButtons = numberpadData.DisabledButtons.ToList();
+        }
+
+        base.LoadPuzzleData(puzzleData);
+    }
+
+    public override void OnPuzzleUpdated()
+    {
+        print("puzzle updated!");
+        LayoutHandler.UpdatePuzzleData(this, (NumberpadControllerData)this);
+    }
+}
+
+public class NumberpadControllerData : PuzzleElementControllerData
+{
+    public char[] DisabledButtons;
+
+    public NumberpadControllerData(NumberpadController numberpadController) : base(numberpadController)
+    {
+        DisabledButtons = numberpadController.disabledButtons.ToArray();
+    }
+
+    public static implicit operator NumberpadControllerData(NumberpadController numberpadController)
+    {
+        return new NumberpadControllerData(numberpadController);
     }
 }

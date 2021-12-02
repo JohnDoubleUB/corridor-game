@@ -16,22 +16,22 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private string layoutId = "";
 
-    public string LayoutID 
-    { 
-        get 
+    public string LayoutID
+    {
+        get
         {
             if (string.IsNullOrEmpty(layoutId)) layoutId = layoutLevelNumber + "_" + layoutNumber;
             return layoutId;
-        } 
+        }
     }
 
     public Door SectionDoor
-    { 
-        set 
-        { 
+    {
+        set
+        {
             sectionDoor = value;
             InitateDoorStatus();
-        } 
+        }
     }
 
     public Door sectionDoor;
@@ -54,13 +54,13 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     private void Update()
     {
-        if (layoutIntitated) 
+        if (layoutIntitated)
         {
-            for (int i = 0; i < Pickups.Length; i++) 
+            for (int i = 0; i < Pickups.Length; i++)
             {
                 PickupSpawn currentPickup = Pickups[i];
                 if (currentPickup.PickedUp) continue;
-                if (currentPickup.SpawnedPickup.ParentChanged) 
+                if (currentPickup.SpawnedPickup.ParentChanged)
                 {
                     currentPickup.PickedUp = true;
                     layoutData.collectedItems.Add(i);
@@ -70,7 +70,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded levelData) 
+    public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded levelData)
     {
         if (!layoutIntitated)
         {
@@ -78,7 +78,7 @@ public class CorridorLayoutHandler : MonoBehaviour
             this.levelData = levelData;
             layoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
 
-            
+
 
             //Setup prop parenting
             IntiatePropParenting(sectionIsFlipped);
@@ -86,13 +86,14 @@ public class CorridorLayoutHandler : MonoBehaviour
             int numberPadCount = 0;
             PuzzleElementController puzzleElement;
 
-            for (int i = 0; i < PuzzleElements.Count; i++) 
+            for (int i = 0; i < PuzzleElements.Count; i++)
             {
                 puzzleElement = PuzzleElements[i];
-                if (layoutData.completedPuzzles.Contains(i)) 
-                {
-                    puzzleElement.PuzzleSolved = true;
-                }
+
+                //NEW
+                PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
+                if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
+
                 puzzleElement.LayoutHandler = this;
 
                 //Set the passwords and store in the layout!
@@ -120,28 +121,35 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    public void CheckPuzzleCompletion(PuzzleElementController puzzleElement = null) 
+    public void CheckPuzzleCompletion(PuzzleElementController puzzleElement = null, PuzzleElementControllerData puzzleData = null)
     {
-        if (puzzleElement != null && puzzleElement.PuzzleSolved) 
-        {
-            int puzzleIndex = PuzzleElements.IndexOf(puzzleElement);
-            if (!layoutData.completedPuzzles.Contains(puzzleIndex)) layoutData.completedPuzzles.Add(puzzleIndex);
-        }
-
-        if (!PuzzleElements.Any(x => !x.PuzzleSolved)) 
+        if (!PuzzleElements.Any(x => !x.PuzzleSolved))
         {
             sectionDoor.DoorLocked = false;
         }
     }
 
-    public void UpdatePuzzleStatus() 
+    public void UpdatePuzzleData(PuzzleElementController puzzleElement = null, PuzzleElementControllerData puzzleData = null)
     {
+        if (puzzleElement != null && puzzleData != null)
+        {
+            puzzleData.PuzzleIndex = PuzzleElements.IndexOf(puzzleElement);
+            int indexToReplace = layoutData.puzzleData.FindIndex(x => x.PuzzleIndex == puzzleData.PuzzleIndex);
 
+            if (indexToReplace == -1)
+            {
+                layoutData.puzzleData.Add(puzzleData);
+            }
+            else
+            {
+                layoutData.puzzleData[indexToReplace] = puzzleData;
+            }
+        }
     }
 
-    private void PlacePickupables() 
+    private void PlacePickupables()
     {
-        for ( int i = 0; i < Pickups.Length; i++)
+        for (int i = 0; i < Pickups.Length; i++)
         {
             PickupSpawn pickup = Pickups[i];
 
@@ -151,7 +159,7 @@ public class CorridorLayoutHandler : MonoBehaviour
                 {
                     pickup.PickedUp = true;
                 }
-                else 
+                else
                 {
                     pickup.SpawnedPickup = new PickupAndParent();
                     pickup.SpawnedPickup.Parent = pickup.PotentialSpawnPositions[UnityEngine.Random.Range(0, pickup.PotentialSpawnPositions.Length)];
@@ -164,7 +172,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     }
 
 
-    private void InitateDoorStatus() 
+    private void InitateDoorStatus()
     {
         if (PuzzleElements.Any() && PuzzleElements.Any(x => !x.PuzzleSolved))
         {
@@ -173,7 +181,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    private void IntiatePropParenting(bool sectionIsFlipped) 
+    private void IntiatePropParenting(bool sectionIsFlipped)
     {
         foreach (PropScript prop in Props)
         {
@@ -190,7 +198,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 }
 
 [System.Serializable]
-public class PickupSpawn 
+public class PickupSpawn
 {
     public PickupableInteractable PickupItemPrefab;
     public Transform[] PotentialSpawnPositions;
@@ -203,11 +211,11 @@ public struct PickupAndParent
     public InteractableObject Pickup;
     public Transform Parent;
 
-    public bool ParentChanged 
+    public bool ParentChanged
     {
-        get 
+        get
         {
             return Pickup.transform.parent != Parent;
-        } 
+        }
     }
 }

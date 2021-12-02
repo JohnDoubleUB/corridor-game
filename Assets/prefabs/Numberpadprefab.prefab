@@ -1725,6 +1725,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2841342758071465357, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
         type: 3}
+      propertyPath: makeButtonInert
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2841342758071465357, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
+        type: 3}
       propertyPath: ButtonMeshTransform
       value: 
       objectReference: {fileID: 7968833478274302962}

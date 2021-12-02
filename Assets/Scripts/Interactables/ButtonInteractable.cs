@@ -8,6 +8,7 @@ public class ButtonInteractable : InteractableObject
     public Transform ButtonMeshTransform;
     public float buttonInAmount = 0.009f;
     public float timeInMultiplier = 4;
+    public bool makeButtonInert = false;
 
     public Text buttonText;
 
@@ -46,28 +47,30 @@ public class ButtonInteractable : InteractableObject
 
     private void Update()
     {
-        if (buttonPushed && ButtonMeshTransform.position.x != buttonInPosition.x)
+        if (!makeButtonInert)
         {
-            ButtonMeshTransform.localPosition = buttonInPosition;
-        }
-        else if (!buttonPushed && ButtonMeshTransform.position.x != buttonOutPosition.x) 
-        {
-            ButtonMeshTransform.localPosition = buttonOutPosition;
-        }
-
-        if (buttonPushed) 
-        {
-            if (timer < 1)
+            if (buttonPushed && ButtonMeshTransform.position.x != buttonInPosition.x)
             {
-                timer += Time.deltaTime * timeInMultiplier;
+                ButtonMeshTransform.localPosition = buttonInPosition;
             }
-            else 
+            else if (!buttonPushed && ButtonMeshTransform.position.x != buttonOutPosition.x)
             {
-                buttonPushed = false;
-                timer = 0;
+                ButtonMeshTransform.localPosition = buttonOutPosition;
+            }
+
+            if (buttonPushed)
+            {
+                if (timer < 1)
+                {
+                    timer += Time.deltaTime * timeInMultiplier;
+                }
+                else
+                {
+                    buttonPushed = false;
+                    timer = 0;
+                }
             }
         }
-
 
 
     }
