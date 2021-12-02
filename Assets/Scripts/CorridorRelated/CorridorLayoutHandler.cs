@@ -121,7 +121,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    public void CheckPuzzleCompletion(PuzzleElementController puzzleElement = null, PuzzleElementControllerData puzzleData = null)
+    public void CheckPuzzleCompletion()
     {
         IEnumerable<PuzzleElementController>[] levelTriggerSplitList = PuzzleElements.Partition(x => !x.IsLevelTrigger).ToArray();
 
@@ -138,7 +138,6 @@ public class CorridorLayoutHandler : MonoBehaviour
             {
                 CorridorChangeManager.current.LevelChange(levelChange);
             }
-            //Trigger level change?
         }
     }
 

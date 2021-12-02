@@ -1,15 +1,16 @@
 Puzzles:
 - Keypad <DONE>
-
 - getting keys for keypad<DONE>
+
 - Plynth Items
 - Key lock
 
 Pickupable objects: (These all need doing)
 - Keypad key <DONE>
 - Momentos (various pickupable items) <DONE>
+
 - Key
-- Plynth Items <-- work on this next
+- Plynth Items
 
 Interactables:
 - Notes
@@ -23,6 +24,7 @@ Other features:
 - persistent items <DONE>
 - persistent puzzle completion <DONE>
 - persistent custom puzzle completion <DONE>
+- Puzzle level change trigger <DONE>
 
 
 
