@@ -27,6 +27,12 @@ Other features:
 - Puzzle level change trigger <DONE>
 
 
+Things to do:
+- Plynth Items + puzzle
+- Key lock puzzle + Key
+- Notes
+- Offices
+
 
 Number based key pad puzzles
 Clues around the rooms
