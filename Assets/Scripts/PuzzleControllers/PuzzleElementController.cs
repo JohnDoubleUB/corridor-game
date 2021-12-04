@@ -25,7 +25,7 @@ public class PuzzleElementController : MonoBehaviour
         }
     }
 
-    public virtual void Notify() 
+    public virtual void Notify(PuzzleElementNotifier notifier = null) 
     {
         print("Not implemented!");
     }

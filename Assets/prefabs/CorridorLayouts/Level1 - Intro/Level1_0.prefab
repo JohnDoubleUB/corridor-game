@@ -100,7 +100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7785650445776822735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7785650446421573658}
@@ -130,11 +130,12 @@ MonoBehaviour:
   PuzzleElements: []
   DecalClueObjects: []
   Pickups:
-  - PickupItemPrefab: {fileID: 659813024, guid: 75ea85c3bf9bee049b3f61f94a7cd5a8,
+  - PickupItemPrefab: {fileID: 1972190308613710872, guid: 6f3ed5abdc3255944b78fbc9f231250c,
       type: 3}
     PotentialSpawnPositions:
     - {fileID: 7127803071100671468}
     - {fileID: 6177214978030446287}
+    PickedUp: 0
 --- !u!1 &7785650446421573657
 GameObject:
   m_ObjectHideFlags: 0

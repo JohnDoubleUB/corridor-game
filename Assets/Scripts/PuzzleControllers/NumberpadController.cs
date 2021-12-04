@@ -40,7 +40,7 @@ public class NumberpadController : PuzzleElementController
         checkingPassword = false;
     }
 
-    public override void Notify()
+    public override void Notify(PuzzleElementNotifier notifier = null)
     {
         if (!placingKey) 
         {

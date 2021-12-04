@@ -103,12 +103,12 @@ public class InventorySlot
         return this;
     }
 
-    public PickupableInteractable RemoveItemFromContents()
+    public PickupableInteractable RemoveItemFromContents(bool makeInteractable = true)
     {
         PickupableInteractable objectToRemove = slotContent;
         slotContent = null;
         objectToRemove.transform.SetParent(null);
-        objectToRemove.IsInteractable = true;
+        objectToRemove.IsInteractable = makeInteractable;
         objectToRemove.currentSlot = null;
         return objectToRemove;
     }

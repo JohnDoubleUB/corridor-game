@@ -12,6 +12,7 @@ public class PickupableInteractable : InteractableObject
     private Vector3 PositionAtTimeOfPickup;
     private float positionValue = 0;
     private bool beingPickedUp;
+    private InventorySlot lastFrameInventorySlot;
 
     private Collider pickupCollider;
 
@@ -60,6 +61,11 @@ public class PickupableInteractable : InteractableObject
                 if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
                 beingPickedUp = false;
             }
+        }
+
+        if (currentSlot == null && transform.localScale != defaultScale) 
+        {
+            transform.localScale = defaultScale;
         }
     }
 
