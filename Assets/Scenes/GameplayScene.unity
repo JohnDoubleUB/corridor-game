@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 59256164}
   - component: {fileID: 59256167}
   m_Layer: 10
-  m_Name: Plynth2
+  m_Name: Plinth2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3156,7 +3156,7 @@ GameObject:
   - component: {fileID: 957479078}
   - component: {fileID: 957479081}
   m_Layer: 10
-  m_Name: Plynth3
+  m_Name: Plinth3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4306,7 +4306,7 @@ GameObject:
   - component: {fileID: 1609747850}
   - component: {fileID: 1609747853}
   m_Layer: 10
-  m_Name: Plynth1
+  m_Name: Plinth1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5115,7 +5115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LayoutHandler: {fileID: 0}
   IsLevelTrigger: 0
-  Plynths:
+  Plinths:
   - PlynthNotifier: {fileID: 1609747853}
     RequiredObject: {fileID: 1972190308613710872, guid: a6e177f2d9489e0469239e7ade5a27ad,
       type: 3}

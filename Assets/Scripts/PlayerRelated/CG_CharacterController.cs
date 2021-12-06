@@ -162,11 +162,14 @@ public class CG_CharacterController : MonoBehaviour
                 {
                     currentInteractableGameObject = lookedAtObject.collider.gameObject;
                     currentInteractable = currentInteractableGameObject.GetComponent<InteractableObject>();
-                    
+
                     interactionPrompt.text = currentInteractable.IsInteractable ? currentInteractable.ObjectName : "";
-
-                    if(currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
-
+                    if (currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
+                }
+                else if (currentInteractable.IsInteractable != (playerCrosshair.sprite == crosshairInteract))
+                {
+                    //This makes it so that the interact crosshair updates if the interactable state changes while being looked at
+                    playerCrosshair.sprite = currentInteractable.IsInteractable ? crosshairInteract : crosshairNormal;
                 }
             }
             else

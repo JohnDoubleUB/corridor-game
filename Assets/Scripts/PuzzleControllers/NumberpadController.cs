@@ -57,7 +57,6 @@ public class NumberpadController : PuzzleElementController
                 keyToPlaceTarget = Buttons.First(x => x.ObjectName[0] == keyToPlace).transform;
                 //Destroy inventory object
                 Destroy(key.RemoveItemFromContents().gameObject);
-                //TODO: Method in InventoryManager to reorganize inventory;
                 positionValue = 0f;
                 placingKey = true;
                 inertKey.ObjectName = keyToPlace.ToString();

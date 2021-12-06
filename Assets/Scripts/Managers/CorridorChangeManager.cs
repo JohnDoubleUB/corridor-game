@@ -80,7 +80,7 @@ public class CorridorChangeManager : MonoBehaviour
         if (Levels != null && Levels.Any())
         {
             LevelData_Loaded temp = GetCurrentLevelData;
-            levelCorridorPrefabs = temp.CorridorLayouts; //TODO: Make the check a little more nice for CurrentLevelData?
+            levelCorridorPrefabs = temp.CorridorLayouts;
             levelCorridorBackwardPrefabs = temp.BackwardOnlyLayouts;
         }
 
@@ -348,7 +348,6 @@ public class CorridorChangeManager : MonoBehaviour
         foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
         Destroy(sectionCorridorPrefab.gameObject);
 
-        //TODO: Change this so that it does some fancy creation stuff
         CreateCorridorPrefabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
     }
 
