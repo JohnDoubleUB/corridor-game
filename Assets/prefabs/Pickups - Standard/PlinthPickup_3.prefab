@@ -168,7 +168,7 @@ PrefabInstance:
     - target: {fileID: 334401647505907937, guid: a6e177f2d9489e0469239e7ade5a27ad,
         type: 3}
       propertyPath: m_Name
-      value: PlynhPickup_3
+      value: PlinthPickup_3
       objectReference: {fileID: 0}
     - target: {fileID: 1148374106133330523, guid: a6e177f2d9489e0469239e7ade5a27ad,
         type: 3}

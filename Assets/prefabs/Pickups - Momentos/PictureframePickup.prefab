@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1972190308613710873}
   - component: {fileID: 1972190308613710872}
   m_Layer: 10
-  m_Name: PictureframePickup 1
+  m_Name: PictureframePickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   pickupType: 1
   currentSlot:
     slotContent: {fileID: 0}
-  pickupSpeedMultiplier: 4
+  pickupSpeedMultiplier: 2.5
   pickupScaleMultiplier: 1
 --- !u!1 &5749191566646132570
 GameObject:

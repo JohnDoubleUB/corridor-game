@@ -27,14 +27,18 @@ public class PlinthController : PuzzleElementController
             if (plinthItemSlot != null) 
             {
                 PickupableInteractable plinthItem = plinthItemSlot.RemoveItemFromContents(false);
-
-
                 AttatchItemToPlinth(currentPItem, plinthItem);
-
-                //plinthItem.transform.SetParent(currentPItem.PlynthNotifier.AssociatedTransform);
-                //plinthItem.transform.localPosition = Vector3.zero;
-                //currentPItem.HasCorrectItem = true;
-                //currentPItem.PlynthNotifier.IsInteractable = false;
+                
+                //Check if all plinths are now correct, if so then set Puzzle as solved
+                if (Plinths.All(x => x.HasCorrectItem))
+                {
+                    PuzzleSolved = true;
+                }
+                else 
+                {
+                    OnPuzzleUpdated();
+                }
+                  
             }
         }
 
@@ -55,7 +59,6 @@ public class PlinthController : PuzzleElementController
 
         }
 
-
         base.LoadPuzzleData(puzzleData);
     }
 
@@ -75,6 +78,10 @@ public class PlinthController : PuzzleElementController
         currentPlinth.PlynthNotifier.IsInteractable = false;
     }
 
+    public override void OnPuzzleUpdated()
+    {
+        LayoutHandler.UpdatePuzzleData(this, (PlinthControllerData)this);
+    }
 }
 
 [System.Serializable]

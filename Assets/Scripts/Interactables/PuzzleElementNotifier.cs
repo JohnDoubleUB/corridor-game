@@ -8,6 +8,8 @@ public class PuzzleElementNotifier : InteractableObject
     public Transform AssociatedTransform;
     public PuzzleElementController puzzleToNotify;
 
+    private Vector3 InitialPosition;
+
     protected override void OnInteract()
     {
         if (puzzleToNotify != null) puzzleToNotify.Notify(this);

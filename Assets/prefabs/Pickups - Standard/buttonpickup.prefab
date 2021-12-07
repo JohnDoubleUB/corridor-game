@@ -63,7 +63,7 @@ MonoBehaviour:
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}
-  pickupSpeedMultiplier: 4
+  pickupSpeedMultiplier: 2.5
   pickupScaleMultiplier: 4
   buttonText: {fileID: 3710080081520378665}
 --- !u!1 &3710080081520378670
