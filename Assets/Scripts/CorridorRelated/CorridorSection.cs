@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CorridorSection : MonoBehaviour
@@ -43,6 +45,8 @@ public class CorridorSection : MonoBehaviour
     private float defaultVariationAmplitude;
 
     private BoxCollider boxCol;
+
+    private Task stretchTask;
 
     private void Awake()
     {
@@ -139,6 +143,43 @@ public class CorridorSection : MonoBehaviour
     public void SetWallWavyness(float value) 
     {
         meshMaterials[0].SetFloat("_DriftSpeed", value);
+    }
+
+    public void StretchTo(float stretchTarget)
+    {
+        if (!HasWarped) 
+        {
+            print("stretch!");
+            stretchTask = TransitionToStretchTarget(stretchTarget); 
+        }
+    }
+
+    private async Task TransitionToStretchTarget(float stretchTarget) 
+    {
+        float stretchTimer = 0;
+        float initialStretch = Math.Abs(transform.localScale.x);
+        float stretchSpeed = 0.5f;
+
+        while (stretchTimer < 1f)
+        {
+            stretchTimer += Time.deltaTime * stretchSpeed;
+            float currentStretch = Mathf.SmoothStep(initialStretch, stretchTarget, stretchTimer);
+            SetCorridorStretch(currentStretch);
+            await Task.Yield();
+        }
+
+        SetCorridorStretch(stretchTarget);
+    }
+
+    public async void StopAllTasks()
+    {
+        if (stretchTask != null && !stretchTask.IsCompleted) 
+        { 
+            stretchTask.Dispose();
+            stretchTask = null;
+        }
+
+        await Task.Yield();
     }
 }
 

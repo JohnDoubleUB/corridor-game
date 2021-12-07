@@ -299,23 +299,22 @@ public class CorridorChangeManager : MonoBehaviour
         }
 
         //Initiate weird extendo times;
-        if (false && currentSection.CorridorNumber % 2 == 0)
+
+
+        if (currentSection.CorridorNumber % 2 == 0)
         {
-            if ((Random.Range(0f, 1f) > 0.3) && !currentSection.HasWarped)
+            if (true && !currentSection.HasWarped)
             {
-                //this.playerTransform = playerTransform;
-                stretchTimer = 0;
-                sectionToStretch = currentSection;
-                stretchTarget = Random.Range(1, 5);
+                currentSection.StretchTo(2);
             }
 
-            if (Random.Range(0f, 1f) > 0.3)
-            {
-                wavyTimer = 0;
-                sectionToMakeWavy = currentSection;
-                currentWavy = 0;
-                doorsToMakeWavy = currentSectionDoors;
-            }
+            //if (Random.Range(0f, 1f) > 0.3)
+            //{
+            //    wavyTimer = 0;
+            //    sectionToMakeWavy = currentSection;
+            //    currentWavy = 0;
+            //    doorsToMakeWavy = currentSectionDoors;
+            //}
 
             currentSection.HasWarped = true;
         }
@@ -326,6 +325,7 @@ public class CorridorChangeManager : MonoBehaviour
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
         newSectionEndDoor.ResetDoor();
 
+        sectionToMove.StopAllTasks();
         sectionToMove.SetPropSectionFlip(false);
         sectionToMove.SetAllWavyness(0);
         sectionToMove.FakeParent = middleSection.CorridorStartEnd[1]; //parent the new section to the front of the front section
@@ -342,6 +342,7 @@ public class CorridorChangeManager : MonoBehaviour
         sectionToMove.HasWarped = false;
         sectionToMove.FlipCorridorX = Random.Range(0f, 1f) > 0.5f;
         sectionToMove.FlipCorridorZ = Random.Range(0f, 1f) > 0.5f;
+
 
         //Remove old objects and add new
         CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
