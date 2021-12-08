@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Door : MonoBehaviour
@@ -37,15 +38,22 @@ public class Door : MonoBehaviour
     private bool justUnlocked;
     private bool doorIsClosing;
 
+    private bool wavyInProgress;
+
+    private float defaultVariationAmplitude;
+
 
     private void Awake()
     {
-        meshMaterials = GetComponent<MeshRenderer>().sharedMaterials;
+        meshMaterials = GetComponent<MeshRenderer>().materials;
         doorInteractable.door = this;
 
         openOnInteractLast = openOnInteract;
         doorInteractable.IsInteractable = openOnInteract;
-    }
+
+        defaultVariationAmplitude = meshMaterials[1].GetFloat("_VariationAmplitude");
+        meshMaterials[1].SetFloat("_VariationAmplitude", 0f);
+}
 
     // Start is called before the first frame update
     void Start()
@@ -72,9 +80,17 @@ public class Door : MonoBehaviour
         }
     }
 
+    private void _SetWavyness(float value)
+    {
+        Material meshMat = meshMaterials[1];
+        meshMat.SetFloat("_DriftSpeed", value);
+        SetMatWaveOnOrOff(value > 0, meshMat);
+    }
+
     public void SetWavyness(float value)
     {
-        meshMaterials[1].SetFloat("_DriftSpeed", value);
+        wavyInProgress = false;
+        _SetWavyness(value);
     }
 
     public void InteractOpenClose(bool ignoreLock = false) 
@@ -164,5 +180,55 @@ public class Door : MonoBehaviour
         Vector3 playerPosition = player.position;
         Vector3 heading = playerPosition - transform.position;
         relativePlayerDirection = Vector3.Dot(heading, transform.right) > 0 ? 1 : -1;
+    }
+
+    public void MakeWave()
+    {
+        print("make wave!");
+        TransitionToWavy();
+    }
+
+    private async void TransitionToWavy()
+    {
+        float wavyTimer = 0;
+        float currentWavy = 0;
+        float wavySpeed = 0.5f;
+
+        wavyInProgress = true;
+
+        while (currentWavy < 1f && wavyInProgress)
+        {
+            wavyTimer += Time.deltaTime * wavySpeed;
+            currentWavy = Mathf.SmoothStep(0, 1, wavyTimer);
+
+            _SetWavyness(currentWavy);
+
+            await Task.Yield();
+        }
+
+        if (!wavyInProgress)
+        {
+            _SetWavyness(0);
+        }
+        else
+        {
+            _SetWavyness(1);
+            wavyInProgress = false;
+        }
+
+    }
+
+    private void SetMatWaveOnOrOff(bool isWaving, Material mat)
+    {
+        float variationAmplitudeValue = mat.GetFloat("_VariationAmplitude");
+
+        if (isWaving && variationAmplitudeValue != defaultVariationAmplitude)
+        {
+            mat.SetFloat("_VariationAmplitude", defaultVariationAmplitude);
+        }
+        else if (!isWaving && variationAmplitudeValue != 0f)
+        {
+            mat.SetFloat("_VariationAmplitude", 0f);
+        }
     }
 }

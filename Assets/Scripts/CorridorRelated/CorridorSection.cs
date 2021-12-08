@@ -46,7 +46,8 @@ public class CorridorSection : MonoBehaviour
 
     private BoxCollider boxCol;
 
-    private Task stretchTask;
+    private bool wavyInProgress;
+    private bool stretchInProgress;
 
     private void Awake()
     {
@@ -132,35 +133,43 @@ public class CorridorSection : MonoBehaviour
 
     public void SetAllWavyness(float value) 
     {
-        foreach (Material meshMat in meshMaterials) meshMat.SetFloat("_DriftSpeed", value);
+        foreach (Material meshMat in meshMaterials) 
+        { 
+            meshMat.SetFloat("_DriftSpeed", value);
+        }
     }
 
     public void SetFloorWavyness(float value) 
     {
-        meshMaterials[1].SetFloat("_DriftSpeed", value);
+        Material meshMat = meshMaterials[1];
+        meshMat.SetFloat("_DriftSpeed", value);
     }
 
     public void SetWallWavyness(float value) 
     {
-        meshMaterials[0].SetFloat("_DriftSpeed", value);
+        Material meshMat = meshMaterials[0];
+        meshMat.SetFloat("_DriftSpeed", value);
     }
 
     public void StretchTo(float stretchTarget)
     {
-        if (!HasWarped) 
-        {
-            print("stretch!");
-            stretchTask = TransitionToStretchTarget(stretchTarget); 
-        }
+        TransitionToStretchTarget(stretchTarget); 
     }
 
-    private async Task TransitionToStretchTarget(float stretchTarget) 
+    public void MakeWave(bool effectWall = true, bool effectFloor = true) 
+    {
+        TransitionToWavy(effectWall, effectFloor);
+    }
+
+    private async void TransitionToStretchTarget(float stretchTarget) 
     {
         float stretchTimer = 0;
         float initialStretch = Math.Abs(transform.localScale.x);
         float stretchSpeed = 0.5f;
+        
+        stretchInProgress = true;
 
-        while (stretchTimer < 1f)
+        while (stretchTimer < 1f && stretchInProgress)
         {
             stretchTimer += Time.deltaTime * stretchSpeed;
             float currentStretch = Mathf.SmoothStep(initialStretch, stretchTarget, stretchTimer);
@@ -168,18 +177,58 @@ public class CorridorSection : MonoBehaviour
             await Task.Yield();
         }
 
-        SetCorridorStretch(stretchTarget);
+        if (!wavyInProgress) 
+        {
+            SetCorridorStretch(initialStretch);
+        }
+        else 
+        {
+            SetCorridorStretch(stretchTarget);
+            stretchInProgress = false;
+        }
     }
 
-    public async void StopAllTasks()
+    private async void TransitionToWavy(bool wall, bool floor) 
     {
-        if (stretchTask != null && !stretchTask.IsCompleted) 
-        { 
-            stretchTask.Dispose();
-            stretchTask = null;
+        float wavyTimer = 0;
+        float currentWavy = 0;
+        float wavySpeed = 0.5f;
+
+        wavyInProgress = true;
+        
+        while (currentWavy < 1f && wavyInProgress)
+        {
+            wavyTimer += Time.deltaTime * wavySpeed;
+            currentWavy = Mathf.SmoothStep(0, 1, wavyTimer);
+
+            SetWallAndOrFloorWavyness(wall, floor, currentWavy);
+
+            await Task.Yield();
         }
 
-        await Task.Yield();
+        if (!wavyInProgress)
+        {
+            SetWallAndOrFloorWavyness(wall, floor, 0);
+        }
+        else
+        {
+            SetWallAndOrFloorWavyness(wall, floor, 1f);
+            wavyInProgress = false;
+        }
+
+    }
+
+    public void StopAllEffects()
+    {
+        wavyInProgress = false;
+        stretchInProgress = false;
+    }
+
+    private void SetWallAndOrFloorWavyness(bool wall, bool floor, float wavyAmount) 
+    {
+        if (wall && floor) SetAllWavyness(wavyAmount);
+        else if (wall) SetWallWavyness(wavyAmount);
+        else if (floor) SetFloorWavyness(wavyAmount);
     }
 }
 

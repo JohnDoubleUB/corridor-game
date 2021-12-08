@@ -24,22 +24,9 @@ public class CorridorChangeManager : MonoBehaviour
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
-    Door[] GetOrderedDoorSegments { get { return corridorDoorSegments.OrderByDescending(x => x.transform.position.x).ToArray(); } }
+    //Door[] GetOrderedDoorSegments { get { return corridorDoorSegments.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
     private Transform playerTransform;
-    private float stretchTimer;
-    private float stretchTarget = 2;
-    private float initialStretch = 1;
-    private float stretchSpeed = 0.5f;
-    private CorridorSection sectionToStretch;
-
-    private float wavyTimer;
-    private float wavyTarget = 1;
-    private float intitialWavy = 0;
-    private float wavySpeed = 1;
-    private float currentWavy;
-    private CorridorSection sectionToMakeWavy;
-    private Door[] doorsToMakeWavy = new Door[0];
 
     private GameObject corridorGameParent;
     private Vector3 playerInitialPosition;
@@ -162,44 +149,6 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void Update()
     {
-        if (sectionToStretch != null)
-        {
-
-            if (Mathf.Abs(sectionToStretch.transform.localScale.x) < Mathf.Abs(stretchTarget))
-            {
-                float currentStretch = Mathf.SmoothStep(initialStretch, stretchTarget, stretchTimer);
-                stretchTimer += Time.deltaTime * stretchSpeed;
-
-                sectionToStretch.SetCorridorStretch(currentStretch);
-            }
-            else
-            {
-                stretchTimer = 0;
-                sectionToStretch = null;
-            }
-        }
-
-        if (sectionToMakeWavy != null)
-        {
-            if (currentWavy < wavyTarget)
-            {
-                currentWavy = Mathf.SmoothStep(intitialWavy, wavyTarget, wavyTimer);
-                wavyTimer += Time.deltaTime * wavySpeed;
-
-                sectionToMakeWavy.SetAllWavyness(currentWavy);
-                foreach (Door secDoor in doorsToMakeWavy) secDoor.SetWavyness(currentWavy);
-
-            }
-            else
-            {
-                currentWavy = 0;
-                wavyTimer = 0;
-                sectionToMakeWavy = null;
-                doorsToMakeWavy = new Door[0];
-            }
-        }
-
-
         if (currentLevelChangeTracking != CurrentLevel)
         {
             RenumberSections();
@@ -211,7 +160,6 @@ public class CorridorChangeManager : MonoBehaviour
         //{
         //    GameManager.current.tvMan.moveTowardPlayer = true;
         //}
-
     }
 
     private void LateUpdate()
@@ -254,10 +202,6 @@ public class CorridorChangeManager : MonoBehaviour
                 || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
                 LevelChange(levelChange);
-                //sectionsTraveledOnCurrentLevel = 0;
-                //RenumberSections();
-                //CurrentLevel = levelChange;
-                //UpdateLevel();
             }
 
 
@@ -303,19 +247,13 @@ public class CorridorChangeManager : MonoBehaviour
 
         if (currentSection.CorridorNumber % 2 == 0)
         {
-            if (true && !currentSection.HasWarped)
+            if (!currentSection.HasWarped)
             {
                 currentSection.StretchTo(2);
+                currentSection.MakeWave();
+                //foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
             }
-
-            //if (Random.Range(0f, 1f) > 0.3)
-            //{
-            //    wavyTimer = 0;
-            //    sectionToMakeWavy = currentSection;
-            //    currentWavy = 0;
-            //    doorsToMakeWavy = currentSectionDoors;
-            //}
-
+            foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
             currentSection.HasWarped = true;
         }
     }
@@ -325,7 +263,7 @@ public class CorridorChangeManager : MonoBehaviour
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
         newSectionEndDoor.ResetDoor();
 
-        sectionToMove.StopAllTasks();
+        sectionToMove.StopAllEffects();
         sectionToMove.SetPropSectionFlip(false);
         sectionToMove.SetAllWavyness(0);
         sectionToMove.FakeParent = middleSection.CorridorStartEnd[1]; //parent the new section to the front of the front section
