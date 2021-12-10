@@ -24,8 +24,6 @@ public class CorridorChangeManager : MonoBehaviour
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
-    //Door[] GetOrderedDoorSegments { get { return corridorDoorSegments.OrderByDescending(x => x.transform.position.x).ToArray(); } }
-
     private Transform playerTransform;
 
     private GameObject corridorGameParent;
