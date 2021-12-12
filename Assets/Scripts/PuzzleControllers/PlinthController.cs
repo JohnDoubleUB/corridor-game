@@ -7,10 +7,16 @@ using UnityEngine;
 public class PlinthController : PuzzleElementController
 {
     public PlinthNotifierAndItem[] Plinths;
+    public float plinthLowerAmount = 1f;
+    float pickupSpeedMultiplier = 1.5f;
+
+    private bool plinthsAreDown;
+
+    private int plinthCompleteCount;
 
     private void Awake()
     {
-        for (int i = 0; i < Plinths.Length; i++) 
+        for (int i = 0; i < Plinths.Length; i++)
         {
             PuzzleElementNotifier notifierElement = Plinths[i].PlynthNotifier;
             notifierElement.NotifierId = i;
@@ -20,26 +26,26 @@ public class PlinthController : PuzzleElementController
 
     public override void Notify(PuzzleElementNotifier notifier = null)
     {
-        if (notifier != null) 
+        if (notifier != null)
         {
             PlinthNotifierAndItem currentPItem = Plinths[notifier.NotifierId];
             InventorySlot plinthItemSlot = InventoryManager.current.inventorySlots.Where(x => x.SlotOccupied && x.slotContent.ObjectName == currentPItem.RequiredObject.ObjectName).FirstOrDefault();
 
-            if (plinthItemSlot != null) 
+            if (plinthItemSlot != null)
             {
                 PickupableInteractable plinthItem = plinthItemSlot.RemoveItemFromContents(false);
                 AttatchItemToPlinth(currentPItem, plinthItem, true);
-                
+
                 //Check if all plinths are now correct, if so then set Puzzle as solved
                 if (Plinths.All(x => x.HasCorrectItem))
                 {
                     PuzzleSolved = true;
                 }
-                else 
+                else
                 {
                     OnPuzzleUpdated();
                 }
-                  
+
             }
         }
 
@@ -48,7 +54,7 @@ public class PlinthController : PuzzleElementController
     public override void LoadPuzzleData(PuzzleElementControllerData puzzleData)
     {
         PlinthControllerData plinthControllerData = puzzleData as PlinthControllerData;
-        
+
         if (plinthControllerData != null)
         {
             for (int i = 0; i < Plinths.Length; i++)
@@ -60,10 +66,12 @@ public class PlinthController : PuzzleElementController
 
         }
 
+        if (puzzleData.PuzzleSolved) LowerPlinths();
+
         base.LoadPuzzleData(puzzleData);
     }
 
-    private void AttatchItemToPlinth(PlinthNotifierAndItem currentPlinth, InteractableObject itemForPlinth, bool playAnimation = false) 
+    private void AttatchItemToPlinth(PlinthNotifierAndItem currentPlinth, InteractableObject itemForPlinth, bool playAnimation = false)
     {
         if (itemForPlinth.IsInteractable) itemForPlinth.IsInteractable = false;
 
@@ -71,7 +79,6 @@ public class PlinthController : PuzzleElementController
 
         if (playAnimation)
         {
-            print("not implemented but animation would play for the thing");
             AnimateItemToPoint(currentPlinth.PlynthNotifier.AssociatedTransform, new Vector3(0, 0.2f, 0));
         }
 
@@ -88,7 +95,7 @@ public class PlinthController : PuzzleElementController
     }
 
 
-    public async void AnimatePlinthAndItem(Transform transformToMove) 
+    public async void AnimatePlinthAndItem(Transform transformToMove)
     {
         await Task.Yield();
 
@@ -99,13 +106,18 @@ public class PlinthController : PuzzleElementController
     {
         Vector3 finalTargetPosition = transformToMove.position;
         Vector3 targetPosition = finalTargetPosition + offset;
-        
+
+        bool leftOrRight = Random.Range(0f, 1f) > 0.5f;
+
         //Rotation things
         Vector3 targetRotation = transformToMove.rotation.eulerAngles;
-        Vector3 initialRotation = transformToMove.rotation.eulerAngles + new Vector3(0, Random.Range(0f, 1f) > 0.5f ? 180 : -180, 0);
+        Vector3 rotationOvershoot = transformToMove.rotation.eulerAngles + new Vector3(0, leftOrRight ? -20 : 20, 0);
+        Vector3 initialRotation = transformToMove.rotation.eulerAngles + new Vector3(0, leftOrRight ? 180 : -180, 0);
 
 
-        float pickupSpeedMultiplier = 1.5f;
+        //float pickupSpeedMultiplier = 1.5f;
+        
+        
         float positionValue = 0;
         float smoothedPositionValue;
         Vector3 initalPosition;
@@ -116,10 +128,10 @@ public class PlinthController : PuzzleElementController
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
 
-
+            //TODO: convert all these into localposition (maybe also rotation)
             transformToMove.SetPositionAndRotation(
                 Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue),
-                Quaternion.Euler(Vector3.Lerp(initialRotation, targetRotation, smoothedPositionValue))
+                Quaternion.Euler(Vector3.Lerp(initialRotation, rotationOvershoot, smoothedPositionValue))
                 );
 
             await Task.Yield();
@@ -136,24 +148,82 @@ public class PlinthController : PuzzleElementController
                 positionValue += Time.deltaTime * pickupSpeedMultiplier;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
 
-                transformToMove.position = Vector3.Lerp(initalPosition, finalTargetPosition, smoothedPositionValue);
+                transformToMove.SetPositionAndRotation(
+                    Vector3.Lerp(initalPosition, finalTargetPosition, smoothedPositionValue),
+                    Quaternion.Euler(Vector3.Lerp(rotationOvershoot, targetRotation, smoothedPositionValue))
+                    );
+
+
 
                 await Task.Yield();
             }
         }
 
         transformToMove.SetPositionAndRotation(finalTargetPosition, Quaternion.Euler(targetRotation));
-        
-        if (PuzzleSolved) 
+
+        plinthCompleteCount++;
+
+        if (PuzzleSolved && !plinthsAreDown && plinthCompleteCount > 2)
         {
-            print("plinths move down!");
+            plinthsAreDown = true;
+            LowerPlinths(true);
         }
+
+    }
+
+    private async void LowerPlinths(bool playAnimation = false) 
+    {
+        //Wait for a few seconds
+
+        if (!playAnimation)
+        {
+            await Task.Yield();
+            foreach (PlinthNotifierAndItem p in Plinths)
+            {
+                p.PlynthNotifier.transform.position += new Vector3(0, -plinthLowerAmount, 0);
+            }
+        }
+        else 
+        {
+            //Play plinth down animation!
+            foreach (PlinthNotifierAndItem p in Plinths)
+            {
+                MoveObject(p.PlynthNotifier.transform, new Vector3(0, -plinthLowerAmount, 0), Random.Range(0f, 0.2f));
+            }
+        }
+
+    }
+
+
+    private async void MoveObject(Transform ObjectToMove, Vector3 offset, float initialDelay = 1)
+    {
+        float timer = 0;
+        while (timer < initialDelay) 
+        { 
+            timer += Time.deltaTime;
+            await Task.Yield();
+        }
+
+
+        float positionValue = 0;
+        float smoothedPositionValue;
+        Vector3 initalPosition = ObjectToMove.transform.position;
+        Vector3 targetPosition = ObjectToMove.transform.position + offset;
+
+        while (positionValue < 1f)
+        {
+            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            ObjectToMove.position = Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue);
+            await Task.Yield();
+        }
+
 
     }
 }
 
 [System.Serializable]
-public class PlinthNotifierAndItem 
+public class PlinthNotifierAndItem
 {
     public PuzzleElementNotifier PlynthNotifier;
     public InteractableObject RequiredObject;
