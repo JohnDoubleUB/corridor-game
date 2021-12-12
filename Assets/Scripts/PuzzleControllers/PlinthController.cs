@@ -62,6 +62,7 @@ public class PlinthController : PuzzleElementController
                 if (!plinthControllerData.PlinthItemsPlaced[i]) continue;
                 PlinthNotifierAndItem currentPlinth = Plinths[i];
                 AttatchItemToPlinth(currentPlinth, Instantiate(currentPlinth.RequiredObject));
+                plinthCompleteCount++;
             }
 
         }
@@ -79,7 +80,7 @@ public class PlinthController : PuzzleElementController
 
         if (playAnimation)
         {
-            AnimateItemToPoint(currentPlinth.PlynthNotifier.AssociatedTransform, new Vector3(0, 0.2f, 0));
+            AnimateItemToPoint(currentPlinth, new Vector3(0, 0.2f, 0));
         }
 
         itemForPlinth.transform.SetParent(currentPlinth.PlynthNotifier.AssociatedTransform);
@@ -101,38 +102,35 @@ public class PlinthController : PuzzleElementController
 
         //await AnimateItemToPoint(transformToMove)
     }
-
-    public async void AnimateItemToPoint(Transform transformToMove, Vector3 offset)
+    
+    public async void AnimateItemToPoint(PlinthNotifierAndItem plinthAndItem, Vector3 offset)
     {
-        Vector3 finalTargetPosition = transformToMove.position;
+        Transform transformToMove = plinthAndItem.PlynthNotifier.AssociatedTransform;
+
+        Vector3 finalTargetPosition = transformToMove.localPosition;
         Vector3 targetPosition = finalTargetPosition + offset;
 
         bool leftOrRight = Random.Range(0f, 1f) > 0.5f;
 
         //Rotation things
-        Vector3 targetRotation = transformToMove.rotation.eulerAngles;
-        Vector3 rotationOvershoot = transformToMove.rotation.eulerAngles + new Vector3(0, leftOrRight ? -20 : 20, 0);
-        Vector3 initialRotation = transformToMove.rotation.eulerAngles + new Vector3(0, leftOrRight ? 180 : -180, 0);
+        Vector3 targetRotation = transformToMove.localRotation.eulerAngles;
+        Vector3 rotationOvershoot = transformToMove.localRotation.eulerAngles + new Vector3(0, leftOrRight ? -20 : 20, 0);
+        Vector3 initialRotation = transformToMove.localRotation.eulerAngles + new Vector3(0, leftOrRight ? 180 : -180, 0);
 
-
-        //float pickupSpeedMultiplier = 1.5f;
-        
-        
         float positionValue = 0;
         float smoothedPositionValue;
         Vector3 initalPosition;
 
         while (positionValue < 1f)
         {
-            initalPosition = GameManager.current.playerController.playerCamera.transform.position - new Vector3(0, 0.6f, 0);
+            initalPosition = (GameManager.current.playerController.playerCamera.transform.position - plinthAndItem.PlynthNotifier.transform.position) - new Vector3(0, 0.6f, 0);
+
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
+
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
 
-            //TODO: convert all these into localposition (maybe also rotation)
-            transformToMove.SetPositionAndRotation(
-                Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue),
-                Quaternion.Euler(Vector3.Lerp(initialRotation, rotationOvershoot, smoothedPositionValue))
-                );
+            transformToMove.localPosition = Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue);
+            transformToMove.localRotation = Quaternion.Euler(Vector3.Lerp(initialRotation, rotationOvershoot, smoothedPositionValue));
 
             await Task.Yield();
 
@@ -141,25 +139,21 @@ public class PlinthController : PuzzleElementController
         if (offset != Vector3.zero)
         {
             positionValue = 0;
-            initalPosition = transformToMove.position;
 
             while (positionValue < 1f)
             {
                 positionValue += Time.deltaTime * pickupSpeedMultiplier;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
 
-                transformToMove.SetPositionAndRotation(
-                    Vector3.Lerp(initalPosition, finalTargetPosition, smoothedPositionValue),
-                    Quaternion.Euler(Vector3.Lerp(rotationOvershoot, targetRotation, smoothedPositionValue))
-                    );
-
-
+                transformToMove.localPosition = Vector3.Lerp(targetPosition, finalTargetPosition, smoothedPositionValue);
+                transformToMove.localRotation = Quaternion.Euler(Vector3.Lerp(rotationOvershoot, targetRotation, smoothedPositionValue));
 
                 await Task.Yield();
             }
         }
 
-        transformToMove.SetPositionAndRotation(finalTargetPosition, Quaternion.Euler(targetRotation));
+        transformToMove.localPosition = finalTargetPosition;
+        transformToMove.localRotation = Quaternion.Euler(targetRotation);
 
         plinthCompleteCount++;
 
