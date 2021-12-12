@@ -65,7 +65,7 @@ MonoBehaviour:
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}
-  pickupSpeedMultiplier: 2.5
+  pickupSpeedMultiplier: 4
   pickupScaleMultiplier: 1
 --- !u!1 &3157876857236735659
 GameObject:
