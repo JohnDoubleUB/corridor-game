@@ -185,17 +185,20 @@ public class PlinthController : PuzzleElementController
         }
         else 
         {
+            float pickupSpeedMax = pickupSpeedMultiplier / 2;
+            float pickupSpeedMin = pickupSpeedMax - (pickupSpeedMax * 0.2f);
+            
             //Play plinth down animation!
             foreach (PlinthNotifierAndItem p in Plinths)
             {
-                MoveObject(p.PlynthNotifier.transform, new Vector3(0, -plinthLowerAmount, 0), Random.Range(0f, 0.2f));
+                MoveObject(p.PlynthNotifier.transform, new Vector3(0, -plinthLowerAmount, 0), Random.Range(0f, 0.5f), Random.Range(pickupSpeedMin, pickupSpeedMax));
             }
         }
 
     }
 
 
-    private async void MoveObject(Transform ObjectToMove, Vector3 offset, float initialDelay = 1)
+    private async void MoveObject(Transform ObjectToMove, Vector3 offset, float initialDelay = 1, float speedMultiplier = 1f)
     {
         float timer = 0;
         while (timer < initialDelay) 
@@ -207,14 +210,14 @@ public class PlinthController : PuzzleElementController
 
         float positionValue = 0;
         float smoothedPositionValue;
-        Vector3 initalPosition = ObjectToMove.transform.position;
-        Vector3 targetPosition = ObjectToMove.transform.position + offset;
+        Vector3 initalPosition = ObjectToMove.transform.localPosition;
+        Vector3 targetPosition = ObjectToMove.transform.localPosition + offset;
 
         while (positionValue < 1f)
         {
-            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            positionValue += Time.deltaTime * speedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-            ObjectToMove.position = Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue);
+            ObjectToMove.localPosition = Vector3.Lerp(initalPosition, targetPosition, smoothedPositionValue);
             await Task.Yield();
         }
 
