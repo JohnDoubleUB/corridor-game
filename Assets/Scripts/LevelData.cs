@@ -126,7 +126,14 @@ public class LevelData_Loaded
     {
         this.levelData = levelData;
         //generate all the passwords for this level
-        NumberpadPasswords = levelData.NumberpadPasswords.Select(x => x.GenerateRandomPassword()).ToArray();
+
+        
+        NumberpadPasswords = levelData.NumberpadPasswords.Select(x => 
+        {
+            string randomPassword = x.GenerateRandomPassword();
+
+            return randomPassword;
+        }).ToArray();
 
         //Generate LevelLayoutData for all the layouts
         CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
@@ -156,6 +163,7 @@ public class NumberpadPassword
 {
     public string possibleCharacters = "0123456789";
     public int passwordLength = 6;
+    public int missingKeyCount = 0;
 
     public string GenerateRandomPassword() 
     {

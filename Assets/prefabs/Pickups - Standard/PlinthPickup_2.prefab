@@ -87,6 +87,12 @@ PrefabInstance:
       propertyPath: ObjectName
       value: Rectangular Piece
       objectReference: {fileID: 0}
+    - target: {fileID: 3312244108656012967, guid: a6e177f2d9489e0469239e7ade5a27ad,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1799131749446294383, guid: 88918f29b35fda047855ca898393b57a,
+        type: 3}
     - target: {fileID: 4719887467734527889, guid: a6e177f2d9489e0469239e7ade5a27ad,
         type: 3}
       propertyPath: m_LocalScale.x

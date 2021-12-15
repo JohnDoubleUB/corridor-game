@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 1636822479379277464, guid: 440e7b231c2e59146b273e1ca30e3fa5,
         type: 3}
       propertyPath: disabledButtons.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1636822479379277464, guid: 440e7b231c2e59146b273e1ca30e3fa5,
         type: 3}
