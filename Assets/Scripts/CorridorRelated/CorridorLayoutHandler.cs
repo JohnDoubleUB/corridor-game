@@ -90,28 +90,38 @@ public class CorridorLayoutHandler : MonoBehaviour
             {
                 puzzleElement = PuzzleElements[i];
 
-                //NEW
-                PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
-                if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
+                ////NEW
+                //PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
+                //if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
 
-                puzzleElement.LayoutHandler = this;
+                //puzzleElement.LayoutHandler = this;
 
                 //Set the passwords and store in the layout!
                 if (puzzleElement is NumberpadController && levelData != null)
                 {
                     NumberpadController numberpadElement = (NumberpadController)puzzleElement;
-                    numberpadElement.password = levelData.NumberpadPasswords[numberPadCount];
+                    NumberpadPassword_Loaded numberpadData = levelData.NumberpadData[numberPadCount];
+
+
+                    numberpadElement.password = numberpadData.NumberpadPassword;
+                    if(numberpadData.MissingCharacters != null) numberpadElement.disabledButtons = numberpadData.MissingCharacters.ToList();
                     numberPadCount++;
-                    print("password is: " + numberpadElement.password);
                     numberPadPasswords.Add(numberpadElement.password);
                 }
+
+
+                //NEW
+                PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
+                if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
+
+                puzzleElement.LayoutHandler = this;
             }
 
 
             foreach (DecalClueObject clueObject in DecalClueObjects)
             {
-                print("set clue to: " + levelData.NumberpadPasswords[clueObject.ClueNumber]);
-                clueObject.clue = levelData.NumberpadPasswords[clueObject.ClueNumber];
+                //clueObject.clue = levelData.NumberpadPasswords[clueObject.ClueNumber];
+                clueObject.clue = levelData.NumberpadData[clueObject.ClueNumber].NumberpadPassword;
             }
 
             PlacePickupables();
@@ -164,7 +174,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         for (int i = 0; i < Pickups.Length; i++)
         {
             PickupSpawn pickup = Pickups[i];
-
+            //TODO: Something here to make keys spawn
             if (pickup.PickupItemPrefab != null && pickup.PotentialSpawnPositions.Any())
             {
                 if (layoutData.collectedItems.Contains(i) || pickup.PickupItemPrefab.pickupType == PickupType.Momento && !InventoryManager.current.AnyFreeMomentoSlots)

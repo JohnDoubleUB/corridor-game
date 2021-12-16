@@ -105,6 +105,8 @@ public class LevelData_Loaded
 
     public string[] NumberpadPasswords;
 
+    public NumberpadPassword_Loaded[] NumberpadData;
+
     public LayoutLevelData[] CorridorLayoutData;
 
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
@@ -128,12 +130,8 @@ public class LevelData_Loaded
         //generate all the passwords for this level
 
         
-        NumberpadPasswords = levelData.NumberpadPasswords.Select(x => 
-        {
-            string randomPassword = x.GenerateRandomPassword();
-
-            return randomPassword;
-        }).ToArray();
+        NumberpadPasswords = levelData.NumberpadPasswords.Select(x => x.GenerateRandomPassword()).ToArray();
+        NumberpadData = levelData.NumberpadPasswords.Select(x => (NumberpadPassword_Loaded) x).ToArray();
 
         //Generate LevelLayoutData for all the layouts
         CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
@@ -175,6 +173,30 @@ public class NumberpadPassword
         string newPassword = "";
         for (int i = 0; i < passwordLength; i++) newPassword += possibleCharacters[Random.Range(0, possibleCharacters.Length)];
         return newPassword;
+    }
+}
+
+public class NumberpadPassword_Loaded 
+{
+    public string NumberpadPassword;
+    public char[] MissingCharacters;
+
+    public NumberpadPassword_Loaded(NumberpadPassword numberpadData) 
+    {
+        NumberpadPassword = numberpadData.GenerateRandomPassword();
+        if (numberpadData.missingKeyCount > 0) 
+        {
+            char[] uniqueCharacters = NumberpadPassword.Distinct().ToArray();
+            MissingCharacters = uniqueCharacters.Shuffle().Take(Mathf.Clamp(numberpadData.missingKeyCount, 1, uniqueCharacters.Length)).ToArray();
+        }
+
+    }
+
+
+    public static implicit operator NumberpadPassword_Loaded(NumberpadPassword numberpadData)
+    {
+
+        return new NumberpadPassword_Loaded(numberpadData);
     }
 }
 

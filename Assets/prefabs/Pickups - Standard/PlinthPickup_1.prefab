@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 1898460630413566210}
   - component: {fileID: 3312244108656012967}
   - component: {fileID: 726068267982166637}
+  - component: {fileID: 2302266273141582067}
   m_Layer: 10
   m_Name: PuzzlePieceMesh
   m_TagString: Untagged
@@ -123,7 +124,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -7721751261207427256, guid: 193489662e51eee41b60420a2c89ba63, type: 3}
+  - {fileID: 2100000, guid: bfcf343d08ebb5d46a035f6444cba01c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,3 +145,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &2302266273141582067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230467096680151992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9b4f5c9c02b6b4ab61ab39479e47fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherObjectRenderers: []

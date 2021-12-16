@@ -23,6 +23,12 @@ MonoBehaviour:
   NumberpadPasswords:
   - possibleCharacters: 0123456789
     passwordLength: 5
+    missingKeyCount: 0
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber:
   - Name: Change to level 2
     LayoutNumberTrigger: 3
@@ -31,3 +37,5 @@ MonoBehaviour:
   - Name: Change to 3
     SectionCount: 8
     LevelChange: 1
+    RandomSectionRange: 0
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []

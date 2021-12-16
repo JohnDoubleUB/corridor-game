@@ -243,7 +243,7 @@ public class CorridorChangeManager : MonoBehaviour
         //Initiate weird extendo times;
 
 
-        if (currentSection.CorridorNumber % 2 == 0)
+        if (false && currentSection.CorridorNumber % 2 == 0)
         {
             if (!currentSection.HasWarped)
             {
