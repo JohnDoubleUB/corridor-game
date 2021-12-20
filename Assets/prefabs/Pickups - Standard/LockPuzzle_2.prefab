@@ -7,6 +7,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1736772786726360847, guid: b6aa9428db4369348b4203c4f88721c8,
+        type: 3}
+      propertyPath: RequiredObject
+      value: 
+      objectReference: {fileID: 6721166451368541600, guid: 27eea2878f13ae54b957a134c211a7b0,
+        type: 3}
     - target: {fileID: 3205997951521831782, guid: b6aa9428db4369348b4203c4f88721c8,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -30,7 +36,7 @@ PrefabInstance:
     - target: {fileID: 5956973150778292019, guid: b6aa9428db4369348b4203c4f88721c8,
         type: 3}
       propertyPath: m_Name
-      value: LockPuzzle2
+      value: LockPuzzle_2
       objectReference: {fileID: 0}
     - target: {fileID: 5956973150778292020, guid: b6aa9428db4369348b4203c4f88721c8,
         type: 3}

@@ -380,7 +380,8 @@ MonoBehaviour:
   LayoutHandler: {fileID: 0}
   IsLevelTrigger: 0
   PadlockNotifier: {fileID: 2145410568101239270}
-  RequiredObject: {fileID: 0}
+  RequiredObject: {fileID: 8965826023466985456, guid: becf7f5a1e4c9ba4e86ac446f87a4b1d,
+    type: 3}
 --- !u!1 &8929018920296250094
 GameObject:
   m_ObjectHideFlags: 0
