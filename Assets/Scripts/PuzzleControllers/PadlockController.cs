@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PadlockController : PuzzleElementController
@@ -38,7 +39,7 @@ public class PadlockController : PuzzleElementController
         if (lockFocus != null) 
         {
             lockFocusDefaultPos = lockFocus.localPosition;
-            lockFocusDefaultRot = lockFocus.localRotation;
+            lockFocusDefaultRot = lockFocus.rotation;
         }
 
         if (lockHole != null)
@@ -63,6 +64,26 @@ public class PadlockController : PuzzleElementController
         else 
         {
             //Animation for checking lock only
+            RotateLockToFacePlayer();
         }
+    }
+
+
+    public async void RotateLockToFacePlayer() 
+    {
+        float positionValue = 0;
+        float smoothedPositionValue;
+        Quaternion initialRotation = lockFocus.rotation;
+
+        Transform cameraTarget = GameManager.current.playerController.playerCamera.transform;
+
+        while (positionValue < 1f) 
+        {
+            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            lockFocus.rotation = Quaternion.RotateTowards(initialRotation, Quaternion.LookRotation(cameraTarget.position - lockFocus.position), smoothedPositionValue * 200f);
+            await Task.Yield();
+        }
+        lockFocus.LookAt(cameraTarget);
     }
 }
