@@ -27,7 +27,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.194, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5956973150466368364}
   - {fileID: 5956973149049285832}
   m_Father: {fileID: 5956973150778292020}
   m_RootOrder: 1
@@ -221,6 +220,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4338887263125061641}
+  - {fileID: 5956973150466368364}
   m_Father: {fileID: 5956973149049285832}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -300,7 +300,7 @@ Transform:
   m_Children:
   - {fileID: 6586606106389238155}
   m_Father: {fileID: 8552147854970731195}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5956973150466368363
 GameObject:
@@ -325,13 +325,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5956973150466368363}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0.047100067, y: -0.00029999018, z: 0.16870001}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.047100082, y: 0.025300045, z: 0.0002999939}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3220749852667323518}
-  m_Father: {fileID: 8552147854970731195}
-  m_RootOrder: 0
+  m_Father: {fileID: 6586606106389238155}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5956973150778292019
 GameObject:
@@ -343,6 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5956973150778292020}
   - component: {fileID: 1736772786726360847}
+  - component: {fileID: 5769996082121605918}
   m_Layer: 10
   m_Name: LockPuzzle_1
   m_TagString: Untagged
@@ -386,7 +387,26 @@ MonoBehaviour:
   keyParent: {fileID: 476399419576200246}
   lockFocus: {fileID: 8552147854970731195}
   lockHole: {fileID: 4338887263125061641}
-  lockRotationUnlockOffset: 30
+  lockAnimator: {fileID: 5769996082121605918}
+--- !u!95 &5769996082121605918
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5956973150778292019}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e01b0de2534d1bc4e8b424c57a7f0184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7224211188065744826
 GameObject:
   m_ObjectHideFlags: 0
