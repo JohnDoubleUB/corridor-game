@@ -60,30 +60,70 @@ public class PadlockController : PuzzleElementController
         if (inventoryItem != null)
         {
             //Checking lock and putting in key and twisting
+            PickupableInteractable item = inventoryItem.RemoveItemFromContents(false);
+            item.transform.position = Vector3.zero;
+            InsertKey(item);
+
         }
         else 
         {
             //Animation for checking lock only
-            RotateLockToFacePlayer();
+            RotateThenBack();
         }
     }
 
 
-    public async void RotateLockToFacePlayer() 
+    private async Task RotateLock(bool toFacePlayer = true) 
     {
         float positionValue = 0;
         float smoothedPositionValue;
         Quaternion initialRotation = lockFocus.rotation;
-
         Transform cameraTarget = GameManager.current.playerController.playerCamera.transform;
+        Quaternion targetRotation = toFacePlayer ? Quaternion.LookRotation(cameraTarget.position - lockFocus.position) : lockFocusDefaultRot;
 
-        while (positionValue < 1f) 
+        while (positionValue < 1)
         {
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-            lockFocus.rotation = Quaternion.RotateTowards(initialRotation, Quaternion.LookRotation(cameraTarget.position - lockFocus.position), smoothedPositionValue * 200f);
+            lockFocus.rotation = Quaternion.RotateTowards(initialRotation, targetRotation, smoothedPositionValue * 360f);
             await Task.Yield();
         }
-        lockFocus.LookAt(cameraTarget);
+        
+        lockFocus.rotation = targetRotation;
+    }
+
+
+    private async void RotateThenBack() 
+    {
+        await RotateLock(true);
+        await RotateLock(false);
+        PadlockNotifier.IsInteractable = true;
+    }
+
+    private async void InsertKey(PickupableInteractable keyItem) 
+    {
+        await RotateLock(true);
+
+        Transform tempCamRef = GameManager.current.trueCamera.transform;
+
+        keyItem.transform.position = tempCamRef.position - new Vector3(0, 0.2f, 0);
+        keyItem.transform.rotation = tempCamRef.rotation;
+        keyItem.transform.SetParent(keyParent);
+
+        float positionValue = 0;
+        float smoothedPositionValue;
+        Vector3 initialRotation = new Vector3(0, 30, 0);
+        Vector3 initialPosition = keyItem.transform.localPosition;
+        Vector3 targetVector = Vector3.zero;
+
+        while (positionValue < 1)
+        {
+            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            keyItem.transform.localRotation = Quaternion.Euler(Vector3.Lerp(initialRotation, targetVector, smoothedPositionValue));
+            keyItem.transform.localPosition = Vector3.Lerp(initialPosition, targetVector, smoothedPositionValue);
+            await Task.Yield();
+        }
+
     }
 }
