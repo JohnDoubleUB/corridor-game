@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FakeParent: {fileID: 0}
   flipXZIfCorridorFlip: 0
+  rotateY180IfCorridorFlip: 1
 --- !u!1 &7544100642754596095
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,10 +94,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutLevelNumber: 1
   layoutNumber: 3
-  Props: []
   sectionDoor: {fileID: 0}
+  Props: []
   PuzzleElements: []
   DecalClueObjects: []
+  Pickups: []
 --- !u!1001 &2490920411167244644
 PrefabInstance:
   m_ObjectHideFlags: 0

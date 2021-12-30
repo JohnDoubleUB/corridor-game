@@ -22,7 +22,8 @@ public class PropScript : MonoBehaviour
     public void AccountForCorridorFlip(bool corridorIsFlipped = false) 
     {
         if (corridorIsFlipped && flipXZIfCorridorFlip) transform.localScale = new Vector3(-1, 1, -1);
-        if (corridorIsFlipped && rotateY180IfCorridorFlip) transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(0, 180, 0));
         else transform.localScale = Vector3.one;
+
+        if (corridorIsFlipped && rotateY180IfCorridorFlip) transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(0, 180, 0));
     }
 }
