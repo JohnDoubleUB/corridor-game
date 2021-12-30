@@ -90,13 +90,6 @@ public class CorridorLayoutHandler : MonoBehaviour
             {
                 puzzleElement = PuzzleElements[i];
 
-                ////NEW
-                //PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
-                //if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
-
-                //puzzleElement.LayoutHandler = this;
-
-                //Set the passwords and store in the layout!
                 if (puzzleElement is NumberpadController && levelData != null)
                 {
                     NumberpadController numberpadElement = (NumberpadController)puzzleElement;

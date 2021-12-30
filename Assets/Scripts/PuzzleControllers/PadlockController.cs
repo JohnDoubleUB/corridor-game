@@ -26,6 +26,8 @@ public class PadlockController : PuzzleElementController
 
     float pickupSpeedMultiplier = 1.5f;
 
+    private bool beingSolved;
+
     private void Awake()
     {
         if (PadlockNotifier != null) PadlockNotifier.puzzleToNotify = this;
@@ -53,6 +55,7 @@ public class PadlockController : PuzzleElementController
 
     public override void Notify(PuzzleElementNotifier notifier = null)
     {
+        lockFocusDefaultRot = lockFocus.rotation;
         InventorySlot inventoryItem = InventoryManager.current.inventorySlots.Where(x => x.SlotOccupied && x.slotContent.ObjectName == RequiredObject.ObjectName).FirstOrDefault();
         PadlockNotifier.IsInteractable = false;
 
@@ -63,8 +66,6 @@ public class PadlockController : PuzzleElementController
             PickupableInteractable item = inventoryItem.RemoveItemFromContents(false);
             item.transform.position = Vector3.zero;
             InsertKey(item);
-            PuzzleSolved = true;
-
         }
         else 
         {
@@ -104,6 +105,7 @@ public class PadlockController : PuzzleElementController
 
     private async void InsertKey(PickupableInteractable keyItem) 
     {
+        beingSolved = true;
         await RotateLock(true);
 
         Transform tempCamRef = GameManager.current.trueCamera.transform;
@@ -131,13 +133,14 @@ public class PadlockController : PuzzleElementController
         if (lockAnimator != null) lockAnimator.Play("Unlock");
         await Task.Delay(1000);
 
-        RotateLock(false);
+        Task temp = RotateLock(false);
 
         positionValue = 0;
 
         Vector3 lockFocusPos = lockFocus.localPosition;
         Vector3 lockFocusPosTarget = lockFocus.localPosition - new Vector3(0, 5, 0);
 
+        PuzzleSolved = true;
 
         while (positionValue < 1)
         {
@@ -147,5 +150,22 @@ public class PadlockController : PuzzleElementController
             await Task.Yield();
         }
 
+
+        
+    }
+
+    public override void LoadPuzzleData(PuzzleElementControllerData puzzleData)
+    {
+        base.LoadPuzzleData(puzzleData);
+
+        if (PuzzleSolved) 
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (beingSolved && beingSolved != PuzzleSolved) PuzzleSolved = true;
     }
 }
