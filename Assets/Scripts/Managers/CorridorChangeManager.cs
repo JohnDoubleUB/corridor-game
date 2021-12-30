@@ -139,6 +139,7 @@ public class CorridorChangeManager : MonoBehaviour
 
         if (layoutGameObj != null)
         {
+            //Name ideas: foyerphobia?, [r]egress
             //layoutGameObj.SectionDoor = sectionDoor;
             //print(cachedCurrentLevelData.)
             //int currentLayoutNoTemp = layoutGameObj.layoutNumber;

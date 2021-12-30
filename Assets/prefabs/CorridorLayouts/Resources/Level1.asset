@@ -22,8 +22,9 @@ MonoBehaviour:
   BackwardOnlyLayouts: []
   NumberpadPasswords:
   - possibleCharacters: 0123456789
+    makePasswordFixed: 0
     passwordLength: 5
-    missingKeyCount: 0
+    missingKeyCount: 2
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
   AllowRandomWaving: 0
