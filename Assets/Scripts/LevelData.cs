@@ -41,7 +41,7 @@ public class LevelData : ScriptableObject
         return false;
     }
 
-    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo) 
+    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         if (CompleteLevelTriggerOnLayoutPuzzleComplete.Any())
         {
@@ -60,16 +60,16 @@ public class LevelData : ScriptableObject
 
     public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo)
     {
-        if (CompleteLevelOnTraveledSectionCount.Any()) 
+        if (CompleteLevelOnTraveledSectionCount.Any())
         {
 
-            LevelSectionCountTrigger countTrigger = CompleteLevelOnTraveledSectionCount.FirstOrDefault(cT => 
+            LevelSectionCountTrigger countTrigger = CompleteLevelOnTraveledSectionCount.FirstOrDefault(cT =>
             {
                 int generatedSectionCount = cT.RandomSectionRange > 0 ? Mathf.Clamp(Random.Range(cT.SectionCount - cT.RandomSectionRange, cT.SectionCount + -cT.RandomSectionRange), 1, 100) : cT.SectionCount;
-                return generatedSectionCount <= currentSectionCount; 
+                return generatedSectionCount <= currentSectionCount;
             });
 
-            if (countTrigger != null) 
+            if (countTrigger != null)
             {
                 LevelToChangeTo = countTrigger.LevelChange;
                 return true;
@@ -81,7 +81,7 @@ public class LevelData : ScriptableObject
         return false;
     }
 
-    public static implicit operator LevelData_Loaded(LevelData levelData) 
+    public static implicit operator LevelData_Loaded(LevelData levelData)
     {
 
         return new LevelData_Loaded(levelData);
@@ -92,7 +92,7 @@ public class LevelData_Loaded
 {
     private LevelData levelData;
     public int LevelNumber { get { return levelData.LevelNumber; } }
-    public CorridorLayoutHandler[] CorridorLayouts { get {return levelData.CorridorLayouts; } }
+    public CorridorLayoutHandler[] CorridorLayouts { get { return levelData.CorridorLayouts; } }
     public CorridorLayoutHandler[] BackwardOnlyLayouts { get { return levelData.BackwardOnlyLayouts; } }
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber { get { return levelData.CompleteLevelTriggerOnLayoutNumber; } }
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount { get { return levelData.CompleteLevelOnTraveledSectionCount; } }
@@ -114,24 +114,24 @@ public class LevelData_Loaded
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
     }
 
-    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo) 
+    public bool GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerOnLayoutPuzzleCompleteAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
     }
 
-    public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo) 
+    public bool GetIfLevelCountTriggerAndReturnLevelChange(int currentSectionCount, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelCountTriggerAndReturnLevelChange(currentSectionCount, out LevelToChangeTo);
     }
 
-    public LevelData_Loaded(LevelData levelData) 
+    public LevelData_Loaded(LevelData levelData)
     {
         this.levelData = levelData;
         //generate all the passwords for this level
 
-        
+
         NumberpadPasswords = levelData.NumberpadPasswords.Select(x => x.GenerateRandomPassword()).ToArray();
-        NumberpadData = levelData.NumberpadPasswords.Select(x => (NumberpadPassword_Loaded) x).ToArray();
+        NumberpadData = levelData.NumberpadPasswords.Select(x => (NumberpadPassword_Loaded)x).ToArray();
 
         //Generate LevelLayoutData for all the layouts
         CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
@@ -140,7 +140,7 @@ public class LevelData_Loaded
 }
 
 [System.Serializable]
-public class LevelSwitchTrigger 
+public class LevelSwitchTrigger
 {
     public string Name = "LevelChangeTrigger";
     public int LayoutNumberTrigger;
@@ -148,7 +148,7 @@ public class LevelSwitchTrigger
 }
 
 [System.Serializable]
-public class LevelSectionCountTrigger 
+public class LevelSectionCountTrigger
 {
     public string Name = "LevelSectionCountTrigger";
     public int SectionCount;
@@ -160,10 +160,12 @@ public class LevelSectionCountTrigger
 public class NumberpadPassword
 {
     public string possibleCharacters = "0123456789";
+    public bool makePasswordFixed;
     public int passwordLength = 6;
     public int missingKeyCount = 0;
 
-    public string GenerateRandomPassword() 
+
+    public string GenerateRandomPassword()
     {
         return GenerateRandomPasswordOfLength(passwordLength, possibleCharacters);
     }
@@ -171,20 +173,75 @@ public class NumberpadPassword
     private string GenerateRandomPasswordOfLength(int passwordLength, string possibleCharacters)
     {
         string newPassword = "";
-        for (int i = 0; i < passwordLength; i++) newPassword += possibleCharacters[Random.Range(0, possibleCharacters.Length)];
+
+        if (makePasswordFixed)
+        {
+            newPassword = possibleCharacters;
+        }
+        else
+        {
+            //Incase we need them
+            List<int> repeatedCharacterIndexes = new List<int>();
+            string uniqueCharacters = "";
+
+            //Initially generate password
+            for (int i = 0; i < passwordLength; i++)
+            {
+                char newCharacter = possibleCharacters[Random.Range(0, possibleCharacters.Length)];
+
+                if (missingKeyCount > 0 && newPassword.Contains(newCharacter))
+                {
+                    repeatedCharacterIndexes.Add(newPassword.Length);
+                }
+                else
+                {
+                    uniqueCharacters += newCharacter;
+                }
+
+                newPassword += newCharacter;
+            }
+
+            //If there are missing keys, ensure that the password has enough unique characters to have this many missing keys
+            if (missingKeyCount > 0)
+            {
+                int uniqueKeysRequired = missingKeyCount + 1;
+                int uniqueCharactersLength = uniqueCharacters.Length;
+
+                if (uniqueCharactersLength < uniqueKeysRequired)
+                {
+                    Debug.Log("Not enough unique keys for puzzle, regenerating " + uniqueKeysRequired + " repeated password characters.");
+
+                    int keysToChange = uniqueKeysRequired - uniqueCharactersLength; //Keys to change
+
+                    char[] unusedCharacters = possibleCharacters.Where(x => !uniqueCharacters.Contains(x)).Shuffle().ToArray(); //Unused characters, randomly shuffled
+                    int[] repeatedIndexesShuffled = repeatedCharacterIndexes.Shuffle().ToArray(); //Indexes randomly shuffled
+                    char[] newPasswordArray = newPassword.ToArray(); //Password converted to char array for easier manipulation
+
+
+                    for (int i = 0; i < keysToChange && i < unusedCharacters.Length && i < repeatedCharacterIndexes.Count; i++)
+                    {
+                        newPasswordArray[repeatedIndexesShuffled[i]] = unusedCharacters[i];
+                    }
+
+                    newPassword = new string(newPasswordArray);
+                }
+            }
+
+        }
+
         return newPassword;
     }
 }
 
-public class NumberpadPassword_Loaded 
+public class NumberpadPassword_Loaded
 {
     public string NumberpadPassword;
     public char[] MissingCharacters;
 
-    public NumberpadPassword_Loaded(NumberpadPassword numberpadData) 
+    public NumberpadPassword_Loaded(NumberpadPassword numberpadData)
     {
         NumberpadPassword = numberpadData.GenerateRandomPassword();
-        if (numberpadData.missingKeyCount > 0) 
+        if (numberpadData.missingKeyCount > 0)
         {
             char[] uniqueCharacters = NumberpadPassword.Distinct().ToArray();
             MissingCharacters = uniqueCharacters.Shuffle().Take(Mathf.Clamp(numberpadData.missingKeyCount, 1, uniqueCharacters.Length)).ToArray();
@@ -200,7 +257,7 @@ public class NumberpadPassword_Loaded
     }
 }
 
-public class LayoutLevelData 
+public class LayoutLevelData
 {
     public string LayoutID;
     public List<int> collectedItems = new List<int>();
@@ -208,7 +265,7 @@ public class LayoutLevelData
 
     public List<PuzzleElementControllerData> puzzleData = new List<PuzzleElementControllerData>();
 
-    public LayoutLevelData(string layoutID) 
+    public LayoutLevelData(string layoutID)
     {
         LayoutID = layoutID;
     }

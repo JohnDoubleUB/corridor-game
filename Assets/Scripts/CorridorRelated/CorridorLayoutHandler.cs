@@ -97,6 +97,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 
 
                     numberpadElement.password = numberpadData.NumberpadPassword;
+
                     if(numberpadData.MissingCharacters != null) numberpadElement.disabledButtons = numberpadData.MissingCharacters.ToList();
                     numberPadCount++;
                     numberPadPasswords.Add(numberpadElement.password);

@@ -140,6 +140,14 @@ public class CorridorChangeManager : MonoBehaviour
         if (layoutGameObj != null)
         {
             //layoutGameObj.SectionDoor = sectionDoor;
+            //print(cachedCurrentLevelData.)
+            //int currentLayoutNoTemp = layoutGameObj.layoutNumber;
+            //var currentLayoutDataTemp = cachedCurrentLevelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == layoutGameObj.LayoutID);
+            //var passwordTemp = cachedCurrentLevelData.NumberpadData[0];
+
+            //print("numberpad password is: " + passwordTemp.NumberpadPassword);
+            //print("missing numbers are: " + string.Join(", ", passwordTemp.MissingCharacters));
+
             layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
             section.CurrentLayout = layoutGameObj;
         }
