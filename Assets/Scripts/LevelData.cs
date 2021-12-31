@@ -109,6 +109,8 @@ public class LevelData_Loaded
 
     public LayoutLevelData[] CorridorLayoutData;
 
+    public char[] GeneratedNumberpadPieces;
+
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         return levelData.GetIfLevelTriggerAndReturnLevelChange(corridorLayout, out LevelToChangeTo);
@@ -132,6 +134,9 @@ public class LevelData_Loaded
 
         NumberpadPasswords = levelData.NumberpadPasswords.Select(x => x.GenerateRandomPassword()).ToArray();
         NumberpadData = levelData.NumberpadPasswords.Select(x => (NumberpadPassword_Loaded)x).ToArray();
+
+        char[][] allMissingCharacters = NumberpadData.Select(x => x.MissingCharacters).Where(x => x != null && x.Any()).ToArray();
+        if (allMissingCharacters != null && allMissingCharacters.Any()) GeneratedNumberpadPieces = allMissingCharacters.SelectMany(x => x).ToArray();
 
         //Generate LevelLayoutData for all the layouts
         CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
@@ -245,6 +250,8 @@ public class NumberpadPassword_Loaded
         {
             char[] uniqueCharacters = NumberpadPassword.Distinct().ToArray();
             MissingCharacters = uniqueCharacters.Shuffle().Take(Mathf.Clamp(numberpadData.missingKeyCount, 1, uniqueCharacters.Length)).ToArray();
+
+            if (MissingCharacters == null) MissingCharacters = new char[0];
         }
 
     }

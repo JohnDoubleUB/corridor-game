@@ -182,7 +182,16 @@ public class CorridorLayoutHandler : MonoBehaviour
                     pickup.SpawnedPickup.Pickup = Instantiate(pickup.PickupItemPrefab, pickup.SpawnedPickup.Parent);
                     pickup.SpawnedPickup.Pickup.transform.localPosition = Vector3.zero;
                     pickup.SpawnedPickup.Pickup.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+                    //This works when keys are in the same level, if they're not then it doesn't work
+                    if (pickup.IsGeneratedNumberKey)
+                    {
+                        pickup.SpawnedPickup.Pickup.ObjectName = levelData.GeneratedNumberpadPieces[pickup.PuzzlePieceId].ToString();
+                    }
+
                 }
+
+
             }
         }
     }
@@ -221,6 +230,8 @@ public class PickupSpawn
     public Transform[] PotentialSpawnPositions;
     public PickupAndParent SpawnedPickup;
     public bool PickedUp;
+    public bool IsGeneratedNumberKey;
+    public int PuzzlePieceId = -1;
 }
 
 public struct PickupAndParent
