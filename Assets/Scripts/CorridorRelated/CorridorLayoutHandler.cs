@@ -184,6 +184,7 @@ public class CorridorLayoutHandler : MonoBehaviour
                     pickup.SpawnedPickup.Pickup.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
                     //This works when keys are in the same level, if they're not then it doesn't work
+                    //TODO: Unify this and store all missing keys over the entire game in a single ordered list? Also add fixed missing keys option
                     if (pickup.IsGeneratedNumberKey)
                     {
                         pickup.SpawnedPickup.Pickup.ObjectName = levelData.GeneratedNumberpadPieces[pickup.PuzzlePieceId].ToString();
