@@ -39,6 +39,11 @@ public class CG_CharacterController : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
 
+    [HideInInspector]
+    public bool canInteract = true;
+
+    private InteractableNote interactingNote;
+
     private InputMaster controls;
 
     private GameObject currentInteractableGameObject;
@@ -49,6 +54,7 @@ public class CG_CharacterController : MonoBehaviour
 
     private int pencilLayerMask;
     private bool characterIsJumping;
+    
 
     private void OnEnable()
     {
@@ -67,11 +73,27 @@ public class CG_CharacterController : MonoBehaviour
         pencilLayerMask = 1 << LayerMask.NameToLayer("Notepad") | 1 << LayerMask.NameToLayer("NonWritingArea");
     }
 
+    public void Interact(InteractableNote note) 
+    {
+        interactingNote = note;
+        bool isInteractingWithNote = interactingNote != null;
+
+        playerCrosshair.enabled = !isInteractingWithNote;
+        interactionPrompt.enabled = !isInteractingWithNote;
+    }
+
     private void Interact()
     {
-        if (currentInteractable != null)
+        if (interactingNote == null)
         {
-            currentInteractable.IntiateInteract();
+            if (currentInteractable != null && canInteract)
+            {
+                currentInteractable.IntiateInteract();
+            }
+        }
+        else 
+        {
+            interactingNote.PutDownItem();
         }
     }
 
@@ -88,13 +110,18 @@ public class CG_CharacterController : MonoBehaviour
         if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
         if (!canMove) UpdateDraw();
 
+        bool playerNotBusy = canMove && interactingNote == null;
+
         if (characterController.isGrounded)
         {
             // We are grounded, so recalculate move direction based on axes
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
-            float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
-            float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
+            //float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
+            //float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
+
+            float curSpeedX = playerNotBusy ? speed * Input.GetAxis("Vertical") : 0;
+            float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
             if (characterIsJumping) 
@@ -103,7 +130,7 @@ public class CG_CharacterController : MonoBehaviour
                 if (playerLandSound != null) AudioManager.current.PlayClipAt(playerLandSound, footStepPosition.position, 0.1f, true);
             }
 
-            if (Input.GetButtonDown("Jump") && canMove)
+            if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)
             {
                 moveDirection.y = jumpSpeed;
                 characterIsJumping = true;
@@ -117,8 +144,10 @@ public class CG_CharacterController : MonoBehaviour
         // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
 
+
+
         // Player and Camera rotation
-        if (canMove)
+        if (playerNotBusy/*canMove*/)
         {
             rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
             rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
@@ -127,16 +156,10 @@ public class CG_CharacterController : MonoBehaviour
             transform.eulerAngles = new Vector2(0, rotation.y);
         }
 
-
-        if (Input.GetButtonDown("Cancel"))
-        {
-            print("End game!");
-            Application.Quit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && interactingNote == null)
         {
             canMove = !canMove;
+            canInteract = !canInteract;
             Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.Confined;
             Cursor.visible = false;
             NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
@@ -144,6 +167,12 @@ public class CG_CharacterController : MonoBehaviour
             playerCrosshair.enabled = canMove;
         }
 
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            print("End game!");
+            Application.Quit();
+        }
     }
 
     private void UpdateInteractable(bool showDebug = false)
