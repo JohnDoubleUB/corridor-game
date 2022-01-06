@@ -4119,7 +4119,7 @@ PrefabInstance:
     - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
         type: 3}
       propertyPath: verticalMoveLimit
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
         type: 3}

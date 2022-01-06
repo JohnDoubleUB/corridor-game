@@ -29,11 +29,10 @@ public class InteractableNote : InteractableObject
     public float distanceToStopFromPlayer = 0.3f;
 
     private Vector3 viewRestingPosition;
-    private Vector3 maximumZoomPosition;
-    private Vector3 maximumUpPosition;
 
     private float currentScrollValue;
-    private float currentVerticalValue;
+    private float currentYValue;
+    private float currentXValue;
 
     private void Awake()
     {
@@ -68,13 +67,17 @@ public class InteractableNote : InteractableObject
         {
             float mouseScrollValue = (Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime) * 30;
             float mouseMoveYValue = Input.GetAxis("Mouse Y") * Time.deltaTime;
+            float mouseMoveXValue = Input.GetAxis("Mouse X") * Time.deltaTime;
 
             if (Input.GetAxis("Mouse ScrollWheel") != 0f) currentScrollValue = Mathf.Clamp(currentScrollValue + mouseScrollValue, 0, 1);
-            if (Input.GetAxis("Mouse Y") != 0f) currentVerticalValue = Mathf.Clamp(currentVerticalValue + mouseMoveYValue, -1, 1);
+            if (Input.GetAxis("Mouse Y") != 0f) currentYValue = Mathf.Clamp((currentYValue + mouseMoveYValue), -1, 1);
+            if (Input.GetAxis("Mouse X") != 0f) currentXValue = Mathf.Clamp((currentXValue + mouseMoveXValue), -1, 1);
 
             transform.position = 
-                viewRestingPosition + (transform.forward * (zoomLimit * currentScrollValue))
-                + (transform.up * (verticalMoveLimit * (currentVerticalValue * currentScrollValue)));
+                viewRestingPosition 
+                + (transform.forward * (zoomLimit * currentScrollValue))
+                + (transform.up * (verticalMoveLimit * (currentYValue * currentScrollValue)))
+                + (-transform.right * (verticalMoveLimit/2 * (currentXValue * currentScrollValue)));
 
 
         }
@@ -121,11 +124,9 @@ public class InteractableNote : InteractableObject
               lookRotation
               );
 
-        maximumZoomPosition = cameraLookPosition + (GameManager.current.playerController.playerCamera.transform.forward * zoomLimit); ;
-        maximumUpPosition = transform.position + (transform.up * verticalMoveLimit);
         viewRestingPosition = cameraPosition;
 
-        currentVerticalValue = 0;
+        currentYValue = 0;
         currentScrollValue = 0;
         inTransitionState = false;
         NoteBeingHeld = true;
