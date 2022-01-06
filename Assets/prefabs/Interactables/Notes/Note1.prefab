@@ -67,6 +67,9 @@ MonoBehaviour:
   - {fileID: -2575575908143986094, guid: 19c5d472abd0c6b40be02b65e60d199e, type: 3}
   - {fileID: -1171289254437874472, guid: 6f6c2494077603b4183af5870762c68d, type: 3}
   - {fileID: 785179258914271421, guid: 5d014624a3c4f4e4aa0c24447f4713c7, type: 3}
+  allowViewZoom: 0
+  zoomLimit: 0.2
+  verticalZoomMoveLimit: 10
   pickupSpeedMultiplier: 2.5
   distanceToStopFromPlayer: 0.3
 --- !u!1 &6586276878418695146

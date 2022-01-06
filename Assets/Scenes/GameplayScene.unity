@@ -2863,7 +2863,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 7991
+    m_Bits: 532279
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: fcc9d4d2062773e44a94e593a95f85d5, type: 2}
   m_TargetDisplay: 0
@@ -4019,6 +4019,120 @@ MonoBehaviour:
   momentoSlots: []
   AllowReplace: 0
   HasMomento: 0
+--- !u!1001 &1631354018
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5777264278276114768, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5836967
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777264278276114768, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5836967
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777264278276114768, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5836967
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.727
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.749
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.65136606
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.6513661
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.27517682
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.27517676
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898578, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -45.804
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: zoomLimit
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: ObjectName
+      value: Strange Document #1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: NoteTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 5bd3d9d880921444a824a7dd6cac9e74, type: 3}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: allowViewZoom
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: verticalMoveLimit
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898580, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: distanceToStopFromPlayer
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315821552350898583, guid: c8f05b4e909385a4586b48c65d5688bf,
+        type: 3}
+      propertyPath: m_Name
+      value: Document1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c8f05b4e909385a4586b48c65d5688bf, type: 3}
 --- !u!1 &1670984948
 GameObject:
   m_ObjectHideFlags: 0
