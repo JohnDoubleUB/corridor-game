@@ -62,7 +62,11 @@ public class InteractableNote : InteractableObject
 
     private void Update()
     {
-        //View limit stuff;
+        UpdateNotePosition();
+    }
+
+    private void UpdateNotePosition() 
+    {
         if (allowViewZoom && NoteBeingHeld && !inTransitionState)
         {
             float mouseScrollValue = (Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime) * 30;
@@ -73,13 +77,11 @@ public class InteractableNote : InteractableObject
             if (Input.GetAxis("Mouse Y") != 0f) currentYValue = Mathf.Clamp((currentYValue + mouseMoveYValue), -1, 1);
             if (Input.GetAxis("Mouse X") != 0f) currentXValue = Mathf.Clamp((currentXValue + mouseMoveXValue), -1, 1);
 
-            transform.position = 
-                viewRestingPosition 
+            transform.position =
+                viewRestingPosition
                 + (transform.forward * (zoomLimit * currentScrollValue))
                 + (transform.up * (verticalMoveLimit * (currentYValue * currentScrollValue)))
-                + (-transform.right * (verticalMoveLimit/2 * (currentXValue * currentScrollValue)));
-
-
+                + (-transform.right * (verticalMoveLimit / 2 * (currentXValue * currentScrollValue)));
         }
     }
 
