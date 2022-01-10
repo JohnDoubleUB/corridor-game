@@ -16,15 +16,23 @@ public class Door : MonoBehaviour
     public AudioClip closeSound;
     public AudioClip rattleSound;
     public AudioClip slamCloseSound;
-    
+
     public bool openOnInteract;
+
+    private bool doorIsVisible = true;
+
+    [SerializeField]
+    private Collider[] doorCollisions;
+    
+    [SerializeField]
+    private MeshRenderer[] doorMeshes;
 
     public bool IsOpen { get { return doorIsOpen; } }
 
-    public bool DoorLocked 
+    public bool DoorLocked
     {
         get { return doorLocked; }
-        set 
+        set
         {
             if (!value && doorLocked) justUnlocked = true;
             doorLocked = value;
@@ -53,12 +61,12 @@ public class Door : MonoBehaviour
 
         defaultVariationAmplitude = meshMaterials[1].GetFloat("_VariationAmplitude");
         meshMaterials[1].SetFloat("_VariationAmplitude", 0f);
-}
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        if(MaterialManager.current != null) MaterialManager.current.TrackMaterials(meshMaterials);
+        if (MaterialManager.current != null) MaterialManager.current.TrackMaterials(meshMaterials);
     }
 
     // Update is called once per frame
@@ -67,13 +75,13 @@ public class Door : MonoBehaviour
         if (fakeParent != null && fakeParent.position != transform.position) transform.position = fakeParent.position;
 
 
-        if (openOnInteract != openOnInteractLast) 
+        if (openOnInteract != openOnInteractLast)
         {
             doorInteractable.IsInteractable = openOnInteract;
             openOnInteractLast = openOnInteract;
         }
 
-        if (doorIsClosing && doorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f) 
+        if (doorIsClosing && doorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
         {
             transform.PlayClipAtTransform(slamCloseSound, true, 0.4f, true);
             doorIsClosing = false;
@@ -93,37 +101,59 @@ public class Door : MonoBehaviour
         _SetWavyness(value);
     }
 
-    public void InteractOpenClose(bool ignoreLock = false) 
+    public void InteractOpenClose(bool ignoreLock = false)
     {
-        if (ignoreLock || !doorLocked)
+        if (doorIsVisible)
         {
-            if (!doorIsOpen)
+            if (ignoreLock || !doorLocked)
             {
-                UpdateRelativePlayerDirection();
-                PlayDoorOpenAnimation();
-                if (justUnlocked) 
+                if (!doorIsOpen)
                 {
-                    transform.PlayClipAtTransform(correctOpenSound, true, 1f, false, 0.3f);
-                    justUnlocked = false;
+                    UpdateRelativePlayerDirection();
+                    PlayDoorOpenAnimation();
+                    if (justUnlocked)
+                    {
+                        transform.PlayClipAtTransform(correctOpenSound, true, 1f, false, 0.3f);
+                        justUnlocked = false;
+                    }
+                }
+                else
+                {
+                    PlayDoorCloseAnimation();
                 }
             }
             else
             {
-                PlayDoorCloseAnimation();
-            }
-        }
-        else 
-        {
-            if (!doorIsOpen) 
-            {
-                UpdateRelativePlayerDirection();
-                PlayDoorRattleAnimation();
+                if (!doorIsOpen)
+                {
+                    UpdateRelativePlayerDirection();
+                    PlayDoorRattleAnimation();
+                }
             }
         }
     }
 
-    public void ResetDoor() 
+    public void SetDoorVisible(bool doorVisible)
     {
+        if (doorIsVisible != doorVisible) 
+        {
+            doorIsVisible = doorVisible;
+            
+            foreach (MeshRenderer m in doorMeshes)
+            {
+                m.enabled = doorVisible;
+            }
+
+            foreach (Collider c in doorCollisions) 
+            {
+                c.enabled = doorVisible;
+            }
+        }
+    }
+
+    public void ResetDoor()
+    {
+        SetDoorVisible(true);
         openOnInteract = false;
         doorAnimator.Play("doorClosed");
         doorIsOpen = false;
@@ -132,7 +162,7 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!openOnInteract)
+        if (!openOnInteract && doorIsVisible)
         {
             if (other.gameObject.tag == "Player" && !doorLocked)
             {
@@ -153,7 +183,7 @@ public class Door : MonoBehaviour
     }
 
 
-    private void PlayDoorOpenAnimation() 
+    private void PlayDoorOpenAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "openForward" : "openBackward");
         transform.PlayClipAtTransform(openSound, true, 0.4f);
@@ -168,13 +198,13 @@ public class Door : MonoBehaviour
         doorIsOpen = false;
     }
 
-    private void PlayDoorRattleAnimation() 
+    private void PlayDoorRattleAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "rattleForward" : "rattleBackward");
         transform.PlayClipAtTransform(rattleSound);
     }
 
-    private void UpdateRelativePlayerDirection(Transform player = null) 
+    private void UpdateRelativePlayerDirection(Transform player = null)
     {
         if (player == null) player = GameManager.current.player.transform;
         Vector3 playerPosition = player.position;

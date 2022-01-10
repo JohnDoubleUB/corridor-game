@@ -134,6 +134,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 8044445721029405633}
+  meshFilter: {fileID: 5208249738734771979}
+  meshCollider: {fileID: 1424938837924940631}
+  CorridorMeshVarients:
+  - {fileID: 1834302813847974084, guid: 0bc2e8d5148c4e745a122f539e61d5ed, type: 3}
+  - {fileID: -8055246573662172148, guid: 80bcf3eed99cffd4e97802b29d4c928e, type: 3}
   corridorTransform: {fileID: 9216810287770996910}
   lights:
   - {fileID: 0}
@@ -145,7 +150,12 @@ MonoBehaviour:
   - {fileID: 1586560739280874413}
   - {fileID: 7950922518849562771}
   toNotifyOnPlayerEnter: {fileID: 0}
+  CurrentLayout: {fileID: 0}
   DoorPrefab: {fileID: 1376143418, guid: f32b440fe64c6d84fa9187a259a644f3, type: 3}
+  HasWarped: 0
+  WillStretch: 0
+  WillWave: 0
+  corridorMeshIndex: 0
   CorridorNumber: 0
   sectionType: 0
   FlipSection: 0

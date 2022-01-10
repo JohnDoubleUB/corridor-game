@@ -7,6 +7,14 @@ using UnityEngine;
 public class CorridorSection : MonoBehaviour
 {
     public MeshRenderer meshRenderer;
+    
+    [SerializeField]
+    private MeshFilter meshFilter;
+    [SerializeField]
+    private MeshCollider meshCollider;
+
+    public CorridorMeshVarient MeshCorridorVarient;
+
     public Transform corridorTransform;
     public Light[] lights;
     public float segmentLength = 10f;
@@ -22,7 +30,6 @@ public class CorridorSection : MonoBehaviour
     public bool WillStretch;
     
     public bool WillWave;
-
 
     public int CorridorNumber;
 
@@ -59,6 +66,7 @@ public class CorridorSection : MonoBehaviour
         currentSectionFlip = FlipSection;
         defaultVariationAmplitude = meshMaterials[0].GetFloat("_VariationAmplitude");
         boxCol = GetComponent<BoxCollider>();
+        MeshCorridorVarient = new CorridorMeshVarient(meshFilter, meshCollider);
     }
 
     private void Start()
@@ -237,4 +245,28 @@ public enum SectionType
     Middle,
     Front,
     Back
+}
+
+public class CorridorMeshVarient 
+{
+    private MeshFilter meshFilter;
+    private MeshCollider meshCollider;
+
+    public MeshFilter MeshFilter { get { return meshFilter; } }
+    public MeshCollider MeshCollider { get { return meshCollider; } }
+    public Mesh CurrentMesh { get { return meshFilter.mesh; } }
+    
+    public CorridorMeshVarient(MeshFilter meshFilter, MeshCollider meshCollider) 
+    {
+        this.meshFilter = meshFilter;
+        this.meshCollider = meshCollider;
+    }
+
+    public void ChangeMesh(Mesh mesh) 
+    {
+        if (meshFilter.mesh != mesh) meshFilter.mesh = mesh;
+        if (meshCollider.sharedMesh != mesh) meshCollider.sharedMesh = mesh;
+    }
+
+
 }

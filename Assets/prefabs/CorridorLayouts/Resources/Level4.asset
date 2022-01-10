@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level4
+  m_EditorClassIdentifier: 
+  LevelNumber: 4
+  CorridorLayouts:
+  - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
+  - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
+  - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
+  - {fileID: 395630380, guid: af231c90ab461a442bbb2d6ab8635dc1, type: 3}
+  BackwardOnlyLayouts: []
+  NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
+  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []

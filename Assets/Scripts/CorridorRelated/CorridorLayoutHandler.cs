@@ -9,6 +9,8 @@ public class CorridorLayoutHandler : MonoBehaviour
     public int layoutLevelNumber;
     public int layoutNumber;
 
+    public CorridorMeshType corridorMeshType;
+
     private LevelData_Loaded levelData;
     private LayoutLevelData layoutData;
 
@@ -247,4 +249,10 @@ public struct PickupAndParent
             return Pickup.transform.parent != Parent;
         }
     }
+}
+
+public enum CorridorMeshType 
+{
+    Default,
+    Office
 }

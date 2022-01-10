@@ -34,6 +34,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public int sectionsTraveledOnCurrentLevel = 0;
 
+    public Mesh[] CorridorMeshVarients;
 
 
     private void Awake()
@@ -139,6 +140,11 @@ public class CorridorChangeManager : MonoBehaviour
 
         if (layoutGameObj != null)
         {
+            //Set the section mesh options
+            //Mesh selectedMesh = section.layoutGameObj.corridorMeshType
+            
+
+
             //Name ideas: foyerphobia?, [r]egress
             //layoutGameObj.SectionDoor = sectionDoor;
             //print(cachedCurrentLevelData.)
@@ -151,6 +157,26 @@ public class CorridorChangeManager : MonoBehaviour
 
             layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
             section.CurrentLayout = layoutGameObj;
+            int layoutMeshType = (int)layoutGameObj.corridorMeshType;
+
+            section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[layoutMeshType]);
+
+            if (layoutMeshType != 0)
+            {
+                section.FlipCorridorX = false;
+                section.FlipCorridorZ = false;
+                layoutGameObj.sectionDoor.SetDoorVisible(false);
+                //layoutGameObj.sectionDoor.gameObject.SetActive(false);
+            }
+            //else if(!layoutGameObj.sectionDoor.gameObject.activeInHierarchy)
+            //{
+            //    //layoutGameObj.sectionDoor.gameObject.SetActive(true);
+            //}
+
+        }
+        else
+        {
+            section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[0]);
         }
     }
 
@@ -194,7 +220,10 @@ public class CorridorChangeManager : MonoBehaviour
         Door[] currentSectionDoors = new Door[0];
 
         //Stop all wavyness on doors
-        foreach (Door corrDoor in corridorDoorSegments) corrDoor.SetWavyness(0);
+        foreach (Door corrDoor in corridorDoorSegments) 
+        {
+            corrDoor.SetWavyness(0); 
+        }
 
 
         if (currentSection.sectionType != SectionType.Middle)
