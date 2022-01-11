@@ -98,6 +98,7 @@ MonoBehaviour:
   layoutLevelNumber: 0
   layoutNumber: 0
   corridorMeshType: 1
+  corridorMatType: 1
   sectionDoor: {fileID: 0}
   Props: []
   PuzzleElements: []

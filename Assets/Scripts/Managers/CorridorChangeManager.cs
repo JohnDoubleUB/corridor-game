@@ -36,6 +36,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public Mesh[] CorridorMeshVarients;
 
+    public CorridorMatVarient[] CorridorMatVarients;
 
     private void Awake()
     {
@@ -166,17 +167,16 @@ public class CorridorChangeManager : MonoBehaviour
                 section.FlipCorridorX = false;
                 section.FlipCorridorZ = false;
                 layoutGameObj.sectionDoor.SetDoorVisible(false);
-                //layoutGameObj.sectionDoor.gameObject.SetActive(false);
             }
-            //else if(!layoutGameObj.sectionDoor.gameObject.activeInHierarchy)
-            //{
-            //    //layoutGameObj.sectionDoor.gameObject.SetActive(true);
-            //}
 
+            section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
+            sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
         }
         else
         {
             section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[0]);
+            section.SetMaterialVarient(CorridorMatVarients[0]);
+            sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
     }
 
@@ -343,4 +343,11 @@ public class CorridorChangeManager : MonoBehaviour
     {
         print("Player exited section " + section.name);
     }
+}
+
+[System.Serializable]
+public class CorridorMatVarient 
+{
+    public Texture albedo1;
+    public Texture albedo2;
 }

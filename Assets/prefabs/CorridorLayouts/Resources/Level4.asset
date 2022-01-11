@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
   - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
   - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
+  - {fileID: 395630380, guid: f8366b56a6b0b60468e042ca5b970d16, type: 3}
   - {fileID: 395630380, guid: af231c90ab461a442bbb2d6ab8635dc1, type: 3}
   BackwardOnlyLayouts: []
   NumberpadPasswords: []

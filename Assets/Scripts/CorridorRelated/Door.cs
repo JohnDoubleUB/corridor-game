@@ -261,4 +261,17 @@ public class Door : MonoBehaviour
             mat.SetFloat("_VariationAmplitude", 0f);
         }
     }
+
+
+    public void SetMaterialVarient(CorridorMatVarient materialVarient)
+    {
+        if (meshMaterials != null) 
+        {
+            if (meshMaterials[0].GetTexture("Albedo1") != materialVarient.albedo1) meshMaterials[0].SetTexture("Albedo1", materialVarient.albedo1);
+            if (meshMaterials[0].GetTexture("Albedo2") != materialVarient.albedo2) meshMaterials[0].SetTexture("Albedo2", materialVarient.albedo2);
+
+            if (meshMaterials[1].GetTexture("Albedo1") != materialVarient.albedo1) meshMaterials[1].SetTexture("Albedo1", materialVarient.albedo1);
+            if (meshMaterials[1].GetTexture("Albedo2") != materialVarient.albedo2) meshMaterials[1].SetTexture("Albedo2", materialVarient.albedo2);
+        }
+    }
 }

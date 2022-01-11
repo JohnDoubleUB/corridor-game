@@ -10,6 +10,8 @@ public class CorridorLayoutHandler : MonoBehaviour
     public int layoutNumber;
 
     public CorridorMeshType corridorMeshType;
+    public CorridorMatType corridorMatType;
+    public CorridorMatType corridorDoorMatType;
 
     private LevelData_Loaded levelData;
     private LayoutLevelData layoutData;
@@ -255,4 +257,12 @@ public enum CorridorMeshType
 {
     Default,
     Office
+}
+
+public enum CorridorMatType 
+{
+    Default,
+    Office1,
+    Office2,
+    Office3
 }
