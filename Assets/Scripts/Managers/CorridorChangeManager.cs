@@ -76,7 +76,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private LevelData_Loaded GetCurrentLevelData
     {
-        get 
+        get
         {
             cachedCurrentLevelData = LoadedLevels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
             return cachedCurrentLevelData;
@@ -132,51 +132,37 @@ public class CorridorChangeManager : MonoBehaviour
             {
                 layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
             }
-            else 
+            else
             {
                 layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
                 section.CorridorNumber = 0;
             }
         }
-
         if (layoutGameObj != null)
         {
-            //Set the section mesh options
-            //Mesh selectedMesh = section.layoutGameObj.corridorMeshType
-            
-
-
-            //Name ideas: foyerphobia?, [r]egress
-            //layoutGameObj.SectionDoor = sectionDoor;
-            //print(cachedCurrentLevelData.)
-            //int currentLayoutNoTemp = layoutGameObj.layoutNumber;
-            //var currentLayoutDataTemp = cachedCurrentLevelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == layoutGameObj.LayoutID);
-            //var passwordTemp = cachedCurrentLevelData.NumberpadData[0];
-
-            //print("numberpad password is: " + passwordTemp.NumberpadPassword);
-            //print("missing numbers are: " + string.Join(", ", passwordTemp.MissingCharacters));
-
             layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
             section.CurrentLayout = layoutGameObj;
-            int layoutMeshType = (int)layoutGameObj.corridorMeshType;
 
-            section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[layoutMeshType]);
+            //TODO: This stuff is causing errors in the build still, fix this
+            //int layoutMeshType = (int)layoutGameObj.corridorMeshType;
 
-            if (layoutMeshType != 0)
-            {
-                section.FlipCorridorX = false;
-                section.FlipCorridorZ = false;
-                layoutGameObj.sectionDoor.SetDoorVisible(false);
-            }
+            //section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[layoutMeshType]);
 
-            section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
-            sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
+            //if (layoutMeshType != 0)
+            //{
+            //    section.FlipCorridorX = false;
+            //    section.FlipCorridorZ = false;
+            //    layoutGameObj.sectionDoor.SetDoorVisible(false);
+            //}
+
+            //section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
+            //sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
         }
         else
         {
-            section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[0]);
-            section.SetMaterialVarient(CorridorMatVarients[0]);
-            sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
+            //section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[0]);
+            //section.SetMaterialVarient(CorridorMatVarients[0]);
+            //sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
     }
 
@@ -220,9 +206,9 @@ public class CorridorChangeManager : MonoBehaviour
         Door[] currentSectionDoors = new Door[0];
 
         //Stop all wavyness on doors
-        foreach (Door corrDoor in corridorDoorSegments) 
+        foreach (Door corrDoor in corridorDoorSegments)
         {
-            corrDoor.SetWavyness(0); 
+            corrDoor.SetWavyness(0);
         }
 
 
@@ -232,9 +218,9 @@ public class CorridorChangeManager : MonoBehaviour
             //Check if we are in a trigger section or not
             LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
             int levelChange = -1;
-            if (!OnlyUseRandomAssortedCorridorLayouts 
-                && currentSection.CurrentLayout != null 
-                && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange) 
+            if (!OnlyUseRandomAssortedCorridorLayouts
+                && currentSection.CurrentLayout != null
+                && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange)
                 || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
                 LevelChange(levelChange);
@@ -326,7 +312,7 @@ public class CorridorChangeManager : MonoBehaviour
         CreateCorridorPrefabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
     }
 
-    public void LevelChange(int newLevel) 
+    public void LevelChange(int newLevel)
     {
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
@@ -346,7 +332,7 @@ public class CorridorChangeManager : MonoBehaviour
 }
 
 [System.Serializable]
-public class CorridorMatVarient 
+public class CorridorMatVarient
 {
     public Texture albedo1;
     public Texture albedo2;

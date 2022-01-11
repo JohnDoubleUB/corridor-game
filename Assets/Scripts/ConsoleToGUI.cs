@@ -8,11 +8,12 @@ namespace DebugStuff
         string filename = "";
         bool doShow = false;
         int kChars = 700;
-        //void OnEnable() { Application.logMessageReceived += Log; }
-        //void OnDisable() { Application.logMessageReceived -= Log; }
+        void OnEnable() { Application.logMessageReceived += Log; }
+        void OnDisable() { Application.logMessageReceived -= Log; }
         void Update() { if (Input.GetKeyDown(KeyCode.BackQuote)) { doShow = !doShow; } }
         public void Log(string logString, string stackTrace, LogType type)
         {
+            logString = logString + stackTrace;
             // for onscreen...
             myLog = myLog + "\n" + logString;
             if (myLog.Length > kChars) { myLog = myLog.Substring(myLog.Length - kChars); }
