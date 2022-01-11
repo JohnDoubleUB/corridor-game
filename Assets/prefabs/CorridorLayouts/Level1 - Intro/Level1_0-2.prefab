@@ -186,9 +186,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutLevelNumber: 1
   layoutNumber: 0
-  corridorMeshType: 0
-  corridorMatType: 0
-  corridorDoorMatType: 0
   sectionDoor: {fileID: 0}
   Props: []
   PuzzleElements: []
@@ -202,6 +199,20 @@ MonoBehaviour:
     PickedUp: 0
     IsGeneratedNumberKey: 0
     PuzzlePieceId: -1
+  - PickupItemPrefab: {fileID: 3710080080312790725, guid: c14772bbbd23e2745b5a178bc958187c,
+      type: 3}
+    PotentialSpawnPositions:
+    - {fileID: 1132875205}
+    PickedUp: 0
+    IsGeneratedNumberKey: 1
+    PuzzlePieceId: 0
+  - PickupItemPrefab: {fileID: 3710080080312790725, guid: c14772bbbd23e2745b5a178bc958187c,
+      type: 3}
+    PotentialSpawnPositions:
+    - {fileID: 1666918061}
+    PickedUp: 0
+    IsGeneratedNumberKey: 1
+    PuzzlePieceId: 1
 --- !u!1 &7785650446421573657
 GameObject:
   m_ObjectHideFlags: 0

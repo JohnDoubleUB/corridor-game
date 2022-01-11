@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7418575949572918992}
   - component: {fileID: 395630380}
   m_Layer: 0
-  m_Name: Candles_Layout_3
+  m_Name: Candles_Layout_3-level2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf94e1f253f0a5448f4e037304e92d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutLevelNumber: 0
-  layoutNumber: 0
+  layoutLevelNumber: 2
+  layoutNumber: 1
   corridorMeshType: 0
   corridorMatType: 0
   corridorDoorMatType: 0

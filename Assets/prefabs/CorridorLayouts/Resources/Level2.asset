@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelNumber: 2
   CorridorLayouts:
-  - {fileID: 395630380, guid: 020ef6c49e055404eb3116d2f9e2df7c, type: 3}
-  - {fileID: 8711203481728457502, guid: d03aaf274baa995438af7f475f4317a5, type: 3}
-  - {fileID: 395630380, guid: 9e291fb5879972644a53c0ce8837374b, type: 3}
+  - {fileID: 395630380, guid: eef9c32125a07db4d99918b79ffbfad5, type: 3}
+  - {fileID: 8711203481728457502, guid: d2d51bdfb20723e4990f9c8dd0849d3a, type: 3}
+  - {fileID: 395630380, guid: 081ac7354ca34dc4095a7640cf806f14, type: 3}
   BackwardOnlyLayouts:
   - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
   NumberpadPasswords: []
@@ -31,3 +31,4 @@ MonoBehaviour:
     SectionCount: 6
     LevelChange: 3
     RandomSectionRange: 2
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []

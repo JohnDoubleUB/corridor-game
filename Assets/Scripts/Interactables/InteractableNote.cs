@@ -37,8 +37,8 @@ public class InteractableNote : InteractableObject
     private void Awake()
     {
         //Establish default rotation and position
-        defaultPosition = transform.position;
-        defaultRotation = transform.rotation;
+        defaultPosition = transform.localPosition;
+        defaultRotation = transform.localRotation;
 
         if (!NoteInitiated)
         {

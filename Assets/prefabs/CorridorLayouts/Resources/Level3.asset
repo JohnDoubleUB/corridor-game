@@ -20,9 +20,13 @@ MonoBehaviour:
   BackwardOnlyLayouts: []
   NumberpadPasswords:
   - possibleCharacters: 6
+    makePasswordFixed: 0
     passwordLength: 3
+    missingKeyCount: 0
   - possibleCharacters: 1
+    makePasswordFixed: 0
     passwordLength: 1
+    missingKeyCount: 0
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
   AllowRandomWaving: 0
@@ -31,6 +35,6 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete:
-  - Name: Go back to 1
+  - Name: Continue to 4
     LayoutNumberTrigger: 0
-    LevelChange: 1
+    LevelChange: 4

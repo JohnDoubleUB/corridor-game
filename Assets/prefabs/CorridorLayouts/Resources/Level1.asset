@@ -15,7 +15,7 @@ MonoBehaviour:
   LevelNumber: 1
   CorridorLayouts:
   - {fileID: 5706549757614248288, guid: 466fbd33209de4849912f30878ec7d5a, type: 3}
-  - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
+  - {fileID: 7785650445776822728, guid: 1c0e5bfc86c049d439b71bc487a92c3a, type: 3}
   - {fileID: 8502516513757351436, guid: 438caa5ee7d4dc34c9107b6174ec553a, type: 3}
   - {fileID: 8720562560379247226, guid: 26c5111db5ba16845a254b7206999fb9, type: 3}
   - {fileID: 1028531646186853634, guid: 4baa1ffb0799d5a4bb00affe842b32a8, type: 3}
