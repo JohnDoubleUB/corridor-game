@@ -34,12 +34,14 @@ public class CorridorChangeManager : MonoBehaviour
 
     public int sectionsTraveledOnCurrentLevel = 0;
 
-    public Mesh[] CorridorMeshVarients;
+    public Mesh[] corridorMeshes;
 
     public CorridorMatVarient[] CorridorMatVarients;
 
     private void Awake()
     {
+        //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
+
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
 
@@ -144,23 +146,34 @@ public class CorridorChangeManager : MonoBehaviour
             section.CurrentLayout = layoutGameObj;
 
             //TODO: This stuff is causing errors in the build still, fix this
-            //int layoutMeshType = (int)layoutGameObj.corridorMeshType;
+            int layoutMeshType = (int)layoutGameObj.corridorMeshType;
 
-            //section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[layoutMeshType]);
+            Mesh corridorMesh = corridorMeshes[layoutMeshType]; //The issue is with this bit?
 
-            //if (layoutMeshType != 0)
-            //{
-            //    section.FlipCorridorX = false;
-            //    section.FlipCorridorZ = false;
-            //    layoutGameObj.sectionDoor.SetDoorVisible(false);
-            //}
+            //Debug.Log("layout mesh: " + corridorMesh.name);
 
+
+
+            if (corridorMesh != null)
+            {
+                section.ChangeMesh(corridorMesh);
+            }
+
+            if (layoutMeshType != 0)
+            {
+                section.FlipCorridorX = false;
+                section.FlipCorridorZ = false;
+                layoutGameObj.sectionDoor.SetDoorVisible(false);
+            }
+
+            //Material changes still don't work in build!
             //section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
             //sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
         }
         else
         {
-            //section.MeshCorridorVarient.ChangeMesh(CorridorMeshVarients[0]);
+            section.ChangeMesh(corridorMeshes[0]);
+
             //section.SetMaterialVarient(CorridorMatVarients[0]);
             //sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
