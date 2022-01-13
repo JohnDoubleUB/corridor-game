@@ -60,7 +60,7 @@ public class CG_HeadBob : MonoBehaviour
     {
         if (footSteps.Any() && !controller.IsJumping) 
         {
-            AudioManager.current.PlayClipAt(footSteps[Random.Range(0, footSteps.Length)], footStepPosition.position, 0.1f, true);
+            AudioManager.current.PlayClipAt(footSteps[Random.Range(0, footSteps.Length)], footStepPosition.position, 0.2f, true);
         }
     }
 }

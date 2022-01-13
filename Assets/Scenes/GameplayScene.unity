@@ -481,7 +481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158676736}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 64.7, y: 0, z: -32.3}
+  m_LocalPosition: {x: 4.91, y: 0, z: -11.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124715450}
@@ -504,7 +504,7 @@ MonoBehaviour:
   movementSpeed: 2
   minumumDistance: 1
   xTeleportDistanceFromPlayer: 60
-  teleportAwayWhenAtMinimumDistance: 1
+  teleportAwayWhenAtMinimumDistance: 0
 --- !u!82 &158676739
 AudioSource:
   m_ObjectHideFlags: 0
@@ -765,10 +765,7 @@ MonoBehaviour:
   controller: {fileID: 2067456599}
   additonalBobber: {fileID: 1583393752}
   footStepPosition: {fileID: 230452652}
-  footSteps:
-  - {fileID: 8300000, guid: 62828ec6214e09c4cb4eff2ca08e9e80, type: 3}
-  - {fileID: 8300000, guid: f9e9256477612e7478619caa63a6b269, type: 3}
-  - {fileID: 8300000, guid: 9f87e7259d46d3943969a6a61da87be9, type: 3}
+  footSteps: []
 --- !u!114 &189754255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2842,9 +2839,9 @@ MonoBehaviour:
   additonalBobber: {fileID: 1583393752}
   footStepPosition: {fileID: 230452652}
   footSteps:
-  - {fileID: 8300000, guid: 62828ec6214e09c4cb4eff2ca08e9e80, type: 3}
-  - {fileID: 8300000, guid: f9e9256477612e7478619caa63a6b269, type: 3}
-  - {fileID: 8300000, guid: 9f87e7259d46d3943969a6a61da87be9, type: 3}
+  - {fileID: 8300000, guid: 95fc3f7161c6460438e25aafb72e9bd5, type: 3}
+  - {fileID: 8300000, guid: a13f79cabf7ea2944a7795226f544314, type: 3}
+  - {fileID: 8300000, guid: d0e7090b51a279e45a6a7a19f16a43a6, type: 3}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4497,7 +4494,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2002696291}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 615cc2b2011859f4b99a1078566e9569, type: 3}
@@ -4902,7 +4899,10 @@ MonoBehaviour:
   interactionPrompt: {fileID: 1237934485}
   NotepadAnimator: {fileID: 235820161}
   footStepPosition: {fileID: 230452652}
-  playerLandSound: {fileID: 8300000, guid: 8ff64bd292d925b40842c66ce9d467d7, type: 3}
+  playerLandSounds:
+  - {fileID: 8300000, guid: 74402154826f0f64aa316fab0b0692db, type: 3}
+  - {fileID: 8300000, guid: a364aaf360f7c8640b50bc30db067e63, type: 3}
+  - {fileID: 8300000, guid: 4806fbe9ac8c637488348cc8c05c6976, type: 3}
   moveDirection: {x: 0, y: 0, z: 0}
   canMove: 1
   canInteract: 1

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -29,7 +30,7 @@ public class CG_CharacterController : MonoBehaviour
     public Animator NotepadAnimator;
 
     public Transform footStepPosition;
-    public AudioClip playerLandSound; 
+    public AudioClip[] playerLandSounds; 
 
     CharacterController characterController;
     [HideInInspector]
@@ -127,7 +128,7 @@ public class CG_CharacterController : MonoBehaviour
             if (characterIsJumping) 
             {
                 characterIsJumping = false;
-                if (playerLandSound != null) AudioManager.current.PlayClipAt(playerLandSound, footStepPosition.position, 0.1f, true);
+                if (playerLandSounds != null && playerLandSounds.Any()) AudioManager.current.PlayClipAt(playerLandSounds[Random.Range(0, playerLandSounds.Length)], footStepPosition.position, 0.2f, true);
             }
 
             if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)
