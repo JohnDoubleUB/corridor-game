@@ -49,19 +49,6 @@ public class CorridorChangeManager : MonoBehaviour
         LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
 
         UpdateLevel();
-
-        for (int i = 0; i < corridorSections.Count; i++)
-        {
-            CorridorSection section = corridorSections[i];
-            section.toNotifyOnPlayerEnter = this;
-            section.name = "corridor(" + i + ")";
-            section.CorridorNumber = i;
-
-            if (i == 0) section.sectionType = SectionType.Back;
-            else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
-
-            CreateCorridorPrefabForSection(section, InitialMappingsForDoorSegments(i), i);
-        }
     }
 
     private void UpdateLevel()
@@ -108,6 +95,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void Start()
     {
+        SetupInitialSections();
         playerTransform = GameManager.current.player.transform;
         corridorGameParent = GameManager.current.GameParent;
 
@@ -145,14 +133,9 @@ public class CorridorChangeManager : MonoBehaviour
             layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
             section.CurrentLayout = layoutGameObj;
 
-            //TODO: This stuff is causing errors in the build still, fix this
             int layoutMeshType = (int)layoutGameObj.corridorMeshType;
 
             Mesh corridorMesh = corridorMeshes[layoutMeshType]; //The issue is with this bit?
-
-            //Debug.Log("layout mesh: " + corridorMesh.name);
-
-
 
             if (corridorMesh != null)
             {
@@ -166,16 +149,31 @@ public class CorridorChangeManager : MonoBehaviour
                 layoutGameObj.sectionDoor.SetDoorVisible(false);
             }
 
-            //Material changes still don't work in build!
-            //section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
-            //sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
+            section.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorMatType]);
+            sectionDoor.SetMaterialVarient(CorridorMatVarients[(int)layoutGameObj.corridorDoorMatType]);
         }
         else
         {
             section.ChangeMesh(corridorMeshes[0]);
 
-            //section.SetMaterialVarient(CorridorMatVarients[0]);
-            //sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
+            section.SetMaterialVarient(CorridorMatVarients[0]);
+            sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
+        }
+    }
+
+    private void SetupInitialSections() 
+    {
+        for (int i = 0; i < corridorSections.Count; i++)
+        {
+            CorridorSection section = corridorSections[i];
+            section.toNotifyOnPlayerEnter = this;
+            section.name = "corridor(" + i + ")";
+            section.CorridorNumber = i;
+
+            if (i == 0) section.sectionType = SectionType.Back;
+            else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
+
+            CreateCorridorPrefabForSection(section, InitialMappingsForDoorSegments(i), i);
         }
     }
 

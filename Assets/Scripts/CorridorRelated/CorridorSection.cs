@@ -237,11 +237,11 @@ public class CorridorSection : MonoBehaviour
 
     public void SetMaterialVarient(CorridorMatVarient materialVarient) 
     {
-        if (meshMaterials[0].GetTexture("Albedo1") != materialVarient.albedo1) meshMaterials[0].SetTexture("Albedo1", materialVarient.albedo1);
-        if (meshMaterials[0].GetTexture("Albedo2") != materialVarient.albedo2) meshMaterials[0].SetTexture("Albedo2", materialVarient.albedo2);
-        
-        if (meshMaterials[1].GetTexture("Albedo1") != materialVarient.albedo1) meshMaterials[1].SetTexture("Albedo1", materialVarient.albedo1);
-        if (meshMaterials[1].GetTexture("Albedo2") != materialVarient.albedo2) meshMaterials[1].SetTexture("Albedo2", materialVarient.albedo2);
+        if (meshMaterials[0].GetTexture("_MainTex") != materialVarient.albedo1) meshMaterials[0].SetTexture("_MainTex", materialVarient.albedo1);
+        if (meshMaterials[0].GetTexture("_MainTex2") != materialVarient.albedo2) meshMaterials[0].SetTexture("_MainTex2", materialVarient.albedo2);
+
+        if (meshMaterials[1].GetTexture("_MainTex") != materialVarient.albedo1) meshMaterials[1].SetTexture("_MainTex", materialVarient.albedo1);
+        if (meshMaterials[1].GetTexture("_MainTex2") != materialVarient.albedo2) meshMaterials[1].SetTexture("_MainTex2", materialVarient.albedo2);
     }
 
     private void SetWallAndOrFloorWavyness(bool wall, bool floor, float wavyAmount) 
