@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -11,7 +13,14 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource FirstPersonPlayerSource;
 
+    public AudioMixer AmbientTrackMixer;
+
+    public List<MusicMixerTrack> AmbientTracks;
+
+    public int enabledTracksAtStart = 4;
+
     public float pitchVariation = 0.2f;
+
 
     private bool playFromFirstPersonAudioSource;
 
@@ -19,13 +28,23 @@ public class AudioManager : MonoBehaviour
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
+
+        AmbientTracks = AmbientTrackMixer.FindMatchingGroups("Master").Where(x => x.name != "Master").Select(x => new MusicMixerTrack(x.name, AmbientTrackMixer)).ToList();
     }
 
-    public void SetCreakingVolumeAt(AudioSourceType audioSource, float volume) 
+    private void Start()
+    {
+        for (int i = 0; i < AmbientTracks.Count; i++)
+        {
+            if (i >= enabledTracksAtStart) AmbientTracks[i].trackOn = false;
+        }
+    }
+
+    public void SetCreakingVolumeAt(AudioSourceType audioSource, float volume)
     {
         AudioSource selectedSource;
 
-        switch (audioSource) 
+        switch (audioSource)
         {
             default:
             case AudioSourceType.FirstPersonPlayer:
@@ -37,7 +56,7 @@ public class AudioManager : MonoBehaviour
         {
             playFromFirstPersonAudioSource = false;
         }
-        else if (selectedSource.clip != AmbientCreaking || !selectedSource.isPlaying) 
+        else if (selectedSource.clip != AmbientCreaking || !selectedSource.isPlaying)
         {
             selectedSource.clip = AmbientCreaking;
             playFromFirstPersonAudioSource = true;
@@ -53,13 +72,24 @@ public class AudioManager : MonoBehaviour
             FirstPersonPlayerSource.pitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
             FirstPersonPlayerSource.Play();
         }
-        else if (!playFromFirstPersonAudioSource) 
+        else if (!playFromFirstPersonAudioSource)
         {
             FirstPersonPlayerSource.Stop();
         }
+
+
+        foreach (MusicMixerTrack track in AmbientTracks)
+        {
+            if (track.trackOn != track.trackOn_LastFrame)
+            {
+                track.trackOn_LastFrame = track.trackOn;
+                track.SetTrackTo(track.trackOn ? 0 : -80f);
+            }
+        }
+
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f) 
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f)
     {
         return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds);
     }
@@ -79,7 +109,30 @@ public class AudioManager : MonoBehaviour
     }
 }
 
-public enum AudioSourceType 
+public enum AudioSourceType
 {
     FirstPersonPlayer
+}
+
+[System.Serializable]
+public class MusicMixerTrack
+{
+    [HideInInspector]
+    public string AmbientTrackName;
+    private AudioMixer Mixer;
+    public bool trackOn = true;
+
+    [HideInInspector]
+    public bool trackOn_LastFrame = true;
+
+    public MusicMixerTrack(string ambientTrackName, AudioMixer mixer)
+    {
+        AmbientTrackName = ambientTrackName;
+        Mixer = mixer;
+    }
+
+    public void SetTrackTo(float value)
+    {
+        Mixer.SetFloat(AmbientTrackName, value);
+    }
 }
