@@ -99,6 +99,7 @@ public class AudioManager : MonoBehaviour
         GameObject tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
         AudioSource aSource = tempGO.AddComponent<AudioSource>(); // add an audio source
+        aSource.spatialBlend = 0.5f;
         aSource.clip = clip; // define the clip
         aSource.pitch = pitch;
         aSource.volume = volume;

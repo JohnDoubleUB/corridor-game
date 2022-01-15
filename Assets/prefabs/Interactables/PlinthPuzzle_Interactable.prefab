@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 1740560222720988209}
   - component: {fileID: 1740560222720988210}
   m_Layer: 0
-  m_Name: PlinthPuzzle
+  m_Name: PlinthPuzzle_Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,6 +341,14 @@ MonoBehaviour:
   - PlynthNotifier: {fileID: 1740560221528273829}
     RequiredObject: {fileID: 0}
     HasCorrectItem: 0
+  PlinthItemPlaceSounds:
+  - {fileID: 8300000, guid: 7cf973e2ed036b44cb541fdd9b986f3c, type: 3}
+  - {fileID: 8300000, guid: 681fe66adf5dfa8469fb9d8dee9bf7c7, type: 3}
+  - {fileID: 8300000, guid: 7c2881f5333f8bc4788bea70b61cd454, type: 3}
+  PlinthSlideDownSounds:
+  - {fileID: 8300000, guid: 952ec854056ec9e4790098abaf33a454, type: 3}
+  - {fileID: 8300000, guid: 197a5f2d382efaf47ba873b7fc23bb64, type: 3}
+  - {fileID: 8300000, guid: 6b877da987b03d4448212d55fee7ce12, type: 3}
   plinthLowerAmount: 0.05
 --- !u!114 &4029376979616471777
 MonoBehaviour:
@@ -361,6 +369,7 @@ MonoBehaviour:
   - {fileID: 8204504007632941080}
   - {fileID: 1481263085391329442}
   - {fileID: 2928080871091572898}
+  trackSpecificMaterialElements: 
 --- !u!1001 &238432722593555494
 PrefabInstance:
   m_ObjectHideFlags: 0

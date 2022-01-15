@@ -7,6 +7,9 @@ using UnityEngine;
 public class PlinthController : PuzzleElementController
 {
     public PlinthNotifierAndItem[] Plinths;
+    public AudioClip[] PlinthItemPlaceSounds;
+    public AudioClip[] PlinthSlideDownSounds;
+
     public float plinthLowerAmount = 1f;
     float pickupSpeedMultiplier = 1.5f;
 
@@ -157,6 +160,12 @@ public class PlinthController : PuzzleElementController
 
         plinthCompleteCount++;
 
+        //Sound effect!
+        int tempNotifId = plinthAndItem.PlynthNotifier.NotifierId;
+        if (PlinthItemPlaceSounds != null && PlinthItemPlaceSounds.Any() && tempNotifId < PlinthItemPlaceSounds.Length) 
+            AudioManager.current.PlayClipAt(PlinthItemPlaceSounds[tempNotifId], transformToMove.position, 1f, false).transform.SetParent(transform);
+        
+
         if (PuzzleSolved && !plinthsAreDown && plinthCompleteCount > 2)
         {
             plinthsAreDown = true;
@@ -185,14 +194,20 @@ public class PlinthController : PuzzleElementController
             //Play plinth down animation!
             foreach (PlinthNotifierAndItem p in Plinths)
             {
-                MoveObject(p.PlynthNotifier.transform, new Vector3(0, -plinthLowerAmount, 0), Random.Range(0f, 0.5f), Random.Range(pickupSpeedMin, pickupSpeedMax));
+                MoveObject(p.PlynthNotifier.transform, 
+                    new Vector3(0, -plinthLowerAmount, 0), 
+                    Random.Range(0f, 0.5f), 
+                    Random.Range(pickupSpeedMin, pickupSpeedMax), 
+                    PlinthSlideDownSounds != null && PlinthSlideDownSounds.Any() && p.PlynthNotifier.NotifierId < PlinthSlideDownSounds.Length ? 
+                    PlinthSlideDownSounds[p.PlynthNotifier.NotifierId] : 
+                    null);
             }
         }
 
     }
 
 
-    private async void MoveObject(Transform ObjectToMove, Vector3 offset, float initialDelay = 1, float speedMultiplier = 1f)
+    private async void MoveObject(Transform ObjectToMove, Vector3 offset, float initialDelay = 1, float speedMultiplier = 1f, AudioClip movementSound = null)
     {
         float timer = 0;
         while (timer < initialDelay) 
@@ -201,6 +216,9 @@ public class PlinthController : PuzzleElementController
             await Task.Yield();
         }
 
+        AudioSource tempAudioSource = movementSound != null ? AudioManager.current.PlayClipAt(movementSound, ObjectToMove.position, 1f, false) : null;
+
+        if (tempAudioSource != null) tempAudioSource.transform.SetParent(ObjectToMove);
 
         float positionValue = 0;
         float smoothedPositionValue;
@@ -215,6 +233,7 @@ public class PlinthController : PuzzleElementController
             await Task.Yield();
         }
 
+        if (tempAudioSource != null) tempAudioSource.Stop();
 
     }
 }

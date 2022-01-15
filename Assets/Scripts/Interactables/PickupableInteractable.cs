@@ -11,6 +11,7 @@ public class PickupableInteractable : InteractableObject
     public float pickupScaleMultiplier = 1f;
     public AudioClip pickupSound;
     public bool varyPickupSoundPitch;
+    public float pickupSoundVolume = 0.5f;
 
     private bool beingPickedUp;
     private Collider pickupCollider;
@@ -46,7 +47,10 @@ public class PickupableInteractable : InteractableObject
         IsInteractable = false;
         beingPickedUp = true;
 
-        if (pickupSound != null) AudioManager.current.PlayClipAt(pickupSound, transform.position, 0.7f, varyPickupSoundPitch);
+        if (pickupSound != null)
+        { 
+            AudioManager.current.PlayClipAt(pickupSound, transform.position, pickupSoundVolume, varyPickupSoundPitch).transform.SetParent(transform); 
+        }
 
         Vector3 positionAtTimeOfPickup = transform.position;
         float positionValue = 0;

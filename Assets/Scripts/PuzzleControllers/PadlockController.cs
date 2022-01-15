@@ -15,6 +15,13 @@ public class PadlockController : PuzzleElementController
 
     public Animator lockAnimator;
 
+    public AudioClip LockKeySlideSound;
+    public AudioClip LockUnlockSound;
+    public AudioClip LockDropSound;
+    public AudioClip GenericLockSound;
+    public float soundVolume = 1f;
+
+
     private Vector3 keyParentDefaultPos;
     private Quaternion keyParentDefaultRot;
 
@@ -83,6 +90,8 @@ public class PadlockController : PuzzleElementController
         Transform cameraTarget = GameManager.current.playerController.playerCamera.transform;
         Quaternion targetRotation = toFacePlayer ? Quaternion.LookRotation(cameraTarget.position - lockFocus.position) : lockFocusDefaultRot;
 
+        if (GenericLockSound != null) AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume/2).transform.SetParent(transform);
+
         while (positionValue < 1)
         {
             await Task.Yield();
@@ -120,6 +129,8 @@ public class PadlockController : PuzzleElementController
         Vector3 initialPosition = keyItem.transform.localPosition;
         Vector3 targetVector = Vector3.zero;
 
+        if (LockKeySlideSound != null) AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume).transform.SetParent(transform);
+
         while (positionValue < 1)
         {
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
@@ -131,7 +142,9 @@ public class PadlockController : PuzzleElementController
 
 
         if (lockAnimator != null) lockAnimator.Play("Unlock");
-        await Task.Delay(1000);
+        await Task.Delay(500);
+        if (LockUnlockSound != null) AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
+        await Task.Delay(500);
 
         Task temp = RotateLock(false);
 
@@ -141,6 +154,8 @@ public class PadlockController : PuzzleElementController
         Vector3 lockFocusPosTarget = lockFocus.localPosition - new Vector3(0, 5, 0);
 
         PuzzleSolved = true;
+
+        if (LockDropSound != null) AudioManager.current.PlayClipAt(LockDropSound, transform.position, soundVolume).transform.SetParent(transform);
 
         while (positionValue < 1)
         {
