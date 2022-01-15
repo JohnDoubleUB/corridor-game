@@ -22,6 +22,10 @@ public class NumberpadController : PuzzleElementController
     public ButtonInteractable inertKey;
 
     public List<char> disabledButtons = new List<char>();
+
+    public MeshRenderer numberpadMeshRenderer;
+    private Material numberpadMat;
+
     private char[] lastDisabledButtons = new char[0];
 
     private string blankPassword;
@@ -80,6 +84,17 @@ public class NumberpadController : PuzzleElementController
         if (blankPassword.Length != password.Length || blankPassword[0] != passwordGapCharacter) UpdateBlankPassword();
         if (PuzzleSolved && DisplayText.text != "Access Granted") DisplayText.text = "Access Granted";
         UpdateDisabledButtons();
+    }
+
+    private void Start()
+    {
+        numberpadMat = numberpadMeshRenderer.sharedMaterials[0];
+        MaterialManager.current.TrackMaterials(numberpadMat);
+    }
+
+    private void OnDestroy()
+    {
+        MaterialManager.current.UntrackMaterials(numberpadMat);
     }
 
     private void UpdateDisabledButtons() 

@@ -59,6 +59,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Replace Key
   IsInteractable: 1
+  NotifierId: 0
+  AssociatedTransform: {fileID: 0}
   puzzleToNotify: {fileID: 1636822479379277464}
 --- !u!1 &1636822477742015568
 GameObject:
@@ -323,7 +325,7 @@ GameObject:
   - component: {fileID: 1636822479379277471}
   - component: {fileID: 1636822479379277464}
   m_Layer: 0
-  m_Name: Numberpadprefab
+  m_Name: NumberpadPuzzle_Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,6 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayoutHandler: {fileID: 0}
+  IsLevelTrigger: 0
   password: 12345
   DisplayText: {fileID: 1636822479183181211}
   passwordGapCharacter: 95
@@ -397,6 +400,7 @@ MonoBehaviour:
   keyPadInteractor: {fileID: 718174340}
   inertKey: {fileID: 7968833478274302964}
   disabledButtons: 
+  numberpadMeshRenderer: {fileID: 105479442993026314}
 --- !u!1001 &1636822477766001828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -864,6 +868,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 848d2cc17ac6f8e4fa3174407d891cc0, type: 3}
+--- !u!4 &3591993918696160252 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2841342758071465355, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1636822478187990647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3591993918696160250 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2841342758071465357, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
@@ -876,12 +886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b33e6a0db646cc240b719daa76187fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &3591993918696160252 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2841342758071465355, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1636822478187990647}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1636822478477552024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1048,6 +1052,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbb9a1eb332a92c45beca2cc864b90fd, type: 3}
+--- !u!23 &105479442993026314 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: cbb9a1eb332a92c45beca2cc864b90fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1636822478780500366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1242307548844617317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cbb9a1eb332a92c45beca2cc864b90fd,
@@ -1133,12 +1143,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 848d2cc17ac6f8e4fa3174407d891cc0, type: 3}
---- !u!4 &3591993920329792783 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2841342758071465355, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1636822478835992708}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3591993920329792777 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2841342758071465357, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
@@ -1151,6 +1155,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b33e6a0db646cc240b719daa76187fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &3591993920329792783 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2841342758071465355, guid: 848d2cc17ac6f8e4fa3174407d891cc0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1636822478835992708}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1636822478971492589
 PrefabInstance:
   m_ObjectHideFlags: 0
