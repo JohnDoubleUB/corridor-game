@@ -65,6 +65,8 @@ MonoBehaviour:
     slotContent: {fileID: 0}
   pickupSpeedMultiplier: 4
   pickupScaleMultiplier: 2
+  pickupSound: {fileID: 8300000, guid: 70e77386b8927eb4c8caf437864002c6, type: 3}
+  varyPickupSoundPitch: 0
 --- !u!1 &1230467096680151992
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,3 +160,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherObjectRenderers: []
+  trackSpecificMaterialElements: 
