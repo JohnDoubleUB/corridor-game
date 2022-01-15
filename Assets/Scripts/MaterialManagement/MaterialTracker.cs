@@ -7,8 +7,12 @@ public class MaterialTracker : MonoBehaviour
 {
     public List<Renderer> otherObjectRenderers = new List<Renderer>();
 
+    public int[] trackSpecificMaterialElements;
+
     private MeshRenderer meshRenderer;
     private SpriteRenderer spriteRenderer;
+    private Material[] trackedMeshMaterials;
+    private Material[] trackedSpriteMaterials;
 
     private void Awake()
     {
@@ -17,17 +21,27 @@ public class MaterialTracker : MonoBehaviour
     }
     void Start()
     {
-        if (meshRenderer != null && MaterialManager.current != null) 
+        if (meshRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.TrackMaterials(meshRenderer.sharedMaterials);
+            trackedMeshMaterials =
+                trackSpecificMaterialElements != null && trackSpecificMaterialElements.Any() ?
+                meshRenderer.sharedMaterials.Where((x, i) => trackSpecificMaterialElements.Contains(i)).ToArray() :
+                meshRenderer.sharedMaterials;
+
+            MaterialManager.current.TrackMaterials(trackedMeshMaterials);
         }
 
         if (spriteRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.TrackMaterials(spriteRenderer.sharedMaterials);
+            trackedSpriteMaterials =
+                trackSpecificMaterialElements != null && trackSpecificMaterialElements.Any() ?
+                spriteRenderer.sharedMaterials.Where((x, i) => trackSpecificMaterialElements.Contains(i)).ToArray() :
+                spriteRenderer.sharedMaterials;
+
+            MaterialManager.current.TrackMaterials(trackedSpriteMaterials);
         }
 
-        if (otherObjectRenderers.Any() && MaterialManager.current != null) 
+        if (otherObjectRenderers.Any() && MaterialManager.current != null)
         {
             MaterialManager.current.TrackMaterials(otherObjectRenderers.SelectMany(x => x.sharedMaterials).ToArray());
         }
@@ -38,12 +52,12 @@ public class MaterialTracker : MonoBehaviour
     {
         if (meshRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.UntrackMaterials(meshRenderer.sharedMaterials);
+            MaterialManager.current.UntrackMaterials(trackedMeshMaterials);
         }
 
         if (spriteRenderer != null && MaterialManager.current != null)
         {
-            MaterialManager.current.UntrackMaterials(spriteRenderer.sharedMaterials);
+            MaterialManager.current.UntrackMaterials(trackedSpriteMaterials);
         }
 
         if (otherObjectRenderers.Any() && MaterialManager.current != null)
