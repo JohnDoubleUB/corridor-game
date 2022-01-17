@@ -14,6 +14,11 @@ public class ButtonInteractable_Testing : InteractableObject
 
     public MeshRenderer buttonMesh;
 
+    private Material buttonMaterial;
+
+    public Color activated;
+    public Color deactivated;
+
     private bool buttonPushed;
     private float timer = 0;
 
@@ -21,6 +26,47 @@ public class ButtonInteractable_Testing : InteractableObject
     private Vector3 buttonInPosition;
 
     public TestButtonEffectType testEffectType;
+
+    private bool IsButtonPropertyActive { 
+        get 
+        {
+            switch (testEffectType) 
+            {
+                case TestButtonEffectType.Spin:
+                    return GameParentTestScript.current.dospin;
+
+                case TestButtonEffectType.TVMan:
+                    return GameManager.current.tvMan.moveTowardPlayer;
+
+                default:
+                    return AudioManager.current.GetAmbientTrackByIndex(GetAmbientTrackIndex(testEffectType)).trackOn;
+            }
+        } 
+    }
+
+    private int GetAmbientTrackIndex(TestButtonEffectType TestButtonEffectIndex) 
+    {
+        switch (TestButtonEffectIndex) 
+        {
+            case TestButtonEffectType.ToggleTrack1:
+                return 1;
+
+            case TestButtonEffectType.ToggleTrack2:
+                return 2;
+
+            case TestButtonEffectType.ToggleTrack3:
+                return 3;
+
+            case TestButtonEffectType.ToggleTrack4:
+                return 4;
+
+            case TestButtonEffectType.ToggleTrack5:
+                return 5;
+
+            default:
+                return 0;
+        }
+    }
 
     private void Awake()
     {
@@ -47,7 +93,22 @@ public class ButtonInteractable_Testing : InteractableObject
                     GameManager.current.tvMan.moveTowardPlayer = !GameManager.current.tvMan.moveTowardPlayer;
                     GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance = !GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance;
                     break;
+
+                default:
+                    MusicMixerTrack track = AudioManager.current.GetAmbientTrackByIndex(GetAmbientTrackIndex(testEffectType));
+                    track.trackOn = !track.trackOn;
+                    break;
             }
+
+            buttonMaterial.SetColor("_BaseColor", IsButtonPropertyActive ? activated : deactivated);
+        }
+    }
+
+    private void Start()
+    {
+        if (buttonMesh != null) { 
+            buttonMaterial = buttonMesh.material;
+            buttonMaterial.SetColor("_BaseColor", IsButtonPropertyActive ? activated : deactivated);
         }
     }
 
@@ -77,13 +138,17 @@ public class ButtonInteractable_Testing : InteractableObject
                 }
             }
         }
-
-
     }
 }
 
 public enum TestButtonEffectType 
 {
     Spin,
-    TVMan
+    TVMan,
+    ToggleTrack0,
+    ToggleTrack1,
+    ToggleTrack2,
+    ToggleTrack3,
+    ToggleTrack4,
+    ToggleTrack5
 }

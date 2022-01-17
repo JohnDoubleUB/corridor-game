@@ -32,10 +32,7 @@ public class AudioManager : MonoBehaviour
         current = this;
 
         AmbientTracks = AmbientTrackMixer.FindMatchingGroups("Master").Where(x => x.name != "Master").Select(x => new MusicMixerTrack(x.name, AmbientTrackMixer)).ToList();
-    }
 
-    private void Start()
-    {
         for (int i = 0; i < AmbientTracks.Count; i++)
         {
             if (i >= enabledTracksAtStart) AmbientTracks[i].trackOn = false;
@@ -65,6 +62,11 @@ public class AudioManager : MonoBehaviour
         }
 
         selectedSource.volume = playFromFirstPersonAudioSource ? volume : 1f;
+    }
+
+    public MusicMixerTrack GetAmbientTrackByIndex(int index) 
+    {
+        return AmbientTracks[index];
     }
 
     private void Update()

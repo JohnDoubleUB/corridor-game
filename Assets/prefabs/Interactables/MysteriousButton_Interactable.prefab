@@ -157,16 +157,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 5c1adaec5642f6b41bc7c558e3712858, type: 3}
+    m_Font: {fileID: 12800000, guid: b6c92430a8724e74b9439f4b853c84a1, type: 3}
     m_FontSize: 5
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 5
     m_MaxSize: 300
@@ -243,6 +243,8 @@ MonoBehaviour:
   makeButtonInert: 0
   buttonText: {fileID: 7248760997505653595}
   buttonMesh: {fileID: 8311762657177820705}
+  activated: {r: 0.06587124, g: 1, b: 0, a: 0}
+  deactivated: {r: 1, g: 0, b: 0, a: 0}
   testEffectType: 0
 --- !u!1001 &7248760996680057509
 PrefabInstance:
@@ -325,7 +327,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 183045c3fa8973145a1b0559a0797b42, type: 2}
+      objectReference: {fileID: 2100000, guid: b1223845ccc389242b35ccfa4956195a, type: 2}
     - target: {fileID: 919132149155446097, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
         type: 3}
       propertyPath: m_Name
