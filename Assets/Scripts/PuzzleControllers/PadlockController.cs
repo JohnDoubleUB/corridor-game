@@ -84,6 +84,8 @@ public class PadlockController : PuzzleElementController
 
     private async Task RotateLock(bool toFacePlayer = true) 
     {
+
+        print("rotating");
         float positionValue = 0;
         float smoothedPositionValue;
         Quaternion initialRotation = lockFocus.rotation;
@@ -104,6 +106,10 @@ public class PadlockController : PuzzleElementController
         lockFocus.rotation = targetRotation;
     }
 
+    private void RotateLockBack() 
+    {
+        Task tc = RotateLock(false);
+    }
 
     private async void RotateThenBack() 
     {
@@ -129,7 +135,11 @@ public class PadlockController : PuzzleElementController
         Vector3 initialPosition = keyItem.transform.localPosition;
         Vector3 targetVector = Vector3.zero;
 
-        if (LockKeySlideSound != null) AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume).transform.SetParent(transform);
+        //if (LockKeySlideSound != null) 
+        //{ 
+        //    AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume, true, 0.2f).transform.SetParent(transform);
+        //    AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume, true, 0.6f).transform.SetParent(transform);
+        //}
 
         while (positionValue < 1)
         {
@@ -142,13 +152,40 @@ public class PadlockController : PuzzleElementController
 
 
         if (lockAnimator != null) lockAnimator.Play("Unlock");
-        await Task.Delay(500);
-        if (LockUnlockSound != null) AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
-        await Task.Delay(500);
+        //await Task.Delay(1000);
+        //if (LockUnlockSound != null) AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
+        //await Task.Delay(500);
 
-        Task temp = RotateLock(false);
+        //Task temp = RotateLock(false);
 
-        positionValue = 0;
+        //positionValue = 0;
+
+        //Vector3 lockFocusPos = lockFocus.localPosition;
+        //Vector3 lockFocusPosTarget = lockFocus.localPosition - new Vector3(0, 5, 0);
+
+        //PuzzleSolved = true;
+
+        //if (LockDropSound != null) AudioManager.current.PlayClipAt(LockDropSound, transform.position, soundVolume).transform.SetParent(transform);
+
+        //while (positionValue < 1)
+        //{
+        //    positionValue += Time.deltaTime * 0.5f;
+        //    smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+        //    lockFocus.localPosition = Vector3.Lerp(lockFocusPos, lockFocusPosTarget, smoothedPositionValue);
+        //    await Task.Yield();
+        //}
+
+
+        
+    }
+
+    public async void DropLock() 
+    {
+
+        //Task temp = RotateLock(false);
+
+        float positionValue = 0;
+        float smoothedPositionValue;
 
         Vector3 lockFocusPos = lockFocus.localPosition;
         Vector3 lockFocusPosTarget = lockFocus.localPosition - new Vector3(0, 5, 0);
@@ -164,9 +201,6 @@ public class PadlockController : PuzzleElementController
             lockFocus.localPosition = Vector3.Lerp(lockFocusPos, lockFocusPosTarget, smoothedPositionValue);
             await Task.Yield();
         }
-
-
-        
     }
 
     public override void LoadPuzzleData(PuzzleElementControllerData puzzleData)
@@ -178,6 +212,22 @@ public class PadlockController : PuzzleElementController
             gameObject.SetActive(false);
         }
     }
+    private void PlayLockKeySlideSound()
+    {
+        if (LockKeySlideSound != null) AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume).transform.SetParent(transform);
+    }
+
+    private void PlayLockUnlockSound()
+    {
+        if (LockUnlockSound != null) AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
+    }
+
+    private void PlayGenericLockSound()
+    {
+        if (GenericLockSound != null) AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume).transform.SetParent(transform);
+    }
+
+    private void PlaySoundTest(AudioClip test) { }
 
     private void OnDestroy()
     {

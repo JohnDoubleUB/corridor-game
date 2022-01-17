@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -21,6 +22,7 @@ public class AudioManager : MonoBehaviour
 
     public float pitchVariation = 0.2f;
 
+    private bool initialUpdate = true;
 
     private bool playFromFirstPersonAudioSource;
 
@@ -83,9 +85,12 @@ public class AudioManager : MonoBehaviour
             if (track.trackOn != track.trackOn_LastFrame)
             {
                 track.trackOn_LastFrame = track.trackOn;
-                track.SetTrackTo(track.trackOn ? 0 : -80f);
+                track.SetTrackActive(track.trackOn, !initialUpdate);
+                //track.SetTrackTo(track.trackOn ? 0 : -80f);
             }
         }
+
+        if (initialUpdate) initialUpdate = false;
 
     }
 
@@ -105,7 +110,7 @@ public class AudioManager : MonoBehaviour
         aSource.volume = volume;
 
         aSource.PlayDelayed(delayInSeconds); // start the sound
-        Destroy(tempGO, clip.length); // destroy object after clip duration
+        Destroy(tempGO, clip.length + delayInSeconds); // destroy object after clip duration
         return aSource; // return the AudioSource reference
     }
 }
@@ -118,6 +123,14 @@ public enum AudioSourceType
 [System.Serializable]
 public class MusicMixerTrack
 {
+    private AsyncAudioEaser currentMixerTask;
+
+
+    [HideInInspector]
+    public float audioMax = 0;
+    [HideInInspector]
+    public float audioMin = -80f;
+
     [HideInInspector]
     public string AmbientTrackName;
     private AudioMixer Mixer;
@@ -132,8 +145,92 @@ public class MusicMixerTrack
         Mixer = mixer;
     }
 
+    public void SetTrackActive(bool trackActive, bool easeAudioInOut = true)
+    {
+        float audioTarget = trackActive ? audioMax : audioMin;
+        if (easeAudioInOut)
+        {
+            if (currentMixerTask != null && !currentMixerTask.IsCompleted)
+            {
+                currentMixerTask.Stop();
+            }
+            currentMixerTask = new AsyncAudioEaser(audioTarget, AmbientTrackName, Mixer);
+            currentMixerTask.EaseTrackAsync();
+        }
+        else
+        {
+            if (currentMixerTask != null && !currentMixerTask.IsCompleted) currentMixerTask.Stop();
+            Mixer.SetFloat(AmbientTrackName, audioTarget);
+        }
+    }
+
     public void SetTrackTo(float value)
     {
+        if (currentMixerTask != null && !currentMixerTask.IsCompleted) currentMixerTask.Stop();
         Mixer.SetFloat(AmbientTrackName, value);
     }
+
+    class AsyncAudioEaser
+    {
+        private bool IsCanceled = false;
+        private float audioTarget;
+        private AudioMixer audioMixer;
+        private string trackName;
+
+        private Task task;
+
+        public bool IsCompleted
+        {
+            get
+            {
+                if (task != null) return task.IsCompleted;
+                else return true;
+            }
+        }
+
+        public AsyncAudioEaser(float audioTarget, string trackName, AudioMixer audioMixer)
+        {
+            this.audioTarget = audioTarget;
+            this.audioMixer = audioMixer;
+            this.trackName = trackName;
+        }
+
+
+        public async void EaseTrackAsync()
+        {
+            task = /*Task.Run(() => */_EaseTrack();/*);*/
+            await task;
+        }
+
+        public void Stop()
+        {
+            IsCanceled = true;
+        }
+
+        private async Task _EaseTrack()
+        {
+            if (audioMixer.GetFloat(trackName, out float trackCurrent))
+            {
+                //figure out where we are in terms of percentage complete already
+                float positionValue = 0;
+
+                while (true && positionValue < 1)
+                {
+                    positionValue += Time.deltaTime * 0.5f;
+                    audioMixer.SetFloat(trackName, Mathf.Lerp(trackCurrent, audioTarget, positionValue));
+
+                    if (IsCanceled)
+                    {
+                        break;
+                    }
+
+                    await Task.Yield();
+                }
+
+                if (!IsCanceled) audioMixer.SetFloat(trackName, audioTarget);
+
+            }
+        }
+    }
+
 }

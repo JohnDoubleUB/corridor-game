@@ -504,7 +504,7 @@ MonoBehaviour:
   movementSpeed: 2
   minumumDistance: 1
   xTeleportDistanceFromPlayer: 60
-  teleportAwayWhenAtMinimumDistance: 0
+  teleportAwayWhenAtMinimumDistance: 1
 --- !u!82 &158676739
 AudioSource:
   m_ObjectHideFlags: 0

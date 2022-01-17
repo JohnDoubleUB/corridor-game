@@ -403,10 +403,11 @@ MonoBehaviour:
   lockFocus: {fileID: 8552147854970731195}
   lockHole: {fileID: 4338887263125061641}
   lockAnimator: {fileID: 5769996082121605918}
-  LockKeySlideSound: {fileID: 8300000, guid: 65717b111c2fb8940a1ca81f5ac6f5c4, type: 3}
+  LockKeySlideSound: {fileID: 8300000, guid: 38f2f262b01458749bfbb54a037aef04, type: 3}
   LockUnlockSound: {fileID: 8300000, guid: 35a3cb5734848b747834ebed46b6007b, type: 3}
   LockDropSound: {fileID: 8300000, guid: 15f92c7cba18f0845af6b2c2c59f56d2, type: 3}
   GenericLockSound: {fileID: 8300000, guid: 36591a63a5929bb42bc433a36b34863e, type: 3}
+  soundVolume: 1
 --- !u!95 &5769996082121605918
 Animator:
   serializedVersion: 3
