@@ -112,7 +112,7 @@ public class CorridorChangeManager : MonoBehaviour
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
-    private void CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
+    private CorridorLayoutHandler CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
     {
         CorridorLayoutHandler layoutGameObj = null;
 
@@ -163,6 +163,8 @@ public class CorridorChangeManager : MonoBehaviour
             section.SetMaterialVarient(CorridorMatVarients[0]);
             sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
+
+        return layoutGameObj;
     }
 
     private void SetupInitialSections() 
@@ -230,6 +232,7 @@ public class CorridorChangeManager : MonoBehaviour
         if (currentSection.sectionType != SectionType.Middle)
         {
             sectionsTraveledOnCurrentLevel++;
+            
             //Check if we are in a trigger section or not
             LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
             int levelChange = -1;
@@ -241,8 +244,9 @@ public class CorridorChangeManager : MonoBehaviour
                 LevelChange(levelChange);
             }
 
-
+            //Check if section we are moving is front (useful for other parts of the code)
             bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
+
             SectionType sectionToMoveType = sectionToMoveWasFront ? SectionType.Back : SectionType.Front;
             CorridorSection[] orderedSections = GetOrderedSections;
             CorridorSection sectionToMove = orderedSections.Single(x => x.sectionType == sectionToMoveType);
@@ -277,25 +281,59 @@ public class CorridorChangeManager : MonoBehaviour
 
             newEndSection.FlipSection = sectionToMoveWasFront; //flip back section to be facing away
             newEndSection.FakeParent = currentSection.CorridorStartEnd[0]; //move to link up with last section
+
+
+            //Apply the effects to the current section
+            ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp);
         }
 
-        //Initiate weird extendo times;
+  
 
 
-        if (false && currentSection.CorridorNumber % 2 == 0)
+        //if (false && currentSection.CorridorNumber % 2 == 0)
+        //{
+        //    if (!currentSection.HasWarped)
+        //    {
+        //        currentSection.StretchTo(2);
+        //        currentSection.MakeWave();
+        //        //foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
+        //    }
+        //    foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
+        //    currentSection.HasWarped = true;
+        //}
+    }
+
+    private void ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel) 
+    {
+        //Check if this section has already been warped
+        if (!currentSection.HasWarped) 
         {
-            if (!currentSection.HasWarped)
+            bool hasWarped = false;
+            //Check if we should stretch, either if its set to force or if settings for level allow it
+            if (currentSection.WillStretch || 
+                currentLoadedLevel.AllowRandomScaling && currentLoadedLevel.ScaleEffectCount < currentLoadedLevel.MaxScaleEffectCount && Random.value < 0.5f) 
             {
-                currentSection.StretchTo(2);
-                currentSection.MakeWave();
-                //foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
+                currentSection.StretchTo(currentSection.StretchAmount);
+                currentLoadedLevel.ScaleEffectCount++;
+                hasWarped = true;
             }
-            foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
-            currentSection.HasWarped = true;
+
+            //Check if we should make section wave, either if it has it set to force or if settings for level allow it
+            if (currentSection.WillWave || 
+                currentLoadedLevel.AllowRandomWaving && currentLoadedLevel.WaveEffectCount < currentLoadedLevel.MaxWaveEffectCount && Random.value < 0.5f) 
+            {
+                currentSection.MakeWave();
+                foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
+                currentLoadedLevel.WaveEffectCount++;
+                hasWarped = true;
+            }
+
+            currentSection.HasWarped = hasWarped;
         }
     }
 
-    private void CreateNextSection(CorridorSection sectionToMove, CorridorSection middleSection, bool directionPositive, Door newSectionEndDoor)
+
+    private CorridorLayoutHandler CreateNextSection(CorridorSection sectionToMove, CorridorSection middleSection, bool directionPositive, Door newSectionEndDoor)
     {
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
         newSectionEndDoor.ResetDoor();
@@ -323,8 +361,9 @@ public class CorridorChangeManager : MonoBehaviour
         CorridorLayoutHandler sectionCorridorPrefab = sectionToMove.corridorProps.GetComponentInChildren<CorridorLayoutHandler>();
         foreach (PropScript p in sectionCorridorPrefab.Props) Destroy(p.gameObject);
         Destroy(sectionCorridorPrefab.gameObject);
+        CorridorLayoutHandler newLayoutHandler = CreateCorridorPrefabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
 
-        CreateCorridorPrefabForSection(sectionToMove, newSectionEndDoor, sectionToMove.CorridorNumber, directionPositive);
+        return newLayoutHandler;
     }
 
     public void LevelChange(int newLevel)

@@ -98,10 +98,13 @@ public class LevelData_Loaded
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount { get { return levelData.CompleteLevelOnTraveledSectionCount; } }
 
     public bool SectionOrdersAreRandom { get { return levelData.SectionOrdersAreRandom; } }
-    public bool AllowRandomScaling { get { return levelData.AllowRandomScaling; } }
+    public bool AllowRandomScaling { get { return levelData.AllowRandomScaling; } } //TODO: this is a bad name, it should be RandomStretching!
     public bool AllowRandomWaving { get { return levelData.AllowRandomWaving; } }
     public int MaxScaleEffectCount { get { return levelData.MaxScaleEffectCount; } }
     public int MaxWaveEffectCount { get { return levelData.MaxWaveEffectCount; } }
+
+    public int ScaleEffectCount;
+    public int WaveEffectCount;
 
     public string[] NumberpadPasswords;
 
@@ -269,6 +272,7 @@ public class LayoutLevelData
     public string LayoutID;
     public List<int> collectedItems = new List<int>();
     public List<int> completedPuzzles = new List<int>();
+    public bool HasWarped;
 
     public List<PuzzleElementControllerData> puzzleData = new List<PuzzleElementControllerData>();
 

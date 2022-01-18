@@ -214,7 +214,6 @@ public class Door : MonoBehaviour
 
     public void MakeWave()
     {
-        print("make wave!");
         TransitionToWavy();
     }
 

@@ -48,6 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutLevelNumber: 1
   layoutNumber: 2
+  corridorMeshType: 0
+  corridorMatType: 0
+  corridorDoorMatType: 0
+  StretchAmount: 2
+  ForceStretch: 0
+  ForceWave: 1
   sectionDoor: {fileID: 0}
   Props: []
   PuzzleElements:

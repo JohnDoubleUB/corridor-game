@@ -21,13 +21,65 @@ public class CorridorSection : MonoBehaviour
     
     public Transform[] CorridorStartEnd;
     public CorridorChangeManager toNotifyOnPlayerEnter;
-    public CorridorLayoutHandler CurrentLayout;
+    public CorridorLayoutHandler CurrentLayout 
+    {
+        get 
+        {
+            return currentLayout;
+        }
+        set 
+        {
+            currentLayout = value;
+        }
+
+    }
+    
+    [SerializeField]
+    private CorridorLayoutHandler currentLayout;
+
+
+
     public Door DoorPrefab;
-    public bool HasWarped;
+    public bool HasWarped 
+    {
+        get 
+        {
+            return currentLayout != null ? currentLayout.LayoutData.HasWarped : false; 
+        }
+        set 
+        {
+            if (value && currentLayout != null && currentLayout.LayoutData != null) currentLayout.LayoutData.HasWarped = value;
+            hasWarped = value;
+        }
+    }
+
+    //This is kind of just so we can see stuff in the inspector, it doesn't do anything and should probably be removed.
+    [SerializeField]
+    private bool hasWarped;
+
+    public bool WillStretch 
+    { 
+        get 
+        {
+            return currentLayout != null ? currentLayout.ForceStretch : false;
+        } 
+    }
     
-    public bool WillStretch;
-    
-    public bool WillWave;
+    public bool WillWave 
+    {
+        get 
+        {
+            return currentLayout != null ? currentLayout.ForceWave : false;
+        }
+    }
+
+    public float StretchAmount 
+    {
+        get 
+        {
+            return currentLayout != null ? currentLayout.StretchAmount : 2f;
+        } 
+    }
 
     public int CorridorNumber;
 
@@ -182,7 +234,7 @@ public class CorridorSection : MonoBehaviour
             await Task.Yield();
         }
 
-        if (!wavyInProgress) 
+        if (!stretchInProgress) 
         {
             SetCorridorStretch(initialStretch);
         }

@@ -14,11 +14,18 @@ public class CorridorLayoutHandler : MonoBehaviour
     public CorridorMatType corridorDoorMatType;
 
     private LevelData_Loaded levelData;
-    private LayoutLevelData layoutData;
+    
+    [HideInInspector]
+    public LayoutLevelData LayoutData;
 
     private List<string> numberPadPasswords = new List<string>();
 
     private string layoutId = "";
+
+    public float StretchAmount = 2;
+    public bool ForceStretch;
+
+    public bool ForceWave;
 
     public string LayoutID
     {
@@ -67,7 +74,7 @@ public class CorridorLayoutHandler : MonoBehaviour
                 if (currentPickup.SpawnedPickup.ParentChanged)
                 {
                     currentPickup.PickedUp = true;
-                    layoutData.collectedItems.Add(i);
+                    LayoutData.collectedItems.Add(i);
                 }
 
             }
@@ -80,7 +87,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         {
             this.sectionDoor = sectionDoor;
             this.levelData = levelData;
-            layoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
+            LayoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
 
 
 
@@ -109,7 +116,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 
 
                 //NEW
-                PuzzleElementControllerData puzzleData = layoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
+                PuzzleElementControllerData puzzleData = LayoutData.puzzleData.FirstOrDefault(x => x.PuzzleIndex == i);
                 if (puzzleData != null) puzzleElement.LoadPuzzleData(puzzleData);
 
                 puzzleElement.LayoutHandler = this;
@@ -154,15 +161,15 @@ public class CorridorLayoutHandler : MonoBehaviour
         if (puzzleElement != null && puzzleData != null)
         {
             puzzleData.PuzzleIndex = PuzzleElements.IndexOf(puzzleElement);
-            int indexToReplace = layoutData.puzzleData.FindIndex(x => x.PuzzleIndex == puzzleData.PuzzleIndex);
+            int indexToReplace = LayoutData.puzzleData.FindIndex(x => x.PuzzleIndex == puzzleData.PuzzleIndex);
 
             if (indexToReplace == -1)
             {
-                layoutData.puzzleData.Add(puzzleData);
+                LayoutData.puzzleData.Add(puzzleData);
             }
             else
             {
-                layoutData.puzzleData[indexToReplace] = puzzleData;
+                LayoutData.puzzleData[indexToReplace] = puzzleData;
             }
         }
     }
@@ -175,7 +182,7 @@ public class CorridorLayoutHandler : MonoBehaviour
             //TODO: Something here to make keys spawn
             if (pickup.PickupItemPrefab != null && pickup.PotentialSpawnPositions.Any())
             {
-                if (layoutData.collectedItems.Contains(i) || pickup.PickupItemPrefab.pickupType == PickupType.Momento && !InventoryManager.current.AnyFreeMomentoSlots)
+                if (LayoutData.collectedItems.Contains(i) || pickup.PickupItemPrefab.pickupType == PickupType.Momento && !InventoryManager.current.AnyFreeMomentoSlots)
                 {
                     pickup.PickedUp = true;
                 }

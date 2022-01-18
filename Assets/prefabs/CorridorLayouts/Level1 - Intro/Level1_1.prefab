@@ -48,9 +48,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutLevelNumber: 1
   layoutNumber: 1
-  Props: []
+  corridorMeshType: 0
+  corridorMatType: 0
+  corridorDoorMatType: 0
+  StretchAmount: 2
+  ForceStretch: 1
+  ForceWave: 0
   sectionDoor: {fileID: 0}
+  Props: []
   PuzzleElements: []
+  DecalClueObjects: []
+  Pickups: []
 --- !u!1001 &3241386197580464126
 PrefabInstance:
   m_ObjectHideFlags: 0
