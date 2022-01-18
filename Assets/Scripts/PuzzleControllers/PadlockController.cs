@@ -84,8 +84,6 @@ public class PadlockController : PuzzleElementController
 
     private async Task RotateLock(bool toFacePlayer = true) 
     {
-
-        print("rotating");
         float positionValue = 0;
         float smoothedPositionValue;
         Quaternion initialRotation = lockFocus.rotation;

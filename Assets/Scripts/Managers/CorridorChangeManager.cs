@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CorridorChangeManager : MonoBehaviour
 {
     public static CorridorChangeManager current;
+
+    public delegate void LevelChangeAction();
+    public static event LevelChangeAction OnLevelChange;
 
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
@@ -325,6 +329,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void LevelChange(int newLevel)
     {
+        if (newLevel != CurrentLevel) OnLevelChange?.Invoke(); //Invoke if there is anything to invoke on
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
         CurrentLevel = newLevel;

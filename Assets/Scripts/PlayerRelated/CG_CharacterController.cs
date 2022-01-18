@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class CG_CharacterController : MonoBehaviour
     public Sprite crosshairInteract;
 
     public Text interactionPrompt;
+    public Text levelChangePrompt;
 
     public Animator NotepadAnimator;
 
@@ -72,6 +74,7 @@ public class CG_CharacterController : MonoBehaviour
         controls = new InputMaster();
         controls.Player.Interact.performed += _ => Interact();
         pencilLayerMask = 1 << LayerMask.NameToLayer("Notepad") | 1 << LayerMask.NameToLayer("NonWritingArea");
+        CorridorChangeManager.OnLevelChange += OnLevelChange;
     }
 
     public void Interact(InteractableNote note) 
@@ -95,6 +98,35 @@ public class CG_CharacterController : MonoBehaviour
         else 
         {
             interactingNote.PutDownItem();
+        }
+    }
+
+    private void OnLevelChange() 
+    {
+        ShowLevelChangePrompt();
+    }
+
+    private async void ShowLevelChangePrompt() 
+    {
+        if (levelChangePrompt != null) 
+        {
+            float positionValue = 0f;
+            float positionSmoothed;
+            Color newColor;
+
+            while (positionValue < 1) 
+            {
+                positionValue += Time.deltaTime * 0.1f;
+                positionSmoothed = Mathf.SmoothStep(0, 255, positionValue);
+                newColor = levelChangePrompt.color;
+                newColor.a = positionSmoothed;
+                levelChangePrompt.color = newColor;
+                await Task.Yield();
+            }
+
+            newColor = levelChangePrompt.color;
+            newColor.a = 0f;
+            levelChangePrompt.color = newColor;
         }
     }
 
