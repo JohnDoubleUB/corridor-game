@@ -42,6 +42,7 @@ public class PickupableInteractable : InteractableObject
 
     private async void Pickup() 
     {
+        OnSuccessfulInteract();
         transform.parent = null;
         currentSlot = InventoryManager.current.MoveInteractableToInventory(this);
         IsInteractable = false;

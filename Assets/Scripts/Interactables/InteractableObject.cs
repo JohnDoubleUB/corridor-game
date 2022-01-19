@@ -7,6 +7,8 @@ public class InteractableObject : MonoBehaviour
     public string ObjectName = "";
     public bool IsInteractable = true;
 
+    public SignificantObjectController puzzleObjectToNotifyOnInteract;
+
     public void IntiateInteract() 
     {
         if (IsInteractable) OnInteract();
@@ -15,5 +17,10 @@ public class InteractableObject : MonoBehaviour
     protected virtual void OnInteract() 
     {
         print("Interaction initiated but no override present for this object!");
+    }
+
+    protected void OnSuccessfulInteract() 
+    {
+        if (puzzleObjectToNotifyOnInteract != null) puzzleObjectToNotifyOnInteract.RegisterInteract();
     }
 }

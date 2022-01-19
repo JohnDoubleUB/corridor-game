@@ -15,6 +15,7 @@ public class CG_CharacterController : MonoBehaviour
     public Camera playerCamera;
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
+    public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
 
     public bool IsJumping { get { return characterIsJumping; } }
 
@@ -189,7 +190,7 @@ public class CG_CharacterController : MonoBehaviour
             transform.eulerAngles = new Vector2(0, rotation.y);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && interactingNote == null)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
         {
             canMove = !canMove;
             canInteract = !canInteract;
