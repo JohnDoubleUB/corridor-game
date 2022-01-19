@@ -50,7 +50,6 @@ public class Door : MonoBehaviour
 
     private float defaultVariationAmplitude;
 
-
     private void Awake()
     {
         meshMaterials = GetComponent<MeshRenderer>().materials;

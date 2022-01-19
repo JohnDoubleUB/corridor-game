@@ -146,7 +146,7 @@ Material:
     - _Surface: 0
     - _UVSec: 0
     - _UVStretch: 1
-    - _VariationAmplitude: 0
+    - _VariationAmplitude: 0.02
     - _ZWrite: 1
     m_Colors:
     - Color_7802C764: {r: 0, g: 0, b: 0, a: 0}

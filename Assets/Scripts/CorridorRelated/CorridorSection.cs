@@ -99,7 +99,8 @@ public class CorridorSection : MonoBehaviour
     private float defaultCorX;
     private float defaultCorZ;
 
-    private float defaultVariationAmplitude;
+    public float defaultVariationAmplitude;
+    private float currentVariationAmplitude;
 
     private BoxCollider boxCol;
 
@@ -115,6 +116,7 @@ public class CorridorSection : MonoBehaviour
         currentFlipZ = FlipCorridorZ;
         currentSectionFlip = FlipSection;
         defaultVariationAmplitude = meshMaterials[0].GetFloat("_VariationAmplitude");
+        currentVariationAmplitude = 0f;
         boxCol = GetComponent<BoxCollider>();
     }
 
@@ -144,9 +146,9 @@ public class CorridorSection : MonoBehaviour
         CorridorFlipCheck();
         SectionFlipCheck();
         foreach (Material meshMat in meshMaterials) 
-        { 
+        {
             meshMat.SetFloat("_UVStretch", transform.localScale.x);
-            meshMat.SetFloat("_VariationAmplitude", defaultVariationAmplitude / transform.localScale.x);
+            meshMat.SetFloat("_VariationAmplitude", currentVariationAmplitude / transform.localScale.x);
         }
 
         if (FakeParent != null && transform.position != FakeParent.position) transform.position = FakeParent.position;
@@ -193,6 +195,7 @@ public class CorridorSection : MonoBehaviour
         foreach (Material meshMat in meshMaterials) 
         { 
             meshMat.SetFloat("_DriftSpeed", value);
+            currentVariationAmplitude = value != 0f ? defaultVariationAmplitude : 0f;
         }
     }
 
@@ -200,12 +203,14 @@ public class CorridorSection : MonoBehaviour
     {
         Material meshMat = meshMaterials[1];
         meshMat.SetFloat("_DriftSpeed", value);
+        currentVariationAmplitude = value != 0f ? defaultVariationAmplitude : 0f;
     }
 
     public void SetWallWavyness(float value) 
     {
         Material meshMat = meshMaterials[0];
         meshMat.SetFloat("_DriftSpeed", value);
+        currentVariationAmplitude = value != 0f ? defaultVariationAmplitude : 0f;
     }
 
     public void StretchTo(float stretchTarget)
@@ -252,7 +257,10 @@ public class CorridorSection : MonoBehaviour
         float wavySpeed = 0.5f;
 
         wavyInProgress = true;
-        
+
+        if (floor) meshMaterials[1].SetFloat("_VariationAmplitude", 0.01f);
+        if (wall) meshMaterials[0].SetFloat("_VariationAmplitude", 0.01f);
+
         while (currentWavy < 1f && wavyInProgress)
         {
             wavyTimer += Time.deltaTime * wavySpeed;
