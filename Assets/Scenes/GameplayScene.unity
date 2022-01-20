@@ -4865,11 +4865,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3a74d730e7d0a5142b73d64614aa4612, type: 3}
   - {fileID: 8300000, guid: 4087da346cc5c2e4ca8e1b14a444f91a, type: 3}
   - {fileID: 8300000, guid: d2ea19103ff600f4bbe61e2b247b655e, type: 3}
-  CasterSubtitles: {fileID: 4900000, guid: 4dbb515ad4afa294cacb06fee0ecf0f7, type: 3}
-  TheEntitySubtitles: {fileID: 4900000, guid: f03845e073f99bf47bef60d6bff287d0, type: 3}
-  testText: {fileID: 730452330}
-  dialogueScriptableObject: {fileID: 11400000, guid: de01f5d9a4c777045bebf3f19516d10c,
-    type: 2}
+  CasterSubtitlesText: {fileID: 4900000, guid: 4dbb515ad4afa294cacb06fee0ecf0f7, type: 3}
+  TheEntitySubtitlesText: {fileID: 4900000, guid: f03845e073f99bf47bef60d6bff287d0,
+    type: 3}
+  CasterSubtitles: {fileID: 11400000, guid: de01f5d9a4c777045bebf3f19516d10c, type: 2}
+  TheEntitySubtitles: {fileID: 11400000, guid: 1b166c19b8097c346b056bfbe51bb583, type: 2}
 --- !u!4 &1990534610
 Transform:
   m_ObjectHideFlags: 0

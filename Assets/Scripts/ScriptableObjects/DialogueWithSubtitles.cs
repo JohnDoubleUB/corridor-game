@@ -7,7 +7,6 @@ using UnityEngine;
 public class DialogueWithSubtitles : ScriptableObject
 {
     public List<Dialogue> Dialogue;
-    public Conversation[] Conversations;
 }
 
 [System.Serializable]

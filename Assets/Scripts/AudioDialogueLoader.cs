@@ -11,35 +11,26 @@ public class AudioDialogueLoader : MonoBehaviour
     public AudioClip[] JohnCasterClips;
     public AudioClip[] TheEntityClips;
 
-    public TextAsset CasterSubtitles;
-    public TextAsset TheEntitySubtitles;
+    public TextAsset CasterSubtitlesText;
+    public TextAsset TheEntitySubtitlesText;
 
     public Dictionary<string, string> JohnCasterSubtitlesConverted;
 
-    public Text testText;
-
-    public DialogueWithSubtitles dialogueScriptableObject;
+    public DialogueWithSubtitles CasterSubtitles;
+    public DialogueWithSubtitles TheEntitySubtitles;
 
     // Start is called before the first frame update
     void Start()
     {
-        print(CasterSubtitles.text);
-        //JohnCasterSubtitlesConverted = JsonUtility.FromJson<string[][]>(TheEntitySubtitles.text);
-        //CasterSubtitles.
-        JohnCasterSubtitlesConverted = JsonConvert.DeserializeObject<Dictionary<string, string>>(CasterSubtitles.text);
-        
-        print(JohnCasterSubtitlesConverted.Count);
+        CasterSubtitles.Dialogue = GetDialogues(
+            JsonConvert.DeserializeObject<Dictionary<string, string>>(CasterSubtitlesText.text),
+            JohnCasterClips)
+            .ToList();
 
-        foreach (KeyValuePair<string, string> s in JohnCasterSubtitlesConverted)
-        {
-            print(Path.GetFileNameWithoutExtension(s.Key));
-        }
-
-        if (testText != null) testText.text = JohnCasterSubtitlesConverted[JohnCasterClips[0].name + ".wav"];
-
-        //dialogueScriptableObject.Dialogue.Add(new Dialogue(JohnCasterClips[0], "this isn't actually the subtitle because I'm testing and I'm lazy!"));
-
-        dialogueScriptableObject.Dialogue = GetDialogues(JohnCasterSubtitlesConverted, JohnCasterClips).ToList();
+        TheEntitySubtitles.Dialogue = GetDialogues(
+            JsonConvert.DeserializeObject<Dictionary<string, string>>(TheEntitySubtitlesText.text),
+            TheEntityClips)
+            .ToList();
     }
 
 

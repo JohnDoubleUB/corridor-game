@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2355272f49787674ba7c6b26010401fd, type: 3}
+  m_Name: JohnCaster
+  m_EditorClassIdentifier: 
+  Dialogue:
+  - DialogueAudio: {fileID: 8300000, guid: c7c1187954b56bb4c9e1679bc239f0a7, type: 3}
+    Subtitles: "My name is John Caster, and this is the *static* o\u2019clock news."
+    ConversationNo: 1
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: de699641238e2e14cb6dfcb086a14756, type: 3}
+    Subtitles: Leading scientist at the Institute of Modern Technology in Cambridge,
+      Dr Joan Robinson, has published a paper on extra-dimensional leaps,
+    ConversationNo: 1
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: ed0d3adb268e8c84cbb10ffc2c32c879, type: 3}
+    Subtitles: 'putting forward theory that travel of distances outside of our known
+      universe are possible within the rules of modern physics. '
+    ConversationNo: 1
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: 31c718d48b640444bbf9e70feeef25c5, type: 3}
+    Subtitles: "Upon peer review, the paper was described as \u201Cairtight\u201D
+      and a \u201Cmassive step forward in the way we understand our reality\u201D."
+    ConversationNo: 1
+    DialoguePart: 4
+  - DialogueAudio: {fileID: 8300000, guid: 36ab97866410e0d4a90e019d5fda2750, type: 3}
+    Subtitles: 'The lead suspect in the gas attack in Oxford that left 150 people
+      dead and 300 injured has been found dead in his holding cell tonight. '
+    ConversationNo: 2
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 3d5ed18f96b394246975dae0e6a6377d, type: 3}
+    Subtitles: "The 27-year-old by the name of Harold Brown was found hanged in what
+      police are describing as a \u201Ccut and dry suicide\u201D."
+    ConversationNo: 2
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: b9fb7409680d4ec4a91d118b4914d3a1, type: 3}
+    Subtitles: Brown was first discovered by the police after posting a manifesto
+      online which pushed the ideas of collective identity in this modern era of
+      knowledge and travel.
+    ConversationNo: 2
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: 29dc9c5535c4d5c4d9cf38188325fa10, type: 3}
+    Subtitles: He and his family maintained his innocence through all legal proceedings.
+    ConversationNo: 2
+    DialoguePart: 4
+  - DialogueAudio: {fileID: 8300000, guid: 8115a1737cd0e7f479c169bd1386f37d, type: 3}
+    Subtitles: Behind you, you stupid fool. You can go more than one direction in
+      here you know.
+    ConversationNo: 3
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: e2ecf0461486d0b43bb5c3cc3aa7dc44, type: 3}
+    Subtitles: "And in lighter news tonight, a shelter for abused animals has been
+      fully funded by a local corporation \u201CHCC\u201D. "
+    ConversationNo: 4
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 60753650120848343bb40f148c985380, type: 3}
+    Subtitles: 'This comes 2 years after HCC were found to be breaking the Animal
+      Rights act by taking part in illegal animal testing. '
+    ConversationNo: 4
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: 9b9a432667f20aa499cbad931429b726, type: 3}
+    Subtitles: Well, I for one sure am glad these animals will be getting treated
+      the way they deserve, thanks HCC!
+    ConversationNo: 4
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: 628e2d580b8230f49a6822e8a1439c4d, type: 3}
+    Subtitles: Welcome to Trivia Tonight with me, your host, John Caster!
+    ConversationNo: 5
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 3e81d060aa9515b4c9c259b4327eadf3, type: 3}
+    Subtitles: "Tonight, we are remotely joined by Musician \u201CBill O\u2019Dreary\u201D,
+      Celeb Economist \u201CBilly \u2018Big Money\u2019 O\u2019Cashe\u201D and Actor
+      \u201CWilliam A. C. Torre\u201D. Let\u2019s play some Trivia! Bill, thanks
+      for joining us."
+    ConversationNo: 5
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: d136170eebd8aff4cba9e61769432210, type: 3}
+    Subtitles: Thank you for having me.
+    ConversationNo: 5
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: 68cdf516ea6230e48b87726776833ef4, type: 3}
+    Subtitles: "So, the first question tonight, \u201CIn 2032, which company got
+      its start by importing materials from East Asia?\u201D"
+    ConversationNo: 5
+    DialoguePart: 4
+  - DialogueAudio: {fileID: 8300000, guid: 5efc9039410221e4b8ed3d84aa3b6cd2, type: 3}
+    Subtitles: That would be the HCC Corporation, John.
+    ConversationNo: 5
+    DialoguePart: 5
+  - DialogueAudio: {fileID: 8300000, guid: 48fe2465d7060c741ad31f8f282a279b, type: 3}
+    Subtitles: "That is correct! Question 2: \u201CWhich company donated \xA344,000,000
+      to the British government before it was disbanded in 2048?\u201D"
+    ConversationNo: 5
+    DialoguePart: 6
+  - DialogueAudio: {fileID: 8300000, guid: 4078b03c01509c74aae088ccf109ee96, type: 3}
+    Subtitles: That would also be the HCC Corporation, John!
+    ConversationNo: 5
+    DialoguePart: 7
+  - DialogueAudio: {fileID: 8300000, guid: 844a97701f22baf4cbac2d3a96913b22, type: 3}
+    Subtitles: "Indeed, it is! Question 3 for you, and the last question of your
+      first round. \u201CIn the HCC strike of 2058, what was the fate of some ungrateful
+      employees?\u201D"
+    ConversationNo: 5
+    DialoguePart: 8
+  - DialogueAudio: {fileID: 8300000, guid: ca204392103d2bb46aa743d26854a25b, type: 3}
+    Subtitles: They were driving drunk and crashed into a lamppost, John!
+    ConversationNo: 5
+    DialoguePart: 9
+  - DialogueAudio: {fileID: 8300000, guid: 52673dc2a1360394381ea6b661d14092, type: 3}
+    Subtitles: "That is correct! - Wow eager to answer questions are we William?
+      Let\u2019s move on - Alright *laughs and finger clicks*"
+    ConversationNo: 5
+    DialoguePart: 10
+  - DialogueAudio: {fileID: 8300000, guid: 4977a942d697215489814c98ec41e024, type: 3}
+    Subtitles: "Hey, no wait a minute, I\u2019m sorry but that wasn\u2019t what happen
+      - No John, that stuff about the drunk driving was never - Wait no!"
+    ConversationNo: 5
+    DialoguePart: 10
+  - DialogueAudio: {fileID: 8300000, guid: ce301e862a491fb4b89602f090127487, type: 3}
+    Subtitles: "I bet you\u2019ve never seen anything like it have you?"
+    ConversationNo: 6
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 21677329c5ae9b641b42c8f30ff3cd81, type: 3}
+    Subtitles: "They showed me it once, not all of it of course. I\u2019ve heard
+      the stories about it driving people mad."
+    ConversationNo: 6
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: 0069b7cf756576b46914599a53c95fc2, type: 3}
+    Subtitles: "I can\u2019t believe fools like you still get to experience it."
+    ConversationNo: 6
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: e64d3f1b4e3d961438bfba1131411425, type: 3}
+    Subtitles: "My connection to this place is just weak enough to not be consumed,
+      but strong enough to experience small parts of it. It\u2019s like a drug. I
+      live for this."
+    ConversationNo: 6
+    DialoguePart: 4
+  - DialogueAudio: {fileID: 8300000, guid: 2b9ab2b802e8a584d8cea05c46a6cce2, type: 3}
+    Subtitles: "I can see all of you, I\u2019ve seen the rise and fall of powerful
+      people in here. Most times without them even knowing."
+    ConversationNo: 7
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 105cc515a93a9f84f9c97a07ea429a81, type: 3}
+    Subtitles: "It was especially transparent to you; I\u2019ll be interested to
+      know why. Not that I\u2019d be able to understand it."
+    ConversationNo: 7
+    DialoguePart: 2

@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2355272f49787674ba7c6b26010401fd, type: 3}
+  m_Name: TheEntity
+  m_EditorClassIdentifier: 
+  Dialogue:
+  - DialogueAudio: {fileID: 8300000, guid: 43f173643eb1f4648891b39d91834863, type: 3}
+    Subtitles: When I first made your acquaintance, you asked me if I was divine.
+    ConversationNo: 1
+    DialoguePart: 1
+  - DialogueAudio: {fileID: 8300000, guid: 9f5779666c2ab5e41aff618f611f9ec9, type: 3}
+    Subtitles: If I was the written one or simply a tool of them.
+    ConversationNo: 1
+    DialoguePart: 2
+  - DialogueAudio: {fileID: 8300000, guid: 7a2985692ba4a654a9dcad8a3becd00e, type: 3}
+    Subtitles: If I was omniscient, benevolent, eternal?
+    ConversationNo: 1
+    DialoguePart: 3
+  - DialogueAudio: {fileID: 8300000, guid: 02dbf0656514f54429127660c597e155, type: 3}
+    Subtitles: Tell me, what is eternity to the man who stands beyond the barrier
+      and looks back at history?
+    ConversationNo: 1
+    DialoguePart: 4
+  - DialogueAudio: {fileID: 8300000, guid: 43229d3cbc5aab74da7d0740dd00bad9, type: 3}
+    Subtitles: What is omniscience to the man who spends his life in the pursuit
+      of answers?
+    ConversationNo: 1
+    DialoguePart: 5
+  - DialogueAudio: {fileID: 8300000, guid: 622dfa5f2c6869c48a506eab1509aad5, type: 3}
+    Subtitles: What is benevolence to the rat who finds his sustenance in the death
+      and decay of life?
+    ConversationNo: 1
+    DialoguePart: 6
+  - DialogueAudio: {fileID: 8300000, guid: f9ac3771299655147a2fa3d6a0e52cb6, type: 3}
+    Subtitles: Your roles appear defined and balanced, but you place value in them
+      beyond the place the world has found for you.
+    ConversationNo: 1
+    DialoguePart: 7
+  - DialogueAudio: {fileID: 8300000, guid: 3887d71dec3937c49aec036a30da9588, type: 3}
+    Subtitles: Your knowledge and experience are not earned by you but placed upon
+      you.
+    ConversationNo: 1
+    DialoguePart: 8
+  - DialogueAudio: {fileID: 8300000, guid: 44310c0b6ea8622439021cd9c24912bd, type: 3}
+    Subtitles: Your relation to the divine is in a place of inferiority and awe,
+      but your self-image is established only on the experience you've grown so comfortable
+      with.
+    ConversationNo: 1
+    DialoguePart: 9
+  - DialogueAudio: {fileID: 8300000, guid: 39c2c385810fcd14bb168dfe0fd55ae5, type: 3}
+    Subtitles: You cannot understand what you refuse to, I am the ending of a million-step
+      path you refused to embark upon.
+    ConversationNo: 1
+    DialoguePart: 10
+  - DialogueAudio: {fileID: 8300000, guid: c2a0a349dfcc7fa4b91a6afd3bb580e3, type: 3}
+    Subtitles: I am impossible.
+    ConversationNo: 1
+    DialoguePart: 11
+  - DialogueAudio: {fileID: 8300000, guid: 6ccbdfab7182e1840a833356437c65dd, type: 3}
+    Subtitles: Your failure comes in the personal nature of your anger.
+    ConversationNo: 1
+    DialoguePart: 12
+  - DialogueAudio: {fileID: 8300000, guid: ad1d2c0dd9914a24c8bdc02ab9ce0a50, type: 3}
+    Subtitles: Connection is real, but something pure in a scene of dismay and destruction
+      will not lighten the overarching perspective but will taint what was beautiful.
+    ConversationNo: 1
+    DialoguePart: 13
+  - DialogueAudio: {fileID: 8300000, guid: 75d842ba00d80bc41b587cb8990c6454, type: 3}
+    Subtitles: In the arrogance of your kind, you forget that those outside of your
+      perspective view you as a collective.
+    ConversationNo: 1
+    DialoguePart: 14
+  - DialogueAudio: {fileID: 8300000, guid: bbb518d12cbe53a4aa7a1708522f7027, type: 3}
+    Subtitles: Billions and billions of eyes gazing at a personal slice of reality
+      that make up a whole.
+    ConversationNo: 1
+    DialoguePart: 15
+  - DialogueAudio: {fileID: 8300000, guid: 40445828f83db1548a4953ca4c612031, type: 3}
+    Subtitles: This is the stamp you leave on this world, this reality, me.
+    ConversationNo: 1
+    DialoguePart: 16
+  - DialogueAudio: {fileID: 8300000, guid: 3a74d730e7d0a5142b73d64614aa4612, type: 3}
+    Subtitles: This is what I am, whatever you make me. You wish to make change?
+    ConversationNo: 1
+    DialoguePart: 17
+  - DialogueAudio: {fileID: 8300000, guid: 4087da346cc5c2e4ca8e1b14a444f91a, type: 3}
+    Subtitles: That which strives for change will accomplish equal to its bravery.
+    ConversationNo: 1
+    DialoguePart: 18
+  - DialogueAudio: {fileID: 8300000, guid: d2ea19103ff600f4bbe61e2b247b655e, type: 3}
+    Subtitles: What does bravery mean for you?
+    ConversationNo: 1
+    DialoguePart: 19
