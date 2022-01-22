@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2355272f49787674ba7c6b26010401fd, type: 3}
   m_Name: TheEntity_SubtitlesAndAudio
   m_EditorClassIdentifier: 
+  SubtitleColours:
+  - {r: 1, g: 0.6084906, b: 0.6084906, a: 1}
   Conversations:
   - ConversationName: 1_When I first made your acquaintance, you asked me if I was
       divine.
@@ -23,18 +25,21 @@ MonoBehaviour:
         Subtitles: When I first made your acquaintance, you asked me if I was divine.
         ConversationNo: 1
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 9f5779666c2ab5e41aff618f611f9ec9, type: 3}
         Subtitles: If I was the written one or simply a tool of them.
         ConversationNo: 1
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 7a2985692ba4a654a9dcad8a3becd00e, type: 3}
         Subtitles: If I was omniscient, benevolent, eternal?
         ConversationNo: 1
         PartNo: 3
+        SubtitleColour: 0
     - PartNo: 4
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 02dbf0656514f54429127660c597e155, type: 3}
@@ -42,6 +47,7 @@ MonoBehaviour:
           and looks back at history?
         ConversationNo: 1
         PartNo: 4
+        SubtitleColour: 0
     - PartNo: 5
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 43229d3cbc5aab74da7d0740dd00bad9, type: 3}
@@ -49,6 +55,7 @@ MonoBehaviour:
           of answers?
         ConversationNo: 1
         PartNo: 5
+        SubtitleColour: 0
     - PartNo: 6
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 622dfa5f2c6869c48a506eab1509aad5, type: 3}
@@ -56,6 +63,7 @@ MonoBehaviour:
           death and decay of life?
         ConversationNo: 1
         PartNo: 6
+        SubtitleColour: 0
     - PartNo: 7
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: f9ac3771299655147a2fa3d6a0e52cb6, type: 3}
@@ -63,6 +71,7 @@ MonoBehaviour:
           them beyond the place the world has found for you.
         ConversationNo: 1
         PartNo: 7
+        SubtitleColour: 0
     - PartNo: 8
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 3887d71dec3937c49aec036a30da9588, type: 3}
@@ -70,6 +79,7 @@ MonoBehaviour:
           upon you.
         ConversationNo: 1
         PartNo: 8
+        SubtitleColour: 0
     - PartNo: 9
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 44310c0b6ea8622439021cd9c24912bd, type: 3}
@@ -78,6 +88,7 @@ MonoBehaviour:
           so comfortable with.
         ConversationNo: 1
         PartNo: 9
+        SubtitleColour: 0
     - PartNo: 10
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 39c2c385810fcd14bb168dfe0fd55ae5, type: 3}
@@ -85,18 +96,21 @@ MonoBehaviour:
           million-step path you refused to embark upon.
         ConversationNo: 1
         PartNo: 10
+        SubtitleColour: 0
     - PartNo: 11
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: c2a0a349dfcc7fa4b91a6afd3bb580e3, type: 3}
         Subtitles: I am impossible.
         ConversationNo: 1
         PartNo: 11
+        SubtitleColour: 0
     - PartNo: 12
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 6ccbdfab7182e1840a833356437c65dd, type: 3}
         Subtitles: Your failure comes in the personal nature of your anger.
         ConversationNo: 1
         PartNo: 12
+        SubtitleColour: 0
     - PartNo: 13
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: ad1d2c0dd9914a24c8bdc02ab9ce0a50, type: 3}
@@ -105,6 +119,7 @@ MonoBehaviour:
           what was beautiful.
         ConversationNo: 1
         PartNo: 13
+        SubtitleColour: 0
     - PartNo: 14
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 75d842ba00d80bc41b587cb8990c6454, type: 3}
@@ -112,6 +127,7 @@ MonoBehaviour:
           your perspective view you as a collective.
         ConversationNo: 1
         PartNo: 14
+        SubtitleColour: 0
     - PartNo: 15
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: bbb518d12cbe53a4aa7a1708522f7027, type: 3}
@@ -119,27 +135,32 @@ MonoBehaviour:
           that make up a whole.
         ConversationNo: 1
         PartNo: 15
+        SubtitleColour: 0
     - PartNo: 16
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 40445828f83db1548a4953ca4c612031, type: 3}
         Subtitles: This is the stamp you leave on this world, this reality, me.
         ConversationNo: 1
         PartNo: 16
+        SubtitleColour: 0
     - PartNo: 17
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 3a74d730e7d0a5142b73d64614aa4612, type: 3}
         Subtitles: This is what I am, whatever you make me. You wish to make change?
         ConversationNo: 1
         PartNo: 17
+        SubtitleColour: 0
     - PartNo: 18
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 4087da346cc5c2e4ca8e1b14a444f91a, type: 3}
         Subtitles: That which strives for change will accomplish equal to its bravery.
         ConversationNo: 1
         PartNo: 18
+        SubtitleColour: 0
     - PartNo: 19
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: d2ea19103ff600f4bbe61e2b247b655e, type: 3}
         Subtitles: What does bravery mean for you?
         ConversationNo: 1
         PartNo: 19
+        SubtitleColour: 0

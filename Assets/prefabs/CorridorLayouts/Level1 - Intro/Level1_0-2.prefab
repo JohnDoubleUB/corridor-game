@@ -666,6 +666,101 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fabc12967a4779f478757d3f1eaf6081, type: 3}
+--- !u!1001 &6961730910034177057
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3067062764786056257}
+    m_Modifications:
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.057
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.382
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.95617974
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.29278046
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -34.049
+      objectReference: {fileID: 0}
+    - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075322221609184478, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_Name
+      value: radioprefab (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1579835123983371531, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: DialogueToPlay
+      value: 
+      objectReference: {fileID: 11400000, guid: 07ae88193fdab614e8dec36febc42930,
+        type: 2}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: ConversationNumber
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 67426d3e63625e4489fc8eb785f15abb, type: 3}
 --- !u!1001 &7081775098627853446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -822,6 +917,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DynamicOccludee
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: DialogueToPlay
+      value: 
+      objectReference: {fileID: 11400000, guid: 24d494da639a4a6409e24347b148c6f7,
+        type: 2}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: ConversationNumber
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67426d3e63625e4489fc8eb785f15abb, type: 3}

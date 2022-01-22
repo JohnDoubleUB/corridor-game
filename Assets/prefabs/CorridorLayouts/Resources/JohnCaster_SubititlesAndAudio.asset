@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2355272f49787674ba7c6b26010401fd, type: 3}
   m_Name: JohnCaster_SubititlesAndAudio
   m_EditorClassIdentifier: 
+  SubtitleColours:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.6556604, g: 0.8811691, b: 1, a: 1}
   Conversations:
   - ConversationName: "1_My name is John Caster, and this is the *static* o\u2019clock
       news."
@@ -24,6 +27,7 @@ MonoBehaviour:
           news."
         ConversationNo: 1
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: de699641238e2e14cb6dfcb086a14756, type: 3}
@@ -31,6 +35,7 @@ MonoBehaviour:
           Dr Joan Robinson, has published a paper on extra-dimensional leaps,
         ConversationNo: 1
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: ed0d3adb268e8c84cbb10ffc2c32c879, type: 3}
@@ -38,6 +43,7 @@ MonoBehaviour:
           known universe are possible within the rules of modern physics. '
         ConversationNo: 1
         PartNo: 3
+        SubtitleColour: 0
     - PartNo: 4
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 31c718d48b640444bbf9e70feeef25c5, type: 3}
@@ -45,6 +51,7 @@ MonoBehaviour:
           and a \u201Cmassive step forward in the way we understand our reality\u201D."
         ConversationNo: 1
         PartNo: 4
+        SubtitleColour: 0
   - ConversationName: '2_The lead suspect in the gas attack in Oxford that left 150
       people dead and 300 injured has been found dead in his holding cell tonight. '
     ConversationNo: 2
@@ -56,6 +63,7 @@ MonoBehaviour:
           dead and 300 injured has been found dead in his holding cell tonight. '
         ConversationNo: 2
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 3d5ed18f96b394246975dae0e6a6377d, type: 3}
@@ -63,6 +71,7 @@ MonoBehaviour:
           in what police are describing as a \u201Ccut and dry suicide\u201D."
         ConversationNo: 2
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: b9fb7409680d4ec4a91d118b4914d3a1, type: 3}
@@ -71,12 +80,14 @@ MonoBehaviour:
           of knowledge and travel.
         ConversationNo: 2
         PartNo: 3
+        SubtitleColour: 0
     - PartNo: 4
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 29dc9c5535c4d5c4d9cf38188325fa10, type: 3}
         Subtitles: He and his family maintained his innocence through all legal proceedings.
         ConversationNo: 2
         PartNo: 4
+        SubtitleColour: 0
   - ConversationName: 3_Behind you, you stupid fool. You can go more than one direction
       in here you know.
     ConversationNo: 3
@@ -88,6 +99,7 @@ MonoBehaviour:
           in here you know.
         ConversationNo: 3
         PartNo: 1
+        SubtitleColour: 0
   - ConversationName: "4_And in lighter news tonight, a shelter for abused animals
       has been fully funded by a local corporation \u201CHCC\u201D. "
     ConversationNo: 4
@@ -99,6 +111,7 @@ MonoBehaviour:
           been fully funded by a local corporation \u201CHCC\u201D. "
         ConversationNo: 4
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 60753650120848343bb40f148c985380, type: 3}
@@ -106,6 +119,7 @@ MonoBehaviour:
           Rights act by taking part in illegal animal testing. '
         ConversationNo: 4
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 9b9a432667f20aa499cbad931429b726, type: 3}
@@ -113,6 +127,7 @@ MonoBehaviour:
           the way they deserve, thanks HCC!
         ConversationNo: 4
         PartNo: 3
+        SubtitleColour: 0
   - ConversationName: 5_Welcome to Trivia Tonight with me, your host, John Caster!
     ConversationNo: 5
     DialogueParts:
@@ -122,6 +137,7 @@ MonoBehaviour:
         Subtitles: Welcome to Trivia Tonight with me, your host, John Caster!
         ConversationNo: 5
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 3e81d060aa9515b4c9c259b4327eadf3, type: 3}
@@ -131,12 +147,14 @@ MonoBehaviour:
           thanks for joining us."
         ConversationNo: 5
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: d136170eebd8aff4cba9e61769432210, type: 3}
         Subtitles: Thank you for having me.
         ConversationNo: 5
         PartNo: 3
+        SubtitleColour: 1
     - PartNo: 4
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 68cdf516ea6230e48b87726776833ef4, type: 3}
@@ -144,12 +162,14 @@ MonoBehaviour:
           got its start by importing materials from East Asia?\u201D"
         ConversationNo: 5
         PartNo: 4
+        SubtitleColour: 0
     - PartNo: 5
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 5efc9039410221e4b8ed3d84aa3b6cd2, type: 3}
         Subtitles: That would be the HCC Corporation, John.
         ConversationNo: 5
         PartNo: 5
+        SubtitleColour: 1
     - PartNo: 6
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 48fe2465d7060c741ad31f8f282a279b, type: 3}
@@ -157,12 +177,14 @@ MonoBehaviour:
           to the British government before it was disbanded in 2048?\u201D"
         ConversationNo: 5
         PartNo: 6
+        SubtitleColour: 0
     - PartNo: 7
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 4078b03c01509c74aae088ccf109ee96, type: 3}
         Subtitles: That would also be the HCC Corporation, John!
         ConversationNo: 5
         PartNo: 7
+        SubtitleColour: 1
     - PartNo: 8
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 844a97701f22baf4cbac2d3a96913b22, type: 3}
@@ -171,12 +193,14 @@ MonoBehaviour:
           ungrateful employees?\u201D"
         ConversationNo: 5
         PartNo: 8
+        SubtitleColour: 0
     - PartNo: 9
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: ca204392103d2bb46aa743d26854a25b, type: 3}
         Subtitles: They were driving drunk and crashed into a lamppost, John!
         ConversationNo: 5
         PartNo: 9
+        SubtitleColour: 1
     - PartNo: 10
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 52673dc2a1360394381ea6b661d14092, type: 3}
@@ -184,11 +208,13 @@ MonoBehaviour:
           Let\u2019s move on - Alright *laughs and finger clicks*"
         ConversationNo: 5
         PartNo: 10
+        SubtitleColour: 0
       - DialogueAudio: {fileID: 8300000, guid: 4977a942d697215489814c98ec41e024, type: 3}
         Subtitles: "Hey, no wait a minute, I\u2019m sorry but that wasn\u2019t what
           happen - No John, that stuff about the drunk driving was never - Wait no!"
         ConversationNo: 5
         PartNo: 10
+        SubtitleColour: 1
   - ConversationName: "6_I bet you\u2019ve never seen anything like it have you?"
     ConversationNo: 6
     DialogueParts:
@@ -198,6 +224,7 @@ MonoBehaviour:
         Subtitles: "I bet you\u2019ve never seen anything like it have you?"
         ConversationNo: 6
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 21677329c5ae9b641b42c8f30ff3cd81, type: 3}
@@ -205,12 +232,14 @@ MonoBehaviour:
           the stories about it driving people mad."
         ConversationNo: 6
         PartNo: 2
+        SubtitleColour: 0
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 0069b7cf756576b46914599a53c95fc2, type: 3}
         Subtitles: "I can\u2019t believe fools like you still get to experience it."
         ConversationNo: 6
         PartNo: 3
+        SubtitleColour: 0
     - PartNo: 4
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: e64d3f1b4e3d961438bfba1131411425, type: 3}
@@ -219,6 +248,7 @@ MonoBehaviour:
           I live for this."
         ConversationNo: 6
         PartNo: 4
+        SubtitleColour: 0
   - ConversationName: "7_I can see all of you, I\u2019ve seen the rise and fall of
       powerful people in here. Most times without them even knowing."
     ConversationNo: 7
@@ -230,6 +260,7 @@ MonoBehaviour:
           people in here. Most times without them even knowing."
         ConversationNo: 7
         PartNo: 1
+        SubtitleColour: 0
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 105cc515a93a9f84f9c97a07ea429a81, type: 3}
@@ -237,3 +268,4 @@ MonoBehaviour:
           to know why. Not that I\u2019d be able to understand it."
         ConversationNo: 7
         PartNo: 2
+        SubtitleColour: 0

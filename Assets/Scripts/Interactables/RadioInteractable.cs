@@ -77,7 +77,6 @@ public class RadioInteractable : InteractableObject
             
             if (!reachedEndOfDialogue && conversationToPlay != null && !DialogueAudioSources[0].isPlaying) 
             {
-                //DialoguePartNo++;
                 PlayNextDialoguePart();
             }
         }
@@ -100,6 +99,7 @@ public class RadioInteractable : InteractableObject
                     DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
                     DialogueAudioSources[i].Play();
                     GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                    GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
                 }
             }
             else
@@ -107,8 +107,11 @@ public class RadioInteractable : InteractableObject
                 foreach (AudioSource aS in DialogueAudioSources) aS.Play();
 
                 for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
+                {
                     GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
-                
+                    GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
+                }
+
             }
         }
     }
@@ -135,6 +138,7 @@ public class RadioInteractable : InteractableObject
                 DialogueAudioSources[i].Play();
 
                 GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
             }
         }
         else 

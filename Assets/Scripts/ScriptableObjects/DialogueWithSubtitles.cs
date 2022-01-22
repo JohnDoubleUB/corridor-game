@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DialogueWithSubs", menuName = "ScriptableObjects/DialogueWithSubs", order = 1)]
 public class DialogueWithSubtitles : ScriptableObject
 {
-    //public List<Dialogue> Dialogue;
+    public Color[] SubtitleColours;
     public List<Conversation> Conversations;
 }
 
@@ -17,6 +17,7 @@ public class Dialogue
     public string Subtitles;
     public int ConversationNo;
     public int PartNo;
+    public int SubtitleColour = 0;
 
 
     public Dialogue(string Subtitles, AudioClip DialogueAudio)
