@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Strangers Note #1
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NoteMeshRenderer: {fileID: 4640919407649649215}
   NoteMeshFilter: {fileID: 7458854702239483637}
   NoteTexture: {fileID: 0}
@@ -72,6 +73,8 @@ MonoBehaviour:
   verticalMoveLimit: 0.05
   pickupSpeedMultiplier: 2.5
   distanceToStopFromPlayer: 0.3
+  NoteInteractSound: {fileID: 8300000, guid: 93994bdebae605446ad226491e8140b0, type: 3}
+  SoundEffectVolume: 0.5
 --- !u!1 &6586276878418695146
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,11 +62,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Strange Picture
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   pickupType: 1
   currentSlot:
     slotContent: {fileID: 0}
   pickupSpeedMultiplier: 2.5
   pickupScaleMultiplier: 1
+  pickupSound: {fileID: 8300000, guid: ba478248c3229d848882622fd74a2050, type: 3}
+  varyPickupSoundPitch: 0
+  pickupSoundVolume: 0.5
 --- !u!1 &5749191566646132570
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherObjectRenderers: []
+  trackSpecificMaterialElements: 
 --- !u!1 &7151237524895457920
 GameObject:
   m_ObjectHideFlags: 0

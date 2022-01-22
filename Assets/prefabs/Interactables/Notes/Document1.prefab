@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Strange Document #1
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NoteMeshRenderer: {fileID: 3650487416609165057}
   NoteMeshFilter: {fileID: 1535118065226038219}
   NoteTexture: {fileID: 2800000, guid: 5bd3d9d880921444a824a7dd6cac9e74, type: 3}
@@ -72,6 +73,8 @@ MonoBehaviour:
   verticalMoveLimit: 0.15
   pickupSpeedMultiplier: 2.5
   distanceToStopFromPlayer: 0.45
+  NoteInteractSound: {fileID: 8300000, guid: 93994bdebae605446ad226491e8140b0, type: 3}
+  SoundEffectVolume: 0.5
 --- !u!1 &3002175297663168212
 GameObject:
   m_ObjectHideFlags: 0

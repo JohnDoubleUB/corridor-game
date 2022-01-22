@@ -60,25 +60,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: 7
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}
   pickupSpeedMultiplier: 2.5
   pickupScaleMultiplier: 4
+  pickupSound: {fileID: 8300000, guid: 34d4aa9677c1084418bac20563af9bab, type: 3}
+  varyPickupSoundPitch: 0
+  pickupSoundVolume: 0.5
   buttonText: {fileID: 3710080081520378665}
---- !u!114 &9158564386036668120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4593025092947994502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9b4f5c9c02b6b4ab61ab39479e47fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  otherObjectRenderers: []
 --- !u!1 &3710080081520378670
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +247,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &9158564386036668120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4593025092947994502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9b4f5c9c02b6b4ab61ab39479e47fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherObjectRenderers: []
+  trackSpecificMaterialElements: 
 --- !u!1001 &3710080081223473879
 PrefabInstance:
   m_ObjectHideFlags: 0

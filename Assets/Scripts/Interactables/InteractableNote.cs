@@ -28,6 +28,9 @@ public class InteractableNote : InteractableObject
     public float pickupSpeedMultiplier = 2.5f;
     public float distanceToStopFromPlayer = 0.3f;
 
+    public AudioClip NoteInteractSound;
+    public float SoundEffectVolume = 0.5f;
+
     private Vector3 viewRestingPosition;
 
     private float currentScrollValue;
@@ -88,6 +91,12 @@ public class InteractableNote : InteractableObject
     protected override void OnInteract()
     {
         ShowToPlayer();
+        PlayInteractSound();
+    }
+
+    private void PlayInteractSound() 
+    {
+        if (NoteInteractSound != null) AudioManager.current.PlayClipAt(NoteInteractSound, transform.position, SoundEffectVolume).transform.SetParent(transform);
     }
 
     private async void ShowToPlayer() 
@@ -138,7 +147,11 @@ public class InteractableNote : InteractableObject
 
     public void PutDownItem() 
     {
-        if (!inTransitionState) ReturnToDefaultPosition();
+        if (!inTransitionState) 
+        {
+            ReturnToDefaultPosition();
+            PlayInteractSound();
+        }
     }
 
     private async void ReturnToDefaultPosition() 
