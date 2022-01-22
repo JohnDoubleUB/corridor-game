@@ -87,12 +87,13 @@ public class RadioInteractable : InteractableObject
     {
         if (!reachedEndOfDialogue && conversationToPlay != null)
         {
+            DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
+            ClearPlayerSubtitles();
+
             if (DialogueAudioSources[0].clip == null)
             {
                 //Play clip from position
-                DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
-
-                ClearPlayerSubtitles();
+                //DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
 
                 for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++) 
                 {
@@ -103,10 +104,11 @@ public class RadioInteractable : InteractableObject
             }
             else
             {
-                foreach (AudioSource aS in DialogueAudioSources)
-                {
-                    aS.Play();
-                }
+                foreach (AudioSource aS in DialogueAudioSources) aS.Play();
+
+                for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
+                    GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                
             }
         }
     }
