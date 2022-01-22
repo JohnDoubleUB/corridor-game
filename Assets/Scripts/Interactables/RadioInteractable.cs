@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RadioInteractable : InteractableObject
@@ -13,12 +14,32 @@ public class RadioInteractable : InteractableObject
     public AudioSource RadioSpeaker;
     public float RadioSpeakerDefaultVolume = 0.5f;
 
+    public GameObject DialogueAudioSourceObject;
+
     public bool radioOn;
+
+    public DialogueWithSubtitles DialogueToPlay;
+    public int ConversationNumber = 0;
+    public int DialoguePartNo = 0;
+
+    private AudioSource[] DialogueAudioSources;
+    private Conversation conversationToPlay;
+    private bool reachedEndOfDialogue;
 
     private void Awake()
     {
         RadioSpeaker.clip = RadioDroneSound;
         RadioSpeaker.volume = RadioSpeakerDefaultVolume;
+
+        if (DialogueAudioSourceObject != null) DialogueAudioSources = DialogueAudioSourceObject.GetComponents<AudioSource>();
+
+
+        DialoguePartNo = 0;
+        if (DialogueToPlay) 
+        {
+            conversationToPlay = DialogueToPlay.Conversations.FirstOrDefault(x => x.ConversationNo == ConversationNumber);
+        } 
+
     }
     protected override void OnInteract()
     {
@@ -39,10 +60,81 @@ public class RadioInteractable : InteractableObject
         if (radioOn)
         {
             RadioSpeaker.Play();
+            PlayDialogue();
         }
         else 
         {
             RadioSpeaker.Stop();
+            PauseDialogue();
+        }
+    }
+
+    private void Update()
+    {
+        if (radioOn) 
+        {
+            
+            if (!reachedEndOfDialogue && conversationToPlay != null && !DialogueAudioSources[0].isPlaying) 
+            {
+                //DialoguePartNo++;
+                PlayNextDialoguePart();
+            }
+        }
+    }
+
+    private void PlayDialogue() 
+    {
+        if (!reachedEndOfDialogue && conversationToPlay != null)
+        {
+            if (DialogueAudioSources[0].clip == null)
+            {
+                //Play clip from position
+                DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
+                
+                for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++) 
+                {
+                    DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
+                    DialogueAudioSources[i].Play();
+                }
+            }
+            else
+            {
+                foreach (AudioSource aS in DialogueAudioSources)
+                {
+                    aS.Play();
+                }
+            }
+        }
+    }
+
+    private void PauseDialogue() 
+    {
+        foreach (AudioSource aS in DialogueAudioSources) aS.Pause();
+    }
+
+    private void PlayNextDialoguePart() 
+    {
+        if (DialoguePartNo < conversationToPlay.DialogueParts.Count - 1)
+        {
+            DialoguePartNo++;
+
+            DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
+
+            for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
+            {
+                DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
+                DialogueAudioSources[i].Play();
+            }
+        }
+        else 
+        {
+            reachedEndOfDialogue = true;
+
+            foreach (AudioSource aS in DialogueAudioSources)
+            { 
+                aS.Stop();
+                aS.clip = null;
+            }
         }
     }
 }
