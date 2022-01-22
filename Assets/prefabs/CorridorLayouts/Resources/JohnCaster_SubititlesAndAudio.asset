@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2355272f49787674ba7c6b26010401fd, type: 3}
-  m_Name: JohnCaster
+  m_Name: JohnCaster_SubititlesAndAudio
   m_EditorClassIdentifier: 
   Conversations:
   - ConversationName: "1_My name is John Caster, and this is the *static* o\u2019clock

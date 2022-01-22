@@ -585,7 +585,7 @@ Transform:
   m_Children:
   - {fileID: 2124715450}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &158676738
 MonoBehaviour:
@@ -883,10 +883,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Tonight, we are remotely joined by Musician \u201CBill O\u2019Dreary\u201D,
-    Celeb Economist \u201CBilly \u2018Big Money\u2019 O\u2019Cashe\u201D and Actor
-    \u201CWilliam A. C. Torre\u201D. Let\u2019s play some Trivia! Bill, thanks for
-    joining us."
+  m_Text: 
 --- !u!222 &170585521
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1502,7 +1499,7 @@ PrefabInstance:
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
@@ -2131,7 +2128,7 @@ PrefabInstance:
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
@@ -2818,7 +2815,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &891142827
 GameObject:
@@ -3038,7 +3035,7 @@ PrefabInstance:
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
@@ -3107,7 +3104,7 @@ PrefabInstance:
     - target: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
@@ -3414,7 +3411,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1015809493
 MonoBehaviour:
@@ -3441,75 +3438,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40609098bf359b445bd491a85e3d7d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &1082334288
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.39
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822729, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7785650445776822735, guid: 1c0e5bfc86c049d439b71bc487a92c3a,
-        type: 3}
-      propertyPath: m_Name
-      value: Level1_0-2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1c0e5bfc86c049d439b71bc487a92c3a, type: 3}
 --- !u!4 &1213126420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
@@ -3585,7 +3513,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: test
+  m_Text: 
 --- !u!222 &1237934486
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3848,7 +3776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5283019, g: 0.36632255, b: 0.3693695, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3867,10 +3795,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Tonight, we are remotely joined by Musician \u201CBill O\u2019Dreary\u201D,
-    Celeb Economist \u201CBilly \u2018Big Money\u2019 O\u2019Cashe\u201D and Actor
-    \u201CWilliam A. C. Torre\u201D. Let\u2019s play some Trivia! Bill, thanks for
-    joining us."
+  m_Text: 
 --- !u!222 &1336907176
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4404,7 +4329,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1630812777
 GameObject:
@@ -4575,7 +4500,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1731665340 stripped
 Transform:
@@ -4597,7 +4522,7 @@ PrefabInstance:
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
@@ -4741,7 +4666,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1825609243
 GameObject:
@@ -4771,7 +4696,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1835833469 stripped
 MonoBehaviour:
@@ -4816,7 +4741,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1838609637
 MonoBehaviour:
@@ -5178,7 +5103,7 @@ Transform:
   m_Children:
   - {fileID: 87227007}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2002696291
 GameObject:
@@ -5844,7 +5769,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2042821394
 PrefabInstance:
@@ -5856,7 +5781,7 @@ PrefabInstance:
     - target: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1891356515364142864, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
@@ -5990,7 +5915,7 @@ Transform:
   - {fileID: 2002696292}
   - {fileID: 1630812778}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!82 &2067456598
 AudioSource:
@@ -6107,6 +6032,9 @@ MonoBehaviour:
   lookSpeed: 2
   lookXLimit: 70
   NotepadPickedUp: 0
+  DialogueBoxes:
+  - {fileID: 170585520}
+  - {fileID: 1336907175}
   playerPencil: {fileID: 653852192}
   playerCrosshair: {fileID: 718060826}
   momentoText: {fileID: 158990646}
@@ -6197,7 +6125,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2124715449
 GameObject:
@@ -6447,7 +6375,7 @@ PrefabInstance:
         type: 3}
       propertyPath: DialogueToPlay
       value: 
-      objectReference: {fileID: 11400000, guid: de01f5d9a4c777045bebf3f19516d10c,
+      objectReference: {fileID: 11400000, guid: 24d494da639a4a6409e24347b148c6f7,
         type: 2}
     - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}

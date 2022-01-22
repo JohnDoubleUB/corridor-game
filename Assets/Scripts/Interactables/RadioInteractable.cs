@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RadioInteractable : InteractableObject
 {
@@ -90,11 +91,14 @@ public class RadioInteractable : InteractableObject
             {
                 //Play clip from position
                 DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
-                
+
+                ClearPlayerSubtitles();
+
                 for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++) 
                 {
                     DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
                     DialogueAudioSources[i].Play();
+                    GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
                 }
             }
             else
@@ -110,6 +114,7 @@ public class RadioInteractable : InteractableObject
     private void PauseDialogue() 
     {
         foreach (AudioSource aS in DialogueAudioSources) aS.Pause();
+        ClearPlayerSubtitles();
     }
 
     private void PlayNextDialoguePart() 
@@ -120,15 +125,21 @@ public class RadioInteractable : InteractableObject
 
             DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
 
+            ClearPlayerSubtitles();
+
             for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
             {
                 DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
                 DialogueAudioSources[i].Play();
+
+                GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
             }
         }
         else 
         {
             reachedEndOfDialogue = true;
+
+            ClearPlayerSubtitles();
 
             foreach (AudioSource aS in DialogueAudioSources)
             { 
@@ -136,5 +147,15 @@ public class RadioInteractable : InteractableObject
                 aS.clip = null;
             }
         }
+    }
+
+    private void ClearPlayerSubtitles() 
+    {
+        foreach (Text tb in GameManager.current.playerController.DialogueBoxes) tb.text = "";
+    }
+
+    private void OnDestroy()
+    {
+        ClearPlayerSubtitles();
     }
 }

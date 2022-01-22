@@ -16,6 +16,8 @@ public class CG_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
+    public Text[] DialogueBoxes;
+
 
     public bool IsJumping { get { return characterIsJumping; } }
 
