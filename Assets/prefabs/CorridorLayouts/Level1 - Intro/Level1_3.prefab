@@ -94,6 +94,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutLevelNumber: 1
   layoutNumber: 3
+  corridorMeshType: 0
+  corridorMatType: 0
+  corridorDoorMatType: 0
+  StretchAmount: 2
+  ForceStretch: 0
+  ForceWave: 0
   sectionDoor: {fileID: 0}
   Props: []
   PuzzleElements: []
@@ -255,6 +261,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: radioprefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: DialogueToPlay
+      value: 
+      objectReference: {fileID: 11400000, guid: 24d494da639a4a6409e24347b148c6f7,
+        type: 2}
+    - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
+        type: 3}
+      propertyPath: ConversationNumber
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67426d3e63625e4489fc8eb785f15abb, type: 3}
