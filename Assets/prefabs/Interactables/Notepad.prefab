@@ -155,7 +155,7 @@ MonoBehaviour:
   ObjectName: Notepad
   IsInteractable: 1
   puzzleObjectToNotifyOnInteract: {fileID: 0}
-  pickupSound: {fileID: 8300000, guid: 36591a63a5929bb42bc433a36b34863e, type: 3}
+  pickupSound: {fileID: 8300000, guid: 93994bdebae605446ad226491e8140b0, type: 3}
   varyPickupSoundPitch: 1
   pickupSoundVolume: 0.5
   pickupSpeedMultiplier: 2.5
