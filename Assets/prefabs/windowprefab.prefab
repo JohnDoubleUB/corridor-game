@@ -603,6 +603,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8136881842351423729}
+  - component: {fileID: 6445761037249506023}
+  - component: {fileID: 5354702552376857246}
   m_Layer: 0
   m_Name: windowprefab
   m_TagString: Untagged
@@ -629,6 +631,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6445761037249506023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136881842351423730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0944bac4776a94fa0d674b9ddd7fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChanceToTrigger: 0.5
+  WindowAnimator: {fileID: 8136881842687830017}
+  LightningAudio: {fileID: 8300000, guid: 2916c5c4e9bd14f479c18e37d67d5da0, type: 3}
+--- !u!65 &5354702552376857246
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136881842351423730}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.35, y: 3, z: 2.886859}
+  m_Center: {x: 0, y: 0, z: -1.4586427}
 --- !u!1 &8136881842687830019
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,6 +884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherObjectRenderers:
   - {fileID: 8136881842687830016}
+  trackSpecificMaterialElements: 
 --- !u!1001 &8136881842244194937
 PrefabInstance:
   m_ObjectHideFlags: 0

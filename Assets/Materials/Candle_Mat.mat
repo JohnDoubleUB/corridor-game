@@ -123,6 +123,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - BaseMap_EmissionAmount: 1
     - Vector1_D53104C9: 0.329
     - Vector1_F91FF120: 0
     - _AORemapMax: 1

@@ -213,7 +213,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6338421080939927439}
-  m_Layer: 0
+  - component: {fileID: 1787043124}
+  - component: {fileID: 1787043123}
+  m_Layer: 10
   m_Name: candle_long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,6 +238,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1787043124
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5186505922999510073}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.07, y: 0.4585986, z: 0.07}
+  m_Center: {x: 0, y: 0.6094353, z: 0}
+--- !u!114 &1787043123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5186505922999510073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760f7dc10f267a847a9462f41faba7d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectName: Candle
+  IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
+  CandleParticle: {fileID: 2410423487537486717}
+  CandleLight: {fileID: 8434345746213980446}
+  CandleMesh: {fileID: 6022417073939229649}
 --- !u!114 &5821049776983268361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,8 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9b4f5c9c02b6b4ab61ab39479e47fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherObjectRenderers:
-  - {fileID: 6022417073939229649}
+  otherObjectRenderers: []
+  trackSpecificMaterialElements: 
 --- !u!1001 &4923131252164413469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,5 +517,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: CandleFlameEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 4651919698734312586, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4651919698770834902, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4651919700028619316, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4, type: 3}
+--- !u!198 &2410423487537486717 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4651919698734312591, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7060935261476976626}
+  m_PrefabAsset: {fileID: 0}

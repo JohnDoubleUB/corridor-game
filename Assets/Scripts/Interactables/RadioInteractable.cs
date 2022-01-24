@@ -60,8 +60,7 @@ public class RadioInteractable : InteractableObject
 
         if (radioOn)
         {
-            RadioSpeaker.Play();
-            PlayDialogue();
+            if(!PlayDialogue()) RadioSpeaker.Play();
         }
         else 
         {
@@ -82,7 +81,7 @@ public class RadioInteractable : InteractableObject
         }
     }
 
-    private void PlayDialogue() 
+    private bool PlayDialogue() 
     {
         if (!reachedEndOfDialogue && conversationToPlay != null)
         {
@@ -113,7 +112,11 @@ public class RadioInteractable : InteractableObject
                 }
 
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private void PauseDialogue() 
@@ -152,6 +155,7 @@ public class RadioInteractable : InteractableObject
                 aS.Stop();
                 aS.clip = null;
             }
+            RadioSpeaker.Play();
         }
     }
 

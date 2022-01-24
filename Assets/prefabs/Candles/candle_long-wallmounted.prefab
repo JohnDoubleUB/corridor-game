@@ -10,7 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3310649305455288025}
   - component: {fileID: 3685506032349261411}
-  m_Layer: 0
+  - component: {fileID: 706437149}
+  - component: {fileID: 706437148}
+  m_Layer: 10
   m_Name: candle_long-wallmounted
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,6 +48,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FakeParent: {fileID: 0}
+  flipXZIfCorridorFlip: 0
+  rotateY180IfCorridorFlip: 0
+--- !u!65 &706437149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3310649305455288024}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.07, y: 0.36831057, z: 0.07}
+  m_Center: {x: 0, y: 0.45, z: 0.19}
+--- !u!114 &706437148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3310649305455288024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760f7dc10f267a847a9462f41faba7d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectName: Wall Candle
+  IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
+  CandleParticle: {fileID: 4152625214673195547}
+  CandleLight: {fileID: 5027756443859260455}
+  CandleMesh: {fileID: 7993453183760042180}
 --- !u!1 &5914391341943023337
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,8 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9b4f5c9c02b6b4ab61ab39479e47fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherObjectRenderers:
-  - {fileID: 7993453183760042180}
+  otherObjectRenderers: []
+  trackSpecificMaterialElements: 
 --- !u!1001 &8732452121365517376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -513,10 +548,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: CandleFlameEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 4651919698734312586, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4651919698734312591, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
         type: 3}
       propertyPath: LightsModule.light
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4651919698770834902, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4651919700028619316, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4, type: 3}
+--- !u!198 &4152625214673195547 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4651919698734312591, guid: 3db4b41a98fd1ad4a8dd9cac8e9536a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8732452121957269140}
+  m_PrefabAsset: {fileID: 0}
