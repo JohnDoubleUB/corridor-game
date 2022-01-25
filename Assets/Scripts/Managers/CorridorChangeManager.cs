@@ -193,12 +193,6 @@ public class CorridorChangeManager : MonoBehaviour
             RenumberSections();
             UpdateLevel();
         }
-
-        //Because I'm lazy
-        //if (CurrentLevel == 2 && !GameManager.current.tvMan.moveTowardPlayer)
-        //{
-        //    GameManager.current.tvMan.moveTowardPlayer = true;
-        //}
     }
 
     private void LateUpdate()
@@ -248,7 +242,7 @@ public class CorridorChangeManager : MonoBehaviour
                 && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange)
                 || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
-                directionPositiveOnLevelStart = sectionToMoveWasFront;
+                directionPositiveOnLevelStart = directionPositiveOnLastCorridorPiece;
                 LevelChange(levelChange);
             }
 
@@ -362,6 +356,7 @@ public class CorridorChangeManager : MonoBehaviour
     public void LevelChange(int newLevel)
     {
         if (newLevel != CurrentLevel) OnLevelChange?.Invoke(); //Invoke if there is anything to invoke on
+        directionPositiveOnLevelStart = directionPositiveOnLastCorridorPiece;
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
         CurrentLevel = newLevel;
