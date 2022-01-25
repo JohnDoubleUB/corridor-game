@@ -116,6 +116,8 @@ public class CorridorSection : MonoBehaviour
         defaultVariationAmplitude = meshMaterials[0].GetFloat("_VariationAmplitude");
         currentVariationAmplitude = 0f;
         boxCol = GetComponent<BoxCollider>();
+
+
     }
 
     private void Start()
@@ -131,11 +133,11 @@ public class CorridorSection : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnSectionEnter(Collider other) 
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null)
         {
-            //print("Player exited");
+            toNotifyOnPlayerEnter.OnPlayerEnter(this);
         }
     }
 

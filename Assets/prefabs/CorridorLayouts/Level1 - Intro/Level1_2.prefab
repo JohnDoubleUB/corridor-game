@@ -105,8 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FakeParent: {fileID: 0}
-  flipXZIfCorridorFlip: 1
-  rotateY180IfCorridorFlip: 0
+  flipXZIfCorridorFlip: 0
+  rotateY180IfCorridorFlip: 1
 --- !u!1001 &6184070720892046876
 PrefabInstance:
   m_ObjectHideFlags: 0

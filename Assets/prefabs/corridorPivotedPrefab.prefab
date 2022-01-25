@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &20199236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20199237}
+  m_Layer: 0
+  m_Name: CorridorTriggerParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &20199237
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20199236}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1891356515364142864}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1562872961
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,6 +148,7 @@ Transform:
   - {fileID: 1562872962}
   - {fileID: 2632699617563222331}
   - {fileID: 5649685598853727169}
+  - {fileID: 20199237}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -136,9 +167,6 @@ MonoBehaviour:
   meshRenderer: {fileID: 8044445721029405633}
   meshFilter: {fileID: 5208249738734771979}
   meshCollider: {fileID: 1424938837924940631}
-  CorridorMeshVarients:
-  - {fileID: 1834302813847974084, guid: 0bc2e8d5148c4e745a122f539e61d5ed, type: 3}
-  - {fileID: -8055246573662172148, guid: 80bcf3eed99cffd4e97802b29d4c928e, type: 3}
   corridorTransform: {fileID: 9216810287770996910}
   lights:
   - {fileID: 0}
@@ -150,17 +178,15 @@ MonoBehaviour:
   - {fileID: 1586560739280874413}
   - {fileID: 7950922518849562771}
   toNotifyOnPlayerEnter: {fileID: 0}
-  CurrentLayout: {fileID: 0}
+  currentLayout: {fileID: 0}
   DoorPrefab: {fileID: 1376143418, guid: f32b440fe64c6d84fa9187a259a644f3, type: 3}
-  HasWarped: 0
-  WillStretch: 0
-  WillWave: 0
-  corridorMeshIndex: 0
+  hasWarped: 0
   CorridorNumber: 0
   sectionType: 0
   FlipSection: 0
   FlipCorridorX: 0
   FlipCorridorZ: 0
+  defaultVariationAmplitude: 0
 --- !u!65 &1891356515364142870
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,7 +196,7 @@ BoxCollider:
   m_GameObject: {fileID: 1891356515364142871}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 6.21, y: 3, z: 3}
   m_Center: {x: 5, y: 1.5, z: 0}
