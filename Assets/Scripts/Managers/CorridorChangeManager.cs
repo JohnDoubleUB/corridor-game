@@ -36,6 +36,9 @@ public class CorridorChangeManager : MonoBehaviour
     private float playerMaxDistance = 1000;
     private bool playerReachedMaxDistance;
 
+    private bool directionPositiveOnLastCorridorPiece = true;
+    private bool directionPositiveOnLevelStart = true;
+
     public int sectionsTraveledOnCurrentLevel = 0;
 
     public Mesh[] corridorMeshes;
@@ -122,7 +125,7 @@ public class CorridorChangeManager : MonoBehaviour
         }
         else if (levelCorridorPrefabs != null && levelCorridorPrefabs.Any())
         {
-            if (directionPositive || !levelCorridorBackwardPrefabs.Any())
+            if (directionPositive == directionPositiveOnLevelStart || !levelCorridorBackwardPrefabs.Any())
             {
                 layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
             }
@@ -236,16 +239,21 @@ public class CorridorChangeManager : MonoBehaviour
             //Check if we are in a trigger section or not
             LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
             int levelChange = -1;
+            //Check if section we are moving is front (useful for other parts of the code)
+            bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
+            directionPositiveOnLastCorridorPiece = sectionToMoveWasFront;
+
             if (!OnlyUseRandomAssortedCorridorLayouts
                 && currentSection.CurrentLayout != null
                 && currentLevelDataTemp.GetIfLevelTriggerAndReturnLevelChange(currentSection.CurrentLayout, out levelChange)
                 || currentLevelDataTemp.GetIfLevelCountTriggerAndReturnLevelChange(sectionsTraveledOnCurrentLevel, out levelChange))
             {
+                directionPositiveOnLevelStart = sectionToMoveWasFront;
                 LevelChange(levelChange);
             }
 
-            //Check if section we are moving is front (useful for other parts of the code)
-            bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
+            ////Check if section we are moving is front (useful for other parts of the code)
+            //bool sectionToMoveWasFront = currentSection.sectionType == SectionType.Front;
 
             SectionType sectionToMoveType = sectionToMoveWasFront ? SectionType.Back : SectionType.Front;
             CorridorSection[] orderedSections = GetOrderedSections;
@@ -286,21 +294,6 @@ public class CorridorChangeManager : MonoBehaviour
             //Apply the effects to the current section
             ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp);
         }
-
-  
-
-
-        //if (false && currentSection.CorridorNumber % 2 == 0)
-        //{
-        //    if (!currentSection.HasWarped)
-        //    {
-        //        currentSection.StretchTo(2);
-        //        currentSection.MakeWave();
-        //        //foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
-        //    }
-        //    foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
-        //    currentSection.HasWarped = true;
-        //}
     }
 
     private void ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel) 
