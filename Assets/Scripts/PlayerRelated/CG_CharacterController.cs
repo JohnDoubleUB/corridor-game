@@ -18,8 +18,8 @@ public class CG_CharacterController : MonoBehaviour
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
 
-
     public bool IsJumping { get { return characterIsJumping; } }
+    public bool IsIlluminated { get { return isIlluminated; } }
 
 
     public GameObject playerPencil;
@@ -60,6 +60,9 @@ public class CG_CharacterController : MonoBehaviour
 
     private int pencilLayerMask;
     private bool characterIsJumping;
+
+    private List<InteractableCandle> candlesInRangeOfPlayer = new List<InteractableCandle>();
+    public bool isIlluminated;
     
 
     private void OnEnable()
@@ -78,6 +81,16 @@ public class CG_CharacterController : MonoBehaviour
         controls.Player.Interact.performed += _ => Interact();
         pencilLayerMask = 1 << LayerMask.NameToLayer("Notepad") | 1 << LayerMask.NameToLayer("NonWritingArea");
         CorridorChangeManager.OnLevelChange += OnLevelChange;
+    }
+
+    public void CandleEnterPlayerInRange(InteractableCandle candle) 
+    {
+        if (!candlesInRangeOfPlayer.Contains(candle)) candlesInRangeOfPlayer.Add(candle);
+    }
+
+    public void CandleExitPlayerInRange(InteractableCandle candle) 
+    {
+        if (candlesInRangeOfPlayer.Contains(candle)) candlesInRangeOfPlayer.Remove(candle);
     }
 
     public void Interact(InteractableNote note) 
@@ -142,6 +155,8 @@ public class CG_CharacterController : MonoBehaviour
 
     void Update()
     {
+        isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
+        
         UpdateInteractable();
         if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
         if (!canMove) UpdateDraw();

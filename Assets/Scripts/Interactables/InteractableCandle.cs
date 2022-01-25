@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InteractableCandle : InteractableObject
 {
@@ -53,13 +50,14 @@ public class InteractableCandle : InteractableObject
     private void OnDestroy()
     {
         MaterialManager.current.UntrackMaterials(meshMat);
+        GameManager.current.playerController.CandleExitPlayerInRange(this);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            print("player is here");
+            GameManager.current.playerController.CandleEnterPlayerInRange(this);
             inRangeOfPlayer = true;
         }
     }
@@ -68,7 +66,7 @@ public class InteractableCandle : InteractableObject
     {
         if (candleInitial && other.gameObject.tag == "Player")
         {
-            print("player is here");
+            GameManager.current.playerController.CandleEnterPlayerInRange(this);
             
             inRangeOfPlayer = true;
             candleInitial = false;
@@ -79,7 +77,7 @@ public class InteractableCandle : InteractableObject
     {
         if (other.gameObject.tag == "Player")
         {
-            print("player is no longer here");
+            GameManager.current.playerController.CandleExitPlayerInRange(this);
 
             inRangeOfPlayer = false;
         }
@@ -87,22 +85,10 @@ public class InteractableCandle : InteractableObject
 
     private void Update()
     {
-        //lineOfSightToPlayer = inRangeOfPlayer &&
-        //    Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out RaycastHit hitResult, lineOfSightMask) &&
-        //    hitResult.collider.gameObject.tag == "Player";
-
-        if (toggleLight && 
+        lineOfSightToPlayer = toggleLight && 
             inRangeOfPlayer &&
             Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out RaycastHit hitResult, lineOfSightMask) &&
-            hitResult.collider.gameObject.tag == "Player")
-        {
-            lineOfSightToPlayer = true;
-            Debug.DrawLine(CandleParticle.transform.position, hitResult.point, Color.green);
-        }
-        else 
-        {
-            lineOfSightToPlayer = false;
-        }
+            hitResult.collider.gameObject.tag == "Player";
     }
 
 }
