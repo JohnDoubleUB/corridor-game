@@ -159,3 +159,4 @@ MonoBehaviour:
   varyPickupSoundPitch: 1
   pickupSoundVolume: 0.5
   pickupSpeedMultiplier: 2.5
+  NotepadCollider: {fileID: 2936709298863220764}

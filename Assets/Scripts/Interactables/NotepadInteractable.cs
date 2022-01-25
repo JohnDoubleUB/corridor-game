@@ -9,6 +9,7 @@ public class NotepadInteractable : InteractableObject
     public bool varyPickupSoundPitch;
     public float pickupSoundVolume = 0.5f;
     public float pickupSpeedMultiplier = 2.5f;
+    public Collider NotepadCollider;
 
     protected override void OnInteract()
     {
@@ -22,6 +23,7 @@ public class NotepadInteractable : InteractableObject
         OnSuccessfulInteract();
         transform.parent = null;
         IsInteractable = false;
+        if (NotepadCollider != null) NotepadCollider.enabled = false;
 
         if (pickupSound != null)
         {
