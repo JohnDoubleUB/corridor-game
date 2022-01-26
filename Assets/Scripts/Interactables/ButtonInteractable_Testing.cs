@@ -36,7 +36,7 @@ public class ButtonInteractable_Testing : InteractableObject
                     return GameParentTestScript.current.dospin;
 
                 case TestButtonEffectType.TVMan:
-                    return GameManager.current.tvMan.moveTowardPlayer;
+                    return GameManager.current.tvMan.huntingPlayer;
 
                 default:
                     return AudioManager.current.GetAmbientTrackByIndex(GetAmbientTrackIndex(testEffectType)).trackOn;
@@ -90,7 +90,7 @@ public class ButtonInteractable_Testing : InteractableObject
                     break;
 
                 case TestButtonEffectType.TVMan:
-                    GameManager.current.tvMan.moveTowardPlayer = !GameManager.current.tvMan.moveTowardPlayer;
+                    GameManager.current.tvMan.huntingPlayer = !GameManager.current.tvMan.huntingPlayer;
                     GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance = !GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance;
                     break;
 

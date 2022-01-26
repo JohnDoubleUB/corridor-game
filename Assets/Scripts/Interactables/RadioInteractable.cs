@@ -54,7 +54,8 @@ public class RadioInteractable : InteractableObject
             radioAnimatorBack.Play(radioOn ? "On" : "Off");
         }
 
-        AudioManager.current.PlayClipAt(RadioOnOffSound, transform.position, 1f, true);
+        transform.PlayClipAtTransform(RadioOnOffSound);
+        //AudioManager.current.PlayClipAt(RadioOnOffSound, transform.position, 1f, true);
 
         if (radioOn)
         {

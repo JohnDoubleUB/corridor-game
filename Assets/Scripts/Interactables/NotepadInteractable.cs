@@ -27,7 +27,8 @@ public class NotepadInteractable : InteractableObject
 
         if (pickupSound != null)
         {
-            AudioManager.current.PlayClipAt(pickupSound, transform.position, pickupSoundVolume, varyPickupSoundPitch).transform.SetParent(transform);
+            transform.PlayClipAtTransform(pickupSound, true, pickupSoundVolume, varyPickupSoundPitch);
+            //AudioManager.current.PlayClipAt(pickupSound, transform.position, pickupSoundVolume, varyPickupSoundPitch).transform.SetParent(transform);
         }
 
         Vector3 positionAtTimeOfPickup = transform.position;

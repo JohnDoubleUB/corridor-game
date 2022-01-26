@@ -162,7 +162,7 @@ public class PlinthController : PuzzleElementController
 
         //Sound effect!
         int tempNotifId = plinthAndItem.PlynthNotifier.NotifierId;
-        if (PlinthItemPlaceSounds != null && PlinthItemPlaceSounds.Any() && tempNotifId < PlinthItemPlaceSounds.Length) 
+        if (PlinthItemPlaceSounds != null && PlinthItemPlaceSounds.Any() && tempNotifId < PlinthItemPlaceSounds.Length)
             AudioManager.current.PlayClipAt(PlinthItemPlaceSounds[tempNotifId], transformToMove.position, 1f, false).transform.SetParent(transform);
         
 

@@ -90,7 +90,8 @@ public class PadlockController : PuzzleElementController
         Transform cameraTarget = GameManager.current.playerController.playerCamera.transform;
         Quaternion targetRotation = toFacePlayer ? Quaternion.LookRotation(cameraTarget.position - lockFocus.position) : lockFocusDefaultRot;
 
-        if (GenericLockSound != null) AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume/2).transform.SetParent(transform);
+        
+        if (GenericLockSound != null) transform.PlayClipAtTransform(GenericLockSound, true, soundVolume / 2); //AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume/2).transform.SetParent(transform);
 
         while (positionValue < 1)
         {
@@ -156,7 +157,8 @@ public class PadlockController : PuzzleElementController
 
         PuzzleSolved = true;
 
-        if (LockDropSound != null) AudioManager.current.PlayClipAt(LockDropSound, transform.position, soundVolume).transform.SetParent(transform);
+        if (LockDropSound != null) transform.PlayClipAtTransform(LockDropSound, true, soundVolume);
+        //AudioManager.current.PlayClipAt(LockDropSound, transform.position, soundVolume).transform.SetParent(transform);
 
         while (positionValue < 1)
         {
@@ -178,17 +180,20 @@ public class PadlockController : PuzzleElementController
     }
     private void PlayLockKeySlideSound()
     {
-        if (LockKeySlideSound != null) AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume).transform.SetParent(transform);
+        if (LockKeySlideSound != null) transform.PlayClipAtTransform(LockKeySlideSound, true, soundVolume);
+        //AudioManager.current.PlayClipAt(LockKeySlideSound, transform.position, soundVolume).transform.SetParent(transform);
     }
 
     private void PlayLockUnlockSound()
     {
-        if (LockUnlockSound != null) AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
+        if (LockUnlockSound != null) transform.PlayClipAtTransform(LockUnlockSound, true, soundVolume);
+        //AudioManager.current.PlayClipAt(LockUnlockSound, transform.position, soundVolume).transform.SetParent(transform);
     }
 
     private void PlayGenericLockSound()
     {
-        if (GenericLockSound != null) AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume).transform.SetParent(transform);
+        if (GenericLockSound != null) transform.PlayClipAtTransform(GenericLockSound, true, soundVolume); 
+        //AudioManager.current.PlayClipAt(GenericLockSound, transform.position, soundVolume).transform.SetParent(transform);
     }
 
     private void PlaySoundTest(AudioClip test) { }

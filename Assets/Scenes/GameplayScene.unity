@@ -481,7 +481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158676736}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 4.91, y: 0, z: -11.67}
+  m_LocalPosition: {x: 16.95, y: 0, z: 0.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2124715450}
@@ -500,9 +500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefd7dcff3cd57449bf5613145e663c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTowardPlayer: 0
+  huntingPlayer: 1
   movementSpeed: 2
   minumumDistance: 1
+  enableLegacyBehaviour: 0
   xTeleportDistanceFromPlayer: 60
   teleportAwayWhenAtMinimumDistance: 1
 --- !u!82 &158676739
@@ -979,7 +980,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1056567
+    m_Bits: 3153719
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: d9840bb6d1f604f42b64b132bb3a054d, type: 2}
   m_TargetDisplay: 0
@@ -2475,6 +2476,11 @@ PrefabInstance:
       objectReference: {fileID: 315149721}
     - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
         type: 3}
+      propertyPath: enableTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
+        type: 3}
       propertyPath: SectionToReportTo
       value: 
       objectReference: {fileID: 1768998056}
@@ -3141,7 +3147,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1580855
+    m_Bits: 3678007
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: fcc9d4d2062773e44a94e593a95f85d5, type: 2}
   m_TargetDisplay: 0
@@ -3308,6 +3314,11 @@ PrefabInstance:
       propertyPath: FakeParent
       value: 
       objectReference: {fileID: 2090186027}
+    - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
+        type: 3}
+      propertyPath: enableTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
         type: 3}
       propertyPath: SectionToReportTo
@@ -6216,6 +6227,11 @@ PrefabInstance:
       propertyPath: FakeParent
       value: 
       objectReference: {fileID: 338406728}
+    - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
+        type: 3}
+      propertyPath: enableTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4178486748131541575, guid: 81ad91d681b3e6a4d89506fb1d859027,
         type: 3}
       propertyPath: SectionToReportTo

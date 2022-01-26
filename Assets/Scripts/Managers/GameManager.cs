@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         {
             float distanceFromPlayer = Vector3.Distance(tvMan.transform.position, player.transform.position);
 
-            if (distanceFromPlayer <= maximumTVManEffectDistance && tvManEffectEnabled && tvMan.moveTowardPlayer)
+            if (distanceFromPlayer <= maximumTVManEffectDistance && tvManEffectEnabled && tvMan.huntingPlayer)
             {
                 float remappedValue = distanceFromPlayer.Remap(maximumTVManEffectDistance, tvMan.minumumDistance + 0.5f, 0f, 1f);
                 MaterialManager.current.alternateBlend = remappedValue;

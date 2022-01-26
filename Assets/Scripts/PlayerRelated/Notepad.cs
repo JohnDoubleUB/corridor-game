@@ -57,7 +57,8 @@ public class Notepad : MonoBehaviour
                     {
                         writingObjects.Remove(closestWriting);
                         Destroy(closestWriting.LineRenderer.gameObject);
-                        AudioManager.current.PlayClipAt(eraseLineSound, transform.position, 1f, true);
+                        transform.PlayClipAtTransform(eraseLineSound, false);
+                        //AudioManager.current.PlayClipAt(eraseLineSound, transform.position, 1f, true);
                     }
                 }
             }

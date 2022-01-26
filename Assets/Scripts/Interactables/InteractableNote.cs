@@ -96,7 +96,8 @@ public class InteractableNote : InteractableObject
 
     private void PlayInteractSound() 
     {
-        if (NoteInteractSound != null) AudioManager.current.PlayClipAt(NoteInteractSound, transform.position, SoundEffectVolume).transform.SetParent(transform);
+        if (NoteInteractSound != null) transform.PlayClipAtTransform(NoteInteractSound, true, SoundEffectVolume);
+        //AudioManager.current.PlayClipAt(NoteInteractSound, transform.position, SoundEffectVolume).transform.SetParent(transform);
     }
 
     private async void ShowToPlayer() 

@@ -178,7 +178,7 @@ public class CG_CharacterController : MonoBehaviour
             if (characterIsJumping) 
             {
                 characterIsJumping = false;
-                if (playerLandSounds != null && playerLandSounds.Any()) AudioManager.current.PlayClipAt(playerLandSounds[Random.Range(0, playerLandSounds.Length)], footStepPosition.position, 0.2f, true);
+                if (playerLandSounds != null && playerLandSounds.Any()) footStepPosition.PlayClipAtTransform(playerLandSounds[Random.Range(0, playerLandSounds.Length)], false, 0.2f);
             }
 
             if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)

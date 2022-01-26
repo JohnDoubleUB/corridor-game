@@ -63,13 +63,18 @@ public class NumberpadController : PuzzleElementController
         {
             PuzzleSolved = true;
             checkingPassword = false;
-            AudioManager.current.PlayClipAt(numberPadCorrectSound, transform.position, 0.5f, false);
+
+            transform.PlayClipAtTransform(numberPadCorrectSound, true, 0.5f, false);
+            //AudioManager.current.PlayClipAt(numberPadCorrectSound, transform.position, 0.5f, false);
         }
         else 
         {
             DisplayText.text = "Access Denied";
-            AudioManager.current.PlayClipAt(numberPadIncorrectSound, transform.position, 0.5f, false);
-            AudioManager.current.PlayClipAt(incorrectSound, GameManager.current.player.transform.position, 1f, false);
+            transform.PlayClipAtTransform(numberPadIncorrectSound, true, 0.5f, false);
+            GameManager.current.player.transform.PlayClipAtTransform(incorrectSound, true, 1f, false);
+
+            //AudioManager.current.PlayClipAt(numberPadIncorrectSound, transform.position, 0.5f, false);
+            //AudioManager.current.PlayClipAt(incorrectSound, GameManager.current.player.transform.position, 1f, false);
             StartCoroutine(ClearEnteredCodeAfterDelay());
         }
     }
@@ -162,7 +167,8 @@ public class NumberpadController : PuzzleElementController
 
     private void PlayPressSoundAtLocation(Transform locationTransform = null) 
     {
-        if (buttonPressSound != null) AudioManager.current.PlayClipAt(buttonPressSound, locationTransform != null ? locationTransform.position : transform.position, 0.5f, true);
+        if (buttonPressSound != null) (locationTransform != null ? locationTransform : transform).PlayClipAtTransform(buttonPressSound, true, 0.5f); 
+        //AudioManager.current.PlayClipAt(buttonPressSound, locationTransform != null ? locationTransform.position : transform.position, 0.5f, true);
     }
 
     public override void LoadPuzzleData(PuzzleElementControllerData puzzleData)

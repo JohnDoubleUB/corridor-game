@@ -244,7 +244,7 @@ MonoBehaviour:
         useOcclusionCulling: 1
         cullingMask:
           serializedVersion: 2
-          m_Bits: 4294967295
+          m_Bits: 2096951
         sceneCullingMaskOverride: 0
       invertFaceCulling: 0
       flipYMode: 0
@@ -530,6 +530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherObjectRenderers: []
+  trackSpecificMaterialElements: 
 --- !u!1001 &3828384019645897756
 PrefabInstance:
   m_ObjectHideFlags: 0

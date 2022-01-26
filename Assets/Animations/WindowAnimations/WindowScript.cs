@@ -25,8 +25,7 @@ public class WindowScript : MonoBehaviour
     {
         currentlyPlaying = true;
         WindowAnimator.Play("Lightning");
-        source = AudioManager.current.PlayClipAt(LightningAudio, transform.position, 1f);
-        source.transform.SetParent(transform);
+        transform.PlayClipAtTransform(LightningAudio);
     }
 
     private void Update()

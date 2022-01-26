@@ -26,7 +26,7 @@ TagManager:
   - Mask
   - VisibleToTrueCamera
   - ParticleEffect
-  - 
+  - HideFromReflections
   - 
   - 
   - 

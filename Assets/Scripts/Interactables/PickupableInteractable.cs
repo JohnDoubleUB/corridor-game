@@ -49,8 +49,9 @@ public class PickupableInteractable : InteractableObject
         beingPickedUp = true;
 
         if (pickupSound != null)
-        { 
-            AudioManager.current.PlayClipAt(pickupSound, transform.position, pickupSoundVolume, varyPickupSoundPitch).transform.SetParent(transform); 
+        {
+            transform.PlayClipAtTransform(pickupSound, true, pickupSoundVolume, varyPickupSoundPitch);
+            //AudioManager.current.PlayClipAt(pickupSound, transform.position, pickupSoundVolume, varyPickupSoundPitch).transform.SetParent(transform); 
         }
 
         Vector3 positionAtTimeOfPickup = transform.position;
