@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager current;
 
+    public delegate void EntityNoiseAlertAction(Vector3 noisePosition, float noiseRadius);
+    public static event EntityNoiseAlertAction OnEntityNoiseAlert;
 
     public AudioClip AmbientCreaking;
 
@@ -96,12 +98,12 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f)
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
     {
-        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds);
+        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds, noiseCanBeHeardByEntities, noiseAlertRadius);
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch, float delayInSeconds)
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch, float delayInSeconds, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
     {
         GameObject tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
@@ -113,8 +115,14 @@ public class AudioManager : MonoBehaviour
 
         aSource.PlayDelayed(delayInSeconds); // start the sound
         Destroy(tempGO, clip.length + delayInSeconds); // destroy object after clip duration
+
+        if (noiseCanBeHeardByEntities) OnEntityNoiseAlert?.Invoke(pos, noiseAlertRadius);
+
         return aSource; // return the AudioSource reference
     }
+
+
+
 }
 
 public enum AudioSourceType

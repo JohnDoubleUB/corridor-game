@@ -58,9 +58,9 @@ public class CG_HeadBob : MonoBehaviour
 
     private void PlayFootStep() 
     {
-        if (footSteps.Any() && !controller.IsJumping) 
+        if (footSteps.Any() && !controller.IsJumping && !Input.GetKey(KeyCode.LeftControl)) 
         {
-            footStepPosition.PlayClipAtTransform(footSteps[Random.Range(0, footSteps.Length)], false, 0.2f);
+            footStepPosition.PlayClipAtTransform(footSteps[Random.Range(0, footSteps.Length)], false, 0.2f, true, 0, true, 4f);
         }
     }
 }

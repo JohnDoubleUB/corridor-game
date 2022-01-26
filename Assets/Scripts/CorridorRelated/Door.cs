@@ -23,7 +23,7 @@ public class Door : MonoBehaviour
 
     [SerializeField]
     private Collider[] doorCollisions;
-    
+
     [SerializeField]
     private MeshRenderer[] doorMeshes;
 
@@ -82,7 +82,7 @@ public class Door : MonoBehaviour
 
         if (doorIsClosing && doorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
         {
-            transform.PlayClipAtTransform(slamCloseSound, true, 0.4f, true);
+            transform.PlayClipAtTransform(slamCloseSound, true, 0.4f, true, 0, false);
             doorIsClosing = false;
         }
     }
@@ -112,7 +112,7 @@ public class Door : MonoBehaviour
                     PlayDoorOpenAnimation();
                     if (justUnlocked)
                     {
-                        transform.PlayClipAtTransform(correctOpenSound, true, 1f, false, 0.3f);
+                        transform.PlayClipAtTransform(correctOpenSound, true, 1f, false, 0.3f, false);
                         justUnlocked = false;
                     }
                 }
@@ -134,16 +134,16 @@ public class Door : MonoBehaviour
 
     public void SetDoorVisible(bool doorVisible)
     {
-        if (doorIsVisible != doorVisible) 
+        if (doorIsVisible != doorVisible)
         {
             doorIsVisible = doorVisible;
-            
+
             foreach (MeshRenderer m in doorMeshes)
             {
                 m.enabled = doorVisible;
             }
 
-            foreach (Collider c in doorCollisions) 
+            foreach (Collider c in doorCollisions)
             {
                 c.enabled = doorVisible;
             }
@@ -185,14 +185,14 @@ public class Door : MonoBehaviour
     private void PlayDoorOpenAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "openForward" : "openBackward");
-        transform.PlayClipAtTransform(openSound, true, 0.4f);
+        transform.PlayClipAtTransform(openSound, true, 0.4f, true, 0, false);
         doorIsOpen = true;
     }
 
     private void PlayDoorCloseAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "closeForward" : "closeBackward");
-        transform.PlayClipAtTransform(closeSound, true, 0.4f);
+        transform.PlayClipAtTransform(closeSound, true, 0.4f, true, 0, false);
         doorIsClosing = true;
         doorIsOpen = false;
     }
@@ -200,7 +200,7 @@ public class Door : MonoBehaviour
     private void PlayDoorRattleAnimation()
     {
         doorAnimator.Play(relativePlayerDirection == -1 ? "rattleForward" : "rattleBackward");
-        transform.PlayClipAtTransform(rattleSound);
+        transform.PlayClipAtTransform(rattleSound, true, 1, true, 0, false);
     }
 
     private void UpdateRelativePlayerDirection(Transform player = null)
@@ -263,7 +263,7 @@ public class Door : MonoBehaviour
 
     public void SetMaterialVarient(CorridorMatVarient materialVarient)
     {
-        if (meshMaterials != null) 
+        if (meshMaterials != null)
         {
             if (meshMaterials[0].GetTexture("_MainTex") != materialVarient.albedo1) meshMaterials[0].SetTexture("_MainTex", materialVarient.albedo1);
             if (meshMaterials[0].GetTexture("_MainTex2") != materialVarient.albedo2) meshMaterials[0].SetTexture("_MainTex2", materialVarient.albedo2);
