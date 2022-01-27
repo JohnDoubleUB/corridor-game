@@ -82,6 +82,10 @@ MonoBehaviour:
   CandleParticle: {fileID: 4152625214673195547}
   CandleLight: {fileID: 5027756443859260455}
   CandleMesh: {fileID: 7993453183760042180}
+  candleOnSound: {fileID: 8300000, guid: 1e8630c6a30e480489c934d3895db8a8, type: 3}
+  candleOffSound: {fileID: 8300000, guid: 9187ab9f01c756a4595879553668ace0, type: 3}
+  candleSoundVolume: 1
+  candleSoundRadius: 0.2
   lineOfSightToPlayer: 0
 --- !u!135 &8550378021134939677
 SphereCollider:

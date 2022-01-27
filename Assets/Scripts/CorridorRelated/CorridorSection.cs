@@ -5,7 +5,7 @@ using UnityEngine;
 public class CorridorSection : MonoBehaviour
 {
     public MeshRenderer meshRenderer;
-    
+
     [SerializeField]
     private MeshFilter meshFilter;
     [SerializeField]
@@ -16,35 +16,39 @@ public class CorridorSection : MonoBehaviour
     public float segmentLength = 10f;
     public Transform FakeParent;
     public GameObject corridorProps;
-    
+
     public Transform[] CorridorStartEnd;
     public CorridorChangeManager toNotifyOnPlayerEnter;
-    public CorridorLayoutHandler CurrentLayout 
+
+    public AudioClip corridorStretchSound;
+    public float corridorStretchVolume = 1f;
+
+    public CorridorLayoutHandler CurrentLayout
     {
-        get 
+        get
         {
             return currentLayout;
         }
-        set 
+        set
         {
             currentLayout = value;
         }
 
     }
-    
+
     [SerializeField]
     private CorridorLayoutHandler currentLayout;
 
 
 
     public Door DoorPrefab;
-    public bool HasWarped 
+    public bool HasWarped
     {
-        get 
+        get
         {
-            return currentLayout != null ? currentLayout.LayoutData.HasWarped : false; 
+            return currentLayout != null ? currentLayout.LayoutData.HasWarped : false;
         }
-        set 
+        set
         {
             if (value && currentLayout != null && currentLayout.LayoutData != null) currentLayout.LayoutData.HasWarped = value;
             hasWarped = value;
@@ -55,28 +59,28 @@ public class CorridorSection : MonoBehaviour
     [SerializeField]
     private bool hasWarped;
 
-    public bool WillStretch 
-    { 
-        get 
+    public bool WillStretch
+    {
+        get
         {
             return currentLayout != null ? currentLayout.ForceStretch : false;
-        } 
+        }
     }
-    
-    public bool WillWave 
+
+    public bool WillWave
     {
-        get 
+        get
         {
             return currentLayout != null ? currentLayout.ForceWave : false;
         }
     }
 
-    public float StretchAmount 
+    public float StretchAmount
     {
-        get 
+        get
         {
             return currentLayout != null ? currentLayout.StretchAmount : 2f;
-        } 
+        }
     }
 
     public int CorridorNumber;
@@ -122,18 +126,18 @@ public class CorridorSection : MonoBehaviour
 
     private void Start()
     {
-        if(MaterialManager.current != null) MaterialManager.current.TrackMaterials(meshMaterials);
+        if (MaterialManager.current != null) MaterialManager.current.TrackMaterials(meshMaterials);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null) 
+        if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null)
         {
             toNotifyOnPlayerEnter.OnPlayerEnter(this);
         }
     }
 
-    public void OnSectionEnter(Collider other) 
+    public void OnSectionEnter(Collider other)
     {
         if (other.gameObject.tag == "Player" && toNotifyOnPlayerEnter != null)
         {
@@ -145,7 +149,7 @@ public class CorridorSection : MonoBehaviour
     {
         CorridorFlipCheck();
         SectionFlipCheck();
-        foreach (Material meshMat in meshMaterials) 
+        foreach (Material meshMat in meshMaterials)
         {
             meshMat.SetFloat("_UVStretch", transform.localScale.x);
             meshMat.SetFloat("_VariationAmplitude", currentVariationAmplitude / transform.localScale.x);
@@ -154,7 +158,7 @@ public class CorridorSection : MonoBehaviour
         if (FakeParent != null && transform.position != FakeParent.position) transform.position = FakeParent.position;
     }
 
-    private void CorridorFlipCheck() 
+    private void CorridorFlipCheck()
     {
         if (FlipCorridorX != currentFlipX || FlipCorridorZ != currentFlipZ)
         {
@@ -164,16 +168,16 @@ public class CorridorSection : MonoBehaviour
         }
     }
 
-    private void SectionFlipCheck() 
+    private void SectionFlipCheck()
     {
-        if (FlipSection != currentSectionFlip) 
+        if (FlipSection != currentSectionFlip)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             currentSectionFlip = FlipSection;
         }
     }
 
-    public void TogglePropFlip() 
+    public void TogglePropFlip()
     {
         Vector3 currentScale = corridorProps.transform.localScale;
         corridorProps.transform.localScale = new Vector3(currentScale.x > 0 ? -1 : 1, currentScale.y, currentScale.z);
@@ -185,28 +189,28 @@ public class CorridorSection : MonoBehaviour
         corridorProps.transform.localScale = new Vector3(flip ? -1 : 1, currentScale.y, currentScale.z);
     }
 
-    public void SetCorridorStretch(float scaleX) 
+    public void SetCorridorStretch(float scaleX)
     {
         transform.localScale = new Vector3(transform.localScale.x > 0 ? scaleX : -scaleX, transform.localScale.y, transform.localScale.z);
     }
 
-    public void SetAllWavyness(float value) 
+    public void SetAllWavyness(float value)
     {
-        foreach (Material meshMat in meshMaterials) 
-        { 
+        foreach (Material meshMat in meshMaterials)
+        {
             meshMat.SetFloat("_DriftSpeed", value);
             currentVariationAmplitude = value != 0f ? defaultVariationAmplitude : 0f;
         }
     }
 
-    public void SetFloorWavyness(float value) 
+    public void SetFloorWavyness(float value)
     {
         Material meshMat = meshMaterials[1];
         meshMat.SetFloat("_DriftSpeed", value);
         currentVariationAmplitude = value != 0f ? defaultVariationAmplitude : 0f;
     }
 
-    public void SetWallWavyness(float value) 
+    public void SetWallWavyness(float value)
     {
         Material meshMat = meshMaterials[0];
         meshMat.SetFloat("_DriftSpeed", value);
@@ -215,20 +219,23 @@ public class CorridorSection : MonoBehaviour
 
     public void StretchTo(float stretchTarget)
     {
-        TransitionToStretchTarget(stretchTarget); 
+        TransitionToStretchTarget(stretchTarget);
     }
 
-    public void MakeWave(bool effectWall = true, bool effectFloor = true) 
+    public void MakeWave(bool effectWall = true, bool effectFloor = true)
     {
         TransitionToWavy(effectWall, effectFloor);
     }
 
-    private async void TransitionToStretchTarget(float stretchTarget) 
+    private async void TransitionToStretchTarget(float stretchTarget)
     {
+        if (corridorStretchSound != null) GameManager.current.player.transform.PlayClipAtTransform(corridorStretchSound, true, corridorStretchVolume, true, 0, false);
+
+
         float stretchTimer = 0;
         float initialStretch = Math.Abs(transform.localScale.x);
         float stretchSpeed = 0.5f;
-        
+
         stretchInProgress = true;
 
         while (stretchTimer < 1f && stretchInProgress)
@@ -239,18 +246,18 @@ public class CorridorSection : MonoBehaviour
             await Task.Yield();
         }
 
-        if (!stretchInProgress) 
+        if (!stretchInProgress)
         {
             SetCorridorStretch(initialStretch);
         }
-        else 
+        else
         {
             SetCorridorStretch(stretchTarget);
             stretchInProgress = false;
         }
     }
 
-    private async void TransitionToWavy(bool wall, bool floor) 
+    private async void TransitionToWavy(bool wall, bool floor)
     {
         float wavyTimer = 0;
         float currentWavy = 0;
@@ -289,13 +296,13 @@ public class CorridorSection : MonoBehaviour
         stretchInProgress = false;
     }
 
-    public void ChangeMesh(Mesh mesh) 
+    public void ChangeMesh(Mesh mesh)
     {
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
     }
 
-    public void SetMaterialVarient(CorridorMatVarient materialVarient) 
+    public void SetMaterialVarient(CorridorMatVarient materialVarient)
     {
         if (meshMaterials[0].GetTexture("_MainTex") != materialVarient.albedo1) meshMaterials[0].SetTexture("_MainTex", materialVarient.albedo1);
         if (meshMaterials[0].GetTexture("_MainTex2") != materialVarient.albedo2) meshMaterials[0].SetTexture("_MainTex2", materialVarient.albedo2);
@@ -304,7 +311,7 @@ public class CorridorSection : MonoBehaviour
         if (meshMaterials[1].GetTexture("_MainTex2") != materialVarient.albedo2) meshMaterials[1].SetTexture("_MainTex2", materialVarient.albedo2);
     }
 
-    private void SetWallAndOrFloorWavyness(bool wall, bool floor, float wavyAmount) 
+    private void SetWallAndOrFloorWavyness(bool wall, bool floor, float wavyAmount)
     {
         if (wall && floor) SetAllWavyness(wavyAmount);
         else if (wall) SetWallWavyness(wavyAmount);
@@ -312,7 +319,7 @@ public class CorridorSection : MonoBehaviour
     }
 }
 
-public enum SectionType 
+public enum SectionType
 {
     Middle,
     Front,

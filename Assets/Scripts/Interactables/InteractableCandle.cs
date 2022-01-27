@@ -5,6 +5,11 @@ public class InteractableCandle : InteractableObject
     public ParticleSystem CandleParticle;
     public Light CandleLight;
     public MeshRenderer CandleMesh;
+    public AudioClip candleOnSound;
+    public AudioClip candleOffSound;
+    public float candleSoundVolume = 1f;
+    public float candleSoundRadius = 0.2f;
+
     public bool IsIlluminatingPlayer
     {
         get { return lineOfSightToPlayer; }
@@ -37,11 +42,13 @@ public class InteractableCandle : InteractableObject
         
         if (toggleLight)
         {
+            if (candleOnSound != null) transform.PlayClipAtTransform(candleOnSound, true, candleSoundVolume, true, 0, true, candleSoundRadius);
             CandleParticle.Play(true);
             meshMat.SetFloat("BaseMap_EmissionAmount", 1);
         }
         else 
         {
+            if (candleOffSound != null) transform.PlayClipAtTransform(candleOffSound, true, candleSoundVolume, true, 0, true, candleSoundRadius);
             CandleParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             meshMat.SetFloat("BaseMap_EmissionAmount", 0);
         }

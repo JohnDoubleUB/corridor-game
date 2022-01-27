@@ -178,6 +178,9 @@ MonoBehaviour:
   - {fileID: 1586560739280874413}
   - {fileID: 7950922518849562771}
   toNotifyOnPlayerEnter: {fileID: 0}
+  corridorStretchSound: {fileID: 8300000, guid: 52ebb53f386ff1749bbd7b30440cbdc6,
+    type: 3}
+  corridorStretchVolume: 1
   currentLayout: {fileID: 0}
   DoorPrefab: {fileID: 1376143418, guid: f32b440fe64c6d84fa9187a259a644f3, type: 3}
   hasWarped: 0
