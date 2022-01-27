@@ -503,9 +503,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BehaviourEnabled: 1
-  huntingPlayer: 0
-  movementSpeed: 2
-  minumumDistance: 1
+  IsHunting: 1
+  movementSpeed: 1
+  minimumDistance: 1
+  sightRange: 15
+  sightConeAngle: 30
+  alertTimeWithoutPerception: 5
+  lastPerceivedTimer: 0
+  interestTimer: 0
+  lastPercievedLocation: {x: 0, y: 0, z: 0}
   currentBehaviour: 0
   TvManEyeLevel: {fileID: 901748437}
   enableLegacyBehaviour: 0
@@ -6070,6 +6076,7 @@ MonoBehaviour:
   moveDirection: {x: 0, y: 0, z: 0}
   canMove: 1
   canInteract: 1
+  isIlluminated: 0
 --- !u!1 &2070315978
 GameObject:
   m_ObjectHideFlags: 0

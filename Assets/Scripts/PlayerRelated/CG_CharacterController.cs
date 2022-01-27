@@ -62,7 +62,7 @@ public class CG_CharacterController : MonoBehaviour
     private bool characterIsJumping;
 
     private List<InteractableCandle> candlesInRangeOfPlayer = new List<InteractableCandle>();
-    private bool isIlluminated;
+    public bool isIlluminated;
     
 
     private void OnEnable()
