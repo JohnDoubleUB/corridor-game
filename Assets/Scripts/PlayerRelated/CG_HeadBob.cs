@@ -20,6 +20,18 @@ public class CG_HeadBob : MonoBehaviour
 
     private bool stepTaken = false;
 
+    private float defaultBobbingSpeed;
+    private float defaultBobbingAmount;
+
+
+    private void Awake()
+    {
+        defaultBobbingSpeed = walkingBobbingSpeed;
+        defaultBobbingAmount = bobbingAmount;
+    }
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,9 +70,15 @@ public class CG_HeadBob : MonoBehaviour
 
     private void PlayFootStep() 
     {
-        if (footSteps.Any() && !controller.IsJumping && !Input.GetKey(KeyCode.LeftControl)) 
+        if (footSteps.Any() && !controller.IsJumping && !controller.IsCrouching) 
         {
             footStepPosition.PlayClipAtTransform(footSteps[Random.Range(0, footSteps.Length)], false, 0.2f, true, 0, true, 4f);
         }
+    }
+
+    public void SetCrouching(bool enableCrouching) 
+    {
+        bobbingAmount = enableCrouching ? defaultBobbingAmount / 1.3f : defaultBobbingAmount;
+        walkingBobbingSpeed = enableCrouching ? defaultBobbingSpeed / 2 : defaultBobbingSpeed;
     }
 }

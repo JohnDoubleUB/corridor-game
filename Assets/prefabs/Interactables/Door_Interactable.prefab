@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1240805844}
   - component: {fileID: 1240805843}
   m_Layer: 0
-  m_Name: Area Light (1)
+  m_Name: Area Light2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 7314172141149475666}
   - component: {fileID: 356404909252961463}
   m_Layer: 0
-  m_Name: CorridorNavmesh (1)
+  m_Name: DoorNavMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

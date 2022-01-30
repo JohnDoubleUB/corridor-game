@@ -18,9 +18,11 @@ public class CG_CharacterController : MonoBehaviour
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
 
-    public bool IsJumping { get { return characterIsJumping; } }
-    public bool IsIlluminated { get { return isIlluminated; } }
+    public CG_HeadBob HeadBobber;
 
+    public bool IsJumping { get { return isJumping; } }
+    public bool IsIlluminated { get { return isIlluminated; } }
+    public bool IsCrouching { get { return isCrouching; } }
 
     public GameObject playerPencil;
     public Image playerCrosshair;
@@ -35,7 +37,9 @@ public class CG_CharacterController : MonoBehaviour
     public Animator NotepadAnimator;
 
     public Transform footStepPosition;
-    public AudioClip[] playerLandSounds; 
+    public AudioClip[] playerLandSounds;
+
+    public Transform CameraOffsetTransform;
 
     CharacterController characterController;
     [HideInInspector]
@@ -59,11 +63,27 @@ public class CG_CharacterController : MonoBehaviour
     private Notepad notepadObject;
 
     private int pencilLayerMask;
-    private bool characterIsJumping;
+
 
     private List<InteractableCandle> candlesInRangeOfPlayer = new List<InteractableCandle>();
-    public bool isIlluminated;
+    private float defaultColliderHeight;
+    private float defaultMovementSpeed;
+
+    private Vector3 defaultCameraTransformOffset;
+
     
+    [SerializeField]
+    [ReadOnlyField]
+    private bool isIlluminated;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private bool isJumping;
+    
+    [SerializeField]
+    [ReadOnlyField]
+    private bool isCrouching;
+
 
     private void OnEnable()
     {
@@ -151,6 +171,10 @@ public class CG_CharacterController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;// ? does this fix the initial mouse visibility issue?
+        defaultColliderHeight = characterController.height;
+        defaultMovementSpeed = speed;
+        defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
     }
 
     void Update()
@@ -175,16 +199,16 @@ public class CG_CharacterController : MonoBehaviour
             float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-            if (characterIsJumping) 
+            if (isJumping) 
             {
-                characterIsJumping = false;
+                isJumping = false;
                 if (playerLandSounds != null && playerLandSounds.Any()) footStepPosition.PlayClipAtTransform(playerLandSounds[Random.Range(0, playerLandSounds.Length)], false, 0.2f);
             }
 
             if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)
             {
                 moveDirection.y = jumpSpeed;
-                characterIsJumping = true;
+                isJumping = true;
             }
         }
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
@@ -224,6 +248,24 @@ public class CG_CharacterController : MonoBehaviour
             print("End game!");
             Application.Quit();
         }
+
+
+        if (Input.GetButton("Crouch") != isCrouching) 
+        {
+            ToggleCrouching();
+        }
+    }
+
+    private void ToggleCrouching() 
+    {
+        float downAmount = 4f;
+
+        isCrouching = !isCrouching;
+        HeadBobber.SetCrouching(isCrouching);
+        characterController.height = isCrouching ? defaultColliderHeight / downAmount : defaultColliderHeight;
+        speed = isCrouching ? defaultMovementSpeed / 2 : defaultMovementSpeed;
+        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / downAmount);
+        CameraOffsetTransform.localPosition = isCrouching ? new Vector3(defaultCameraTransformOffset.x, defaultCameraTransformOffset.y / downAmount, defaultCameraTransformOffset.z) : defaultCameraTransformOffset; 
     }
 
     private void UpdateInteractable(bool showDebug = false)
