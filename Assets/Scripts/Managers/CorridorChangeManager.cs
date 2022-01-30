@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,9 @@ public class CorridorChangeManager : MonoBehaviour
 
     public delegate void LevelChangeAction();
     public static event LevelChangeAction OnLevelChange;
+
+    public delegate void SectionMoveAction();
+    public static event SectionMoveAction OnSectionMove;
 
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
@@ -286,12 +290,27 @@ public class CorridorChangeManager : MonoBehaviour
 
 
             //Apply the effects to the current section
-            ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp);
+            if (ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp))
+            {
+                OnSectionMoveAfterDelay(2);
+            }
+            else 
+            {
+                OnSectionMove?.Invoke(); //To indicate that the seciton has moved
+            }
+            
         }
     }
 
-    private void ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel) 
+    private async void OnSectionMoveAfterDelay(float timeSeconds) 
     {
+        await Task.Delay(System.TimeSpan.FromSeconds(timeSeconds));
+        OnSectionMove?.Invoke();
+    }
+
+    private bool ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel) 
+    {
+        bool effectUsed = false;
         //Check if this section has already been warped
         if (!currentSection.HasWarped) 
         {
@@ -303,6 +322,7 @@ public class CorridorChangeManager : MonoBehaviour
                 currentSection.StretchTo(currentSection.StretchAmount);
                 currentLoadedLevel.ScaleEffectCount++;
                 hasWarped = true;
+                effectUsed = true;
             }
 
             //Check if we should make section wave, either if it has it set to force or if settings for level allow it
@@ -313,10 +333,13 @@ public class CorridorChangeManager : MonoBehaviour
                 foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
                 currentLoadedLevel.WaveEffectCount++;
                 hasWarped = true;
+                effectUsed = true;
             }
 
             currentSection.HasWarped = hasWarped;
         }
+
+        return effectUsed;
     }
 
 
