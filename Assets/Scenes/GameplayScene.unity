@@ -538,6 +538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 117087972}
   entityTarget: {fileID: 676549971}
+  offsetFromPosition: 0
 --- !u!1 &158676736
 GameObject:
   m_ObjectHideFlags: 0

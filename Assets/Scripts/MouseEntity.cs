@@ -7,6 +7,7 @@ public class MouseEntity : MonoBehaviour
 {
     public NavMeshAgent agent;
     public Transform entityTarget;
+    public float offsetFromPosition;
 
     private Vector3 entityPosition;
 
@@ -30,7 +31,16 @@ public class MouseEntity : MonoBehaviour
 
     private void UpdateDestination() 
     {
-        agent.SetDestination(NavMesh.SamplePosition(entityPosition, out NavMeshHit hit, 400f, NavMesh.AllAreas) ? hit.position : entityPosition);
+        Vector3 calculatedDestination = NavMesh.SamplePosition(entityPosition, out NavMeshHit hit, 400f, NavMesh.AllAreas) ? hit.position : entityPosition;
+
+        if (offsetFromPosition > 0) 
+        {
+            Vector3 dir = (transform.position - calculatedDestination).normalized;
+            calculatedDestination += dir * offsetFromPosition;
+        }
+
+        agent.SetDestination(calculatedDestination);
+
         print("destination: " + agent.destination);
     }
 

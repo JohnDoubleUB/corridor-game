@@ -292,7 +292,7 @@ public class CorridorChangeManager : MonoBehaviour
             //Apply the effects to the current section
             if (ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp))
             {
-                OnSectionMoveAfterDelay(2);
+                OnSectionMoveAfterDelay(2); //Delay because an effect is happening
             }
             else 
             {
