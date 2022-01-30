@@ -991,7 +991,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3153719
+    m_Bits: 7348023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: d9840bb6d1f604f42b64b132bb3a054d, type: 2}
   m_TargetDisplay: 0
@@ -3188,7 +3188,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3678007
+    m_Bits: 7872311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: fcc9d4d2062773e44a94e593a95f85d5, type: 2}
   m_TargetDisplay: 0
@@ -5864,6 +5864,7 @@ GameObject:
   - component: {fileID: 2067456596}
   - component: {fileID: 2067456599}
   - component: {fileID: 2067456598}
+  - component: {fileID: 2067456600}
   m_Layer: 0
   m_Name: First Person Player
   m_TagString: Player
@@ -6048,6 +6049,19 @@ MonoBehaviour:
   isIlluminated: 0
   isJumping: 0
   isCrouching: 0
+--- !u!65 &2067456600
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067456595}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3739554, y: 0.5373225, z: 0.37399855}
+  m_Center: {x: -0, y: 0.4, z: 0}
 --- !u!1 &2070315978
 GameObject:
   m_ObjectHideFlags: 0

@@ -71,6 +71,10 @@ public class CG_CharacterController : MonoBehaviour
 
     private Vector3 defaultCameraTransformOffset;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private bool canUncrouch = true;
+
     
     [SerializeField]
     [ReadOnlyField]
@@ -177,6 +181,16 @@ public class CG_CharacterController : MonoBehaviour
         defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "HideUnderable") canUncrouch = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "HideUnderable") canUncrouch = true;
+    }
+
     void Update()
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
@@ -249,8 +263,9 @@ public class CG_CharacterController : MonoBehaviour
             Application.Quit();
         }
 
+        bool crouchButtonHeld = Input.GetButton("Crouch");
 
-        if (Input.GetButton("Crouch") != isCrouching) 
+        if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching)) 
         {
             ToggleCrouching();
         }
