@@ -104,6 +104,8 @@ public class CorridorSection : MonoBehaviour
     public float defaultVariationAmplitude;
     private float currentVariationAmplitude;
 
+    public NavMeshSourceTag[] navMeshes;
+
     private BoxCollider boxCol;
 
     private bool wavyInProgress;
@@ -296,10 +298,11 @@ public class CorridorSection : MonoBehaviour
         stretchInProgress = false;
     }
 
-    public void ChangeMesh(Mesh mesh)
+    public void ChangeMesh(Mesh mesh, int meshIndex = 0)
     {
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
+        navMeshes[1].enabled = meshIndex != 0;
     }
 
     public void SetMaterialVarient(CorridorMatVarient materialVarient)

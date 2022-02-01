@@ -522,7 +522,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 0.12
-  m_BaseOffset: -0.08
+  m_BaseOffset: -0.07
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &117087973
@@ -660,6 +660,7 @@ GameObject:
   - component: {fileID: 158676737}
   - component: {fileID: 158676738}
   - component: {fileID: 158676739}
+  - component: {fileID: 158676740}
   m_Layer: 0
   m_Name: TVMan
   m_TagString: Untagged
@@ -703,6 +704,8 @@ MonoBehaviour:
   sightRange: 15
   sightConeAngle: 30
   alertTimeWithoutPerception: 5
+  useNavAgent: 1
+  agent: {fileID: 158676740}
   lastPerceivedTimer: 0
   interestTimer: 0
   lastPercievedLocation: {x: 0, y: 0, z: 0}
@@ -843,6 +846,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!195 &158676740
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158676736}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.34
+  m_Speed: 3.5
+  m_Acceleration: 999
+  avoidancePriority: 50
+  m_AngularSpeed: 999
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &158990644
 GameObject:
   m_ObjectHideFlags: 0

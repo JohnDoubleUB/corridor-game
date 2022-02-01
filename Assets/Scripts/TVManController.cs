@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TVManController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class TVManController : MonoBehaviour
 
     public float alertTimeWithoutPerception = 5f;
 
+    public bool useNavAgent = false;
+    public NavMeshAgent agent;
 
 
     [SerializeField]
@@ -43,6 +46,8 @@ public class TVManController : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
+    private bool updateNavDestination = true;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -58,10 +63,14 @@ public class TVManController : MonoBehaviour
 
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
+        CorridorChangeManager.OnSectionMove += UpdateNavDestination;
     }
 
     private void Update()
     {
+        if (useNavAgent != agent.enabled) agent.enabled = useNavAgent;
+        if (movementSpeed != agent.speed) agent.speed = movementSpeed;
+
         if (audioSource.isPlaying != IsHunting) 
         {
             if (IsHunting)
@@ -116,6 +125,11 @@ public class TVManController : MonoBehaviour
         {
 
         }
+    }
+
+    private void UpdateNavDestination() 
+    {
+        updateNavDestination = true;
     }
 
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius) 
@@ -188,6 +202,7 @@ public class TVManController : MonoBehaviour
     {
         if (!Behaviour_Perceive())
         {
+            agent.isStopped = true;
             if (lastPerceivedTimer < alertTimeWithoutPerception)
             {
                 lastPerceivedTimer += Time.deltaTime;
@@ -231,6 +246,8 @@ public class TVManController : MonoBehaviour
             currentBehaviour = TVManBehaviour.None;
         }
     }
+
+    
 
     private PercivedEntity LineOfSightCheck(Vector3 target) 
     {
@@ -284,19 +301,35 @@ public class TVManController : MonoBehaviour
     {
         target = new Vector3(target.x, transform.position.y, target.z); //Make sure target is on the same plane 
         float minimumDistance = stopAtMinimumDistance ? this.minimumDistance : 0.01f;
-
         transform.LookAt(target);
 
-        if (Vector3.Distance(target, transform.position) > minimumDistance)
+        if (!useNavAgent)
         {
-            transform.position += transform.forward * Time.deltaTime * movementSpeed;
+            if (Vector3.Distance(target, transform.position) > minimumDistance)
+            {
+                transform.position += transform.forward * Time.deltaTime * movementSpeed;
+            }
+            else
+            {
+                if (!stopAtMinimumDistance) transform.position = target;
+                return true;
+            }
         }
         else 
         {
-            if (!stopAtMinimumDistance) transform.position = target;
-            return true;
-        }
+            if (agent.isStopped) agent.isStopped = false;
+            agent.stoppingDistance = minimumDistance;
 
+            if (agent.destination != target || updateNavDestination)
+            {
+                agent.SetDestination(target);
+                updateNavDestination = false;
+            }
+            else if (agent.remainingDistance <= minimumDistance) 
+            {
+                return true;
+            }
+        }
         return false;
     }
 

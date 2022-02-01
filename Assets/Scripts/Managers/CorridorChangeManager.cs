@@ -150,7 +150,7 @@ public class CorridorChangeManager : MonoBehaviour
 
             if (corridorMesh != null)
             {
-                section.ChangeMesh(corridorMesh);
+                section.ChangeMesh(corridorMesh, layoutMeshType);
             }
 
             if (layoutMeshType != 0)

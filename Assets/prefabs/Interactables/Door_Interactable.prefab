@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 4794502269050283136}
   - component: {fileID: 1376143414}
   - component: {fileID: 1376143418}
+  - component: {fileID: 2049405308}
   m_Layer: 0
   m_Name: Door_Interactable
   m_TagString: Untagged
@@ -485,12 +486,29 @@ MonoBehaviour:
   rattleSound: {fileID: 8300000, guid: 9e2bd21c5c5f3894d88571a8d34bd8d2, type: 3}
   slamCloseSound: {fileID: 8300000, guid: 0c08e7595bb26984d90a914c3bae8893, type: 3}
   openOnInteract: 0
+  navMeshObstacle: {fileID: 2049405308}
   doorCollisions:
   - {fileID: 4794502269050283136}
   - {fileID: 8909614261085010277}
   doorMeshes:
   - {fileID: 5928317442152465879}
   - {fileID: 6383146642553761109}
+--- !u!208 &2049405308
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5279733056573252610}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.13000001, y: 1.3720001, z: 1.2440001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 1.3720001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6731942081513317626
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,9 +841,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc76967c38de2ed4fb89299aadad03f8, type: 3}
---- !u!1 &4869942047132044416 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dc76967c38de2ed4fb89299aadad03f8,
+--- !u!23 &6383146642553761109 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: dc76967c38de2ed4fb89299aadad03f8,
     type: 3}
   m_PrefabInstance: {fileID: 5716452953154810321}
   m_PrefabAsset: {fileID: 0}
@@ -835,9 +853,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5716452953154810321}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &6383146642553761109 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: dc76967c38de2ed4fb89299aadad03f8,
+--- !u!1 &4869942047132044416 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dc76967c38de2ed4fb89299aadad03f8,
     type: 3}
   m_PrefabInstance: {fileID: 5716452953154810321}
   m_PrefabAsset: {fileID: 0}

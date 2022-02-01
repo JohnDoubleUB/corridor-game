@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Door : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Door : MonoBehaviour
     public AudioClip slamCloseSound;
 
     public bool openOnInteract;
+
+    public NavMeshObstacle navMeshObstacle;
 
     private bool doorIsVisible = true;
 
@@ -72,7 +75,7 @@ public class Door : MonoBehaviour
     void Update()
     {
         if (fakeParent != null && fakeParent.position != transform.position) transform.position = fakeParent.position;
-
+        if (navMeshObstacle.enabled != doorLocked) navMeshObstacle.enabled = doorLocked;
 
         if (openOnInteract != openOnInteractLast)
         {
