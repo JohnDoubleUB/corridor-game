@@ -547,6 +547,7 @@ MonoBehaviour:
   idleDelay: 6
   idleDelayVariation: 3
   chanceToStand: 0.5
+  safeDistanceFromSound: 0.5
   currentBehaviour: 0
   MovementAmount: 0
   currentIdleDelay: 0
