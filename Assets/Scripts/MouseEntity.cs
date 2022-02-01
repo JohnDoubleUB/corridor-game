@@ -15,6 +15,8 @@ public class MouseEntity : InteractableObject
     [Range(0.0f, 1.0f)]
     public float chanceToStand = 0.2f;
 
+    public float safeDistanceFromSound = 4f;
+
 
     public MouseBehaviour currentBehaviour;
 
@@ -33,6 +35,8 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private int destinationsSinceLastIdleStand;
 
+    private Vector3 lastNoiseHeard;
+
 
     private int minimumDestinationsSinceLastStand = 3;
     private bool initialBehaviourUpdate = true;
@@ -41,10 +45,23 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private float behaviourTimer;
 
+    private float defaultSpeed;
+    private float defaultAngularSpeed;
+    private float defaultAcceleration;
+
+
+    private void Awake()
+    {
+        defaultSpeed = agent.speed;
+        defaultAngularSpeed = agent.angularSpeed;
+        defaultAcceleration = agent.acceleration;
+    }
+
 
     private void Start()
     {
         CorridorChangeManager.OnSectionMove += UpdateDestination;
+        AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         entityPosition = entityTarget.position;
 
         //UpdateDestination();
@@ -83,33 +100,22 @@ public class MouseEntity : InteractableObject
             case MouseBehaviour.Idle_Look:
                 Behaviour_IdleStand();
                 break;
+
+            case MouseBehaviour.FleeingFromNoise:
+                Behaviour_FleeFromNoise();
+                break;
         }
-
-
-
-        //NavMeshHit hit;
-        //if (agent.remainingDistance == 0 && NavMesh.FindClosestEdge(transform.position, out hit, NavMesh.AllAreas))
-        //{
-        //    DrawCircle(transform.position, hit.distance, Color.red);
-        //    Debug.DrawRay(hit.position, Vector3.up, Color.red);
-
-        //    Vector3 hitPos = hit.position;
-        //    hitPos.y = transform.position.y;
-        //    Vector3 opposite = (transform.position - hitPos).normalized;
-
-        //    agent.SetDestination(GetNewRandomDestination(transform.position, opposite));
-        //}
 
         entityPosition = transform.position;
     }
 
 
-    private Vector3 GetNewRandomDestination(Vector3 originalPosition, Vector3 oppositeNormalizedVector, float randomFactor = 1f)
+    private Vector3 GetNewRandomDestination(Vector3 originalPosition, Vector3 oppositeNormalizedVector, float randomFactor = 1f, float distanceModifier = 6f)
     {
         Vector3 randomDirection = randomFactor <= 0 ? Vector3.zero : (Random.insideUnitCircle.normalized).ToXZ() * randomFactor;
 
         return Vector3.Lerp(originalPosition,
-                    NavMesh.SamplePosition(originalPosition + ((oppositeNormalizedVector + randomDirection).normalized * 6), out NavMeshHit hit, 200f, NavMesh.AllAreas) ? hit.position : originalPosition,
+                    NavMesh.SamplePosition(originalPosition + ((oppositeNormalizedVector + randomDirection).normalized * distanceModifier), out NavMeshHit hit, 200f, NavMesh.AllAreas) ? hit.position : originalPosition,
                     Random.Range(0.2f, 0.8f));
     }
 
@@ -141,6 +147,16 @@ public class MouseEntity : InteractableObject
         }
     }
 
+    private void Behaviour_FleeFromNoise() 
+    {
+        if (Vector3.Distance(transform.position, lastNoiseHeard) > safeDistanceFromSound)
+        {
+            behaviourTimer = 0;
+            GenerateRandomIdleDelay();
+            currentBehaviour = MouseBehaviour.Idle_Wander;
+        }
+    }
+
     private void Behaviour_IdleStand() 
     {
         if (initialBehaviourUpdate)
@@ -151,6 +167,7 @@ public class MouseEntity : InteractableObject
         else if (mouseAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Idle")) 
         {
             currentBehaviour = MouseBehaviour.Idle_Wander;
+            SetMouseOverallSpeedMultiplier(1);
         }
     }
 
@@ -173,6 +190,9 @@ public class MouseEntity : InteractableObject
             agent.SetDestination(GetNewRandomDestination(transform.position, opposite));
         }
     }
+
+
+
     private void UpdateDestination()
     {
         //Vector3 calculatedDestination = NavMesh.SamplePosition(entityPosition, out NavMeshHit hit, 400f, NavMesh.AllAreas) ? hit.position : entityPosition;
@@ -188,9 +208,42 @@ public class MouseEntity : InteractableObject
         //print("destination: " + agent.destination);
     }
 
+
+    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius)
+    {
+        if (Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
+    }
+
+    private void ReactToNoise(Vector3 noisePosition) 
+    {
+        lastNoiseHeard = noisePosition;
+        currentBehaviour = MouseBehaviour.FleeingFromNoise;
+        behaviourTimer = 0;
+
+        Vector3 hitPos = noisePosition;
+        hitPos.y = transform.position.y;
+        Vector3 opposite = (transform.position - hitPos).normalized;
+
+        agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
+
+        SetMouseOverallSpeedMultiplier(5);
+    }
+
+    private void SetMouseOverallSpeedMultiplier(float multiplier) 
+    {
+        float speedMult = defaultSpeed * multiplier;
+        float angularSpeedMult = defaultAngularSpeed * multiplier;
+        float accelerationMult = defaultAcceleration * multiplier;
+
+        if (agent.speed != speedMult) agent.speed = speedMult;
+        if (agent.angularSpeed != angularSpeedMult) agent.angularSpeed = angularSpeedMult;
+        if (accelerationMult != defaultAcceleration) agent.acceleration = accelerationMult;
+    }
+
     private void OnDestroy()
     {
         CorridorChangeManager.OnLevelChange -= UpdateDestination;
+        AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
     }
 }
 
@@ -198,5 +251,6 @@ public class MouseEntity : InteractableObject
 public enum MouseBehaviour
 {
     Idle_Wander,
-    Idle_Look
+    Idle_Look,
+    FleeingFromNoise
 }
