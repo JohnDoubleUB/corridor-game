@@ -12,6 +12,8 @@ public class MouseEntity : InteractableObject
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
 
+    //TODO: Make there a time limit for mouse to reach explore destination so it doesn't get stuck
+    //TODO: Fix crouching letting you fall through the floor sometimes
     [Range(0.0f, 1.0f)]
     public float chanceToStand = 0.2f;
 
