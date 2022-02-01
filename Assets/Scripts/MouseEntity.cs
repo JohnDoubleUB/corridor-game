@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MouseEntity : MonoBehaviour
+public class MouseEntity : InteractableObject
 {
     public NavMeshAgent agent;
     public Transform entityTarget;
     public float offsetFromPosition;
+    public Animator mouseAnimator;
+
 
     private Vector3 entityPosition;
     private int counter;
