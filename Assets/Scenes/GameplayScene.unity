@@ -513,7 +513,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.1
   m_Speed: 0.5
-  m_Acceleration: 8
+  m_Acceleration: 30
   avoidancePriority: 50
   m_AngularSpeed: 3000
   m_StoppingDistance: 0
@@ -543,6 +543,14 @@ MonoBehaviour:
   entityTarget: {fileID: 676549971}
   offsetFromPosition: 0
   mouseAnimator: {fileID: 1824172784}
+  idleDelay: 6
+  idleDelayVariation: 3
+  chanceToStand: 0.5
+  currentBehaviour: 0
+  MovementAmount: 0
+  currentIdleDelay: 0
+  destinationsSinceLastIdleStand: 0
+  behaviourTimer: 0
 --- !u!1 &158676736
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,6 +4370,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1345894411}
+  - component: {fileID: 1345894412}
   m_Layer: 0
   m_Name: MouseFX
   m_TagString: Untagged
@@ -4384,6 +4393,22 @@ Transform:
   m_Father: {fileID: 117087971}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1345894412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345894410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7a7da598e9b88458c3707c3ce18b96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkingBobbingSpeed: 25
+  bobbingAmount: 0.02
+  mouseEntity: {fileID: 117087973}
+  allowMouseBob: 1
 --- !u!1001 &1417650963
 PrefabInstance:
   m_ObjectHideFlags: 0

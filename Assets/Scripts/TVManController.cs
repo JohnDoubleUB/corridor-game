@@ -13,9 +13,18 @@ public class TVManController : MonoBehaviour
     public float sightConeAngle = 30f;
 
     public float alertTimeWithoutPerception = 5f;
-    public float lastPerceivedTimer;
-    public float interestTimer;
-    public Vector3 lastPercievedLocation;
+
+
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float lastPerceivedTimer;
+    [SerializeField]
+    [ReadOnlyField]
+    private float interestTimer;
+    [SerializeField]
+    [ReadOnlyField]
+    private Vector3 lastPercievedLocation;
 
     public TVManBehaviour currentBehaviour;
     public Transform TvManEyeLevel;
