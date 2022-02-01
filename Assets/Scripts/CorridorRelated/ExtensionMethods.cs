@@ -127,10 +127,18 @@ public static class ExtensionMethods
         }
     }
 
-
     public static string Truncate(this string variable, int Length)
     {
         if (string.IsNullOrEmpty(variable)) return variable;
         return variable.Length <= Length ? variable : variable.Substring(0, Length);
+    }
+
+    public static Vector3 ToXZ(this Vector2 aVec)
+    {
+        return new Vector3(aVec.x, 0, aVec.y);
+    }
+    public static Vector3 ToXZ(this Vector2 aVec, float aYValue)
+    {
+        return new Vector3(aVec.x, aYValue, aVec.y);
     }
 }
