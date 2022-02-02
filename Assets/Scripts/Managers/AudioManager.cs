@@ -9,7 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager current;
 
-    public delegate void EntityNoiseAlertAction(Vector3 noisePosition, float noiseRadius);
+    public delegate void EntityNoiseAlertAction(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified);
     public static event EntityNoiseAlertAction OnEntityNoiseAlert;
 
     public AudioClip AmbientCreaking;
@@ -98,12 +98,12 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified)
     {
-        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds, noiseCanBeHeardByEntities, noiseAlertRadius);
+        return PlayClipAt(clip, pos, volume, withPitchVariation ? Random.Range(1f - pitchVariation, 1f + pitchVariation) : 1, delayInSeconds, noiseCanBeHeardByEntities, noiseAlertRadius, noiseOrigin);
     }
 
-    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch, float delayInSeconds, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
+    public AudioSource PlayClipAt(AudioClip clip, Vector3 pos, float volume, float pitch, float delayInSeconds, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified)
     {
         GameObject tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
@@ -116,13 +116,22 @@ public class AudioManager : MonoBehaviour
         aSource.PlayDelayed(delayInSeconds); // start the sound
         Destroy(tempGO, clip.length + delayInSeconds); // destroy object after clip duration
 
-        if (noiseCanBeHeardByEntities) OnEntityNoiseAlert?.Invoke(pos, noiseAlertRadius);
+        if (noiseCanBeHeardByEntities) GenerateNoiseAlert(pos, noiseAlertRadius, noiseOrigin); //OnEntityNoiseAlert?.Invoke(pos, noiseAlertRadius, noiseOrigin);
 
         return aSource; // return the AudioSource reference
     }
 
+    public void GenerateNoiseAlert(Vector3 position, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified) 
+    {
+        OnEntityNoiseAlert?.Invoke(position, noiseAlertRadius, noiseOrigin);
+    }
+}
 
-
+public enum NoiseOrigin 
+{
+    Unspecified,
+    TVMan,
+    Mouse
 }
 
 public enum AudioSourceType

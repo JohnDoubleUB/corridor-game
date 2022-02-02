@@ -278,7 +278,7 @@ public class CG_CharacterController : MonoBehaviour
         HeadBobber.SetCrouching(isCrouching);
         characterController.height = isCrouching ? defaultColliderHeight / downAmount : defaultColliderHeight;
         speed = isCrouching ? defaultMovementSpeed / downAmount : defaultMovementSpeed;
-        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / downAmount);
+        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / (downAmount/2));
         CameraOffsetTransform.localPosition = isCrouching ? new Vector3(defaultCameraTransformOffset.x, defaultCameraTransformOffset.y / downAmount, defaultCameraTransformOffset.z) : defaultCameraTransformOffset; 
     }
 

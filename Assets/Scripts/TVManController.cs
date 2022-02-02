@@ -70,6 +70,8 @@ public class TVManController : MonoBehaviour
     {
         if (useNavAgent != agent.enabled) agent.enabled = useNavAgent;
         if (movementSpeed != agent.speed) agent.speed = movementSpeed;
+        
+        transform.GenerateNoiseAlertAtTransform(IsHunting ? 4f : 1f, NoiseOrigin.TVMan);
 
         if (audioSource.isPlaying != IsHunting) 
         {
@@ -132,9 +134,9 @@ public class TVManController : MonoBehaviour
         updateNavDestination = true;
     }
 
-    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius) 
+    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin) 
     {
-        if (Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
+        if (noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
     }
 
     private void TurnToNoise(Vector3 noisePosition) 

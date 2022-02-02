@@ -48,6 +48,11 @@ public static class ExtensionMethods
         }
     }
 
+    public static void GenerateNoiseAlertAtTransform(this Transform transform, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified)
+    {
+        if (AudioManager.current != null) AudioManager.current.GenerateNoiseAlert(transform.position, noiseAlertRadius, noiseOrigin);
+    }
+
     public static IEnumerable<IEnumerable<TSource>> Partition<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
         List<TSource> result1 = new List<TSource>();

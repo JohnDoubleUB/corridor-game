@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class MouseEntity : InteractableObject
 {
     public NavMeshAgent agent;
-    public Transform entityTarget;
     public float offsetFromPosition;
     public Animator mouseAnimator;
     public float idleDelay = 6f;
@@ -52,6 +51,11 @@ public class MouseEntity : InteractableObject
     private float defaultAcceleration;
 
 
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float fleeTimer;
+
     private void Awake()
     {
         defaultSpeed = agent.speed;
@@ -62,16 +66,8 @@ public class MouseEntity : InteractableObject
 
     private void Start()
     {
-        CorridorChangeManager.OnSectionMove += UpdateDestination;
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
-        entityPosition = entityTarget.position;
-
-        //UpdateDestination();
-
-        //if (NavMesh.FindClosestEdge(transform.position, out NavMeshHit hit,)) 
-        //{
-
-        //}
+        entityPosition = transform.position;
         GenerateRandomIdleDelay();
     }
 
@@ -106,11 +102,31 @@ public class MouseEntity : InteractableObject
             case MouseBehaviour.FleeingFromNoise:
                 Behaviour_FleeFromNoise();
                 break;
+
+            case MouseBehaviour.Freeze:
+                Behaviour_Freeze();
+                break;
         }
 
         entityPosition = transform.position;
     }
 
+    private void Behaviour_Freeze()
+    {
+        if (!mouseAnimator.GetCurrentAnimatorStateInfo(0).IsName("Scared")) mouseAnimator.Play("Scared", 0);
+        if (!agent.isStopped) agent.isStopped = true;
+        if (behaviourTimer < currentIdleDelay / 2)
+        {
+            behaviourTimer += Time.deltaTime;
+        }
+        else 
+        {
+            behaviourTimer = 0;
+            currentBehaviour = MouseBehaviour.Idle_Wander;
+            mouseAnimator.Play("Idle");
+            agent.isStopped = false;
+        }
+    }
 
     private Vector3 GetNewRandomDestination(Vector3 originalPosition, Vector3 oppositeNormalizedVector, float randomFactor = 1f, float distanceModifier = 6f)
     {
@@ -124,6 +140,7 @@ public class MouseEntity : InteractableObject
 
     private void Behaviour_IdleExplore()
     {
+        if (fleeTimer != 0f) fleeTimer = 0f;
         if (agent.remainingDistance == 0)
         {
             if (behaviourTimer < currentIdleDelay)
@@ -149,24 +166,34 @@ public class MouseEntity : InteractableObject
         }
     }
 
-    private void Behaviour_FleeFromNoise() 
+    private void Behaviour_FleeFromNoise()
     {
         if (Vector3.Distance(transform.position, lastNoiseHeard) > safeDistanceFromSound)
         {
             behaviourTimer = 0;
-            GenerateRandomIdleDelay();
+            //GenerateRandomIdleDelay();
             currentBehaviour = MouseBehaviour.Idle_Wander;
+        }
+
+        if (fleeTimer > 1f)
+        {
+            fleeTimer = 0f;
+            currentBehaviour = MouseBehaviour.Freeze;
+        }
+        else if (MovementAmount < agent.speed)
+        {
+            fleeTimer += Time.deltaTime;
         }
     }
 
-    private void Behaviour_IdleStand() 
+    private void Behaviour_IdleStand()
     {
         if (initialBehaviourUpdate)
         {
             mouseAnimator.Play("Idle_Standup", 0);
             initialBehaviourUpdate = false;
         }
-        else if (mouseAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Idle")) 
+        else if (mouseAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Idle"))
         {
             currentBehaviour = MouseBehaviour.Idle_Wander;
             SetMouseOverallSpeedMultiplier(1);
@@ -174,7 +201,7 @@ public class MouseEntity : InteractableObject
     }
 
     private void GenerateRandomIdleDelay()
-    {        
+    {
         currentIdleDelay = Random.Range(Mathf.Max(idleDelay - idleDelayVariation, 1f), idleDelayVariation + idleDelay);
     }
 
@@ -193,45 +220,31 @@ public class MouseEntity : InteractableObject
         }
     }
 
-
-
-    private void UpdateDestination()
-    {
-        //Vector3 calculatedDestination = NavMesh.SamplePosition(entityPosition, out NavMeshHit hit, 400f, NavMesh.AllAreas) ? hit.position : entityPosition;
-
-        //if (offsetFromPosition > 0) 
-        //{
-        //    Vector3 dir = (transform.position - calculatedDestination).normalized;
-        //    calculatedDestination += dir * offsetFromPosition;
-        //}
-
-        //agent.SetDestination(calculatedDestination);
-
-        //print("destination: " + agent.destination);
-    }
-
-
-    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius)
+    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
         if (Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
     }
 
-    private void ReactToNoise(Vector3 noisePosition) 
+    private void ReactToNoise(Vector3 noisePosition)
     {
-        lastNoiseHeard = noisePosition;
-        currentBehaviour = MouseBehaviour.FleeingFromNoise;
-        behaviourTimer = 0;
+        if (currentBehaviour != MouseBehaviour.Freeze)
+        {
+            lastNoiseHeard = noisePosition;
+            currentBehaviour = MouseBehaviour.FleeingFromNoise;
+            behaviourTimer = 0;
 
-        Vector3 hitPos = noisePosition;
-        hitPos.y = transform.position.y;
-        Vector3 opposite = (transform.position - hitPos).normalized;
 
-        agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
+            Vector3 hitPos = noisePosition;
+            hitPos.y = transform.position.y;
+            Vector3 opposite = (transform.position - hitPos).normalized;
 
-        SetMouseOverallSpeedMultiplier(5);
+            agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
+
+            SetMouseOverallSpeedMultiplier(5);
+        }
     }
 
-    private void SetMouseOverallSpeedMultiplier(float multiplier) 
+    private void SetMouseOverallSpeedMultiplier(float multiplier)
     {
         float speedMult = defaultSpeed * multiplier;
         float angularSpeedMult = defaultAngularSpeed * multiplier;
@@ -244,8 +257,17 @@ public class MouseEntity : InteractableObject
 
     private void OnDestroy()
     {
-        CorridorChangeManager.OnLevelChange -= UpdateDestination;
         AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player") 
+        {
+            fleeTimer = 0;
+            currentBehaviour = MouseBehaviour.Freeze;
+        }
     }
 }
 
@@ -254,5 +276,6 @@ public enum MouseBehaviour
 {
     Idle_Wander,
     Idle_Look,
-    FleeingFromNoise
+    FleeingFromNoise,
+    Freeze
 }
