@@ -7,7 +7,7 @@ public class MouseBob : MonoBehaviour
     public float walkingBobbingSpeed = 14f;
     public float bobbingAmount = 0.05f;
     public MouseEntity mouseEntity;
-    public bool allowMouseBob = true;
+    public bool AllowMouseBob = true;
 
     public AudioSource mouseFootstepSource;
     public AudioClip[] mouseWalkingSounds;
@@ -24,7 +24,7 @@ public class MouseBob : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (allowMouseBob && mouseEntity.MovementAmount > 0.001f)
+        if (AllowMouseBob && mouseEntity.MovementAmount > 0.001f)
         {
             //Player is moving
             timer += Time.deltaTime * walkingBobbingSpeed;

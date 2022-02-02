@@ -30,8 +30,8 @@ TagManager:
   - ParticleEffect
   - HideFromReflections
   - HideUnderable
-  - 
-  - 
+  - CorridorCollision
+  - InteractableNoCollide
   - 
   - 
   - 

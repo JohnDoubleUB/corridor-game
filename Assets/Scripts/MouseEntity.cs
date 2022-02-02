@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class MouseEntity : InteractableObject
 {
     public NavMeshAgent agent;
-    public float offsetFromPosition;
     public Animator mouseAnimator;
+    public MouseBob mouseBobber;
+    public float offsetFromPosition;
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
+    private float pickupSpeedMultiplier = 5f;
+
+    public bool IsHeld { get { return isHeld; } }
 
     //TODO: Make there a time limit for mouse to reach explore destination so it doesn't get stuck
     //TODO: Fix crouching letting you fall through the floor sometimes
@@ -20,7 +25,6 @@ public class MouseEntity : InteractableObject
 
 
     public MouseBehaviour currentBehaviour;
-
 
     private Vector3 entityPosition;
 
@@ -41,6 +45,7 @@ public class MouseEntity : InteractableObject
 
     private int minimumDestinationsSinceLastStand = 3;
     private bool initialBehaviourUpdate = true;
+    private bool isHeld;
 
     [SerializeField]
     [ReadOnlyField]
@@ -56,11 +61,14 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private float fleeTimer;
 
+    private Vector3 initialPosition;
+
     private void Awake()
     {
         defaultSpeed = agent.speed;
         defaultAngularSpeed = agent.angularSpeed;
         defaultAcceleration = agent.acceleration;
+        initialPosition = transform.position;
     }
 
 
@@ -71,17 +79,63 @@ public class MouseEntity : InteractableObject
         GenerateRandomIdleDelay();
     }
 
-
-    void DrawCircle(Vector3 center, float radius, Color color)
+    protected override void OnInteract()
     {
-        Vector3 prevPos = center + new Vector3(radius, 0, 0);
-        for (int i = 0; i < 30; i++)
+        print("pickup!");
+        if (GameManager.current.playerController.heldMouse == null) 
         {
-            float angle = (float)(i + 1) / 30.0f * Mathf.PI * 2.0f;
-            Vector3 newPos = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
-            Debug.DrawLine(prevPos, newPos, color);
-            prevPos = newPos;
+            SetPickedUp(true);
+            PlayerPickup();
         }
+    }
+
+    private void SetPickedUp(bool pickedUp) 
+    {
+        currentBehaviour = pickedUp ?  MouseBehaviour.Held : MouseBehaviour.Idle_Wander;
+        agent.enabled = !pickedUp;
+        IsInteractable = !pickedUp;
+        mouseAnimator.Play("Idle");
+        mouseBobber.AllowMouseBob = !pickedUp;
+    }
+
+
+    private async void PlayerPickup()
+    {
+        isHeld = false;
+        currentBehaviour = MouseBehaviour.Held;
+        if (!mouseAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) mouseAnimator.Play("Idle");
+
+        Vector3 positionAtTimeOfPickup = transform.position;
+        Quaternion rotationAtTimeOfPickup = transform.rotation;
+
+        float positionValue = 0;
+        float smoothedPositionValue;
+
+        Transform handTransform = GameManager.current.playerController.mouseHand;
+
+
+        Vector3 handPosition;
+        Quaternion handRotation;
+
+        GameManager.current.playerController.heldMouse = this;
+
+        while (positionValue < 1f)
+        {
+            handPosition = handTransform.position;
+            handRotation = handTransform.rotation;
+            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            transform.SetPositionAndRotation(
+                Vector3.Lerp(positionAtTimeOfPickup, handPosition, smoothedPositionValue),
+                Quaternion.Lerp(rotationAtTimeOfPickup, handRotation, smoothedPositionValue)
+                );
+            await Task.Yield();
+        }
+
+        transform.SetParent(handTransform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+        isHeld = true;
     }
 
     // Update is called once per frame
@@ -105,6 +159,9 @@ public class MouseEntity : InteractableObject
 
             case MouseBehaviour.Freeze:
                 Behaviour_Freeze();
+                break;
+
+            case MouseBehaviour.Held:
                 break;
         }
 
@@ -209,9 +266,6 @@ public class MouseEntity : InteractableObject
     {
         if (NavMesh.FindClosestEdge(transform.position, out NavMeshHit hit, NavMesh.AllAreas))
         {
-            DrawCircle(transform.position, hit.distance, Color.red);
-            Debug.DrawRay(hit.position, Vector3.up, Color.red);
-
             Vector3 hitPos = hit.position;
             hitPos.y = transform.position.y;
             Vector3 opposite = (transform.position - hitPos).normalized;
@@ -227,7 +281,7 @@ public class MouseEntity : InteractableObject
 
     private void ReactToNoise(Vector3 noisePosition)
     {
-        if (currentBehaviour != MouseBehaviour.Freeze)
+        if (currentBehaviour != MouseBehaviour.Freeze && currentBehaviour != MouseBehaviour.Held)
         {
             lastNoiseHeard = noisePosition;
             currentBehaviour = MouseBehaviour.FleeingFromNoise;
@@ -261,9 +315,9 @@ public class MouseEntity : InteractableObject
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player") 
+        if (currentBehaviour != MouseBehaviour.Held && other.tag == "Player") 
         {
             fleeTimer = 0;
             currentBehaviour = MouseBehaviour.Freeze;
@@ -277,5 +331,6 @@ public enum MouseBehaviour
     Idle_Wander,
     Idle_Look,
     FleeingFromNoise,
-    Freeze
+    Freeze,
+    Held
 }

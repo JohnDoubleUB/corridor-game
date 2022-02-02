@@ -71,6 +71,9 @@ public class CG_CharacterController : MonoBehaviour
 
     private Vector3 defaultCameraTransformOffset;
 
+    public MouseEntity heldMouse;
+    public Transform mouseHand;
+
     [SerializeField]
     [ReadOnlyField]
     private bool canUncrouch = true;
@@ -88,6 +91,7 @@ public class CG_CharacterController : MonoBehaviour
     [ReadOnlyField]
     private bool isCrouching;
 
+   
 
     private void OnEnable()
     {
@@ -288,7 +292,7 @@ public class CG_CharacterController : MonoBehaviour
         {
             RaycastHit lookedAtObject;
 
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward), out lookedAtObject, 2f, LayerMask.GetMask("Interactables")))
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward), out lookedAtObject, 2f, LayerMask.GetMask("Interactables", "InteractableNoCollide")))
             {
                 if (showDebug) Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * lookedAtObject.distance, Color.yellow);
 
