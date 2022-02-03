@@ -236,7 +236,7 @@ public class CG_CharacterController : MonoBehaviour
                 {
                     heldMouse.transform.SetParent(null);
                     heldMouse.transform.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward);
-                    heldMouse.ThrowAtTarget(target, 10f);
+                    heldMouse.ThrowAtTarget(target, 10f, playerCamera.transform.forward);
                     heldMouse = null;
                 }
                 //Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);

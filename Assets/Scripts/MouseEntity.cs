@@ -266,7 +266,7 @@ public class MouseEntity : InteractableObject
     private void Behaviour_Thrown() 
     {
         Vector3 positionButGround = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
-        if(Vector3.Distance(transform.position, entityPosition) < 0.2f || Vector3.Distance(transform.position, positionButGround) < 0.2f) 
+        if(Vector3.Distance(transform.position, entityPosition) < 0.05f || Vector3.Distance(transform.position, positionButGround) < 0.2f) 
         {
             Vector3 dir = (transform.position - entityPosition).normalized;
 
@@ -346,10 +346,11 @@ public class MouseEntity : InteractableObject
         }
     }
 
-    public void ThrowAtTarget(Vector3 target, float magnitude) 
+    public void ThrowAtTarget(Vector3 target, float magnitude, Vector3 forwardVector) 
     {
         mouseRB.isKinematic = false;
-        mouseRB.LaunchAtTarget(target, magnitude);
+        mouseRB.transform.forward = forwardVector;
+        mouseRB.LaunchAtTarget(target, Vector3.one * 600, magnitude);
         currentBehaviour = MouseBehaviour.Thrown;
     }
 }

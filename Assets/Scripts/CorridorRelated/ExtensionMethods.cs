@@ -39,9 +39,9 @@ public static class ExtensionMethods
         }
     }
 
-    public static void PlayClipAtTransform(this Transform transform, AudioClip clip, bool parentToTransform = true, float volume = 1f, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f) 
+    public static void PlayClipAtTransform(this Transform transform, AudioClip clip, bool parentToTransform = true, float volume = 1f, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
     {
-        if (AudioManager.current != null) 
+        if (AudioManager.current != null)
         {
             AudioSource audio = AudioManager.current.PlayClipAt(clip, transform.position, volume, withPitchVariation, delayInSeconds, noiseCanBeHeardByEntities, noiseAlertRadius);
             if (parentToTransform) audio.transform.parent = transform;
@@ -58,13 +58,13 @@ public static class ExtensionMethods
         List<TSource> result1 = new List<TSource>();
         List<TSource> result2 = new List<TSource>();
 
-        foreach (TSource sourceItem in source) 
+        foreach (TSource sourceItem in source)
         {
             if (predicate(sourceItem))
             {
                 result1.Add(sourceItem);
             }
-            else 
+            else
             {
                 result2.Add(sourceItem);
             }
@@ -74,15 +74,15 @@ public static class ExtensionMethods
         yield return result2;
     }
 
-    public static bool AnyAndAllMatchPredicate<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
+    public static bool AnyAndAllMatchPredicate<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
         bool hasItems = false;
 
-        foreach (TSource sourceItem in source) 
+        foreach (TSource sourceItem in source)
         {
             hasItems = true;
-            
-            if (!predicate(sourceItem)) 
+
+            if (!predicate(sourceItem))
             {
                 return false;
             }
@@ -147,7 +147,13 @@ public static class ExtensionMethods
         return new Vector3(aVec.x, aYValue, aVec.y);
     }
 
+
     public static void LaunchAtTarget(this Rigidbody rb, Vector3 target, float magnitude = 20f)
+    {
+        rb.LaunchAtTarget(target, Vector3.zero, magnitude);
+    }
+
+    public static void LaunchAtTarget(this Rigidbody rb, Vector3 target, Vector3 spin, float magnitude = 20f)
     {
         float distance = Vector3.Distance(target, rb.position);
         float desiredFinalMagnitude = magnitude * Mathf.Min(distance, 1f);
@@ -155,5 +161,6 @@ public static class ExtensionMethods
         Vector3 direction = (target - rb.position).normalized;
         Vector3 result = direction * speedNeeded;
         rb.velocity = result;
+        rb.angularVelocity = spin;
     }
 }
