@@ -78,7 +78,7 @@ public class CG_CharacterController : MonoBehaviour
     [ReadOnlyField]
     private bool canUncrouch = true;
 
-    
+
     [SerializeField]
     [ReadOnlyField]
     private bool isIlluminated;
@@ -86,12 +86,12 @@ public class CG_CharacterController : MonoBehaviour
     [SerializeField]
     [ReadOnlyField]
     private bool isJumping;
-    
+
     [SerializeField]
     [ReadOnlyField]
     private bool isCrouching;
 
-   
+    public Rigidbody testProjectilePrefab;
 
     private void OnEnable()
     {
@@ -111,17 +111,17 @@ public class CG_CharacterController : MonoBehaviour
         CorridorChangeManager.OnLevelChange += OnLevelChange;
     }
 
-    public void CandleEnterPlayerInRange(InteractableCandle candle) 
+    public void CandleEnterPlayerInRange(InteractableCandle candle)
     {
         if (!candlesInRangeOfPlayer.Contains(candle)) candlesInRangeOfPlayer.Add(candle);
     }
 
-    public void CandleExitPlayerInRange(InteractableCandle candle) 
+    public void CandleExitPlayerInRange(InteractableCandle candle)
     {
         if (candlesInRangeOfPlayer.Contains(candle)) candlesInRangeOfPlayer.Remove(candle);
     }
 
-    public void Interact(InteractableNote note) 
+    public void Interact(InteractableNote note)
     {
         interactingNote = note;
         bool isInteractingWithNote = interactingNote != null;
@@ -139,26 +139,26 @@ public class CG_CharacterController : MonoBehaviour
                 currentInteractable.IntiateInteract();
             }
         }
-        else 
+        else
         {
             interactingNote.PutDownItem();
         }
     }
 
-    private void OnLevelChange() 
+    private void OnLevelChange()
     {
         ShowLevelChangePrompt();
     }
 
-    private async void ShowLevelChangePrompt() 
+    private async void ShowLevelChangePrompt()
     {
-        if (levelChangePrompt != null) 
+        if (levelChangePrompt != null)
         {
             float positionValue = 0f;
             float positionSmoothed;
             Color newColor;
 
-            while (positionValue < 1) 
+            while (positionValue < 1)
             {
                 positionValue += Time.deltaTime * 0.1f;
                 positionSmoothed = Mathf.SmoothStep(0, 255, positionValue);
@@ -198,7 +198,7 @@ public class CG_CharacterController : MonoBehaviour
     void Update()
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
-        
+
         UpdateInteractable();
         if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
         if (!canMove) UpdateDraw();
@@ -217,7 +217,7 @@ public class CG_CharacterController : MonoBehaviour
             float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
             moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-            if (isJumping) 
+            if (isJumping)
             {
                 isJumping = false;
                 if (playerLandSounds != null && playerLandSounds.Any()) footStepPosition.PlayClipAtTransform(playerLandSounds[Random.Range(0, playerLandSounds.Length)], false, 0.2f);
@@ -228,7 +228,16 @@ public class CG_CharacterController : MonoBehaviour
                 moveDirection.y = jumpSpeed;
                 isJumping = true;
             }
+
+            //Just for testing
+            if (Input.GetMouseButtonDown(0) && testProjectilePrefab != null)
+            {
+                Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
+                if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
+            }
+
         }
+
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
         // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
         // as an acceleration (ms^-2)
@@ -269,21 +278,36 @@ public class CG_CharacterController : MonoBehaviour
 
         bool crouchButtonHeld = Input.GetButton("Crouch");
 
-        if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching)) 
+        if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
         {
             ToggleCrouching();
         }
     }
 
-    private void ToggleCrouching() 
+
+    private bool GetLookedAtPoint(out Vector3 result)
+    {
+        Vector3 tempOrigin = playerCamera.transform.position;
+        Vector3 tempDirection = playerCamera.transform.TransformDirection(Vector3.forward);
+
+        RaycastHit lookedAtObject;
+
+        bool resultBool = Physics.Raycast(tempOrigin, tempDirection, out lookedAtObject, float.MaxValue, LayerMask.GetMask("CorridorCollision", "Default"));
+
+
+        result = lookedAtObject.point;
+        return resultBool;
+    }
+
+    private void ToggleCrouching()
     {
         float downAmount = 4f;
         isCrouching = !isCrouching;
         HeadBobber.SetCrouching(isCrouching);
         characterController.height = isCrouching ? defaultColliderHeight / downAmount : defaultColliderHeight;
         speed = isCrouching ? defaultMovementSpeed / downAmount : defaultMovementSpeed;
-        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / (downAmount/2));
-        CameraOffsetTransform.localPosition = isCrouching ? new Vector3(defaultCameraTransformOffset.x, defaultCameraTransformOffset.y / downAmount, defaultCameraTransformOffset.z) : defaultCameraTransformOffset; 
+        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / (downAmount / 2));
+        CameraOffsetTransform.localPosition = isCrouching ? new Vector3(defaultCameraTransformOffset.x, defaultCameraTransformOffset.y / downAmount, defaultCameraTransformOffset.z) : defaultCameraTransformOffset;
     }
 
     private void UpdateInteractable(bool showDebug = false)
@@ -348,12 +372,12 @@ public class CG_CharacterController : MonoBehaviour
                     notepadGameObject = inViewPencilLayerObj;
 
                     //Only store the notepad once!
-                    if(notepadObject == null) notepadObject = inViewPencilLayerObj.GetComponent<Notepad>();
+                    if (notepadObject == null) notepadObject = inViewPencilLayerObj.GetComponent<Notepad>();
 
-                    if (notepadObject != null) 
-                    { 
-                        notepadObject.PencilOverPadArea = !nonWritingArea; 
-                        if(nonWritingArea) notepadObject.ClearCurrentLine();
+                    if (notepadObject != null)
+                    {
+                        notepadObject.PencilOverPadArea = !nonWritingArea;
+                        if (nonWritingArea) notepadObject.ClearCurrentLine();
                     }
                 }
 

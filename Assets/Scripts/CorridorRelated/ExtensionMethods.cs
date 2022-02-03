@@ -146,4 +146,14 @@ public static class ExtensionMethods
     {
         return new Vector3(aVec.x, aYValue, aVec.y);
     }
+
+    public static void LaunchAtTarget(this Rigidbody rb, Vector3 target, float magnitude = 20f)
+    {
+        float distance = Vector3.Distance(target, rb.position);
+        float desiredFinalMagnitude = magnitude * Mathf.Min(distance, 1f);
+        float speedNeeded = distance / 4 + desiredFinalMagnitude; // 4 is an arbitrary value which suits well my friction / drag
+        Vector3 direction = (target - rb.position).normalized;
+        Vector3 result = direction * speedNeeded;
+        rb.velocity = result;
+    }
 }

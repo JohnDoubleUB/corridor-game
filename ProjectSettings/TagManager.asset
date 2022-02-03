@@ -32,7 +32,7 @@ TagManager:
   - HideUnderable
   - CorridorCollision
   - InteractableNoCollide
-  - 
+  - Player
   - 
   - 
   - 
