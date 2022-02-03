@@ -9,6 +9,8 @@ public class MouseEntity : InteractableObject
     public NavMeshAgent agent;
     public Animator mouseAnimator;
     public MouseBob mouseBobber;
+    public Rigidbody mouseRB;
+
     public float offsetFromPosition;
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
@@ -82,16 +84,16 @@ public class MouseEntity : InteractableObject
     protected override void OnInteract()
     {
         print("pickup!");
-        if (GameManager.current.playerController.heldMouse == null) 
+        if (GameManager.current.playerController.heldMouse == null && currentBehaviour != MouseBehaviour.Thrown)
         {
             SetPickedUp(true);
             PlayerPickup();
         }
     }
 
-    private void SetPickedUp(bool pickedUp) 
+    private void SetPickedUp(bool pickedUp)
     {
-        currentBehaviour = pickedUp ?  MouseBehaviour.Held : MouseBehaviour.Idle_Wander;
+        currentBehaviour = pickedUp ? MouseBehaviour.Held : MouseBehaviour.Idle_Wander;
         agent.enabled = !pickedUp;
         IsInteractable = !pickedUp;
         mouseAnimator.Play("Idle");
@@ -163,6 +165,10 @@ public class MouseEntity : InteractableObject
 
             case MouseBehaviour.Held:
                 break;
+
+            case MouseBehaviour.Thrown:
+                Behaviour_Thrown();
+                break;
         }
 
         entityPosition = transform.position;
@@ -176,7 +182,7 @@ public class MouseEntity : InteractableObject
         {
             behaviourTimer += Time.deltaTime;
         }
-        else 
+        else
         {
             behaviourTimer = 0;
             currentBehaviour = MouseBehaviour.Idle_Wander;
@@ -257,6 +263,19 @@ public class MouseEntity : InteractableObject
         }
     }
 
+    private void Behaviour_Thrown() 
+    {
+        if(Vector3.Distance(transform.position, entityPosition) < 0.2f) 
+        {
+            mouseRB.isKinematic = true;
+            transform.rotation = Quaternion.identity;
+            Vector3 newPosition = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
+            transform.position = NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, NavMesh.AllAreas) ? new Vector3(hit.position.x, newPosition.y, hit.position.z) : newPosition;
+            SetPickedUp(false);
+        }
+    } 
+
+
     private void GenerateRandomIdleDelay()
     {
         currentIdleDelay = Random.Range(Mathf.Max(idleDelay - idleDelayVariation, 1f), idleDelayVariation + idleDelay);
@@ -281,7 +300,7 @@ public class MouseEntity : InteractableObject
 
     private void ReactToNoise(Vector3 noisePosition)
     {
-        if (currentBehaviour != MouseBehaviour.Freeze && currentBehaviour != MouseBehaviour.Held)
+        if (currentBehaviour != MouseBehaviour.Freeze && currentBehaviour != MouseBehaviour.Held && currentBehaviour != MouseBehaviour.Thrown)
         {
             lastNoiseHeard = noisePosition;
             currentBehaviour = MouseBehaviour.FleeingFromNoise;
@@ -317,11 +336,18 @@ public class MouseEntity : InteractableObject
 
     public void OnTriggerEnter(Collider other)
     {
-        if (currentBehaviour != MouseBehaviour.Held && other.tag == "Player") 
+        if (currentBehaviour != MouseBehaviour.Held && currentBehaviour != MouseBehaviour.Thrown && other.tag == "Player") 
         {
             fleeTimer = 0;
             currentBehaviour = MouseBehaviour.Freeze;
         }
+    }
+
+    public void ThrowAtTarget(Vector3 target, float magnitude) 
+    {
+        mouseRB.isKinematic = false;
+        mouseRB.LaunchAtTarget(target, magnitude);
+        currentBehaviour = MouseBehaviour.Thrown;
     }
 }
 
@@ -332,5 +358,6 @@ public enum MouseBehaviour
     Idle_Look,
     FleeingFromNoise,
     Freeze,
-    Held
+    Held,
+    Thrown
 }

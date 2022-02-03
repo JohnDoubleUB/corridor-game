@@ -230,10 +230,17 @@ public class CG_CharacterController : MonoBehaviour
             }
 
             //Just for testing
-            if (Input.GetMouseButtonDown(0) && testProjectilePrefab != null)
+            if (Input.GetMouseButtonDown(0) && heldMouse != null)
             {
-                Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
-                if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
+                if (GetLookedAtPoint(out Vector3 target))
+                {
+                    heldMouse.transform.SetParent(null);
+                    heldMouse.transform.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward);
+                    heldMouse.ThrowAtTarget(target, 10f);
+                    heldMouse = null;
+                }
+                //Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
+                //if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
             }
 
         }
