@@ -83,7 +83,6 @@ public class MouseEntity : InteractableObject
 
     protected override void OnInteract()
     {
-        print("pickup!");
         if (GameManager.current.playerController.heldMouse == null && currentBehaviour != MouseBehaviour.Thrown)
         {
             SetPickedUp(true);
