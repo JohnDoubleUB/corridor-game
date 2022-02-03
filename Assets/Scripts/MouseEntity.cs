@@ -265,10 +265,12 @@ public class MouseEntity : InteractableObject
 
     private void Behaviour_Thrown() 
     {
-        if(Vector3.Distance(transform.position, entityPosition) < 0.2f) 
+        if(Vector3.Distance(transform.position, entityPosition) < 0.1f) 
         {
+            Vector3 dir = (transform.position - entityPosition).normalized;
+
             mouseRB.isKinematic = true;
-            transform.rotation = Quaternion.identity;
+            transform.rotation.SetLookRotation(dir);
             Vector3 newPosition = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
             transform.position = NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, NavMesh.AllAreas) ? new Vector3(hit.position.x, newPosition.y, hit.position.z) : newPosition;
             SetPickedUp(false);
