@@ -265,7 +265,8 @@ public class MouseEntity : InteractableObject
 
     private void Behaviour_Thrown() 
     {
-        if(Vector3.Distance(transform.position, entityPosition) < 0.1f) 
+        Vector3 positionButGround = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
+        if(Vector3.Distance(transform.position, entityPosition) < 0.2f || Vector3.Distance(transform.position, positionButGround) < 0.2f) 
         {
             Vector3 dir = (transform.position - entityPosition).normalized;
 
