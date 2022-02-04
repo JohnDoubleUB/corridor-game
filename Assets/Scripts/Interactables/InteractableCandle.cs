@@ -20,6 +20,8 @@ public class InteractableCandle : InteractableObject
     private bool candleInitial = true;
     private int lineOfSightMask;
     
+    [SerializeField]
+    [ReadOnlyField]
     private bool inRangeOfPlayer;
     public bool lineOfSightToPlayer;
 
@@ -97,7 +99,7 @@ public class InteractableCandle : InteractableObject
         lineOfSightToPlayer = toggleLight && 
             inRangeOfPlayer &&
             Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out hitResult, lineOfSightMask) &&
-            hitResult.collider.gameObject.tag == "Player";
+            hitResult.collider.tag == "Player";
 
         if (lineOfSightToPlayer) Debug.DrawLine(transform.position, hitResult.point, Color.red);
     }

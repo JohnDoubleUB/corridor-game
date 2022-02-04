@@ -4351,7 +4351,7 @@ GameObject:
   - component: {fileID: 1583393752}
   - component: {fileID: 1583393753}
   - component: {fileID: 1583393754}
-  m_Layer: 0
+  m_Layer: 25
   m_Name: CharacterSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5990,7 +5990,7 @@ GameObject:
   - component: {fileID: 2067456599}
   - component: {fileID: 2067456598}
   - component: {fileID: 2067456600}
-  m_Layer: 25
+  m_Layer: 0
   m_Name: First Person Player
   m_TagString: Player
   m_Icon: {fileID: 0}
