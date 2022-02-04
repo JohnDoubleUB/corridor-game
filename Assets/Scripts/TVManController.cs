@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class TVManController : MonoBehaviour
 {
+    public LayerMask lineOfSightMask;
     public bool BehaviourEnabled = true;
     public bool IsHunting = true;
     public float movementSpeed = 1f;
@@ -41,7 +42,6 @@ public class TVManController : MonoBehaviour
     private bool playerFacingPositive;
 
     private AudioSource audioSource;
-    private int lineOfSightMask;
 
     private Vector3 initialPosition;
     private Quaternion initialRotation;
@@ -51,7 +51,6 @@ public class TVManController : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        lineOfSightMask = LayerMask.NameToLayer("RenderTexture");
         initialPosition = transform.position;
         initialRotation = transform.rotation;
     }

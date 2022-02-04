@@ -2,6 +2,7 @@
 
 public class InteractableCandle : InteractableObject
 {
+    public LayerMask lineOfSightMask;
     public ParticleSystem CandleParticle;
     public Light CandleLight;
     public MeshRenderer CandleMesh;
@@ -9,6 +10,7 @@ public class InteractableCandle : InteractableObject
     public AudioClip candleOffSound;
     public float candleSoundVolume = 1f;
     public float candleSoundRadius = 0.2f;
+    
 
     public bool IsIlluminatingPlayer
     {
@@ -18,18 +20,11 @@ public class InteractableCandle : InteractableObject
     private Material meshMat;
     private bool toggleLight = true;
     private bool candleInitial = true;
-    private int lineOfSightMask;
     
     [SerializeField]
     [ReadOnlyField]
     private bool inRangeOfPlayer;
     public bool lineOfSightToPlayer;
-
-
-    private void Awake()
-    {
-        lineOfSightMask = LayerMask.NameToLayer("RenderTexture");
-    }
 
     private void Start()
     {
@@ -94,14 +89,13 @@ public class InteractableCandle : InteractableObject
 
     private void Update()
     {
-
         RaycastHit hitResult = new RaycastHit();
         lineOfSightToPlayer = toggleLight && 
             inRangeOfPlayer &&
             Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out hitResult, lineOfSightMask) &&
             hitResult.collider.tag == "Player";
 
-        if (lineOfSightToPlayer) Debug.DrawLine(transform.position, hitResult.point, Color.red);
+        if (lineOfSightToPlayer) Debug.DrawLine(CandleParticle.transform.position, hitResult.point, Color.red);
     }
 
 }

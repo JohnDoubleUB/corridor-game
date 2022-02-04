@@ -77,7 +77,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - Vector1_5122B5EB: 0
-    - _AlternateTextureSwitch: 1.0130355
+    - _AlternateTextureSwitch: 0.9684643
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

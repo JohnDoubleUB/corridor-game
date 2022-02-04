@@ -267,6 +267,9 @@ MonoBehaviour:
   ObjectName: Candle
   IsInteractable: 1
   puzzleObjectToNotifyOnInteract: {fileID: 0}
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 33554433
   CandleParticle: {fileID: 2410423487537486717}
   CandleLight: {fileID: 8434345746213980446}
   CandleMesh: {fileID: 6022417073939229649}
@@ -274,6 +277,7 @@ MonoBehaviour:
   candleOffSound: {fileID: 8300000, guid: 9187ab9f01c756a4595879553668ace0, type: 3}
   candleSoundVolume: 1
   candleSoundRadius: 0.2
+  inRangeOfPlayer: 0
   lineOfSightToPlayer: 0
 --- !u!135 &599093930
 SphereCollider:
