@@ -179,7 +179,6 @@ public class CorridorLayoutHandler : MonoBehaviour
         for (int i = 0; i < Pickups.Length; i++)
         {
             PickupSpawn pickup = Pickups[i];
-            //TODO: Something here to make keys spawn
             if (pickup.PickupItemPrefab != null && pickup.PotentialSpawnPositions.Any())
             {
                 if (LayoutData.collectedItems.Contains(i) || pickup.PickupItemPrefab.pickupType == PickupType.Momento && !InventoryManager.current.AnyFreeMomentoSlots)
