@@ -22,6 +22,7 @@ public class MouseEntity : InteractableObject
 
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
+    
     public float fleeSpeedMultiplier = 5f;
     public bool IsBeingChased;
 
@@ -38,6 +39,7 @@ public class MouseEntity : InteractableObject
 
     public float safeDistanceFromSound = 4f;
 
+    public float maxWanderTime = 10f; //This is to precent the mouse from getting stuck trying to wander to a point 
 
     public MouseBehaviour currentBehaviour;
 
@@ -292,7 +294,6 @@ public class MouseEntity : InteractableObject
     private void Behaviour_Freeze()
     {
         if (!mouseAnimator.GetCurrentAnimatorStateInfo(0).IsName("Scared")) mouseAnimator.Play("Scared", 0);
-        //if (!agent.isStopped) agent.isStopped = true;
         if (behaviourTimer < currentIdleDelay / 2)
         {
             behaviourTimer += Time.deltaTime;
@@ -300,7 +301,6 @@ public class MouseEntity : InteractableObject
         else
         {
             CurrentBehaviour = MouseBehaviour.Idle;
-            //agent.isStopped = false;
         }
     }
 
@@ -343,9 +343,13 @@ public class MouseEntity : InteractableObject
         {
             Explore();
         }
-        else if (agent.remainingDistance == 0) 
-        { 
-            CurrentBehaviour = MouseBehaviour.Idle; 
+        else if (agent.remainingDistance == 0 || behaviourTimer > maxWanderTime)
+        {
+            CurrentBehaviour = MouseBehaviour.Idle;
+        }
+        else 
+        {
+            behaviourTimer += Time.deltaTime;
         }
     }
 
