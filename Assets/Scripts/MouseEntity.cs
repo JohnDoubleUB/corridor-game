@@ -41,6 +41,21 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private int destinationsSinceLastIdleStand;
 
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float fleeTimer;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float behaviourTimer;
+
+    private float wanderTimeLimitSeconds = 1f;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float wanderTime;
+
     private Vector3 lastNoiseHeard;
 
 
@@ -48,19 +63,9 @@ public class MouseEntity : InteractableObject
     private bool initialBehaviourUpdate = true;
     private bool isHeld;
 
-    [SerializeField]
-    [ReadOnlyField]
-    private float behaviourTimer;
-
     private float defaultSpeed;
     private float defaultAngularSpeed;
     private float defaultAcceleration;
-
-
-
-    [SerializeField]
-    [ReadOnlyField]
-    private float fleeTimer;
 
     private Vector3 initialPosition;
 
@@ -96,6 +101,8 @@ public class MouseEntity : InteractableObject
         IsInteractable = !pickedUp;
         mouseAnimator.Play("Idle");
         mouseBobber.AllowMouseBob = !pickedUp;
+        behaviourTimer = 0f;
+        wanderTime = 0f;
     }
 
 
@@ -202,7 +209,7 @@ public class MouseEntity : InteractableObject
     private void Behaviour_IdleExplore()
     {
         if (fleeTimer != 0f) fleeTimer = 0f;
-        if (agent.remainingDistance == 0)
+        if (agent.remainingDistance == 0 || wanderTime > wanderTimeLimitSeconds)
         {
             if (behaviourTimer < currentIdleDelay)
             {
@@ -222,8 +229,13 @@ public class MouseEntity : InteractableObject
                     destinationsSinceLastIdleStand++;
                 }
                 behaviourTimer = 0;
+                wanderTimeLimitSeconds = 0;
                 GenerateRandomIdleDelay();
             }
+        }
+        else 
+        {
+            wanderTime += Time.deltaTime;
         }
     }
 
@@ -306,7 +318,7 @@ public class MouseEntity : InteractableObject
             lastNoiseHeard = noisePosition;
             currentBehaviour = MouseBehaviour.FleeingFromNoise;
             behaviourTimer = 0;
-
+            wanderTime = 0;
 
             Vector3 hitPos = noisePosition;
             hitPos.y = transform.position.y;
