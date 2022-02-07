@@ -2190,7 +2190,7 @@ PrefabInstance:
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7
+      value: 23.77
       objectReference: {fileID: 0}
     - target: {fileID: 4759937094575455928, guid: f32b440fe64c6d84fa9187a259a644f3,
         type: 3}
@@ -6795,10 +6795,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1291968119, guid: 5efe1d3c343b84a438ede38fa511fd71, type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3363048708282944193, guid: 5efe1d3c343b84a438ede38fa511fd71,
         type: 3}
       propertyPath: m_RootOrder

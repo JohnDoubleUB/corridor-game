@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,9 +12,22 @@ public class MouseEntity : InteractableObject
     public MouseBob mouseBobber;
     public Rigidbody mouseRB;
 
-    public float offsetFromPosition;
+    public AudioClip[] MouseThrowNoises;
+    public AudioClip[] MouseLandNoises;
+    public AudioClip[] MouseSqueaks;
+
+    public float squeakDelay = 6f;
+    public float squeakDelayVariation = 3f;
+
+
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
+    public float fleeSpeedMultiplier = 5f;
+    public bool IsBeingChased;
+
+    public float landNoiseRadius = 6f;
+    public float noiseVolume = 1f;
+
     private float pickupSpeedMultiplier = 5f;
 
     public bool IsHeld { get { return isHeld; } }
@@ -26,6 +40,35 @@ public class MouseEntity : InteractableObject
 
 
     public MouseBehaviour currentBehaviour;
+
+    public MouseBehaviour CurrentBehaviour
+    {
+        get { return currentBehaviour; }
+        private set
+        {
+            bool isNewBehaviour = currentBehaviour != value;
+            bool isFleeingFromTvMan = value == MouseBehaviour.ChasedByTVMan;
+            bool isFleeing = value == MouseBehaviour.FleeingFromNoise || isFleeingFromTvMan;
+            bool needsToMove = isFleeing || value == MouseBehaviour.Wander;
+            bool isBeingHeld = value == MouseBehaviour.Held;
+
+            if (agent.isActiveAndEnabled) agent.isStopped = !needsToMove;
+
+            if (isBeingHeld || needsToMove) mouseAnimator.Play(isFleeing && isNewBehaviour ? "Startled" : "Idle", 0);
+
+            if (isNewBehaviour || isFleeing)
+            {
+                initialBehaviourUpdate = isNewBehaviour;
+                behaviourJustChanged = isNewBehaviour;
+                currentBehaviour = value;
+                behaviourTimer = 0f;
+                fleeTimer = 0f;
+                SetMouseOverallSpeedMultiplier(isFleeing ? fleeSpeedMultiplier : 1);
+            }
+        }
+    }
+
+    private List<AudioSource> throwNoises = new List<AudioSource>();
 
     private Vector3 entityPosition;
 
@@ -50,17 +93,21 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private float behaviourTimer;
 
-    private float wanderTimeLimitSeconds = 1f;
+    [SerializeField]
+    [ReadOnlyField]
+    private float currentSqueakDelay;
 
     [SerializeField]
     [ReadOnlyField]
-    private float wanderTime;
+    private float squeakTimer;
 
     private Vector3 lastNoiseHeard;
 
-
     private int minimumDestinationsSinceLastStand = 3;
+
     private bool initialBehaviourUpdate = true;
+    private bool behaviourJustChanged = false;
+
     private bool isHeld;
 
     private float defaultSpeed;
@@ -83,11 +130,12 @@ public class MouseEntity : InteractableObject
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         entityPosition = transform.position;
         GenerateRandomIdleDelay();
+        GenerateRandomSqueakDelay();
     }
 
     protected override void OnInteract()
     {
-        if (GameManager.current.playerController.heldMouse == null && currentBehaviour != MouseBehaviour.Thrown)
+        if (GameManager.current.playerController.heldMouse == null && CurrentBehaviour != MouseBehaviour.Thrown)
         {
             SetPickedUp(true);
             PlayerPickup();
@@ -96,21 +144,32 @@ public class MouseEntity : InteractableObject
 
     private void SetPickedUp(bool pickedUp)
     {
-        currentBehaviour = pickedUp ? MouseBehaviour.Held : MouseBehaviour.Idle_Wander;
+        CurrentBehaviour = pickedUp ? MouseBehaviour.Held : MouseBehaviour.Idle;
         agent.enabled = !pickedUp;
         IsInteractable = !pickedUp;
-        mouseAnimator.Play("Idle");
         mouseBobber.AllowMouseBob = !pickedUp;
-        behaviourTimer = 0f;
-        wanderTime = 0f;
+        mouseAnimator.Play("Startled", 0);
+        if (!pickedUp && MouseLandNoises != null && MouseLandNoises.Any()) 
+        { 
+            transform.PlayClipAtTransform(MouseLandNoises[Random.Range(0, MouseLandNoises.Length)], true, noiseVolume, true, 0, true, landNoiseRadius);
+            
+            foreach (AudioSource throwNoise in throwNoises) 
+            {
+                if (throwNoise != null) 
+                {
+                    throwNoise.Stop();
+                    Destroy(throwNoise.gameObject);
+                }
+            }
+
+        }
     }
 
 
     private async void PlayerPickup()
     {
         isHeld = false;
-        currentBehaviour = MouseBehaviour.Held;
-        if (!mouseAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) mouseAnimator.Play("Idle");
+        CurrentBehaviour = MouseBehaviour.Held;
 
         Vector3 positionAtTimeOfPickup = transform.position;
         Quaternion rotationAtTimeOfPickup = transform.rotation;
@@ -149,15 +208,51 @@ public class MouseEntity : InteractableObject
     void Update()
     {
         MovementAmount = Vector3.Distance(transform.position, entityPosition);
+        behaviourJustChanged = false;
 
-        switch (currentBehaviour)
+
+        CheckIfAndTransitionToChased();
+        BehaviourUpdate();
+
+        switch (CurrentBehaviour) 
         {
-            case MouseBehaviour.Idle_Wander:
-                Behaviour_IdleExplore();
+            case MouseBehaviour.Idle:
+            case MouseBehaviour.Held:
+            case MouseBehaviour.Look:
+            case MouseBehaviour.Wander:
+                if (squeakTimer > currentSqueakDelay)
+                {
+                    if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], true, noiseVolume, true, 0, false);
+                    GenerateRandomSqueakDelay();
+                    squeakTimer = 0f;
+                }
+                else 
+                {
+                    squeakTimer += Time.deltaTime;
+                }
+                break;
+        }
+
+
+        entityPosition = transform.position;
+        if (!behaviourJustChanged) initialBehaviourUpdate = false;
+    }
+
+
+    private void BehaviourUpdate() 
+    {
+        switch (CurrentBehaviour)
+        {
+            case MouseBehaviour.Idle:
+                Behaviour_Idle();
                 break;
 
-            case MouseBehaviour.Idle_Look:
+            case MouseBehaviour.Look:
                 Behaviour_IdleStand();
+                break;
+
+            case MouseBehaviour.Wander:
+                Behaviour_Wander();
                 break;
 
             case MouseBehaviour.FleeingFromNoise:
@@ -171,28 +266,41 @@ public class MouseEntity : InteractableObject
             case MouseBehaviour.Held:
                 break;
 
+            case MouseBehaviour.ChasedByTVMan:
+                break;
+
             case MouseBehaviour.Thrown:
                 Behaviour_Thrown();
                 break;
         }
+    }
 
-        entityPosition = transform.position;
+    private void CheckIfAndTransitionToChased() 
+    {
+        switch (CurrentBehaviour) 
+        {
+            case MouseBehaviour.Idle:
+            case MouseBehaviour.Freeze:
+            case MouseBehaviour.Look:
+            case MouseBehaviour.Wander:
+            case MouseBehaviour.FleeingFromNoise:
+                if (IsBeingChased) CurrentBehaviour = MouseBehaviour.ChasedByTVMan;
+                break;
+        }
     }
 
     private void Behaviour_Freeze()
     {
         if (!mouseAnimator.GetCurrentAnimatorStateInfo(0).IsName("Scared")) mouseAnimator.Play("Scared", 0);
-        if (!agent.isStopped) agent.isStopped = true;
+        //if (!agent.isStopped) agent.isStopped = true;
         if (behaviourTimer < currentIdleDelay / 2)
         {
             behaviourTimer += Time.deltaTime;
         }
         else
         {
-            behaviourTimer = 0;
-            currentBehaviour = MouseBehaviour.Idle_Wander;
-            mouseAnimator.Play("Idle");
-            agent.isStopped = false;
+            CurrentBehaviour = MouseBehaviour.Idle;
+            //agent.isStopped = false;
         }
     }
 
@@ -206,36 +314,38 @@ public class MouseEntity : InteractableObject
     }
 
 
-    private void Behaviour_IdleExplore()
+    private void Behaviour_Idle()
     {
-        if (fleeTimer != 0f) fleeTimer = 0f;
-        if (agent.remainingDistance == 0 || wanderTime > wanderTimeLimitSeconds)
+        if (behaviourTimer < currentIdleDelay)
         {
-            if (behaviourTimer < currentIdleDelay)
+            behaviourTimer += Time.deltaTime;
+        }
+        else
+        {
+            if (destinationsSinceLastIdleStand >= minimumDestinationsSinceLastStand && Random.value < chanceToStand)
             {
-                behaviourTimer += Time.deltaTime;
+                CurrentBehaviour = MouseBehaviour.Look;
+                destinationsSinceLastIdleStand = 0;
             }
             else
             {
-                if (destinationsSinceLastIdleStand >= minimumDestinationsSinceLastStand && Random.value < chanceToStand)
-                {
-                    currentBehaviour = MouseBehaviour.Idle_Look;
-                    initialBehaviourUpdate = true;
-                    destinationsSinceLastIdleStand = 0;
-                }
-                else
-                {
-                    Explore();
-                    destinationsSinceLastIdleStand++;
-                }
-                behaviourTimer = 0;
-                wanderTimeLimitSeconds = 0;
-                GenerateRandomIdleDelay();
+                CurrentBehaviour = MouseBehaviour.Wander;
+                destinationsSinceLastIdleStand++;
             }
+
+            GenerateRandomIdleDelay();
         }
-        else 
+    }
+
+    private void Behaviour_Wander()
+    {
+        if (initialBehaviourUpdate)
         {
-            wanderTime += Time.deltaTime;
+            Explore();
+        }
+        else if (agent.remainingDistance == 0) 
+        { 
+            CurrentBehaviour = MouseBehaviour.Idle; 
         }
     }
 
@@ -243,15 +353,14 @@ public class MouseEntity : InteractableObject
     {
         if (Vector3.Distance(transform.position, lastNoiseHeard) > safeDistanceFromSound)
         {
-            behaviourTimer = 0;
-            //GenerateRandomIdleDelay();
-            currentBehaviour = MouseBehaviour.Idle_Wander;
+            CurrentBehaviour = MouseBehaviour.Idle;
         }
 
-        if (fleeTimer > 1f)
+
+
+        if (fleeTimer > 2f)
         {
-            fleeTimer = 0f;
-            currentBehaviour = MouseBehaviour.Freeze;
+            CurrentBehaviour = MouseBehaviour.Freeze;
         }
         else if (MovementAmount < agent.speed)
         {
@@ -264,19 +373,17 @@ public class MouseEntity : InteractableObject
         if (initialBehaviourUpdate)
         {
             mouseAnimator.Play("Idle_Standup", 0);
-            initialBehaviourUpdate = false;
         }
         else if (mouseAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Idle"))
         {
-            currentBehaviour = MouseBehaviour.Idle_Wander;
-            SetMouseOverallSpeedMultiplier(1);
+            CurrentBehaviour = MouseBehaviour.Idle;
         }
     }
 
-    private void Behaviour_Thrown() 
+    private void Behaviour_Thrown()
     {
         Vector3 positionButGround = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
-        if(Vector3.Distance(transform.position, entityPosition) < 0.05f || Vector3.Distance(transform.position, positionButGround) < 0.2f) 
+        if (Vector3.Distance(transform.position, entityPosition) < 0.05f || Vector3.Distance(transform.position, positionButGround) < 0.2f)
         {
             Vector3 dir = (transform.position - entityPosition).normalized;
 
@@ -286,12 +393,17 @@ public class MouseEntity : InteractableObject
             transform.position = NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, NavMesh.AllAreas) ? new Vector3(hit.position.x, newPosition.y, hit.position.z) : newPosition;
             SetPickedUp(false);
         }
-    } 
+    }
 
 
     private void GenerateRandomIdleDelay()
     {
         currentIdleDelay = Random.Range(Mathf.Max(idleDelay - idleDelayVariation, 1f), idleDelayVariation + idleDelay);
+    }
+
+    private void GenerateRandomSqueakDelay() 
+    {
+        currentSqueakDelay = Random.Range(Mathf.Max(squeakDelay - squeakDelayVariation, 1f), squeakDelayVariation + squeakDelay);
     }
 
     private void Explore()
@@ -308,17 +420,15 @@ public class MouseEntity : InteractableObject
 
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
-        if (Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
+        if (noiseOrigin != NoiseOrigin.Mouse && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
     }
 
     private void ReactToNoise(Vector3 noisePosition)
     {
-        if (currentBehaviour != MouseBehaviour.Freeze && currentBehaviour != MouseBehaviour.Held && currentBehaviour != MouseBehaviour.Thrown)
+        if (CurrentBehaviour != MouseBehaviour.Freeze && CurrentBehaviour != MouseBehaviour.Held && CurrentBehaviour != MouseBehaviour.Thrown)
         {
             lastNoiseHeard = noisePosition;
-            currentBehaviour = MouseBehaviour.FleeingFromNoise;
-            behaviourTimer = 0;
-            wanderTime = 0;
+            
 
             Vector3 hitPos = noisePosition;
             hitPos.y = transform.position.y;
@@ -326,7 +436,7 @@ public class MouseEntity : InteractableObject
 
             agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
 
-            SetMouseOverallSpeedMultiplier(5);
+            CurrentBehaviour = MouseBehaviour.FleeingFromNoise;
         }
     }
 
@@ -349,29 +459,35 @@ public class MouseEntity : InteractableObject
 
     public void OnTriggerEnter(Collider other)
     {
-        if (currentBehaviour != MouseBehaviour.Held && currentBehaviour != MouseBehaviour.Thrown && other.tag == "Player") 
+        if (CurrentBehaviour != MouseBehaviour.Held && CurrentBehaviour != MouseBehaviour.Thrown && other.tag == "Player")
         {
-            fleeTimer = 0;
-            currentBehaviour = MouseBehaviour.Freeze;
+            CurrentBehaviour = MouseBehaviour.Freeze;
         }
     }
 
-    public void ThrowAtTarget(Vector3 target, float magnitude, Vector3 forwardVector) 
+    public void ThrowAtTarget(Vector3 target, float magnitude, Vector3 forwardVector)
     {
         mouseRB.isKinematic = false;
         mouseRB.transform.forward = forwardVector;
         mouseRB.LaunchAtTarget(target, Vector3.one * 600, magnitude);
-        currentBehaviour = MouseBehaviour.Thrown;
+        CurrentBehaviour = MouseBehaviour.Thrown;
+        
+        if (MouseThrowNoises != null && MouseThrowNoises.Any()) 
+        {
+            throwNoises.Add(transform.PlayClipAtTransform(MouseThrowNoises[Random.Range(0, MouseThrowNoises.Length)], true, noiseVolume, true, 0, false));
+        }
     }
 }
 
 
 public enum MouseBehaviour
 {
-    Idle_Wander,
-    Idle_Look,
+    Idle,
+    Look,
+    Wander,
     FleeingFromNoise,
     Freeze,
     Held,
-    Thrown
+    Thrown,
+    ChasedByTVMan
 }

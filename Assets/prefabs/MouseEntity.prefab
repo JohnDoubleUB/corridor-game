@@ -389,17 +389,36 @@ MonoBehaviour:
   mouseAnimator: {fileID: 3363048706777202386}
   mouseBobber: {fileID: 3363048707506875438}
   mouseRB: {fileID: 1291968119}
-  offsetFromPosition: 0
+  MouseThrowNoises:
+  - {fileID: 8300000, guid: 363f3877647a79c4d9999a5658b043c8, type: 3}
+  - {fileID: 8300000, guid: 5269b0c630ead0342a642cf0952a2618, type: 3}
+  - {fileID: 8300000, guid: 5bf4c06f2b102ba4188efbe7d576f5dc, type: 3}
+  MouseLandNoises:
+  - {fileID: 8300000, guid: 730882c964ccee548bec56b126cb0ed8, type: 3}
+  - {fileID: 8300000, guid: 75346dbe69ccbdf4ebec4bd5bb726ebb, type: 3}
+  MouseSqueaks:
+  - {fileID: 8300000, guid: 22f6f182d69d3654c8de029bf7d547d1, type: 3}
+  - {fileID: 8300000, guid: e13b4ade015d72c4ba18f1aec0b8c390, type: 3}
+  - {fileID: 8300000, guid: 7817bacac241d974fbca8fe71b661cb5, type: 3}
+  - {fileID: 8300000, guid: 5528fb0f9a3a73448a72dd381d8f688d, type: 3}
+  squeakDelay: 6
+  squeakDelayVariation: 3
   idleDelay: 6
   idleDelayVariation: 3
+  fleeSpeedMultiplier: 5
+  IsBeingChased: 0
+  landNoiseRadius: 6
+  noiseVolume: 1
   chanceToStand: 0.5
-  safeDistanceFromSound: 1
+  safeDistanceFromSound: 4
   currentBehaviour: 0
   MovementAmount: 0
   currentIdleDelay: 0
   destinationsSinceLastIdleStand: 0
-  behaviourTimer: 0
   fleeTimer: 0
+  behaviourTimer: 0
+  currentSqueakDelay: 0
+  squeakTimer: 0
 --- !u!82 &3363048708282944196
 AudioSource:
   m_ObjectHideFlags: 0
@@ -506,7 +525,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0

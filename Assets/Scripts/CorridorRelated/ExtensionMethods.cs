@@ -39,13 +39,17 @@ public static class ExtensionMethods
         }
     }
 
-    public static void PlayClipAtTransform(this Transform transform, AudioClip clip, bool parentToTransform = true, float volume = 1f, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
+    public static AudioSource PlayClipAtTransform(this Transform transform, AudioClip clip, bool parentToTransform = true, float volume = 1f, bool withPitchVariation = true, float delayInSeconds = 0f, bool noiseCanBeHeardByEntities = true, float noiseAlertRadius = 10f)
     {
         if (AudioManager.current != null)
         {
             AudioSource audio = AudioManager.current.PlayClipAt(clip, transform.position, volume, withPitchVariation, delayInSeconds, noiseCanBeHeardByEntities, noiseAlertRadius);
             if (parentToTransform) audio.transform.parent = transform;
+
+            return audio;
         }
+
+        return null;
     }
 
     public static void GenerateNoiseAlertAtTransform(this Transform transform, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified)
