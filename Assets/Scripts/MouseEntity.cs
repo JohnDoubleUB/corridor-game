@@ -16,9 +16,11 @@ public class MouseEntity : InteractableObject
     public AudioClip[] MouseLandNoises;
     public AudioClip[] MouseSqueaks;
 
+    public bool destroyIfOffNavMesh = true;
+    public float offNavMeshDelay = 5f;
+
     public float squeakDelay = 6f;
     public float squeakDelayVariation = 3f;
-
 
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
@@ -41,7 +43,7 @@ public class MouseEntity : InteractableObject
 
     public float maxWanderTime = 10f; //This is to precent the mouse from getting stuck trying to wander to a point 
 
-    public MouseBehaviour currentBehaviour;
+    private MouseBehaviour currentBehaviour;
 
     public MouseBehaviour CurrentBehaviour
     {
@@ -102,6 +104,10 @@ public class MouseEntity : InteractableObject
     [SerializeField]
     [ReadOnlyField]
     private float squeakTimer;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float offNavMeshTimer;
 
     private Vector3 lastNoiseHeard;
 
@@ -238,8 +244,28 @@ public class MouseEntity : InteractableObject
 
         entityPosition = transform.position;
         if (!behaviourJustChanged) initialBehaviourUpdate = false;
+
+        //if (destroyIfOffNavMesh) DestroyIfOffNavigatableArea();
     }
 
+    private void DestroyIfOffNavigatableArea() 
+    {
+        if (!agent.isOnNavMesh)
+        {
+            if (offNavMeshTimer > offNavMeshDelay)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                offNavMeshTimer += Time.deltaTime;
+            }
+        }
+        else 
+        {
+            offNavMeshTimer = 0f;
+        }
+    }
 
     private void BehaviourUpdate() 
     {
