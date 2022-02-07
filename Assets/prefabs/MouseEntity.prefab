@@ -80,7 +80,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3363048706836209666}
-  - component: {fileID: 3363048706836209667}
   m_Layer: 0
   m_Name: LookTransform
   m_TagString: Untagged
@@ -103,25 +102,6 @@ Transform:
   m_Father: {fileID: 2963733068904867203}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1183024399 &3363048706836209667
-LookAtConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3363048706836209725}
-  m_Enabled: 0
-  m_Weight: 1
-  m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: 180, y: 0, z: -90}
-  m_Roll: 0
-  m_WorldUpObject: {fileID: 0}
-  m_UseUpObject: 1
-  m_IsContraintActive: 1
-  m_IsLocked: 0
-  m_Sources:
-  - sourceTransform: {fileID: 0}
-    weight: 1
 --- !u!1 &3363048706854842699
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +381,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e13b4ade015d72c4ba18f1aec0b8c390, type: 3}
   - {fileID: 8300000, guid: 7817bacac241d974fbca8fe71b661cb5, type: 3}
   - {fileID: 8300000, guid: 5528fb0f9a3a73448a72dd381d8f688d, type: 3}
+  ThrowNoiseChance: 0.3
+  destroyIfOffNavMesh: 1
+  offNavMeshDelay: 5
   squeakDelay: 6
   squeakDelayVariation: 3
   idleDelay: 6
@@ -411,7 +394,7 @@ MonoBehaviour:
   noiseVolume: 1
   chanceToStand: 0.5
   safeDistanceFromSound: 4
-  currentBehaviour: 0
+  maxWanderTime: 10
   MovementAmount: 0
   currentIdleDelay: 0
   destinationsSinceLastIdleStand: 0
@@ -419,6 +402,7 @@ MonoBehaviour:
   behaviourTimer: 0
   currentSqueakDelay: 0
   squeakTimer: 0
+  offNavMeshTimer: 0
 --- !u!82 &3363048708282944196
 AudioSource:
   m_ObjectHideFlags: 0

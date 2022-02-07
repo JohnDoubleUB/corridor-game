@@ -16,6 +16,9 @@ public class MouseEntity : InteractableObject
     public AudioClip[] MouseLandNoises;
     public AudioClip[] MouseSqueaks;
 
+    [Range(0.0f, 1.0f)]
+    public float ThrowNoiseChance = 0.5f;
+
     public bool destroyIfOffNavMesh = true;
     public float offNavMeshDelay = 5f;
 
@@ -304,6 +307,11 @@ public class MouseEntity : InteractableObject
         }
     }
 
+    private void PlayMouseSqueak() 
+    {
+        if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], true, noiseVolume, true, 0, false);
+    }
+
     private void CheckIfAndTransitionToChased() 
     {
         switch (CurrentBehaviour) 
@@ -503,11 +511,18 @@ public class MouseEntity : InteractableObject
         mouseRB.LaunchAtTarget(target, Vector3.one * 600, magnitude);
         CurrentBehaviour = MouseBehaviour.Thrown;
         
-        if (MouseThrowNoises != null && MouseThrowNoises.Any()) 
+        if (MouseThrowNoises != null && MouseThrowNoises.Any() && Random.value <= ThrowNoiseChance) 
         {
             throwNoises.Add(transform.PlayClipAtTransform(MouseThrowNoises[Random.Range(0, MouseThrowNoises.Length)], true, noiseVolume, true, 0, false));
         }
     }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        PlayMouseSqueak();
+    }
+
 }
 
 

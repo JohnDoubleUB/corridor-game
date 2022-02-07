@@ -75,8 +75,6 @@ public class TVManController : MonoBehaviour
             }
         }
 
-        //if()
-
         switch (currentBehaviour)
         {
             case TVManBehaviour.None:
