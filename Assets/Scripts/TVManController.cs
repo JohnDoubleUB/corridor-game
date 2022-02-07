@@ -33,14 +33,6 @@ public class TVManController : MonoBehaviour
     public TVManBehaviour currentBehaviour;
     public Transform TvManEyeLevel;
 
-
-    public bool enableLegacyBehaviour;
-
-    public float xTeleportDistanceFromPlayer = 30;
-    public bool teleportAwayWhenAtMinimumDistance;
-
-    private bool playerFacingPositive;
-
     private AudioSource audioSource;
 
     private Vector3 initialPosition;
@@ -58,7 +50,6 @@ public class TVManController : MonoBehaviour
 
     private void Start()
     {
-        if(teleportAwayWhenAtMinimumDistance && enableLegacyBehaviour) TeleportXAwayFromPosition(xTeleportDistanceFromPlayer);
 
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
@@ -69,16 +60,16 @@ public class TVManController : MonoBehaviour
     {
         if (useNavAgent != agent.enabled) agent.enabled = useNavAgent;
         if (movementSpeed != agent.speed) agent.speed = movementSpeed;
-        
+
         transform.GenerateNoiseAlertAtTransform(IsHunting ? 4f : 1f, NoiseOrigin.TVMan);
 
-        if (audioSource.isPlaying != IsHunting) 
+        if (audioSource.isPlaying != IsHunting)
         {
             if (IsHunting)
             {
                 audioSource.Play();
             }
-            else 
+            else
             {
                 audioSource.Stop();
             }
@@ -86,11 +77,7 @@ public class TVManController : MonoBehaviour
 
         //if()
 
-
-
-        playerFacingPositive = GameManager.current.player.transform.forward.x > 0;
-
-        switch (currentBehaviour) 
+        switch (currentBehaviour)
         {
             case TVManBehaviour.None:
                 if (IsHunting) IsHunting = false;
@@ -117,33 +104,24 @@ public class TVManController : MonoBehaviour
                 Behaviour_PursueLastPercieved();
                 break;
         }
-
-        if (enableLegacyBehaviour)
-        {
-            OldUpdateBehaviour();
-        }
-        else 
-        {
-
-        }
     }
 
-    private void UpdateNavDestination() 
+    private void UpdateNavDestination()
     {
         updateNavDestination = true;
     }
 
-    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin) 
+    private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
         if (noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
     }
 
-    private void TurnToNoise(Vector3 noisePosition) 
+    private void TurnToNoise(Vector3 noisePosition)
     {
         lastPercievedLocation = noisePosition;
         interestTimer = 0;
 
-        switch (currentBehaviour) 
+        switch (currentBehaviour)
         {
             //case TVManBehaviour.PursuingPlayer:
             //case TVManBehaviour.PursuingMouse:
@@ -184,14 +162,14 @@ public class TVManController : MonoBehaviour
                 currentBehaviour = TVManBehaviour.Returning;
             }
         }
-        else 
+        else
         {
             lastPerceivedTimer = 0f;
             if (interestTimer < alertTimeWithoutPerception * 1.5)
             {
                 interestTimer += Time.deltaTime;
             }
-            else 
+            else
             {
                 currentBehaviour = TVManBehaviour.Waiting;
             }
@@ -199,7 +177,7 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    private void Behaviour_Waiting() 
+    private void Behaviour_Waiting()
     {
         if (!Behaviour_Perceive())
         {
@@ -224,7 +202,7 @@ public class TVManController : MonoBehaviour
 
         if (Vector3.Distance(newLookLocation, transform.position) < sightRange)
         {
-            if (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(newLookLocation, transform.position) <= minimumDistance) 
+            if (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(newLookLocation, transform.position) <= minimumDistance)
             {
                 currentBehaviour = TVManBehaviour.PursuingPlayer;
                 lastPerceivedTimer = 0f;
@@ -233,35 +211,34 @@ public class TVManController : MonoBehaviour
         }
         else if (false) //Check for other thing (Mouse when implemented)
         {
-            
+
         }
 
         return false;
     }
 
-    private void Behaviour_Returning() 
+    private void Behaviour_Returning()
     {
-        if (!Behaviour_Perceive() && MoveTowardPosition(initialPosition, false)) 
+        if (!Behaviour_Perceive() && MoveTowardPosition(initialPosition, false))
         {
             transform.rotation = initialRotation;
             currentBehaviour = TVManBehaviour.None;
         }
     }
 
-    
 
-    private PercivedEntity LineOfSightCheck(Vector3 target) 
+
+    private PercivedEntity LineOfSightCheck(Vector3 target)
     {
         return LineOfSightCheck(target, out RaycastHit? hit);
     }
 
-    private PercivedEntity LineOfSightCheck(Vector3 target, out RaycastHit? hit) 
+    private PercivedEntity LineOfSightCheck(Vector3 target, out RaycastHit? hit)
     {
-        float angleToTarget = Vector3.Angle(transform.forward, new Vector3(target.x, transform.position.y, target.z) - transform.position);
-        if (Mathf.Abs(angleToTarget) < sightConeAngle && Physics.Linecast(TvManEyeLevel.position, target, out RaycastHit hitResult, lineOfSightMask))
+        if (transform.GetAngleToTarget(target) < sightConeAngle && Physics.Linecast(TvManEyeLevel.position, target, out RaycastHit hitResult, lineOfSightMask))
         {
             hit = hitResult;
-            switch (hitResult.collider.gameObject.tag) 
+            switch (hitResult.collider.gameObject.tag)
             {
                 case "Player":
                     return GameManager.current.playerController.IsIlluminated ? PercivedEntity.Player : PercivedEntity.None;
@@ -269,8 +246,6 @@ public class TVManController : MonoBehaviour
                     return PercivedEntity.Entity;
             }
         }
-
-
         hit = null;
         return PercivedEntity.None;
     }
@@ -332,42 +307,6 @@ public class TVManController : MonoBehaviour
             }
         }
         return false;
-    }
-
-    private void OldUpdateBehaviour() 
-    {
-        if (GameManager.current != null && GameManager.current.player != null)
-        {
-            //print("player forward vector: " + GameManager.current.player.transform.forward);
-            bool playerFacingPositive = GameManager.current.player.transform.forward.x > 0;
-
-            if (playerFacingPositive != this.playerFacingPositive && teleportAwayWhenAtMinimumDistance)
-            {
-                this.playerFacingPositive = playerFacingPositive;
-                TeleportXAwayFromPosition(Vector3.Distance(GameManager.current.player.transform.position, transform.position));
-            }
-
-
-
-            Vector3 playerPosition = GameManager.current.player.transform.position;
-            Vector3 newLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
-            transform.LookAt(newLookLocation);
-
-            if (IsHunting && Vector3.Distance(newLookLocation, transform.position) > minimumDistance)
-            {
-                transform.position += transform.forward * Time.deltaTime * movementSpeed;
-            }
-            else if (teleportAwayWhenAtMinimumDistance)
-            {
-                TeleportXAwayFromPosition(xTeleportDistanceFromPlayer);
-            }
-
-        }
-    }
-
-    private void TeleportXAwayFromPosition(float teleportDistance) 
-    {
-        transform.position = new Vector3(GameManager.current.player.transform.position.x + (playerFacingPositive ? teleportDistance : -teleportDistance), transform.position.y, GameManager.current.player.transform.position.z);
     }
 }
 

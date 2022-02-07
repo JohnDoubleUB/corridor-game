@@ -167,4 +167,25 @@ public static class ExtensionMethods
         rb.velocity = result;
         rb.angularVelocity = spin;
     }
+
+
+    public static float GetAngleToTargetFromSelectedTransform(Transform selectedTransform, Vector3 targetPosition, Vector3 selectedTransformDirection)
+    {
+        return Mathf.Abs(Vector3.Angle(selectedTransform.forward, new Vector3(targetPosition.x, selectedTransform.position.y, targetPosition.z) - selectedTransform.position));
+    }
+
+    public static float GetAngleToTargetFromSelectedTransform(Transform selectedTransform, Vector3 targetPosition)
+    {
+        return GetAngleToTargetFromSelectedTransform(selectedTransform, targetPosition, selectedTransform.forward);
+    }
+
+    public static float GetAngleToTarget(this Transform selectedTransform, Vector3 targetPosition) 
+    {
+        return GetAngleToTargetFromSelectedTransform(selectedTransform, targetPosition);
+    }
+
+    public static float GetAngleToTarget(this Transform selectedTransform, Vector3 targetPosition, Vector3 selectedTransformDirection) 
+    {
+        return GetAngleToTargetFromSelectedTransform(selectedTransform, targetPosition, selectedTransformDirection);
+    }
 }

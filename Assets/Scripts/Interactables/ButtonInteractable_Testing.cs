@@ -91,7 +91,6 @@ public class ButtonInteractable_Testing : InteractableObject
 
                 case TestButtonEffectType.TVMan:
                     GameManager.current.tvMan.IsHunting = !GameManager.current.tvMan.IsHunting;
-                    GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance = !GameManager.current.tvMan.teleportAwayWhenAtMinimumDistance;
                     break;
 
                 default:

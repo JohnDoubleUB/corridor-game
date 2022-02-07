@@ -173,7 +173,6 @@ public class MouseEntity : InteractableObject
         }
     }
 
-
     private async void PlayerPickup()
     {
         isHeld = false;
