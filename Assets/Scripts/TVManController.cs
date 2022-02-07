@@ -196,16 +196,15 @@ public class TVManController : MonoBehaviour
     {
         //Check for player
         Vector3 playerPosition = GameManager.current.player.transform.position;
-        Vector3 newLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
+        Vector3 playerLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
 
-        if (Vector3.Distance(newLookLocation, transform.position) < sightRange)
+        if (Vector3.Distance(playerLookLocation, transform.position) < sightRange &&
+            (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(playerLookLocation, transform.position) <= minimumDistance))
         {
-            if (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(newLookLocation, transform.position) <= minimumDistance)
-            {
-                currentBehaviour = TVManBehaviour.PursuingPlayer;
-                lastPerceivedTimer = 0f;
-                return true;
-            }
+            currentBehaviour = TVManBehaviour.PursuingPlayer;
+            lastPerceivedTimer = 0f;
+            return true;
+
         }
         else if (false) //Check for other thing (Mouse when implemented)
         {
@@ -248,10 +247,10 @@ public class TVManController : MonoBehaviour
         return PercivedEntity.None;
     }
 
-    private void Behaviour_PursuePlayer() 
+    private void Behaviour_PursuePlayer()
     {
         MoveTowardPosition(GameManager.current.player.transform.position);
-        
+
         if (LineOfSightCheck(GameManager.current.player.transform.position) != PercivedEntity.Player)
         {
             if (lastPerceivedTimer < alertTimeWithoutPerception)
@@ -264,7 +263,7 @@ public class TVManController : MonoBehaviour
                 lastPerceivedTimer = 0f;
             }
         }
-        else 
+        else
         {
             lastPerceivedTimer = 0f;
         }
@@ -289,7 +288,7 @@ public class TVManController : MonoBehaviour
                 return true;
             }
         }
-        else 
+        else
         {
             if (agent.isStopped) agent.isStopped = false;
             agent.stoppingDistance = minimumDistance;
@@ -299,7 +298,7 @@ public class TVManController : MonoBehaviour
                 agent.SetDestination(target);
                 updateNavDestination = false;
             }
-            else if (agent.remainingDistance <= minimumDistance) 
+            else if (agent.remainingDistance <= minimumDistance)
             {
                 return true;
             }
@@ -308,7 +307,7 @@ public class TVManController : MonoBehaviour
     }
 }
 
-public enum TVManBehaviour 
+public enum TVManBehaviour
 {
     None,
     PursuingPlayer,
@@ -320,7 +319,7 @@ public enum TVManBehaviour
     Waiting
 }
 
-public enum PercivedEntity 
+public enum PercivedEntity
 {
     None,
     Player,

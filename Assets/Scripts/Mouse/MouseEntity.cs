@@ -16,8 +16,12 @@ public class MouseEntity : InteractableObject
     public AudioClip[] MouseLandNoises;
     public AudioClip[] MouseSqueaks;
 
+    public bool IsVisible { get { return visibleAfterThrownTimer < visibleAfterThrownForSeconds; } }
+
     [Range(0.0f, 1.0f)]
     public float ThrowNoiseChance = 0.5f;
+
+    public float visibleAfterThrownForSeconds = 5f;
 
     public bool destroyIfOffNavMesh = true;
     public float offNavMeshDelay = 5f;
@@ -27,7 +31,7 @@ public class MouseEntity : InteractableObject
 
     public float idleDelay = 6f;
     public float idleDelayVariation = 3f;
-    
+
     public float fleeSpeedMultiplier = 5f;
     public bool IsBeingChased;
 
@@ -112,6 +116,10 @@ public class MouseEntity : InteractableObject
     [ReadOnlyField]
     private float offNavMeshTimer;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private float visibleAfterThrownTimer;
+
     private Vector3 lastNoiseHeard;
 
     private int minimumDestinationsSinceLastStand = 3;
@@ -133,6 +141,7 @@ public class MouseEntity : InteractableObject
         defaultAngularSpeed = agent.angularSpeed;
         defaultAcceleration = agent.acceleration;
         initialPosition = transform.position;
+        visibleAfterThrownTimer = visibleAfterThrownForSeconds;
     }
 
 
@@ -228,6 +237,9 @@ public class MouseEntity : InteractableObject
         if (!behaviourJustChanged) initialBehaviourUpdate = false;
 
         //if (destroyIfOffNavMesh) DestroyIfOffNavigatableArea();
+
+        if (IsVisible) visibleAfterThrownTimer += Time.deltaTime;
+        
     }
 
     private void DestroyIfOffNavigatableArea() 
@@ -431,6 +443,7 @@ public class MouseEntity : InteractableObject
             Vector3 newPosition = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
             transform.position = NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, NavMesh.AllAreas) ? new Vector3(hit.position.x, newPosition.y, hit.position.z) : newPosition;
             SetPickedUp(false);
+            visibleAfterThrownTimer = 0f;
         }
     }
 

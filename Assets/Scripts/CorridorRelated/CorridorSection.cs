@@ -23,6 +23,8 @@ public class CorridorSection : MonoBehaviour
     public AudioClip corridorStretchSound;
     public float corridorStretchVolume = 1f;
 
+    public Transform[] MouseSpawnLocations;
+    public Transform[] TVManPatrolLocations;
     public CorridorLayoutHandler CurrentLayout
     {
         get
@@ -122,8 +124,6 @@ public class CorridorSection : MonoBehaviour
         defaultVariationAmplitude = meshMaterials[0].GetFloat("_VariationAmplitude");
         currentVariationAmplitude = 0f;
         boxCol = GetComponent<BoxCollider>();
-
-
     }
 
     private void Start()
