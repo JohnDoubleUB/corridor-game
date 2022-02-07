@@ -45,7 +45,11 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
+    [ReadOnlyField]
     public Door sectionDoor;
+
+    public bool AllowTVMan = true;
+    public bool AllowMouseSpawns = true;
 
     public PropScript[] Props;
 

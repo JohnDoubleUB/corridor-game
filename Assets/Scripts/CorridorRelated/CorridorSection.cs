@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -59,6 +60,7 @@ public class CorridorSection : MonoBehaviour
 
     //This is kind of just so we can see stuff in the inspector, it doesn't do anything and should probably be removed.
     [SerializeField]
+    [ReadOnlyField]
     private bool hasWarped;
 
     public bool WillStretch
@@ -145,6 +147,26 @@ public class CorridorSection : MonoBehaviour
         {
             toNotifyOnPlayerEnter.OnPlayerEnter(this);
         }
+    }
+
+    public Vector3[] GetMouseSpawnLocations(int spawnLocations)
+    {
+        List<Vector3> spawnLocationPos = new List<Vector3>();
+
+        Transform spawnPoint;
+
+        for (int i = 0; i < spawnLocations; i++)
+        {
+            spawnPoint = MouseSpawnLocations[UnityEngine.Random.Range(0, MouseSpawnLocations.Length)];
+
+            spawnLocationPos.Add(new Vector3(
+                UnityEngine.Random.Range(spawnPoint.position.x - 1f, spawnPoint.position.x + 1f),
+                spawnPoint.position.y,
+                UnityEngine.Random.Range(spawnPoint.position.z - 1f, spawnPoint.position.z + 1f)
+                ));
+        }
+
+        return spawnLocationPos.ToArray();
     }
 
     private void Update()

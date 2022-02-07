@@ -19,10 +19,14 @@ public class LevelData : ScriptableObject
     public int MaxScaleEffectCount;
     public int MaxWaveEffectCount;
 
-    [Header("LevelChanging")]
+    [Header("Level Changing")]
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber;
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount;
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutPuzzleComplete;
+
+    [Header("Spawning And Patrol")]
+    public int MaxMouseCount = 1;
+    public bool EnableTVMan;
 
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
@@ -113,6 +117,8 @@ public class LevelData_Loaded
     public LayoutLevelData[] CorridorLayoutData;
 
     public char[] GeneratedNumberpadPieces;
+    public int MaxMouseCount { get { return levelData.MaxMouseCount; } }
+    public bool EnableTVMan { get { return levelData.EnableTVMan; } }
 
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
