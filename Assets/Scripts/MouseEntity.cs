@@ -218,29 +218,9 @@ public class MouseEntity : InteractableObject
         MovementAmount = Vector3.Distance(transform.position, entityPosition);
         behaviourJustChanged = false;
 
-
         CheckIfAndTransitionToChased();
         BehaviourUpdate();
-
-        switch (CurrentBehaviour) 
-        {
-            case MouseBehaviour.Idle:
-            case MouseBehaviour.Held:
-            case MouseBehaviour.Look:
-            case MouseBehaviour.Wander:
-                if (squeakTimer > currentSqueakDelay)
-                {
-                    if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], true, noiseVolume, true, 0, false);
-                    GenerateRandomSqueakDelay();
-                    squeakTimer = 0f;
-                }
-                else 
-                {
-                    squeakTimer += Time.deltaTime;
-                }
-                break;
-        }
-
+        MouseSqueak();
 
         entityPosition = transform.position;
         if (!behaviourJustChanged) initialBehaviourUpdate = false;
@@ -299,6 +279,28 @@ public class MouseEntity : InteractableObject
 
             case MouseBehaviour.Thrown:
                 Behaviour_Thrown();
+                break;
+        }
+    }
+
+    private void MouseSqueak() 
+    {
+        switch (CurrentBehaviour)
+        {
+            case MouseBehaviour.Idle:
+            case MouseBehaviour.Held:
+            case MouseBehaviour.Look:
+            case MouseBehaviour.Wander:
+                if (squeakTimer > currentSqueakDelay)
+                {
+                    if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], true, noiseVolume, true, 0, false);
+                    GenerateRandomSqueakDelay();
+                    squeakTimer = 0f;
+                }
+                else
+                {
+                    squeakTimer += Time.deltaTime;
+                }
                 break;
         }
     }
