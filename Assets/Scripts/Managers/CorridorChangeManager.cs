@@ -177,8 +177,36 @@ public class CorridorChangeManager : MonoBehaviour
         }
 
         //TODO: This needs to be done AFTER the corridor has moved, this means it needs to be on the following update
-        //Check if tv man can be spawned here
-        if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay) 
+        ////Check if tv man can be spawned here
+        //if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay) 
+        //{
+        //    //Tell this section it holds tv man
+        //    //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
+        //    //Spawn tvman here
+        //}
+
+        ////Check if mouse can be spawned here
+        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        //{
+        //    print("make a mouse!");
+        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
+        //    mouseCount++;
+        //    tempMouse.name = "Mouse -" + mouseCount;
+        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
+        //    Mice.Add(tempMouse);
+        //}
+
+        //This confirms it
+        StartCoroutine(WaitThenCreate(layoutGameObj, section));
+
+        return layoutGameObj;
+    }
+
+    IEnumerator WaitThenCreate(CorridorLayoutHandler layoutGameObj, CorridorSection section) 
+    {
+        yield return new WaitForSeconds(1);
+
+        if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay)
         {
             //Tell this section it holds tv man
             //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
@@ -195,8 +223,6 @@ public class CorridorChangeManager : MonoBehaviour
             section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
             Mice.Add(tempMouse);
         }
-
-        return layoutGameObj;
     }
 
     private void SetupInitialSections() 
