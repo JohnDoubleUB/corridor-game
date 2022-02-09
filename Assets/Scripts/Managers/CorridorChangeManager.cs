@@ -176,35 +176,16 @@ public class CorridorChangeManager : MonoBehaviour
             sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
 
-        //TODO: This needs to be done AFTER the corridor has moved, this means it needs to be on the following update
-        ////Check if tv man can be spawned here
-        //if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay) 
-        //{
-        //    //Tell this section it holds tv man
-        //    //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
-        //    //Spawn tvman here
-        //}
-
-        ////Check if mouse can be spawned here
-        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
-        //{
-        //    print("make a mouse!");
-        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
-        //    mouseCount++;
-        //    tempMouse.name = "Mouse -" + mouseCount;
-        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-        //    Mice.Add(tempMouse);
-        //}
-
-        //This confirms it
-        StartCoroutine(WaitThenCreate(layoutGameObj, section));
+        StartCoroutine(HandleSpawningForSectionAfterTime(section));
 
         return layoutGameObj;
     }
 
-    IEnumerator WaitThenCreate(CorridorLayoutHandler layoutGameObj, CorridorSection section) 
+    IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f) 
     {
-        yield return new WaitForSeconds(1);
+        CorridorLayoutHandler layoutGameObj = section.CurrentLayout;
+
+        yield return new WaitForSeconds(timeSeconds);
 
         if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay)
         {
