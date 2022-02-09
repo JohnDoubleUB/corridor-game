@@ -52,6 +52,7 @@ public class CorridorChangeManager : MonoBehaviour
     public MouseEntity MousePrefab;
     public List<MouseEntity> Mice = new List<MouseEntity>();
 
+    private int mouseCount;
 
     private void Awake()
     {
@@ -175,6 +176,7 @@ public class CorridorChangeManager : MonoBehaviour
             sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
 
+        //TODO: This needs to be done AFTER the corridor has moved, this means it needs to be on the following update
         //Check if tv man can be spawned here
         if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay) 
         {
@@ -184,13 +186,15 @@ public class CorridorChangeManager : MonoBehaviour
         }
 
         //Check if mouse can be spawned here
-        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea) 
-        //{
-        //    print("make a mouse!");
-        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
-        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-        //    Mice.Add(tempMouse);
-        //}
+        if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        {
+            print("make a mouse!");
+            MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
+            mouseCount++;
+            tempMouse.name = "Mouse -" + mouseCount;
+            section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
+            Mice.Add(tempMouse);
+        }
 
         return layoutGameObj;
     }
