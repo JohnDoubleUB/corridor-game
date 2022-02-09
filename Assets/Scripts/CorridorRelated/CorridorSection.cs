@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CorridorSection : MonoBehaviour
 {
+    public EntityTracker EntityTracker;
     public MeshRenderer meshRenderer;
 
     [SerializeField]

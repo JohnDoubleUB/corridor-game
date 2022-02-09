@@ -49,6 +49,10 @@ public class CorridorChangeManager : MonoBehaviour
 
     public CorridorMatVarient[] CorridorMatVarients;
 
+    public MouseEntity MousePrefab;
+    public List<MouseEntity> Mice = new List<MouseEntity>();
+
+
     private void Awake()
     {
         //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
@@ -171,6 +175,23 @@ public class CorridorChangeManager : MonoBehaviour
             sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
 
+        //Check if tv man can be spawned here
+        if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay) 
+        {
+            //Tell this section it holds tv man
+            //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
+            //Spawn tvman here
+        }
+
+        //Check if mouse can be spawned here
+        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea) 
+        //{
+        //    print("make a mouse!");
+        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
+        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
+        //    Mice.Add(tempMouse);
+        //}
+
         return layoutGameObj;
     }
 
@@ -288,6 +309,7 @@ public class CorridorChangeManager : MonoBehaviour
             newEndSection.FlipSection = sectionToMoveWasFront; //flip back section to be facing away
             newEndSection.FakeParent = currentSection.CorridorStartEnd[0]; //move to link up with last section
 
+            
 
             //Apply the effects to the current section
             if (ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp))
@@ -342,9 +364,32 @@ public class CorridorChangeManager : MonoBehaviour
         return effectUsed;
     }
 
+    private void CleanMiceFromSection(CorridorSection section) 
+    {
+        if (section.EntityTracker.EntitiesInArea.Any())
+        {
+            var miceInSection = Mice.Where(x => section.EntityTracker.EntitiesInArea.Contains(x.gameObject)).ToArray();
+            section.EntityTracker.RemoveAllEntities();
+
+            foreach (MouseEntity mouseEntity in miceInSection)
+            {
+                if (mouseEntity.CurrentBehaviour != MouseBehaviour.ChasedByTVMan)
+                {
+                    Destroy(mouseEntity.gameObject);
+                    Mice.Remove(mouseEntity);
+                }
+            }
+        }
+    }
+
 
     private CorridorLayoutHandler CreateNextSection(CorridorSection sectionToMove, CorridorSection middleSection, bool directionPositive, Door newSectionEndDoor)
     {
+        //Handle spawning and stuff
+        CleanMiceFromSection(sectionToMove);
+
+        // gah
+
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];
         newSectionEndDoor.ResetDoor();
 

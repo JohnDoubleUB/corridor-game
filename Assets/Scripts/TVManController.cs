@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class TVManController : MonoBehaviour
 {
+    public bool IsInPlay = false;
     public LayerMask lineOfSightMask;
     public bool BehaviourEnabled = true;
     public bool IsHunting = true;
