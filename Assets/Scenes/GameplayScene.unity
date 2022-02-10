@@ -4418,7 +4418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551cdc5afb58da445a81c3e7d211aa8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Tracked: {fileID: 0}
+  m_Tracked: {fileID: 2067456597}
   m_Size: {x: 80, y: 20, z: 80}
 --- !u!4 &1614685658
 Transform:
