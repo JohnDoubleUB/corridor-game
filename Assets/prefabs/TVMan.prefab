@@ -53,7 +53,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 50331649
   BehaviourEnabled: 1
-  IsHunting: 1
+  IsHunting: 0
   movementSpeed: 1
   minimumDistance: 1
   sightRange: 15

@@ -8,7 +8,7 @@ public class TVManController : MonoBehaviour
     public bool IsInPlay = false;
     public LayerMask lineOfSightMask;
     public bool BehaviourEnabled = true;
-    public bool IsHunting = true;
+    public bool IsHunting = false;
     public float movementSpeed = 1f;
     public float minimumDistance = 1f;
 
@@ -17,9 +17,20 @@ public class TVManController : MonoBehaviour
 
     public float alertTimeWithoutPerception = 5f;
 
-    public bool useNavAgent = false;
-    public NavMeshAgent agent;
+    public bool UseNavMesh 
+    {
+        get 
+        { 
+            return agent.enabled; 
+        }
+        set 
+        {
+            agent.enabled = value;
+        }
+    }
 
+    [SerializeField]
+    private NavMeshAgent agent;
 
     [SerializeField]
     [ReadOnlyField]
@@ -31,9 +42,48 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Vector3 lastPercievedLocation;
 
-    public TVManBehaviour currentBehaviour;
-    public Transform TvManEyeLevel;
 
+    public TVManBehaviour CurrentBehaviour 
+    { 
+        get { return currentBehaviour; }
+        set 
+        { 
+            if (currentBehaviour != value) 
+            {
+                currentBehaviour = value;
+                interestTimer = 0f;
+                lastPerceivedTimer = 0f;
+
+
+                switch (currentBehaviour)
+                {
+                    case TVManBehaviour.PursuingLastPercived:
+                        UseNavMesh = true;
+                        goto case TVManBehaviour.None;
+
+                    case TVManBehaviour.Waiting:
+                    case TVManBehaviour.Returning:
+                    case TVManBehaviour.None:
+                        if (IsHunting) IsHunting = false;
+                        break;
+
+                    case TVManBehaviour.PursuingPlayer:
+                        UseNavMesh = true;
+                        if (!IsHunting) IsHunting = true;
+                        break;
+                }
+
+                bool TVManNeedsToMove = currentBehaviour != TVManBehaviour.None && currentBehaviour != TVManBehaviour.Waiting;
+                if(agent.enabled) agent.isStopped = !TVManNeedsToMove;
+            } 
+        }
+    }
+
+    [SerializeField]
+    [ReadOnlyField]
+    private TVManBehaviour currentBehaviour;
+
+    public Transform TvManEyeLevel;
     private AudioSource audioSource;
 
     private Vector3 initialPosition;
@@ -51,7 +101,6 @@ public class TVManController : MonoBehaviour
 
     private void Start()
     {
-
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         CorridorChangeManager.OnSectionMove += UpdateNavDestination;
@@ -59,7 +108,6 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
-        if (useNavAgent != agent.enabled) agent.enabled = useNavAgent;
         if (movementSpeed != agent.speed) agent.speed = movementSpeed;
 
         transform.GenerateNoiseAlertAtTransform(IsHunting ? 4f : 1f, NoiseOrigin.TVMan);
@@ -76,30 +124,30 @@ public class TVManController : MonoBehaviour
             }
         }
 
-        switch (currentBehaviour)
+        BehaviourUpdate();
+    }
+
+    private void BehaviourUpdate() 
+    {
+        switch (CurrentBehaviour)
         {
             case TVManBehaviour.None:
-                if (IsHunting) IsHunting = false;
                 Behaviour_Perceive();
                 break;
 
             case TVManBehaviour.PursuingPlayer:
-                if (!IsHunting) IsHunting = true;
                 Behaviour_PursuePlayer();
                 break;
 
             case TVManBehaviour.Returning:
-                if (IsHunting) IsHunting = false;
                 Behaviour_Returning();
                 break;
 
             case TVManBehaviour.Waiting:
-                if (IsHunting) IsHunting = false;
                 Behaviour_Waiting();
                 break;
 
             case TVManBehaviour.PursuingLastPercived:
-                if (IsHunting) IsHunting = false;
                 Behaviour_PursueLastPercieved();
                 break;
         }
@@ -120,21 +168,17 @@ public class TVManController : MonoBehaviour
         lastPercievedLocation = noisePosition;
         interestTimer = 0;
 
-        switch (currentBehaviour)
+        switch (CurrentBehaviour)
         {
-            //case TVManBehaviour.PursuingPlayer:
-            //case TVManBehaviour.PursuingMouse:
-            //    break;
-
             case TVManBehaviour.None:
             case TVManBehaviour.Returning:
                 transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
                 lastPerceivedTimer = 0f;
-                currentBehaviour = TVManBehaviour.Waiting;
+                CurrentBehaviour = TVManBehaviour.Waiting;
                 break;
 
             case TVManBehaviour.Waiting:
-                currentBehaviour = TVManBehaviour.PursuingLastPercived;
+                CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
                 lastPerceivedTimer = 0f;
                 break;
         }
@@ -158,7 +202,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                currentBehaviour = TVManBehaviour.Returning;
+                CurrentBehaviour = TVManBehaviour.Returning;
             }
         }
         else
@@ -170,7 +214,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                currentBehaviour = TVManBehaviour.Waiting;
+                CurrentBehaviour = TVManBehaviour.Waiting;
             }
 
         }
@@ -180,14 +224,14 @@ public class TVManController : MonoBehaviour
     {
         if (!Behaviour_Perceive())
         {
-            agent.isStopped = true;
+            //agent.isStopped = true;
             if (lastPerceivedTimer < alertTimeWithoutPerception)
             {
                 lastPerceivedTimer += Time.deltaTime;
             }
             else
             {
-                currentBehaviour = TVManBehaviour.Returning;
+                CurrentBehaviour = TVManBehaviour.Returning;
                 lastPerceivedTimer = 0f;
             }
         }
@@ -202,7 +246,7 @@ public class TVManController : MonoBehaviour
         if (Vector3.Distance(playerLookLocation, transform.position) < sightRange &&
             (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(playerLookLocation, transform.position) <= minimumDistance))
         {
-            currentBehaviour = TVManBehaviour.PursuingPlayer;
+            CurrentBehaviour = TVManBehaviour.PursuingPlayer;
             lastPerceivedTimer = 0f;
             return true;
 
@@ -220,7 +264,7 @@ public class TVManController : MonoBehaviour
         if (!Behaviour_Perceive() && MoveTowardPosition(initialPosition, false))
         {
             transform.rotation = initialRotation;
-            currentBehaviour = TVManBehaviour.None;
+            CurrentBehaviour = TVManBehaviour.None;
         }
     }
 
@@ -260,7 +304,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                currentBehaviour = TVManBehaviour.Waiting;
+                CurrentBehaviour = TVManBehaviour.Waiting;
                 lastPerceivedTimer = 0f;
             }
         }
@@ -277,7 +321,7 @@ public class TVManController : MonoBehaviour
         float minimumDistance = stopAtMinimumDistance ? this.minimumDistance : 0.01f;
         transform.LookAt(target);
 
-        if (!useNavAgent)
+        if (!agent.enabled)
         {
             if (Vector3.Distance(target, transform.position) > minimumDistance)
             {
@@ -291,7 +335,6 @@ public class TVManController : MonoBehaviour
         }
         else
         {
-            if (agent.isStopped) agent.isStopped = false;
             agent.stoppingDistance = minimumDistance;
 
             if (agent.destination != target || updateNavDestination)

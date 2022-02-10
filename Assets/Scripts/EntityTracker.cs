@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EntityTracker : MonoBehaviour
 {
+    public CorridorSection section;
+
     [SerializeField]
     [ReadOnlyField]
     private List<GameObject> entitiesInArea = new List<GameObject>();
@@ -12,6 +14,8 @@ public class EntityTracker : MonoBehaviour
     [SerializeField]
     [ReadOnlyField]
     private GameObject tvManInArea;
+
+    private bool initialCollisions = true;
 
     public bool TVManIsInArea { get { return tvManInArea != null; } }
     public List<GameObject> EntitiesInArea { get { return entitiesInArea; } }
@@ -26,6 +30,7 @@ public class EntityTracker : MonoBehaviour
         else if (other.gameObject.tag == "TVMan")
         {
             tvManInArea = other.gameObject;
+            NotifyTVMan();
         }
     }
 
@@ -41,6 +46,22 @@ public class EntityTracker : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (initialCollisions && other.gameObject.tag == "TVMan")
+        {
+            NotifyTVMan();
+            initialCollisions = false;
+        }
+    }
+
+    public void NotifyTVMan() 
+    {
+        TVManController tempController = GameManager.current.tvMan;
+        bool tvNavMeshShouldBeDisabled = section.sectionType != SectionType.Middle && tempController.CurrentBehaviour == TVManBehaviour.PursuingMouse;
+        tempController.UseNavMesh = !tvNavMeshShouldBeDisabled;
+    }
+
     public void AddDistinctEntities(params GameObject[] entities)
     {
         foreach (GameObject entity in entities)
@@ -49,15 +70,15 @@ public class EntityTracker : MonoBehaviour
         }
     }
 
-    public void RemoveEntities(params GameObject[] entities) 
+    public void RemoveEntities(params GameObject[] entities)
     {
-        foreach (GameObject entity in entities) 
+        foreach (GameObject entity in entities)
         {
             if (entitiesInArea.Contains(entity)) entitiesInArea.Remove(entity);
         }
     }
 
-    public void RemoveAllEntities() 
+    public void RemoveAllEntities()
     {
         entitiesInArea = new List<GameObject>();
     }

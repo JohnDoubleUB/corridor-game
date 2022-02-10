@@ -6443,11 +6443,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TVMan
       objectReference: {fileID: 0}
-    - target: {fileID: 7100503525392875016, guid: 94ba505b572010e419639b0cad2babd3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7100503525392875017, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}
       propertyPath: m_RootOrder
@@ -6456,17 +6451,17 @@ PrefabInstance:
     - target: {fileID: 7100503525392875017, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.54
+      value: -4.32
       objectReference: {fileID: 0}
     - target: {fileID: 7100503525392875017, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 88.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7100503525392875017, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -185
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7100503525392875017, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}
