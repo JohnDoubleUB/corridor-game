@@ -19,7 +19,13 @@ public class EntityTracker : MonoBehaviour
 
     public bool TVManIsInArea { get { return tvManInArea != null; } }
     public List<GameObject> EntitiesInArea { get { return entitiesInArea; } }
-    public GameObject TVManInArea { set { tvManInArea = value; } }
+    public GameObject TVManInArea 
+    { 
+        set 
+        { 
+            AddTVManToTracker(value);
+        } 
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -29,9 +35,19 @@ public class EntityTracker : MonoBehaviour
         }
         else if (other.gameObject.tag == "TVMan")
         {
-            tvManInArea = other.gameObject;
-            NotifyTVMan();
+            AddTVManToTracker(other.gameObject);
+            //tvManInArea = other.gameObject;
+            //other.transform.SetParent(section.playerTriggerTransform);
+            //NotifyTVMan();
         }
+    }
+
+
+    private void AddTVManToTracker(GameObject tvManObj) 
+    {
+        tvManInArea = tvManObj;
+        tvManObj.transform.SetParent(section.playerTriggerTransform);
+        NotifyTVMan();
     }
 
     private void OnTriggerExit(Collider other)

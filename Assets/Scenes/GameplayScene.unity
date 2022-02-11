@@ -1258,6 +1258,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2042821394}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &338682415 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4178486748131541599, guid: 81ad91d681b3e6a4d89506fb1d859027,
+    type: 3}
+  m_PrefabInstance: {fileID: 967960899}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &429120891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1540,6 +1546,12 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!4 &455907994 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4178486748131541599, guid: 81ad91d681b3e6a4d89506fb1d859027,
+    type: 3}
+  m_PrefabInstance: {fileID: 726586127}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &474945540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,6 +2952,11 @@ PrefabInstance:
       propertyPath: FakeParent
       value: 
       objectReference: {fileID: 8388001985165718094}
+    - target: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
+        type: 3}
+      propertyPath: playerTriggerTransform
+      value: 
+      objectReference: {fileID: 455907994}
     - target: {fileID: 1891356515364142871, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
       propertyPath: m_Name
@@ -3793,6 +3810,12 @@ Transform:
   m_Father: {fileID: 1630812778}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!4 &1349068444 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4178486748131541599, guid: 81ad91d681b3e6a4d89506fb1d859027,
+    type: 3}
+  m_PrefabInstance: {fileID: 5633004442686500279}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1415146331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5830,6 +5853,11 @@ PrefabInstance:
       propertyPath: FlipSection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
+        type: 3}
+      propertyPath: playerTriggerTransform
+      value: 
+      objectReference: {fileID: 1349068444}
     - target: {fileID: 1891356515364142871, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
       propertyPath: m_Name
@@ -6340,6 +6368,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1891356515364142865, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
+        type: 3}
+      propertyPath: playerTriggerTransform
+      value: 
+      objectReference: {fileID: 338682415}
     - target: {fileID: 1891356515364142871, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
         type: 3}
       propertyPath: m_Name

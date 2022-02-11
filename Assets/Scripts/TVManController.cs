@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class TVManController : MonoBehaviour
 {
-    //public bool IsInPlay = false;
     public LayerMask lineOfSightMask;
     public bool BehaviourEnabled = true;
     public bool IsHunting = false;
@@ -137,6 +136,7 @@ public class TVManController : MonoBehaviour
 
     private void UpdateNavDestination()
     {
+        transform.SetParent(null);
         updateNavDestination = true;
     }
 
@@ -153,6 +153,7 @@ public class TVManController : MonoBehaviour
                 goto case TVManBehaviour.None;
 
             case TVManBehaviour.NotInPlay:
+                transform.SetParent(null);
                 UseNavMesh = false;
                 transform.SetPositionAndRotation(initialPosition, initialRotation);
                 goto case TVManBehaviour.None;
@@ -195,7 +196,6 @@ public class TVManController : MonoBehaviour
     {
         lastPercievedLocation = noisePosition;
         interestTimer = 0;
-        Vector3 directionOfNoise = (noisePosition - transform.position).normalized;
 
 
         switch (CurrentBehaviour)
@@ -216,7 +216,6 @@ public class TVManController : MonoBehaviour
                 {
                     CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
                 }
-                //CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
                 lastPerceivedTimer = 0f;
                 break;
         }
