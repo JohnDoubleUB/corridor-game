@@ -18,7 +18,7 @@ MonoBehaviour:
   - {fileID: 8711203481728457502, guid: d2d51bdfb20723e4990f9c8dd0849d3a, type: 3}
   - {fileID: 395630380, guid: 081ac7354ca34dc4095a7640cf806f14, type: 3}
   BackwardOnlyLayouts:
-  - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}
+  - {fileID: 7785650445776822728, guid: fcd0e54fbf090824f97b42e43c5e4bef, type: 3}
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
@@ -28,7 +28,9 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount:
   - Name: Change to level 3
-    SectionCount: 6
+    SectionCount: 10
     LevelChange: 3
-    RandomSectionRange: 2
+    RandomSectionRange: 3
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 3
+  EnableTVMan: 1

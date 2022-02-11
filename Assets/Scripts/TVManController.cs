@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class TVManController : MonoBehaviour
 {
-    public bool IsInPlay = false;
+    //public bool IsInPlay = false;
     public LayerMask lineOfSightMask;
     public bool BehaviourEnabled = true;
     public bool IsHunting = false;
@@ -51,30 +51,8 @@ public class TVManController : MonoBehaviour
             if (currentBehaviour != value) 
             {
                 currentBehaviour = value;
-                interestTimer = 0f;
-                lastPerceivedTimer = 0f;
 
-
-                switch (currentBehaviour)
-                {
-                    case TVManBehaviour.PursuingLastPercived:
-                        UseNavMesh = true;
-                        goto case TVManBehaviour.None;
-
-                    case TVManBehaviour.Waiting:
-                    case TVManBehaviour.Returning:
-                    case TVManBehaviour.None:
-                        if (IsHunting) IsHunting = false;
-                        break;
-
-                    case TVManBehaviour.PursuingPlayer:
-                        UseNavMesh = true;
-                        if (!IsHunting) IsHunting = true;
-                        break;
-                }
-
-                bool TVManNeedsToMove = currentBehaviour != TVManBehaviour.None && currentBehaviour != TVManBehaviour.Waiting;
-                if(agent.enabled) agent.isStopped = !TVManNeedsToMove;
+                OnBehaviourChange();
             } 
         }
     }
@@ -88,6 +66,9 @@ public class TVManController : MonoBehaviour
 
     private Vector3 initialPosition;
     private Quaternion initialRotation;
+
+    private Vector3 initialSpawnPosition;
+    private Quaternion initialSpawnRotation;
 
     private bool updateNavDestination = true;
 
@@ -104,6 +85,7 @@ public class TVManController : MonoBehaviour
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         CorridorChangeManager.OnSectionMove += UpdateNavDestination;
+        OnBehaviourChange();
     }
 
     private void Update()
@@ -158,9 +140,55 @@ public class TVManController : MonoBehaviour
         updateNavDestination = true;
     }
 
+    private void OnBehaviourChange() 
+    {
+        interestTimer = 0f;
+        lastPerceivedTimer = 0f;
+
+
+        switch (currentBehaviour)
+        {
+            case TVManBehaviour.PursuingLastPercived:
+                UseNavMesh = true;
+                goto case TVManBehaviour.None;
+
+            case TVManBehaviour.NotInPlay:
+                UseNavMesh = false;
+                transform.SetPositionAndRotation(initialPosition, initialRotation);
+                goto case TVManBehaviour.None;
+
+            case TVManBehaviour.Waiting:
+            case TVManBehaviour.Returning:
+            case TVManBehaviour.None:
+                if (IsHunting) IsHunting = false;
+                break;
+
+            case TVManBehaviour.PursuingPlayer:
+                UseNavMesh = true;
+                if (!IsHunting) IsHunting = true;
+                break;
+        }
+
+        bool TVManNeedsToMove = currentBehaviour != TVManBehaviour.None && currentBehaviour != TVManBehaviour.Waiting;
+        if (UseNavMesh) agent.isStopped = !TVManNeedsToMove;
+    }
+
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
-        if (noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
+        if (CurrentBehaviour != TVManBehaviour.NotInPlay && noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
+    }
+
+    public void RemoveFromPlay() 
+    {
+        CurrentBehaviour = TVManBehaviour.NotInPlay;
+    }
+
+    public void PutInPlay(Vector3 position) 
+    {
+        initialSpawnPosition = position;
+        initialSpawnRotation = Quaternion.identity;
+        CurrentBehaviour = TVManBehaviour.None;
+        transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
     }
 
     private void TurnToNoise(Vector3 noisePosition)
@@ -261,7 +289,7 @@ public class TVManController : MonoBehaviour
 
     private void Behaviour_Returning()
     {
-        if (!Behaviour_Perceive() && MoveTowardPosition(initialPosition, false))
+        if (!Behaviour_Perceive() && MoveTowardPosition(initialSpawnPosition, false))
         {
             transform.rotation = initialRotation;
             CurrentBehaviour = TVManBehaviour.None;
@@ -353,6 +381,7 @@ public class TVManController : MonoBehaviour
 
 public enum TVManBehaviour
 {
+    NotInPlay,
     None,
     PursuingPlayer,
     PursuingMouse,

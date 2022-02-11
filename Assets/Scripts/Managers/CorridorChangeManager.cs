@@ -184,18 +184,20 @@ public class CorridorChangeManager : MonoBehaviour
     IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f) 
     {
         CorridorLayoutHandler layoutGameObj = section.CurrentLayout;
-
+        LevelData_Loaded currentLoadedLevelData = cachedCurrentLevelData;
         yield return new WaitForSeconds(timeSeconds);
 
-        if (cachedCurrentLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.IsInPlay)
+        if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
         {
+            GameManager.current.tvMan.PutInPlay(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)].position);
+            //GameManager.current.tvMan.CurrentBehaviour.
             //Tell this section it holds tv man
             //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
             //Spawn tvman here
         }
 
         //Check if mouse can be spawned here
-        if (layoutGameObj.AllowMouseSpawns && Mice.Count < cachedCurrentLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        if (layoutGameObj.AllowMouseSpawns && Mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
         {
             print("make a mouse!");
             MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
@@ -439,7 +441,9 @@ public class CorridorChangeManager : MonoBehaviour
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
         CurrentLevel = newLevel;
+        GameManager.current.tvMan.RemoveFromPlay();
         UpdateLevel();
+        
     }
 
     public void CheckPlayerDistance()
