@@ -4849,7 +4849,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: efbd87600936e26438c6be0764d7ee4c, type: 2}
   - {fileID: 11400000, guid: 522c71257d5f43f4d97eafdf28604582, type: 2}
   - {fileID: 11400000, guid: 20d7e77b75bb366438f0a5137b554708, type: 2}
-  CurrentLevel: 1
+  CurrentLevel: 4
   levelCorridorPrefabs:
   - {fileID: 5706549757614248288, guid: 466fbd33209de4849912f30878ec7d5a, type: 3}
   - {fileID: 7785650445776822728, guid: 909ffbcf1e8e1c54d85e987b110a5360, type: 3}

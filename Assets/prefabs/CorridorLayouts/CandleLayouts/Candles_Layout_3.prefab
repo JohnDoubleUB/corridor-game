@@ -51,7 +51,12 @@ MonoBehaviour:
   corridorMeshType: 0
   corridorMatType: 0
   corridorDoorMatType: 0
+  StretchAmount: 2
+  ForceStretch: 0
+  ForceWave: 0
   sectionDoor: {fileID: 0}
+  AllowTVMan: 0
+  AllowMouseSpawns: 0
   Props: []
   PuzzleElements: []
   DecalClueObjects: []

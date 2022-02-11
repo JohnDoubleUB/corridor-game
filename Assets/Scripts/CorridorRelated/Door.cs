@@ -74,8 +74,9 @@ public class Door : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isPathClear = !(openOnInteract ? doorIsOpen : !doorLocked);
         if (fakeParent != null && fakeParent.position != transform.position) transform.position = fakeParent.position;
-        if (navMeshObstacle.enabled != doorLocked) navMeshObstacle.enabled = doorLocked;
+        if (navMeshObstacle.enabled != isPathClear) navMeshObstacle.enabled = isPathClear;
 
         if (openOnInteract != openOnInteractLast)
         {
