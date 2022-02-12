@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7100503525392875018}
   - component: {fileID: 7100503525392875019}
   - component: {fileID: 7100503525392875020}
+  - component: {fileID: 834834437}
   m_Layer: 0
   m_Name: TVMan
-  m_TagString: Untagged
+  m_TagString: TVMan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fefd7dcff3cd57449bf5613145e663c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsInPlay: 0
   lineOfSightMask:
     serializedVersion: 2
     m_Bits: 50331649
@@ -59,7 +59,6 @@ MonoBehaviour:
   sightRange: 15
   sightConeAngle: 30
   alertTimeWithoutPerception: 5
-  useNavAgent: 1
   agent: {fileID: 7100503525392875020}
   lastPerceivedTimer: 0
   interestTimer: 0
@@ -205,7 +204,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7100503525392875016}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.34
   m_Speed: 3.5
@@ -220,6 +219,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &834834437
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7100503525392875016}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.15
+  m_Height: 2.0463262
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.1010921, z: 0}
 --- !u!1 &7100503525733031900
 GameObject:
   m_ObjectHideFlags: 0

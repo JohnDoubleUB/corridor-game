@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -71,6 +72,8 @@ public class TVManController : MonoBehaviour
 
     private bool updateNavDestination = true;
 
+    private IEnumerator toPutInPlayOnSectionMove = null;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -83,7 +86,7 @@ public class TVManController : MonoBehaviour
     {
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
-        CorridorChangeManager.OnSectionMove += UpdateNavDestination;
+        CorridorChangeManager.OnSectionMove += OnSectionMove;
         OnBehaviourChange();
     }
 
@@ -134,8 +137,10 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    private void UpdateNavDestination()
+    private void OnSectionMove()
     {
+        if (toPutInPlayOnSectionMove != null) StartCoroutine(toPutInPlayOnSectionMove);
+        toPutInPlayOnSectionMove = null;
         transform.SetParent(null);
         updateNavDestination = true;
     }
@@ -184,12 +189,19 @@ public class TVManController : MonoBehaviour
         CurrentBehaviour = TVManBehaviour.NotInPlay;
     }
 
-    public void PutInPlay(Vector3 position)
+    public void PutInPlayOnSectionMove(Transform spawnTransform)
     {
-        initialSpawnPosition = position;
+        toPutInPlayOnSectionMove = PutInPlay(spawnTransform); 
+    }
+
+    private IEnumerator PutInPlay(Transform spawnTransform) 
+    {
+        initialSpawnPosition = spawnTransform.position;
         initialSpawnRotation = transform.rotation;
         CurrentBehaviour = TVManBehaviour.None;
         transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
+        toPutInPlayOnSectionMove = null;
+        yield return null;
     }
 
     private void TurnToNoise(Vector3 noisePosition)

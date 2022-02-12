@@ -22,32 +22,22 @@ public class EntityTracker : MonoBehaviour
     public GameObject TVManInArea 
     { 
         set 
-        { 
-            AddTVManToTracker(value);
+        {
+            tvManInArea = value;
         } 
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Entity")
+        if (other.tag == "Entity")
         {
             AddDistinctEntities(other.gameObject);
         }
-        else if (other.gameObject.tag == "TVMan")
+        if (other.tag == "TVMan")
         {
-            AddTVManToTracker(other.gameObject);
-            //tvManInArea = other.gameObject;
-            //other.transform.SetParent(section.playerTriggerTransform);
-            //NotifyTVMan();
+            tvManInArea = other.gameObject;
+            NotifyTVMan();
         }
-    }
-
-
-    private void AddTVManToTracker(GameObject tvManObj) 
-    {
-        tvManInArea = tvManObj;
-        tvManObj.transform.SetParent(section.playerTriggerTransform);
-        NotifyTVMan();
     }
 
     private void OnTriggerExit(Collider other)

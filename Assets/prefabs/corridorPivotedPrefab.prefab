@@ -464,6 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40609098bf359b445bd491a85e3d7d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTriggerTransform: {fileID: 0}
   EntityTracker: {fileID: 5417011028923341829}
   meshRenderer: {fileID: 8044445721029405633}
   meshFilter: {fileID: 5208249738734771979}
@@ -578,7 +579,7 @@ GameObject:
   - component: {fileID: 6772073135858188243}
   - component: {fileID: 1030082540019856821}
   - component: {fileID: 5417011028923341829}
-  m_Layer: 23
+  m_Layer: 0
   m_Name: EntityTracker
   m_TagString: Untagged
   m_Icon: {fileID: 0}

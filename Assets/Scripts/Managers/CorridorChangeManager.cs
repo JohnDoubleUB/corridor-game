@@ -189,12 +189,8 @@ public class CorridorChangeManager : MonoBehaviour
 
         if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
         {
-            GameManager.current.tvMan.PutInPlay(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)].position);
+            GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
             section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
-            //GameManager.current.tvMan.CurrentBehaviour.
-            //Tell this section it holds tv man
-            //section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
-            //Spawn tvman here
         }
 
         //Check if mouse can be spawned here
