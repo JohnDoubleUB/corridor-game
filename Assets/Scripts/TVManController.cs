@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,7 +17,7 @@ public class TVManController : MonoBehaviour
     public float sightConeAngle = 30f;
 
     public float alertTimeWithoutPerception = 5f;
-
+    //TODO: Figure out the last direction tv man was moving, to get a vector? or perhaps his facing direction?
     public bool UseNavMesh
     {
         get
@@ -42,6 +43,9 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Vector3 lastPercievedLocation;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private Transform[] validPatrolPoints;
 
     public TVManBehaviour CurrentBehaviour
     {
@@ -111,12 +115,38 @@ public class TVManController : MonoBehaviour
         BehaviourUpdate();
     }
 
+    private void GetUpdatedValidPatrolPoints() 
+    {
+        if(!UseNavMesh) UseNavMesh = true;
+
+        Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
+        if (tempPatrolPoints.Any()) 
+        {
+            IEnumerable<Transform[]> temp = tempPatrolPoints.Where(x =>
+            {
+                NavMeshPath newNavPath = new NavMeshPath();
+                return agent.CalculatePath(x[0].position, newNavPath) && newNavPath.status == NavMeshPathStatus.PathComplete;
+            });
+
+
+            if (temp.Any())
+            {
+                validPatrolPoints = temp.SelectMany(x => x).ToArray();
+            }
+            else 
+            {
+                validPatrolPoints = null;
+            }
+        }
+    }
+
     private void BehaviourUpdate()
     {
         switch (CurrentBehaviour)
         {
             case TVManBehaviour.None:
                 Behaviour_Perceive();
+                CurrentBehaviour = TVManBehaviour.Patrolling;
                 break;
 
             case TVManBehaviour.PursuingPlayer:
@@ -139,10 +169,19 @@ public class TVManController : MonoBehaviour
 
     private void OnSectionMove()
     {
-        if (toPutInPlayOnSectionMove != null) StartCoroutine(toPutInPlayOnSectionMove);
-        toPutInPlayOnSectionMove = null;
+        if (toPutInPlayOnSectionMove != null)
+        {
+            StartCoroutine(toPutInPlayOnSectionMove);
+            toPutInPlayOnSectionMove = null;
+        }
+        else 
+        {
+            //if (CurrentBehaviour != TVManBehaviour.NotInPlay) GetUpdatedValidPatrolPoints();
+        }
+        
         transform.SetParent(null);
         updateNavDestination = true;
+        
     }
 
     private void OnBehaviourChange()
@@ -153,6 +192,10 @@ public class TVManController : MonoBehaviour
 
         switch (currentBehaviour)
         {
+            case TVManBehaviour.Patrolling:
+                GetUpdatedValidPatrolPoints();
+                break;
+
             case TVManBehaviour.PursuingLastPercived:
                 UseNavMesh = true;
                 goto case TVManBehaviour.None;
@@ -201,6 +244,12 @@ public class TVManController : MonoBehaviour
         CurrentBehaviour = TVManBehaviour.None;
         transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
         toPutInPlayOnSectionMove = null;
+
+        //if (CurrentBehaviour != TVManBehaviour.NotInPlay) 
+        //{ 
+        //    GetUpdatedValidPatrolPoints(); 
+        //}
+
         yield return null;
     }
 
@@ -214,6 +263,7 @@ public class TVManController : MonoBehaviour
         {
             case TVManBehaviour.None:
             case TVManBehaviour.Returning:
+            case TVManBehaviour.Patrolling:
                 transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
                 lastPerceivedTimer = 0f;
                 CurrentBehaviour = TVManBehaviour.Waiting;
@@ -231,14 +281,6 @@ public class TVManController : MonoBehaviour
                 lastPerceivedTimer = 0f;
                 break;
         }
-        //if (currentBehaviour != TVManBehaviour.PursuingPlayer && currentBehaviour != TVManBehaviour.PursuingMouse)
-        //{
-        //    transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
-        //    lastPercivedTarget = 0f;
-        //    currentBehaviour = TVManBehaviour.Waiting;
-        //}
-
-
     }
 
     private void Behaviour_PursueLastPercieved()

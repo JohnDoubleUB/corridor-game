@@ -54,6 +54,10 @@ public class CorridorChangeManager : MonoBehaviour
 
     private int mouseCount;
 
+
+    private Transform[][] tVManPatrolPoints;
+    public Transform[][] TVManPatrolPoints { get { return tVManPatrolPoints; } }
+
     private void Awake()
     {
         //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
@@ -65,6 +69,22 @@ public class CorridorChangeManager : MonoBehaviour
         LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
 
         UpdateLevel();
+    }
+
+    private void Start()
+    {
+        SetupInitialSections();
+        playerTransform = GameManager.current.player.transform;
+        corridorGameParent = GameManager.current.GameParent;
+
+        //track player position inital
+        playerInitialPosition = playerTransform.position;
+
+        //parent everything under it!
+        corridorGameChildren.Add(playerTransform);
+        corridorGameChildren.AddRange(corridorSections.Select(x => x.transform).Concat(corridorDoorSegments.Select(x => x.transform)).ToArray());
+        foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
+        tVManPatrolPoints = corridorSections.Select(x => x.TVManPatrolLocations).ToArray();
     }
 
     private void UpdateLevel()
@@ -107,21 +127,6 @@ public class CorridorChangeManager : MonoBehaviour
         if (corridorPiece == 0) return corridorDoorSegments[0];
         else if (corridorPiece == 1) return corridorDoorSegments[2];
         else return corridorDoorSegments[3];
-    }
-
-    private void Start()
-    {
-        SetupInitialSections();
-        playerTransform = GameManager.current.player.transform;
-        corridorGameParent = GameManager.current.GameParent;
-
-        //track player position inital
-        playerInitialPosition = playerTransform.position;
-
-        //parent everything under it!
-        corridorGameChildren.Add(playerTransform);
-        corridorGameChildren.AddRange(corridorSections.Select(x => x.transform).Concat(corridorDoorSegments.Select(x => x.transform)).ToArray());
-        foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
     }
 
     private CorridorLayoutHandler CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
