@@ -18,6 +18,9 @@ public class TVManController : MonoBehaviour
 
     public float alertTimeWithoutPerception = 5f;
     //TODO: Figure out the last direction tv man was moving, to get a vector? or perhaps his facing direction?
+
+    public bool DefaultToPatrol = true;
+
     public bool UseNavMesh
     {
         get
@@ -78,6 +81,8 @@ public class TVManController : MonoBehaviour
 
     private IEnumerator toPutInPlayOnSectionMove = null;
 
+    private Transform patrolTarget;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -115,12 +120,12 @@ public class TVManController : MonoBehaviour
         BehaviourUpdate();
     }
 
-    private void GetUpdatedValidPatrolPoints() 
+    private void GetUpdatedValidPatrolPoints()
     {
-        if(!UseNavMesh) UseNavMesh = true;
+        if (!UseNavMesh) UseNavMesh = true;
 
         Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
-        if (tempPatrolPoints.Any()) 
+        if (tempPatrolPoints.Any())
         {
             IEnumerable<Transform[]> temp = tempPatrolPoints.Where(x =>
             {
@@ -133,7 +138,7 @@ public class TVManController : MonoBehaviour
             {
                 validPatrolPoints = temp.SelectMany(x => x).ToArray();
             }
-            else 
+            else
             {
                 validPatrolPoints = null;
             }
@@ -164,6 +169,10 @@ public class TVManController : MonoBehaviour
             case TVManBehaviour.PursuingLastPercived:
                 Behaviour_PursueLastPercieved();
                 break;
+
+            case TVManBehaviour.Patrolling:
+                Behaviour_Patrolling();
+                break;
         }
     }
 
@@ -174,26 +183,28 @@ public class TVManController : MonoBehaviour
             StartCoroutine(toPutInPlayOnSectionMove);
             toPutInPlayOnSectionMove = null;
         }
-        else 
+        else
         {
             //if (CurrentBehaviour != TVManBehaviour.NotInPlay) GetUpdatedValidPatrolPoints();
         }
-        
+
         transform.SetParent(null);
         updateNavDestination = true;
-        
     }
+
+
 
     private void OnBehaviourChange()
     {
         interestTimer = 0f;
         lastPerceivedTimer = 0f;
-
+        patrolTarget = null;
 
         switch (currentBehaviour)
         {
             case TVManBehaviour.Patrolling:
                 GetUpdatedValidPatrolPoints();
+                FindNextPatrolPoint();
                 break;
 
             case TVManBehaviour.PursuingLastPercived:
@@ -234,10 +245,10 @@ public class TVManController : MonoBehaviour
 
     public void PutInPlayOnSectionMove(Transform spawnTransform)
     {
-        toPutInPlayOnSectionMove = PutInPlay(spawnTransform); 
+        toPutInPlayOnSectionMove = PutInPlay(spawnTransform);
     }
 
-    private IEnumerator PutInPlay(Transform spawnTransform) 
+    private IEnumerator PutInPlay(Transform spawnTransform)
     {
         initialSpawnPosition = spawnTransform.position;
         initialSpawnRotation = transform.rotation;
@@ -274,7 +285,7 @@ public class TVManController : MonoBehaviour
                 NavMeshPath newPath = new NavMeshPath();
                 bool pathCalculated = agent.CalculatePath(lastPercievedLocation, newPath);
                 UseNavMesh = false;
-                if (pathCalculated && newPath.status == NavMeshPathStatus.PathComplete) 
+                if (pathCalculated && newPath.status == NavMeshPathStatus.PathComplete)
                 {
                     CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
                 }
@@ -293,7 +304,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                CurrentBehaviour = TVManBehaviour.Returning;
+                CurrentBehaviour = DefaultToPatrol ? TVManBehaviour.Patrolling : TVManBehaviour.Returning;
             }
         }
         else
@@ -322,7 +333,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                CurrentBehaviour = TVManBehaviour.Returning;
+                CurrentBehaviour = DefaultToPatrol ? TVManBehaviour.Patrolling : TVManBehaviour.Returning;
                 lastPerceivedTimer = 0f;
             }
         }
@@ -357,6 +368,29 @@ public class TVManController : MonoBehaviour
             transform.rotation = initialSpawnRotation;
             CurrentBehaviour = TVManBehaviour.None;
         }
+    }
+
+    private void Behaviour_Patrolling()
+    {
+        if (!Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
+        {
+            FindNextPatrolPoint();
+        }
+    }
+
+    private bool FindNextPatrolPoint()
+    {
+        IEnumerable<Transform> nonCurrentPatrolTargets = validPatrolPoints.Where(x => x != patrolTarget);
+        IEnumerable<Transform> forwardPatrolTargets = nonCurrentPatrolTargets.Where(x => Vector3.Dot(x.position - transform.position, transform.forward) >= 0);
+
+        Transform newTarget = forwardPatrolTargets.Any() ? forwardPatrolTargets.OrderBy(x => Vector3.Distance(transform.position, x.position)).First()
+            : nonCurrentPatrolTargets.Any() ? nonCurrentPatrolTargets.OrderBy(x => Vector3.Distance(x.position, transform.position)).First()
+            : patrolTarget;
+
+        bool newTargetSelected = patrolTarget != newTarget;
+        patrolTarget = newTarget;
+
+        return newTargetSelected;
     }
 
 
