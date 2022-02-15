@@ -15,6 +15,9 @@ public class CorridorChangeManager : MonoBehaviour
     public delegate void SectionMoveAction();
     public static event SectionMoveAction OnSectionMove;
 
+    public delegate void NavMeshUpdateAction();
+    public static event NavMeshUpdateAction OnNavMeshUpdate;
+
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
 
@@ -337,6 +340,17 @@ public class CorridorChangeManager : MonoBehaviour
             }
             
         }
+    }
+
+    public void TriggerNavMeshUpdate() 
+    {
+        StartCoroutine(TriggerNavMeshUpdateAfterTime(0.3f));
+    }
+
+    private IEnumerator TriggerNavMeshUpdateAfterTime(float waitTimeSeconds) 
+    {
+        yield return new WaitForSeconds(waitTimeSeconds);
+        OnNavMeshUpdate?.Invoke();
     }
 
     private async void OnSectionMoveAfterDelay(float timeSeconds) 

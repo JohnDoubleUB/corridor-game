@@ -76,7 +76,12 @@ public class Door : MonoBehaviour
     {
         bool isPathClear = !(openOnInteract ? doorIsOpen : !doorLocked);
         if (fakeParent != null && fakeParent.position != transform.position) transform.position = fakeParent.position;
-        if (navMeshObstacle.enabled != isPathClear) navMeshObstacle.enabled = isPathClear;
+        
+        if (navMeshObstacle.enabled != isPathClear) 
+        { 
+            navMeshObstacle.enabled = isPathClear;
+            CorridorChangeManager.current.TriggerNavMeshUpdate();
+        }
 
         if (openOnInteract != openOnInteractLast)
         {

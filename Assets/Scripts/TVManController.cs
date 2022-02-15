@@ -96,6 +96,7 @@ public class TVManController : MonoBehaviour
         //Start listening
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         CorridorChangeManager.OnSectionMove += OnSectionMove;
+        CorridorChangeManager.OnNavMeshUpdate += OnNavMeshUpdate;
         OnBehaviourChange();
     }
 
@@ -123,7 +124,6 @@ public class TVManController : MonoBehaviour
     private void GetUpdatedValidPatrolPoints()
     {
         if (!UseNavMesh) UseNavMesh = true;
-
         Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
         if (tempPatrolPoints.Any())
         {
@@ -192,7 +192,10 @@ public class TVManController : MonoBehaviour
         updateNavDestination = true;
     }
 
-
+    private void OnNavMeshUpdate() 
+    {
+        if(agent.isOnNavMesh) GetUpdatedValidPatrolPoints();
+    }
 
     private void OnBehaviourChange()
     {
@@ -372,7 +375,7 @@ public class TVManController : MonoBehaviour
 
     private void Behaviour_Patrolling()
     {
-        if (!Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
+        if (!validPatrolPoints.Contains(patrolTarget) || !Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
         {
             FindNextPatrolPoint();
         }
