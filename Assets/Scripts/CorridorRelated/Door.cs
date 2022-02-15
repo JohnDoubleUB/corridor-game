@@ -185,7 +185,11 @@ public class Door : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            if (!doorLocked && openOnInteract) openOnInteract = false;
+            if (!doorLocked && openOnInteract) 
+            { 
+                openOnInteract = false;
+                CorridorChangeManager.current.TriggerNavMeshUpdate();
+            }
             if (!openOnInteract && doorIsOpen && !doorLocked) PlayDoorCloseAnimation();
         }
     }

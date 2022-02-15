@@ -184,23 +184,56 @@ public class CorridorChangeManager : MonoBehaviour
             sectionDoor.SetMaterialVarient(CorridorMatVarients[0]);
         }
 
-        StartCoroutine(HandleSpawningForSectionAfterTime(section));
+        //StartCoroutine(HandleSpawningForSectionAfterTime(section));
 
         return layoutGameObj;
     }
 
-    IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f) 
+    IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f, bool roomEffectPresent = false) 
     {
         CorridorLayoutHandler layoutGameObj = section.CurrentLayout;
         LevelData_Loaded currentLoadedLevelData = cachedCurrentLevelData;
+
+        
+
         yield return new WaitForSeconds(timeSeconds);
 
+        HandleTVManSpawningForSection(section, layoutGameObj, currentLoadedLevelData, roomEffectPresent);
+        HandleMouseSpawningForSection(section, layoutGameObj, currentLoadedLevelData);
+
+        //if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
+        //{
+        //    print("spawn tvman!");
+        //    GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+        //    section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
+        //}
+
+        ////Check if mouse can be spawned here
+        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        //{
+        //    print("make a mouse!");
+        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
+        //    mouseCount++;
+        //    tempMouse.name = "Mouse -" + mouseCount;
+        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
+        //    Mice.Add(tempMouse);
+        //}
+    }
+
+    private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false) 
+    {
         if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
         {
-            GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+            print("spawn tvman!");
+            if(putInPlayNow) GameManager.current.tvMan.PutInPlayNow(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+            else GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+            
             section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
         }
+    }
 
+    private void HandleMouseSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData)
+    {
         //Check if mouse can be spawned here
         if (layoutGameObj.AllowMouseSpawns && Mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
         {
@@ -327,18 +360,13 @@ public class CorridorChangeManager : MonoBehaviour
             newEndSection.FlipSection = sectionToMoveWasFront; //flip back section to be facing away
             newEndSection.FakeParent = currentSection.CorridorStartEnd[0]; //move to link up with last section
 
-            
+            //Handle spawning for section
+            StartCoroutine(HandleSpawningForSectionAfterTime(sectionToMove));
 
             //Apply the effects to the current section
-            if (ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp))
-            {
-                OnSectionMoveAfterDelay(2); //Delay because an effect is happening
-            }
-            else 
-            {
-                OnSectionMove?.Invoke(); //To indicate that the seciton has moved
-            }
-            
+            ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp);
+            //after delay notify objects that piece has moved
+            OnSectionMoveAfterDelay(2);
         }
     }
 
@@ -411,12 +439,27 @@ public class CorridorChangeManager : MonoBehaviour
         }
     }
 
+    private void CleanUpTVManFromSection(CorridorSection section) 
+    {
+        if (section.EntityTracker.TVManIsInArea) 
+        {
+            if (GameManager.current.tvMan.CanEscapeRoom)
+            {
+                //Move to nearest section
+            }
+            else 
+            {
+                GameManager.current.tvMan.RemoveFromPlay();
+            }
+        }
+    }
+
 
     private CorridorLayoutHandler CreateNextSection(CorridorSection sectionToMove, CorridorSection middleSection, bool directionPositive, Door newSectionEndDoor)
     {
         //Handle spawning and stuff
         CleanMiceFromSection(sectionToMove);
-
+        CleanUpTVManFromSection(sectionToMove);
         // gah
 
         newSectionEndDoor.fakeParent = sectionToMove.CorridorStartEnd[1];

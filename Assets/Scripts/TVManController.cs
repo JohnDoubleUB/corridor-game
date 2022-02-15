@@ -81,7 +81,15 @@ public class TVManController : MonoBehaviour
 
     private IEnumerator toPutInPlayOnSectionMove = null;
 
+
+    [SerializeField]
+    [ReadOnlyField]
     private Transform patrolTarget;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private bool canEscapeRoom;
+    public bool CanEscapeRoom { get { return canEscapeRoom; } }
 
     private void Awake()
     {
@@ -124,7 +132,9 @@ public class TVManController : MonoBehaviour
     private void GetUpdatedValidPatrolPoints()
     {
         if (!UseNavMesh) UseNavMesh = true;
+
         Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
+
         if (tempPatrolPoints.Any())
         {
             IEnumerable<Transform[]> temp = tempPatrolPoints.Where(x =>
@@ -133,8 +143,9 @@ public class TVManController : MonoBehaviour
                 return agent.CalculatePath(x[0].position, newNavPath) && newNavPath.status == NavMeshPathStatus.PathComplete;
             });
 
+            canEscapeRoom = temp.Any() && temp.Count() > 1;
 
-            if (temp.Any())
+            if (temp != null && temp.Any())
             {
                 validPatrolPoints = temp.SelectMany(x => x).ToArray();
             }
@@ -215,6 +226,7 @@ public class TVManController : MonoBehaviour
                 goto case TVManBehaviour.None;
 
             case TVManBehaviour.NotInPlay:
+                canEscapeRoom = false;
                 transform.SetParent(null);
                 UseNavMesh = false;
                 transform.SetPositionAndRotation(initialPosition, initialRotation);
@@ -253,18 +265,24 @@ public class TVManController : MonoBehaviour
 
     private IEnumerator PutInPlay(Transform spawnTransform)
     {
-        initialSpawnPosition = spawnTransform.position;
-        initialSpawnRotation = transform.rotation;
-        CurrentBehaviour = TVManBehaviour.None;
-        transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
-        toPutInPlayOnSectionMove = null;
 
+        PutInPlayNow(spawnTransform);
         //if (CurrentBehaviour != TVManBehaviour.NotInPlay) 
         //{ 
         //    GetUpdatedValidPatrolPoints(); 
         //}
 
         yield return null;
+    }
+
+    public void PutInPlayNow(Transform spawnTransform) 
+    {
+        print("he put in play");
+        initialSpawnPosition = spawnTransform.position;
+        initialSpawnRotation = transform.rotation;
+        CurrentBehaviour = TVManBehaviour.None;
+        transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
+        toPutInPlayOnSectionMove = null;
     }
 
     private void TurnToNoise(Vector3 noisePosition)
@@ -375,23 +393,31 @@ public class TVManController : MonoBehaviour
 
     private void Behaviour_Patrolling()
     {
-        if (!validPatrolPoints.Contains(patrolTarget) || !Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
+        if (validPatrolPoints != null)
         {
-            FindNextPatrolPoint();
+            if (!validPatrolPoints.Contains(patrolTarget) || !Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
+            {
+                FindNextPatrolPoint();
+            }
         }
     }
 
     private bool FindNextPatrolPoint()
     {
-        IEnumerable<Transform> nonCurrentPatrolTargets = validPatrolPoints.Where(x => x != patrolTarget);
-        IEnumerable<Transform> forwardPatrolTargets = nonCurrentPatrolTargets.Where(x => Vector3.Dot(x.position - transform.position, transform.forward) >= 0);
+        bool newTargetSelected = false;
 
-        Transform newTarget = forwardPatrolTargets.Any() ? forwardPatrolTargets.OrderBy(x => Vector3.Distance(transform.position, x.position)).First()
-            : nonCurrentPatrolTargets.Any() ? nonCurrentPatrolTargets.OrderBy(x => Vector3.Distance(x.position, transform.position)).First()
-            : patrolTarget;
+        if (validPatrolPoints != null)
+        {
+            IEnumerable<Transform> nonCurrentPatrolTargets = validPatrolPoints.Where(x => x != patrolTarget);
+            IEnumerable<Transform> forwardPatrolTargets = nonCurrentPatrolTargets.Where(x => Vector3.Dot(x.position - transform.position, transform.forward) >= 0);
 
-        bool newTargetSelected = patrolTarget != newTarget;
-        patrolTarget = newTarget;
+            Transform newTarget = forwardPatrolTargets.Any() ? forwardPatrolTargets.OrderBy(x => Vector3.Distance(transform.position, x.position)).First()
+                : nonCurrentPatrolTargets.Any() ? nonCurrentPatrolTargets.OrderBy(x => Vector3.Distance(x.position, transform.position)).First()
+                : patrolTarget;
+
+            newTargetSelected = patrolTarget != newTarget;
+            patrolTarget = newTarget;
+        }
 
         return newTargetSelected;
     }

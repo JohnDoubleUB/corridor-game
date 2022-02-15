@@ -131,7 +131,7 @@ MonoBehaviour:
   corridorMatType: 3
   corridorDoorMatType: 1
   StretchAmount: 2
-  ForceStretch: 1
+  ForceStretch: 0
   ForceWave: 0
   sectionDoor: {fileID: 0}
   AllowTVMan: 0
