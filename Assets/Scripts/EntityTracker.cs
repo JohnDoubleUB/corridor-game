@@ -63,6 +63,7 @@ public class EntityTracker : MonoBehaviour
 
     public void NotifyTVMan() 
     {
+        print("update tvman!");
         TVManController tempController = GameManager.current.tvMan;
         bool tvNavMeshShouldBeDisabled = section.sectionType != SectionType.Middle && tempController.CurrentBehaviour == TVManBehaviour.PursuingMouse;
         tempController.UseNavMesh = !tvNavMeshShouldBeDisabled;

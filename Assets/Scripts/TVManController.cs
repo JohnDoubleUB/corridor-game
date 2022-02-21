@@ -17,9 +17,6 @@ public class TVManController : MonoBehaviour
     public float sightConeAngle = 30f;
 
     public float alertTimeWithoutPerception = 5f;
-    //TODO: Figure out the last direction tv man was moving, to get a vector? or perhaps his facing direction?
-
-    public bool DefaultToPatrol = true;
 
     public bool UseNavMesh
     {
@@ -81,6 +78,13 @@ public class TVManController : MonoBehaviour
 
     private IEnumerator toPutInPlayOnSectionMove = null;
 
+    private bool IsCurrentlyOnNavMesh 
+    {
+        get 
+        {
+            return NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas);
+        }
+    }
 
     [SerializeField]
     [ReadOnlyField]
@@ -131,13 +135,13 @@ public class TVManController : MonoBehaviour
 
     private void GetUpdatedValidPatrolPoints()
     {
-        if (!UseNavMesh) UseNavMesh = true;
+        //if (!UseNavMesh) UseNavMesh = true;
 
         Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
 
         if (tempPatrolPoints.Any())
         {
-            IEnumerable<Transform[]> temp = tempPatrolPoints.Where(x =>
+            IEnumerable<Transform[]> temp = !agent.enabled ? tempPatrolPoints : tempPatrolPoints.Where(x =>
             {
                 NavMeshPath newNavPath = new NavMeshPath();
                 return agent.CalculatePath(x[0].position, newNavPath) && newNavPath.status == NavMeshPathStatus.PathComplete;
@@ -160,18 +164,18 @@ public class TVManController : MonoBehaviour
     {
         switch (CurrentBehaviour)
         {
-            case TVManBehaviour.None:
-                Behaviour_Perceive();
-                CurrentBehaviour = TVManBehaviour.Patrolling;
-                break;
+            //case TVManBehaviour.None:
+            //    Behaviour_Perceive();
+            //    CurrentBehaviour = TVManBehaviour.Patrolling;
+            //    break;
 
             case TVManBehaviour.PursuingPlayer:
                 Behaviour_PursuePlayer();
                 break;
 
-            case TVManBehaviour.Returning:
-                Behaviour_Returning();
-                break;
+            //case TVManBehaviour.Returning:
+            //    Behaviour_Returning();
+            //    break;
 
             case TVManBehaviour.Waiting:
                 Behaviour_Waiting();
@@ -194,10 +198,6 @@ public class TVManController : MonoBehaviour
             StartCoroutine(toPutInPlayOnSectionMove);
             toPutInPlayOnSectionMove = null;
         }
-        else
-        {
-            //if (CurrentBehaviour != TVManBehaviour.NotInPlay) GetUpdatedValidPatrolPoints();
-        }
 
         transform.SetParent(null);
         updateNavDestination = true;
@@ -205,7 +205,8 @@ public class TVManController : MonoBehaviour
 
     private void OnNavMeshUpdate() 
     {
-        if(agent.isOnNavMesh) GetUpdatedValidPatrolPoints();
+        agent.enabled = IsCurrentlyOnNavMesh;
+        GetUpdatedValidPatrolPoints();
     }
 
     private void OnBehaviourChange()
@@ -217,35 +218,41 @@ public class TVManController : MonoBehaviour
         switch (currentBehaviour)
         {
             case TVManBehaviour.Patrolling:
+                if (IsCurrentlyOnNavMesh) 
+                {
+                    agent.enabled = true;
+                    agent.isStopped = false;
+                }
+                else 
+                {
+                    agent.enabled = false;
+                }
                 GetUpdatedValidPatrolPoints();
                 FindNextPatrolPoint();
                 break;
 
-            case TVManBehaviour.PursuingLastPercived:
-                UseNavMesh = true;
+            case TVManBehaviour.Waiting:
+                if (agent.enabled) agent.isStopped = true;
                 goto case TVManBehaviour.None;
 
             case TVManBehaviour.NotInPlay:
+                agent.enabled = false;
                 canEscapeRoom = false;
                 transform.SetParent(null);
-                UseNavMesh = false;
                 transform.SetPositionAndRotation(initialPosition, initialRotation);
                 goto case TVManBehaviour.None;
 
-            case TVManBehaviour.Waiting:
+            case TVManBehaviour.PursuingLastPercived:
             case TVManBehaviour.Returning:
             case TVManBehaviour.None:
                 if (IsHunting) IsHunting = false;
                 break;
 
             case TVManBehaviour.PursuingPlayer:
-                UseNavMesh = true;
+                if (IsCurrentlyOnNavMesh && !agent.enabled) agent.enabled = true;
                 if (!IsHunting) IsHunting = true;
                 break;
         }
-
-        bool TVManNeedsToMove = currentBehaviour != TVManBehaviour.None && currentBehaviour != TVManBehaviour.Waiting;
-        if (UseNavMesh) agent.isStopped = !TVManNeedsToMove;
     }
 
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
@@ -267,11 +274,6 @@ public class TVManController : MonoBehaviour
     {
 
         PutInPlayNow(spawnTransform);
-        //if (CurrentBehaviour != TVManBehaviour.NotInPlay) 
-        //{ 
-        //    GetUpdatedValidPatrolPoints(); 
-        //}
-
         yield return null;
     }
 
@@ -280,7 +282,7 @@ public class TVManController : MonoBehaviour
         print("he put in play");
         initialSpawnPosition = spawnTransform.position;
         initialSpawnRotation = transform.rotation;
-        CurrentBehaviour = TVManBehaviour.None;
+        CurrentBehaviour = TVManBehaviour.Patrolling;
         transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
         toPutInPlayOnSectionMove = null;
     }
@@ -293,8 +295,8 @@ public class TVManController : MonoBehaviour
 
         switch (CurrentBehaviour)
         {
-            case TVManBehaviour.None:
-            case TVManBehaviour.Returning:
+            //case TVManBehaviour.None:
+            //case TVManBehaviour.Returning:
             case TVManBehaviour.Patrolling:
                 transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
                 lastPerceivedTimer = 0f;
@@ -302,10 +304,8 @@ public class TVManController : MonoBehaviour
                 break;
 
             case TVManBehaviour.Waiting:
-                UseNavMesh = true;
                 NavMeshPath newPath = new NavMeshPath();
                 bool pathCalculated = agent.CalculatePath(lastPercievedLocation, newPath);
-                UseNavMesh = false;
                 if (pathCalculated && newPath.status == NavMeshPathStatus.PathComplete)
                 {
                     CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
@@ -325,7 +325,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                CurrentBehaviour = DefaultToPatrol ? TVManBehaviour.Patrolling : TVManBehaviour.Returning;
+                CurrentBehaviour = TVManBehaviour.Patrolling;
             }
         }
         else
@@ -354,7 +354,7 @@ public class TVManController : MonoBehaviour
             }
             else
             {
-                CurrentBehaviour = DefaultToPatrol ? TVManBehaviour.Patrolling : TVManBehaviour.Returning;
+                CurrentBehaviour = TVManBehaviour.Patrolling;
                 lastPerceivedTimer = 0f;
             }
         }
@@ -382,14 +382,14 @@ public class TVManController : MonoBehaviour
         return false;
     }
 
-    private void Behaviour_Returning()
-    {
-        if (!Behaviour_Perceive() && MoveTowardPosition(initialSpawnPosition, false))
-        {
-            transform.rotation = initialSpawnRotation;
-            CurrentBehaviour = TVManBehaviour.None;
-        }
-    }
+    //private void Behaviour_Returning()
+    //{
+    //    if (!Behaviour_Perceive() && MoveTowardPosition(initialSpawnPosition, false))
+    //    {
+    //        transform.rotation = initialSpawnRotation;
+    //        CurrentBehaviour = TVManBehaviour.None;
+    //    }
+    //}
 
     private void Behaviour_Patrolling()
     {
