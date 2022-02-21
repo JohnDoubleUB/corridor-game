@@ -164,18 +164,13 @@ public class TVManController : MonoBehaviour
     {
         switch (CurrentBehaviour)
         {
-            //case TVManBehaviour.None:
-            //    Behaviour_Perceive();
-            //    CurrentBehaviour = TVManBehaviour.Patrolling;
-            //    break;
+            case TVManBehaviour.None:
+                CurrentBehaviour = TVManBehaviour.Patrolling;
+                break;
 
             case TVManBehaviour.PursuingPlayer:
                 Behaviour_PursuePlayer();
                 break;
-
-            //case TVManBehaviour.Returning:
-            //    Behaviour_Returning();
-            //    break;
 
             case TVManBehaviour.Waiting:
                 Behaviour_Waiting();
@@ -243,7 +238,6 @@ public class TVManController : MonoBehaviour
                 goto case TVManBehaviour.None;
 
             case TVManBehaviour.PursuingLastPercived:
-            case TVManBehaviour.Returning:
             case TVManBehaviour.None:
                 if (IsHunting) IsHunting = false;
                 break;
@@ -274,6 +268,11 @@ public class TVManController : MonoBehaviour
     {
 
         PutInPlayNow(spawnTransform);
+        //if (CurrentBehaviour != TVManBehaviour.NotInPlay) 
+        //{ 
+        //    GetUpdatedValidPatrolPoints(); 
+        //}
+
         yield return null;
     }
 
@@ -282,7 +281,7 @@ public class TVManController : MonoBehaviour
         print("he put in play");
         initialSpawnPosition = spawnTransform.position;
         initialSpawnRotation = transform.rotation;
-        CurrentBehaviour = TVManBehaviour.Patrolling;
+        CurrentBehaviour = TVManBehaviour.None;
         transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
         toPutInPlayOnSectionMove = null;
     }
@@ -295,8 +294,8 @@ public class TVManController : MonoBehaviour
 
         switch (CurrentBehaviour)
         {
-            //case TVManBehaviour.None:
-            //case TVManBehaviour.Returning:
+            case TVManBehaviour.None:
+            case TVManBehaviour.Returning:
             case TVManBehaviour.Patrolling:
                 transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
                 lastPerceivedTimer = 0f;
