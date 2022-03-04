@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
-public class CG_CharacterController : MonoBehaviour
+public class CG_CharacterController : MonoBehaviour, IHuntableEntities
 {
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -23,6 +23,10 @@ public class CG_CharacterController : MonoBehaviour
     public bool IsJumping { get { return isJumping; } }
     public bool IsIlluminated { get { return isIlluminated; } }
     public bool IsCrouching { get { return isCrouching; } }
+
+    public Transform EntityTransform => transform;
+
+    public EntityType EntityType { get { return EntityType.Player; } }
 
     public GameObject playerPencil;
     public Image playerCrosshair;
@@ -401,5 +405,15 @@ public class CG_CharacterController : MonoBehaviour
                 if (playerPencil.activeInHierarchy) playerPencil.SetActive(false);
             }
         }
+    }
+
+    public void OnBeingHunted()
+    {
+        print("Player is being hunted");
+    }
+
+    public void OnEntityKilled()
+    {
+        print("Player has been killed");
     }
 }

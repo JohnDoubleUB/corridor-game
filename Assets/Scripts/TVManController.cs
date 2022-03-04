@@ -88,8 +88,8 @@ public class TVManController : MonoBehaviour
 
     [SerializeField]
     [ReadOnlyField]
-    private PercivedEntity currentTargetType;
-    public PercivedEntity CurrentTargetType { get { return currentTargetType; } }
+    private EntityType currentTargetType;
+    public EntityType CurrentTargetType { get { return currentTargetType; } }
 
     public Transform TvManEyeLevel;
     private AudioSource audioSource;
@@ -213,6 +213,7 @@ public class TVManController : MonoBehaviour
                 break;
 
             case TVManBehaviour.Alerted:
+
                 if (interestTimer < alertTimeWithoutPerception)
                 {
                     interestTimer += Time.deltaTime;
@@ -224,11 +225,14 @@ public class TVManController : MonoBehaviour
                 break;
             
             case TVManBehaviour.Investigating:
+
                 if (MoveTowardPosition(lastPercievedLocation, false)) 
                 {
                     CurrentBehaviour = TVManBehaviour.Alerted;
                 }
                 break;
+
+            
         }
 
     }
@@ -385,7 +389,7 @@ public enum TVManBehaviour
     KillingTarget
 }
 
-public enum PercivedEntity
+public enum EntityType
 {
     None,
     Player,

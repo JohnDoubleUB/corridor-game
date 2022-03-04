@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MouseEntity : InteractableObject
+public class MouseEntity : InteractableObject, IHuntableEntities
 {
     public NavMeshAgent agent;
     public Animator mouseAnimator;
@@ -54,6 +54,11 @@ public class MouseEntity : InteractableObject
 
     private MouseBehaviour currentBehaviour;
 
+
+    public bool IsIlluminated { get { return false; } }
+
+
+
     private bool detectableByTVMan;
     public bool DetectableByTVMan { get { return detectableByTVMan; } }
 
@@ -83,6 +88,9 @@ public class MouseEntity : InteractableObject
             }
         }
     }
+
+    public EntityType EntityType => EntityType.Mouse;
+    public Transform EntityTransform => transform;
 
     private List<AudioSource> throwNoises = new List<AudioSource>();
 
@@ -542,6 +550,15 @@ public class MouseEntity : InteractableObject
         PlayMouseSqueak();
     }
 
+    public void OnBeingHunted()
+    {
+        print("Mouse is being hunted");
+    }
+
+    public void OnEntityKilled()
+    {
+        print("Mouse has been killed");
+    }
 }
 
 

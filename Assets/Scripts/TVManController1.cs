@@ -376,7 +376,7 @@ public class TVManControllerOLD : MonoBehaviour
         Vector3 playerLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
 
         if (Vector3.Distance(playerLookLocation, transform.position) < sightRange &&
-            (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(playerLookLocation, transform.position) <= minimumDistance))
+            (LineOfSightCheck(playerPosition) == EntityType.Player || Vector3.Distance(playerLookLocation, transform.position) <= minimumDistance))
         {
             CurrentBehaviour = TVManBehaviourOLD.PursuingPlayer;
             lastPerceivedTimer = 0f;
@@ -387,7 +387,7 @@ public class TVManControllerOLD : MonoBehaviour
         else
         {
             //Get all mice that are visible and are in line of sight
-            IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == PercivedEntity.Mouse);
+            IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == EntityType.Mouse);
             if (miceVisibleToTVMan.Any())
             {
                 //Get all of those that are in range
@@ -452,12 +452,12 @@ public class TVManControllerOLD : MonoBehaviour
 
 
 
-    private PercivedEntity LineOfSightCheck(Vector3 target)
+    private EntityType LineOfSightCheck(Vector3 target)
     {
         return LineOfSightCheck(target, out RaycastHit? hit);
     }
 
-    private PercivedEntity LineOfSightCheck(Vector3 target, out RaycastHit? hit)
+    private EntityType LineOfSightCheck(Vector3 target, out RaycastHit? hit)
     {
         if (transform.GetAngleToTarget(target) < sightConeAngle && Physics.Linecast(TvManEyeLevel.position, target, out RaycastHit hitResult, lineOfSightMask))
         {
@@ -465,20 +465,20 @@ public class TVManControllerOLD : MonoBehaviour
             switch (hitResult.collider.gameObject.tag)
             {
                 case "Player":
-                    return GameManager.current.playerController.IsIlluminated ? PercivedEntity.Player : PercivedEntity.None;
+                    return GameManager.current.playerController.IsIlluminated ? EntityType.Player : EntityType.None;
                 case "Entity":
-                    return PercivedEntity.Mouse;
+                    return EntityType.Mouse;
             }
         }
         hit = null;
-        return PercivedEntity.None;
+        return EntityType.None;
     }
 
     private void Behaviour_PursuePlayer()
     {
         MoveTowardPosition(GameManager.current.player.transform.position);
 
-        if (LineOfSightCheck(GameManager.current.player.transform.position) != PercivedEntity.Player)
+        if (LineOfSightCheck(GameManager.current.player.transform.position) != EntityType.Player)
         {
             if (lastPerceivedTimer < alertTimeWithoutPerception)
             {
