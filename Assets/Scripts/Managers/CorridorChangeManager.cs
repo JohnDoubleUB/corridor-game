@@ -53,7 +53,8 @@ public class CorridorChangeManager : MonoBehaviour
     public CorridorMatVarient[] CorridorMatVarients;
 
     public MouseEntity MousePrefab;
-    public List<MouseEntity> Mice = new List<MouseEntity>();
+    private List<MouseEntity> mice = new List<MouseEntity>();
+    public MouseEntity[] Mice { get { return mice.ToArray(); } }
 
     private int mouseCount;
 
@@ -235,14 +236,14 @@ public class CorridorChangeManager : MonoBehaviour
     private void HandleMouseSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData)
     {
         //Check if mouse can be spawned here
-        if (layoutGameObj.AllowMouseSpawns && Mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        if (layoutGameObj.AllowMouseSpawns && mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
         {
             print("make a mouse!");
             MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
             mouseCount++;
             tempMouse.name = "Mouse -" + mouseCount;
             section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-            Mice.Add(tempMouse);
+            mice.Add(tempMouse);
         }
     }
 
@@ -425,7 +426,7 @@ public class CorridorChangeManager : MonoBehaviour
     {
         if (section.EntityTracker.EntitiesInArea.Any())
         {
-            var miceInSection = Mice.Where(x => section.EntityTracker.EntitiesInArea.Contains(x.gameObject)).ToArray();
+            var miceInSection = mice.Where(x => section.EntityTracker.EntitiesInArea.Contains(x.gameObject)).ToArray();
             section.EntityTracker.RemoveAllEntities();
 
             foreach (MouseEntity mouseEntity in miceInSection)
@@ -433,7 +434,7 @@ public class CorridorChangeManager : MonoBehaviour
                 if (mouseEntity.CurrentBehaviour != MouseBehaviour.ChasedByTVMan)
                 {
                     Destroy(mouseEntity.gameObject);
-                    Mice.Remove(mouseEntity);
+                    mice.Remove(mouseEntity);
                 }
             }
         }

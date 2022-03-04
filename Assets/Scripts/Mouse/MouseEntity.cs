@@ -15,6 +15,8 @@ public class MouseEntity : InteractableObject
     public AudioClip[] MouseThrowNoises;
     public AudioClip[] MouseLandNoises;
     public AudioClip[] MouseSqueaks;
+    
+    public bool alwaysGetDetectedByTVMan;
 
     public bool IsVisible { get { return visibleAfterThrownTimer < visibleAfterThrownForSeconds; } }
 
@@ -51,6 +53,9 @@ public class MouseEntity : InteractableObject
     public float maxWanderTime = 10f; //This is to precent the mouse from getting stuck trying to wander to a point 
 
     private MouseBehaviour currentBehaviour;
+
+    private bool detectableByTVMan;
+    public bool DetectableByTVMan { get { return detectableByTVMan; } }
 
     public MouseBehaviour CurrentBehaviour
     {
@@ -142,6 +147,7 @@ public class MouseEntity : InteractableObject
         defaultAcceleration = agent.acceleration;
         initialPosition = transform.position;
         visibleAfterThrownTimer = visibleAfterThrownForSeconds;
+        if (alwaysGetDetectedByTVMan) detectableByTVMan = true;
     }
 
 

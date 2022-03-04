@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,6 +48,10 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Transform[] validPatrolPoints;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private MouseEntity targetMouse;
+
     public TVManBehaviour CurrentBehaviour
     {
         get { return currentBehaviour; }
@@ -54,8 +59,8 @@ public class TVManController : MonoBehaviour
         {
             if (currentBehaviour != value)
             {
+                if (currentBehaviour == TVManBehaviour.PursuingMouse) targetMouse = null;
                 currentBehaviour = value;
-
                 OnBehaviourChange();
             }
         }
@@ -78,9 +83,9 @@ public class TVManController : MonoBehaviour
 
     private IEnumerator toPutInPlayOnSectionMove = null;
 
-    private bool IsCurrentlyOnNavMesh 
+    private bool IsCurrentlyOnNavMesh
     {
-        get 
+        get
         {
             return NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas);
         }
@@ -172,6 +177,10 @@ public class TVManController : MonoBehaviour
                 Behaviour_PursuePlayer();
                 break;
 
+            case TVManBehaviour.PursuingMouse:
+                Behaviour_PursueMouse();
+                break;
+
             case TVManBehaviour.Waiting:
                 Behaviour_Waiting();
                 break;
@@ -198,7 +207,7 @@ public class TVManController : MonoBehaviour
         updateNavDestination = true;
     }
 
-    private void OnNavMeshUpdate() 
+    private void OnNavMeshUpdate()
     {
         agent.enabled = IsCurrentlyOnNavMesh;
         GetUpdatedValidPatrolPoints();
@@ -213,12 +222,12 @@ public class TVManController : MonoBehaviour
         switch (currentBehaviour)
         {
             case TVManBehaviour.Patrolling:
-                if (IsCurrentlyOnNavMesh) 
+                if (IsCurrentlyOnNavMesh)
                 {
                     agent.enabled = true;
                     agent.isStopped = false;
                 }
-                else 
+                else
                 {
                     agent.enabled = false;
                 }
@@ -242,6 +251,7 @@ public class TVManController : MonoBehaviour
                 if (IsHunting) IsHunting = false;
                 break;
 
+            case TVManBehaviour.PursuingMouse:
             case TVManBehaviour.PursuingPlayer:
                 if (IsCurrentlyOnNavMesh && !agent.enabled) agent.enabled = true;
                 if (!IsHunting) IsHunting = true;
@@ -276,7 +286,7 @@ public class TVManController : MonoBehaviour
         yield return null;
     }
 
-    public void PutInPlayNow(Transform spawnTransform) 
+    public void PutInPlayNow(Transform spawnTransform)
     {
         print("he put in play");
         initialSpawnPosition = spawnTransform.position;
@@ -358,7 +368,7 @@ public class TVManController : MonoBehaviour
             }
         }
     }
-
+    //TODO: something isn't right here, I think tv man behaviour needs a large overhaul
     private bool Behaviour_Perceive()
     {
         //Check for player
@@ -370,25 +380,44 @@ public class TVManController : MonoBehaviour
         {
             CurrentBehaviour = TVManBehaviour.PursuingPlayer;
             lastPerceivedTimer = 0f;
+            updateNavDestination = true;
             return true;
 
         }
-        else if (false) //Check for other thing (Mouse when implemented)
+        else
         {
+            //Get all mice that are visible and are in line of sight
+            IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == PercivedEntity.Entity);
+            if (miceVisibleToTVMan.Any())
+            {
+                //Get all of those that are in range
+                IEnumerable<Tuple<float, MouseEntity>> miceWithinRange = miceVisibleToTVMan
+                    .Select(x => new Tuple<float, MouseEntity>(Vector3.Distance(transform.position, new Vector3(x.transform.position.x, transform.position.y, x.transform.position.z)), x))
+                    .Where(x => x.Item1 < sightRange);
+
+                if (miceWithinRange != null && miceWithinRange.Any())
+                {
+                    //Get mouse that is the closest to the player
+                    MouseEntity newTarget = miceWithinRange.OrderBy(x => x.Item1).Select(x => x.Item2).First();
+                    
+                    //If this isn't the current target then change it!
+                    if (targetMouse != newTarget)
+                    {
+
+                        //Tell mouse it's being hunted;
+
+                        targetMouse = newTarget;
+                        CurrentBehaviour = TVManBehaviour.PursuingMouse;
+                        updateNavDestination = true;
+                        return true;
+                    }
+                }
+            }
 
         }
 
         return false;
     }
-
-    //private void Behaviour_Returning()
-    //{
-    //    if (!Behaviour_Perceive() && MoveTowardPosition(initialSpawnPosition, false))
-    //    {
-    //        transform.rotation = initialSpawnRotation;
-    //        CurrentBehaviour = TVManBehaviour.None;
-    //    }
-    //}
 
     private void Behaviour_Patrolling()
     {
@@ -466,6 +495,28 @@ public class TVManController : MonoBehaviour
             lastPerceivedTimer = 0f;
         }
 
+    }
+
+    private void Behaviour_PursueMouse()
+    {
+        MoveTowardPosition(targetMouse.transform.position);
+
+        if (Behaviour_Perceive())
+        {
+            if (lastPerceivedTimer < alertTimeWithoutPerception)
+            {
+                lastPerceivedTimer += Time.deltaTime;
+            }
+            else
+            {
+                CurrentBehaviour = TVManBehaviour.Waiting;
+                lastPerceivedTimer = 0f;
+            }
+        }
+        else
+        {
+            lastPerceivedTimer = 0f;
+        }
     }
 
     private bool MoveTowardPosition(Vector3 target, bool stopAtMinimumDistance = true) //Returns true once target is reached

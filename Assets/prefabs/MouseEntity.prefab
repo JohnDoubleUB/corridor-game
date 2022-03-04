@@ -381,7 +381,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e13b4ade015d72c4ba18f1aec0b8c390, type: 3}
   - {fileID: 8300000, guid: 7817bacac241d974fbca8fe71b661cb5, type: 3}
   - {fileID: 8300000, guid: 5528fb0f9a3a73448a72dd381d8f688d, type: 3}
+  alwaysGetDetectedByTVMan: 1
   ThrowNoiseChance: 0.3
+  visibleAfterThrownForSeconds: 5
   destroyIfOffNavMesh: 1
   offNavMeshDelay: 5
   squeakDelay: 6
@@ -403,6 +405,7 @@ MonoBehaviour:
   currentSqueakDelay: 0
   squeakTimer: 0
   offNavMeshTimer: 0
+  visibleAfterThrownTimer: 0
 --- !u!82 &3363048708282944196
 AudioSource:
   m_ObjectHideFlags: 0
