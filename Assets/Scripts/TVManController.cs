@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,10 +35,8 @@ public class TVManController : MonoBehaviour
 
     [SerializeField]
     [ReadOnlyField]
-    private float lastPerceivedTimer;
-    [SerializeField]
-    [ReadOnlyField]
     private float interestTimer;
+
     [SerializeField]
     [ReadOnlyField]
     private Vector3 lastPercievedLocation;
@@ -48,40 +45,60 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Transform[] validPatrolPoints;
 
-    [SerializeField]
-    [ReadOnlyField]
-    private MouseEntity targetMouse;
-
     public TVManBehaviour CurrentBehaviour
     {
         get { return currentBehaviour; }
-        set
+
+        private set
         {
             if (currentBehaviour != value)
             {
-                if (currentBehaviour == TVManBehaviour.PursuingMouse) targetMouse = null;
                 currentBehaviour = value;
+                interestTimer = 0;
                 OnBehaviourChange();
             }
         }
+    }
+
+    private bool CanHearNoise {
+        get 
+        {
+            switch (CurrentBehaviour) 
+            {
+                default:
+                    return true;
+            }
+        } 
+    }
+
+    private bool CanReachTarget(Transform target) 
+    {
+        return CanReachTarget(target.position);
+    }
+
+    private bool CanReachTarget(Vector3 target)
+    {
+        NavMeshPath newNavPath = new NavMeshPath();
+        return agent.CalculatePath(target, newNavPath) && newNavPath.status == NavMeshPathStatus.PathComplete;
     }
 
     [SerializeField]
     [ReadOnlyField]
     private TVManBehaviour currentBehaviour;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private PercivedEntity currentTargetType;
+    public PercivedEntity CurrentTargetType { get { return currentTargetType; } }
+
     public Transform TvManEyeLevel;
     private AudioSource audioSource;
 
-    private Vector3 initialPosition;
-    private Quaternion initialRotation;
-
-    private Vector3 initialSpawnPosition;
-    private Quaternion initialSpawnRotation;
+    private TransformElements initialTransform;
 
     private bool updateNavDestination = true;
 
-    private IEnumerator toPutInPlayOnSectionMove = null;
+    private IEnumerator ExecuteOnSectionMove = null;
 
     private bool IsCurrentlyOnNavMesh
     {
@@ -93,7 +110,7 @@ public class TVManController : MonoBehaviour
 
     [SerializeField]
     [ReadOnlyField]
-    private Transform patrolTarget;
+    private MovementTarget currentTarget;
 
     [SerializeField]
     [ReadOnlyField]
@@ -103,8 +120,8 @@ public class TVManController : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        initialPosition = transform.position;
-        initialRotation = transform.rotation;
+        initialTransform = transform.ToTransformElements();
+        agent.speed = movementSpeed;
     }
 
 
@@ -114,15 +131,20 @@ public class TVManController : MonoBehaviour
         AudioManager.OnEntityNoiseAlert += OnNoiseMade;
         CorridorChangeManager.OnSectionMove += OnSectionMove;
         CorridorChangeManager.OnNavMeshUpdate += OnNavMeshUpdate;
-        OnBehaviourChange();
     }
 
     private void Update()
     {
-        if (movementSpeed != agent.speed) agent.speed = movementSpeed;
+        //if (movementSpeed != agent.speed) agent.speed = movementSpeed;
 
         transform.GenerateNoiseAlertAtTransform(IsHunting ? 4f : 1f, NoiseOrigin.TVMan);
+        PlayHuntingNoise();
+        BehaviourUpdate();
+    }
 
+
+    private void PlayHuntingNoise()
+    {
         if (audioSource.isPlaying != IsHunting)
         {
             if (IsHunting)
@@ -134,34 +156,50 @@ public class TVManController : MonoBehaviour
                 audioSource.Stop();
             }
         }
-
-        BehaviourUpdate();
     }
 
-    private void GetUpdatedValidPatrolPoints()
+    private IEnumerable<Transform> GetValidPatrolPoints()
     {
-        //if (!UseNavMesh) UseNavMesh = true;
-
         Transform[][] tempPatrolPoints = CorridorChangeManager.current.TVManPatrolPoints;
 
         if (tempPatrolPoints.Any())
         {
-            IEnumerable<Transform[]> temp = !agent.enabled ? tempPatrolPoints : tempPatrolPoints.Where(x =>
-            {
-                NavMeshPath newNavPath = new NavMeshPath();
-                return agent.CalculatePath(x[0].position, newNavPath) && newNavPath.status == NavMeshPathStatus.PathComplete;
-            });
+            IEnumerable<Transform[]> temp = !agent.enabled ? tempPatrolPoints : tempPatrolPoints.Where(x => CanReachTarget(x[0]));
 
             canEscapeRoom = temp.Any() && temp.Count() > 1;
 
             if (temp != null && temp.Any())
             {
-                validPatrolPoints = temp.SelectMany(x => x).ToArray();
+                return temp.SelectMany(x => x).ToArray();
             }
-            else
-            {
-                validPatrolPoints = null;
-            }
+        }
+
+        return null;
+    }
+
+    private MovementTarget GetNextPatrolPoint(IEnumerable<Transform> patrolPoints, Transform pointToIgnore = null)
+    {
+        if (patrolPoints != null)
+        {
+            IEnumerable<Transform> nonCurrentPatrolTargets = patrolPoints.Where(x => pointToIgnore == null || x != pointToIgnore);
+            IEnumerable<Transform> forwardPatrolTargets = nonCurrentPatrolTargets.Where(x => Vector3.Dot(x.position - transform.position, transform.forward) >= 0);
+
+            Transform newTarget = forwardPatrolTargets.Any() ? forwardPatrolTargets.OrderBy(x => Vector3.Distance(transform.position, x.position)).First()
+                : nonCurrentPatrolTargets.Any() ? nonCurrentPatrolTargets.OrderBy(x => Vector3.Distance(x.position, transform.position)).First()
+                : null;
+
+            return newTarget.ToMovementTarget();
+        }
+
+        return null;
+    }
+
+    private void UpdatePatrol()
+    {
+        if (CurrentBehaviour == TVManBehaviour.Patrolling)
+        {
+            validPatrolPoints = GetValidPatrolPoints().ToArray();
+            currentTarget = GetNextPatrolPoint(validPatrolPoints);
         }
     }
 
@@ -169,355 +207,136 @@ public class TVManController : MonoBehaviour
     {
         switch (CurrentBehaviour)
         {
+            case TVManBehaviour.Patrolling:
+                //Patrol behaviour
+                if (validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
+                break;
+
+            case TVManBehaviour.Alerted:
+                if (interestTimer < alertTimeWithoutPerception)
+                {
+                    interestTimer += Time.deltaTime;
+                }
+                else
+                {
+                    CurrentBehaviour = TVManBehaviour.Patrolling;
+                }
+                break;
+            
+            case TVManBehaviour.Investigating:
+                if (MoveTowardPosition(lastPercievedLocation, false)) 
+                {
+                    CurrentBehaviour = TVManBehaviour.Alerted;
+                }
+                break;
+        }
+
+    }
+
+    private bool UpdateNavAgent()
+    {
+        UseNavMesh = IsCurrentlyOnNavMesh;
+        return UseNavMesh;
+    }
+
+    /*Behaviour scripts Update functions START*/
+
+
+
+
+    /*Behaviour scripts Update functions END*/
+    private void OnBehaviourChange()
+    {
+        switch (CurrentBehaviour)
+        {
             case TVManBehaviour.None:
-                CurrentBehaviour = TVManBehaviour.Patrolling;
-                break;
-
-            case TVManBehaviour.PursuingPlayer:
-                Behaviour_PursuePlayer();
-                break;
-
-            case TVManBehaviour.PursuingMouse:
-                Behaviour_PursueMouse();
-                break;
-
-            case TVManBehaviour.Waiting:
-                Behaviour_Waiting();
-                break;
-
-            case TVManBehaviour.PursuingLastPercived:
-                Behaviour_PursueLastPercieved();
+                transform.position = initialTransform.Position;
+                transform.rotation = initialTransform.Rotation;
+                UseNavMesh = false;
                 break;
 
             case TVManBehaviour.Patrolling:
-                Behaviour_Patrolling();
+                UpdateNavAgent();
+                UpdatePatrol();
                 break;
+
+            case TVManBehaviour.Idle:
+            case TVManBehaviour.Alerted:
+                if (UseNavMesh) agent.ResetPath();
+
+
+                break;
+                //case TVManBehaviour.PursuingTarget:
+                //case TVManBehaviour.KillingTarget:
+                //    if (IsCurrentlyOnNavMesh) UseNavMesh = true;
+                //    break;
         }
     }
 
     private void OnSectionMove()
     {
-        if (toPutInPlayOnSectionMove != null)
+        if (ExecuteOnSectionMove != null)
         {
-            StartCoroutine(toPutInPlayOnSectionMove);
-            toPutInPlayOnSectionMove = null;
+            StartCoroutine(ExecuteOnSectionMove);
+            ExecuteOnSectionMove = null;
         }
-
-        transform.SetParent(null);
-        updateNavDestination = true;
+        UpdateNavAgent();
+        UpdatePatrol();
     }
+
+    //public void UpdatePatrolAndAgent(bool enableNavAgent = true) 
+    //{
+    //    UseNavMesh = enableNavAgent ? IsCurrentlyOnNavMesh : false;
+    //    UpdateNavAgent();
+    //    UpdatePatrol();
+    //}
 
     private void OnNavMeshUpdate()
     {
-        agent.enabled = IsCurrentlyOnNavMesh;
-        GetUpdatedValidPatrolPoints();
+        UpdatePatrol();
     }
 
-    private void OnBehaviourChange()
-    {
-        interestTimer = 0f;
-        lastPerceivedTimer = 0f;
-        patrolTarget = null;
-
-        switch (currentBehaviour)
-        {
-            case TVManBehaviour.Patrolling:
-                if (IsCurrentlyOnNavMesh)
-                {
-                    agent.enabled = true;
-                    agent.isStopped = false;
-                }
-                else
-                {
-                    agent.enabled = false;
-                }
-                GetUpdatedValidPatrolPoints();
-                FindNextPatrolPoint();
-                break;
-
-            case TVManBehaviour.Waiting:
-                if (agent.enabled) agent.isStopped = true;
-                goto case TVManBehaviour.None;
-
-            case TVManBehaviour.NotInPlay:
-                agent.enabled = false;
-                canEscapeRoom = false;
-                transform.SetParent(null);
-                transform.SetPositionAndRotation(initialPosition, initialRotation);
-                goto case TVManBehaviour.None;
-
-            case TVManBehaviour.PursuingLastPercived:
-            case TVManBehaviour.None:
-                if (IsHunting) IsHunting = false;
-                break;
-
-            case TVManBehaviour.PursuingMouse:
-            case TVManBehaviour.PursuingPlayer:
-                if (IsCurrentlyOnNavMesh && !agent.enabled) agent.enabled = true;
-                if (!IsHunting) IsHunting = true;
-                break;
-        }
-    }
 
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
-        if (CurrentBehaviour != TVManBehaviour.NotInPlay && noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) TurnToNoise(noisePosition);
+        if (CanHearNoise && noiseOrigin != NoiseOrigin.TVMan && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius)
+        {
+            TurnToNoise(noisePosition);
+        }
     }
 
     public void RemoveFromPlay()
     {
-        CurrentBehaviour = TVManBehaviour.NotInPlay;
+        CurrentBehaviour = TVManBehaviour.None;
     }
 
     public void PutInPlayOnSectionMove(Transform spawnTransform)
     {
-        toPutInPlayOnSectionMove = PutInPlay(spawnTransform);
+        ExecuteOnSectionMove = PutInPlay(spawnTransform);
     }
 
     private IEnumerator PutInPlay(Transform spawnTransform)
     {
 
         PutInPlayNow(spawnTransform);
-        //if (CurrentBehaviour != TVManBehaviour.NotInPlay) 
-        //{ 
-        //    GetUpdatedValidPatrolPoints(); 
-        //}
-
         yield return null;
     }
 
     public void PutInPlayNow(Transform spawnTransform)
     {
-        print("he put in play");
-        initialSpawnPosition = spawnTransform.position;
-        initialSpawnRotation = transform.rotation;
-        CurrentBehaviour = TVManBehaviour.None;
-        transform.SetPositionAndRotation(initialSpawnPosition, initialSpawnRotation);
-        toPutInPlayOnSectionMove = null;
+        //print("he put in play");
+        transform.position = spawnTransform.position;
+        CurrentBehaviour = TVManBehaviour.Patrolling;
     }
 
     private void TurnToNoise(Vector3 noisePosition)
     {
         lastPercievedLocation = noisePosition;
+        transform.LookAt(new Vector3(lastPercievedLocation.x, transform.position.y, lastPercievedLocation.z));
         interestTimer = 0;
-
-
-        switch (CurrentBehaviour)
-        {
-            case TVManBehaviour.None:
-            case TVManBehaviour.Returning:
-            case TVManBehaviour.Patrolling:
-                transform.LookAt(new Vector3(noisePosition.x, transform.position.y, noisePosition.z));
-                lastPerceivedTimer = 0f;
-                CurrentBehaviour = TVManBehaviour.Waiting;
-                break;
-
-            case TVManBehaviour.Waiting:
-                NavMeshPath newPath = new NavMeshPath();
-                bool pathCalculated = agent.CalculatePath(lastPercievedLocation, newPath);
-                if (pathCalculated && newPath.status == NavMeshPathStatus.PathComplete)
-                {
-                    CurrentBehaviour = TVManBehaviour.PursuingLastPercived;
-                }
-                lastPerceivedTimer = 0f;
-                break;
-        }
+        CurrentBehaviour = CurrentBehaviour == TVManBehaviour.Investigating || (CurrentBehaviour == TVManBehaviour.Alerted && CanReachTarget(noisePosition)) ? TVManBehaviour.Investigating : TVManBehaviour.Alerted;
     }
 
-    private void Behaviour_PursueLastPercieved()
-    {
-        if (!Behaviour_Perceive() && MoveTowardPosition(lastPercievedLocation, false))
-        {
-            if (lastPerceivedTimer < alertTimeWithoutPerception)
-            {
-                lastPerceivedTimer += Time.deltaTime;
-            }
-            else
-            {
-                CurrentBehaviour = TVManBehaviour.Patrolling;
-            }
-        }
-        else
-        {
-            lastPerceivedTimer = 0f;
-            if (interestTimer < alertTimeWithoutPerception * 1.5)
-            {
-                interestTimer += Time.deltaTime;
-            }
-            else
-            {
-                CurrentBehaviour = TVManBehaviour.Waiting;
-            }
-
-        }
-    }
-
-    private void Behaviour_Waiting()
-    {
-        if (!Behaviour_Perceive())
-        {
-            //agent.isStopped = true;
-            if (lastPerceivedTimer < alertTimeWithoutPerception)
-            {
-                lastPerceivedTimer += Time.deltaTime;
-            }
-            else
-            {
-                CurrentBehaviour = TVManBehaviour.Patrolling;
-                lastPerceivedTimer = 0f;
-            }
-        }
-    }
-    //TODO: something isn't right here, I think tv man behaviour needs a large overhaul
-    private bool Behaviour_Perceive()
-    {
-        //Check for player
-        Vector3 playerPosition = GameManager.current.player.transform.position;
-        Vector3 playerLookLocation = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
-
-        if (Vector3.Distance(playerLookLocation, transform.position) < sightRange &&
-            (LineOfSightCheck(playerPosition) == PercivedEntity.Player || Vector3.Distance(playerLookLocation, transform.position) <= minimumDistance))
-        {
-            CurrentBehaviour = TVManBehaviour.PursuingPlayer;
-            lastPerceivedTimer = 0f;
-            updateNavDestination = true;
-            return true;
-
-        }
-        else
-        {
-            //Get all mice that are visible and are in line of sight
-            IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == PercivedEntity.Entity);
-            if (miceVisibleToTVMan.Any())
-            {
-                //Get all of those that are in range
-                IEnumerable<Tuple<float, MouseEntity>> miceWithinRange = miceVisibleToTVMan
-                    .Select(x => new Tuple<float, MouseEntity>(Vector3.Distance(transform.position, new Vector3(x.transform.position.x, transform.position.y, x.transform.position.z)), x))
-                    .Where(x => x.Item1 < sightRange);
-
-                if (miceWithinRange != null && miceWithinRange.Any())
-                {
-                    //Get mouse that is the closest to the player
-                    MouseEntity newTarget = miceWithinRange.OrderBy(x => x.Item1).Select(x => x.Item2).First();
-                    
-                    //If this isn't the current target then change it!
-                    if (targetMouse != newTarget)
-                    {
-
-                        //Tell mouse it's being hunted;
-
-                        targetMouse = newTarget;
-                        CurrentBehaviour = TVManBehaviour.PursuingMouse;
-                        updateNavDestination = true;
-                        return true;
-                    }
-                }
-            }
-
-        }
-
-        return false;
-    }
-
-    private void Behaviour_Patrolling()
-    {
-        if (validPatrolPoints != null)
-        {
-            if (!validPatrolPoints.Contains(patrolTarget) || !Behaviour_Perceive() && MoveTowardPosition(patrolTarget.position, false))
-            {
-                FindNextPatrolPoint();
-            }
-        }
-    }
-
-    private bool FindNextPatrolPoint()
-    {
-        bool newTargetSelected = false;
-
-        if (validPatrolPoints != null)
-        {
-            IEnumerable<Transform> nonCurrentPatrolTargets = validPatrolPoints.Where(x => x != patrolTarget);
-            IEnumerable<Transform> forwardPatrolTargets = nonCurrentPatrolTargets.Where(x => Vector3.Dot(x.position - transform.position, transform.forward) >= 0);
-
-            Transform newTarget = forwardPatrolTargets.Any() ? forwardPatrolTargets.OrderBy(x => Vector3.Distance(transform.position, x.position)).First()
-                : nonCurrentPatrolTargets.Any() ? nonCurrentPatrolTargets.OrderBy(x => Vector3.Distance(x.position, transform.position)).First()
-                : patrolTarget;
-
-            newTargetSelected = patrolTarget != newTarget;
-            patrolTarget = newTarget;
-        }
-
-        return newTargetSelected;
-    }
-
-
-
-    private PercivedEntity LineOfSightCheck(Vector3 target)
-    {
-        return LineOfSightCheck(target, out RaycastHit? hit);
-    }
-
-    private PercivedEntity LineOfSightCheck(Vector3 target, out RaycastHit? hit)
-    {
-        if (transform.GetAngleToTarget(target) < sightConeAngle && Physics.Linecast(TvManEyeLevel.position, target, out RaycastHit hitResult, lineOfSightMask))
-        {
-            hit = hitResult;
-            switch (hitResult.collider.gameObject.tag)
-            {
-                case "Player":
-                    return GameManager.current.playerController.IsIlluminated ? PercivedEntity.Player : PercivedEntity.None;
-                case "Entity":
-                    return PercivedEntity.Entity;
-            }
-        }
-        hit = null;
-        return PercivedEntity.None;
-    }
-
-    private void Behaviour_PursuePlayer()
-    {
-        MoveTowardPosition(GameManager.current.player.transform.position);
-
-        if (LineOfSightCheck(GameManager.current.player.transform.position) != PercivedEntity.Player)
-        {
-            if (lastPerceivedTimer < alertTimeWithoutPerception)
-            {
-                lastPerceivedTimer += Time.deltaTime;
-            }
-            else
-            {
-                CurrentBehaviour = TVManBehaviour.Waiting;
-                lastPerceivedTimer = 0f;
-            }
-        }
-        else
-        {
-            lastPerceivedTimer = 0f;
-        }
-
-    }
-
-    private void Behaviour_PursueMouse()
-    {
-        MoveTowardPosition(targetMouse.transform.position);
-
-        if (Behaviour_Perceive())
-        {
-            if (lastPerceivedTimer < alertTimeWithoutPerception)
-            {
-                lastPerceivedTimer += Time.deltaTime;
-            }
-            else
-            {
-                CurrentBehaviour = TVManBehaviour.Waiting;
-                lastPerceivedTimer = 0f;
-            }
-        }
-        else
-        {
-            lastPerceivedTimer = 0f;
-        }
-    }
 
     private bool MoveTowardPosition(Vector3 target, bool stopAtMinimumDistance = true) //Returns true once target is reached
     {
@@ -527,7 +346,7 @@ public class TVManController : MonoBehaviour
 
         if (!agent.enabled)
         {
-            if (Vector3.Distance(target, transform.position) > minimumDistance)
+            if (Vector3.Distance(target, transform.position) > minimumDistance * 3)
             {
                 transform.position += transform.forward * Time.deltaTime * movementSpeed;
             }
@@ -557,20 +376,39 @@ public class TVManController : MonoBehaviour
 
 public enum TVManBehaviour
 {
-    NotInPlay,
     None,
-    PursuingPlayer,
-    PursuingMouse,
-    PursuingLastPercived,
-    Returning,
+    Idle,
+    Alerted,
     Patrolling,
-    AbsorbingPlayer,
-    Waiting
+    Investigating,
+    PursuingTarget,
+    KillingTarget
 }
 
 public enum PercivedEntity
 {
     None,
     Player,
-    Entity
+    Mouse
+}
+
+public class MovementTarget
+{
+    private Transform targetTransform;
+    private Vector3 targetPosition;
+    private bool isTransform;
+
+    public Vector3 TargetPosition { get { return isTransform ? targetTransform.position : targetPosition; } }
+    public Transform TargetTransform { get { return targetTransform; } }
+    public bool IsTransform { get { return isTransform; } }
+    public MovementTarget(Transform TargetTrasform)
+    {
+        targetTransform = TargetTrasform;
+        isTransform = true;
+    }
+
+    public MovementTarget(Vector3 TargetPosition)
+    {
+        targetPosition = TargetPosition;
+    }
 }

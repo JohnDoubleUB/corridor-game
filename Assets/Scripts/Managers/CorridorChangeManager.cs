@@ -223,14 +223,21 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false) 
     {
-        if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
+        //TODO: This communicates with tvman
+        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan) 
         {
-            print("spawn tvman!");
-            if(putInPlayNow) GameManager.current.tvMan.PutInPlayNow(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-            else GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-            
-            section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
+            GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }
+
+
+        //if (currentLoadedLevelData.EnableTVMan && /*GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay &&*/ section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
+        //{
+        //    print("spawn tvman!");
+        //    if(putInPlayNow) GameManager.current.tvMan.PutInPlayNow(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+        //    else GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+            
+        //    section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
+        //}
     }
 
     private void HandleMouseSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData)

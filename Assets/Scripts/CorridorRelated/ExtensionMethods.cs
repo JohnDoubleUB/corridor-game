@@ -188,4 +188,32 @@ public static class ExtensionMethods
     {
         return GetAngleToTargetFromSelectedTransform(selectedTransform, targetPosition, selectedTransformDirection);
     }
+
+    public static TransformElements ToTransformElements(this Transform transform, bool WorldPosition = true, bool WorldRotation = true) 
+    {
+        return new TransformElements(WorldPosition ? transform.position : transform.localPosition, WorldRotation ? transform.rotation : transform.localRotation, transform.localScale);
+    }
+
+    public static MovementTarget ToMovementTarget(this Transform transform)
+    {
+        return new MovementTarget(transform);
+    }
+
+    public static MovementTarget ToMovementTarget(this Vector3 position)
+    {
+        return new MovementTarget(position);
+    }
+}
+
+public struct TransformElements
+{
+    public Vector3 Position;
+    public Quaternion Rotation;
+    public Vector3 Scale;
+    public TransformElements(Vector3 Position, Quaternion Rotation, Vector3 Scale)
+    {
+        this.Position = Position;
+        this.Rotation = Rotation;
+        this.Scale = Scale;
+    }
 }
