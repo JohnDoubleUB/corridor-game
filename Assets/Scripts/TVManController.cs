@@ -125,7 +125,7 @@ public class TVManController : MonoBehaviour
         {
             if (value != huntedTarget) 
             {
-                huntedTarget.OnBeingHunted(false);
+                if (huntedTarget != null) huntedTarget.OnBeingHunted(false);
                 huntedTarget = value;
                 if(huntedTarget != null) huntedTarget.OnBeingHunted(true);
             }
@@ -231,12 +231,12 @@ public class TVManController : MonoBehaviour
         {
             case TVManBehaviour.Patrolling:
                 //Patrol behaviour
-                if (PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) 
+                if (!PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) 
                     currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
                 break;
 
             case TVManBehaviour.Alerted:
-                if (PercieveNewTargets())
+                if (!PercieveNewTargets())
                 {
                     if (interestTimer < alertTimeWithoutPerception)
                     {
@@ -250,7 +250,7 @@ public class TVManController : MonoBehaviour
                 break;
 
             case TVManBehaviour.Investigating:
-                if (PercieveNewTargets())
+                if (!PercieveNewTargets())
                 {
                     if (MoveTowardPosition(lastPercievedLocation, false))
                     {
