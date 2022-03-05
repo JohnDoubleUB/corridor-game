@@ -55,8 +55,8 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     private MouseBehaviour currentBehaviour;
 
 
-    public bool IsIlluminated { get { return false; } }
-
+    public bool IsIlluminated { get { return isIlluminated; } }
+    private bool isIlluminated;
 
 
     private bool detectableByTVMan;
