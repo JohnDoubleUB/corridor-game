@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IHuntableEntities
+public interface IHuntableEntity
 {
+    GameObject EntityGameObject { get; }
     Transform EntityTransform { get; }
     bool IsIlluminated { get; }
     EntityType EntityType { get; }
-    void OnBeingHunted();
+    void OnBeingHunted(bool beingHunted);
     void OnEntityKilled();
 }

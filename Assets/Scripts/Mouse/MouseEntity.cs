@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MouseEntity : InteractableObject, IHuntableEntities
+public class MouseEntity : InteractableObject, IHuntableEntity
 {
     public NavMeshAgent agent;
     public Animator mouseAnimator;
@@ -86,11 +86,14 @@ public class MouseEntity : InteractableObject, IHuntableEntities
                 fleeTimer = 0f;
                 SetMouseOverallSpeedMultiplier(isFleeing ? fleeSpeedMultiplier : 1);
             }
+
         }
     }
 
     public EntityType EntityType => EntityType.Mouse;
     public Transform EntityTransform => transform;
+    public GameObject EntityGameObject => gameObject;
+
 
     private List<AudioSource> throwNoises = new List<AudioSource>();
 
@@ -550,7 +553,7 @@ public class MouseEntity : InteractableObject, IHuntableEntities
         PlayMouseSqueak();
     }
 
-    public void OnBeingHunted()
+    public void OnBeingHunted(bool beingHunted)
     {
         print("Mouse is being hunted");
     }

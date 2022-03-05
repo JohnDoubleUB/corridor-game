@@ -53,10 +53,11 @@ public class CorridorChangeManager : MonoBehaviour
     public CorridorMatVarient[] CorridorMatVarients;
 
     public MouseEntity MousePrefab;
-    private List<MouseEntity> mice = new List<MouseEntity>();
-    public MouseEntity[] Mice { get { return mice.ToArray(); } }
 
     private int mouseCount;
+
+    private List<IHuntableEntity> mice = new List<IHuntableEntity>();
+    public List<IHuntableEntity> Mice { get { return mice; } }
 
 
     private Transform[][] tVManPatrolPoints;
@@ -190,41 +191,23 @@ public class CorridorChangeManager : MonoBehaviour
         return layoutGameObj;
     }
 
-    IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f, bool roomEffectPresent = false) 
+    IEnumerator HandleSpawningForSectionAfterTime(CorridorSection section, float timeSeconds = 1f, bool roomEffectPresent = false)
     {
         CorridorLayoutHandler layoutGameObj = section.CurrentLayout;
         LevelData_Loaded currentLoadedLevelData = cachedCurrentLevelData;
 
-        
+
 
         yield return new WaitForSeconds(timeSeconds);
 
         HandleTVManSpawningForSection(section, layoutGameObj, currentLoadedLevelData, roomEffectPresent);
         HandleMouseSpawningForSection(section, layoutGameObj, currentLoadedLevelData);
-
-        //if (currentLoadedLevelData.EnableTVMan && GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
-        //{
-        //    print("spawn tvman!");
-        //    GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-        //    section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
-        //}
-
-        ////Check if mouse can be spawned here
-        //if (layoutGameObj.AllowMouseSpawns && Mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
-        //{
-        //    print("make a mouse!");
-        //    MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
-        //    mouseCount++;
-        //    tempMouse.name = "Mouse -" + mouseCount;
-        //    section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-        //    Mice.Add(tempMouse);
-        //}
     }
 
-    private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false) 
+    private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false)
     {
         //TODO: This communicates with tvman
-        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan) 
+        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
         {
             GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }
@@ -235,7 +218,7 @@ public class CorridorChangeManager : MonoBehaviour
         //    print("spawn tvman!");
         //    if(putInPlayNow) GameManager.current.tvMan.PutInPlayNow(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         //    else GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-            
+
         //    section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
         //}
     }
@@ -245,16 +228,16 @@ public class CorridorChangeManager : MonoBehaviour
         //Check if mouse can be spawned here
         if (layoutGameObj.AllowMouseSpawns && mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
         {
-            print("make a mouse!");
             MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
             mouseCount++;
             tempMouse.name = "Mouse -" + mouseCount;
             section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-            mice.Add(tempMouse);
+            mice.Add(tempMouse); //TODO: This to be removed
+
         }
     }
 
-    private void SetupInitialSections() 
+    private void SetupInitialSections()
     {
         for (int i = 0; i < corridorSections.Count; i++)
         {
@@ -313,7 +296,7 @@ public class CorridorChangeManager : MonoBehaviour
         if (currentSection.sectionType != SectionType.Middle)
         {
             sectionsTraveledOnCurrentLevel++;
-            
+
             //Check if we are in a trigger section or not
             LevelData_Loaded currentLevelDataTemp = GetCurrentLevelData;
             int levelChange = -1;
@@ -378,33 +361,33 @@ public class CorridorChangeManager : MonoBehaviour
         }
     }
 
-    public void TriggerNavMeshUpdate() 
+    public void TriggerNavMeshUpdate()
     {
         StartCoroutine(TriggerNavMeshUpdateAfterTime(0.3f));
     }
 
-    private IEnumerator TriggerNavMeshUpdateAfterTime(float waitTimeSeconds) 
+    private IEnumerator TriggerNavMeshUpdateAfterTime(float waitTimeSeconds)
     {
         yield return new WaitForSeconds(waitTimeSeconds);
         OnNavMeshUpdate?.Invoke();
     }
 
-    private async void OnSectionMoveAfterDelay(float timeSeconds) 
+    private async void OnSectionMoveAfterDelay(float timeSeconds)
     {
         await Task.Delay(System.TimeSpan.FromSeconds(timeSeconds));
         OnSectionMove?.Invoke();
     }
 
-    private bool ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel) 
+    private bool ApplyCorridorEffects(CorridorSection currentSection, Door[] currentSectionDoors, LevelData_Loaded currentLoadedLevel)
     {
         bool effectUsed = false;
         //Check if this section has already been warped
-        if (!currentSection.HasWarped) 
+        if (!currentSection.HasWarped)
         {
             bool hasWarped = false;
             //Check if we should stretch, either if its set to force or if settings for level allow it
-            if (currentSection.WillStretch || 
-                currentLoadedLevel.AllowRandomScaling && currentLoadedLevel.ScaleEffectCount < currentLoadedLevel.MaxScaleEffectCount && Random.value < 0.5f) 
+            if (currentSection.WillStretch ||
+                currentLoadedLevel.AllowRandomScaling && currentLoadedLevel.ScaleEffectCount < currentLoadedLevel.MaxScaleEffectCount && Random.value < 0.5f)
             {
                 currentSection.StretchTo(currentSection.StretchAmount);
                 currentLoadedLevel.ScaleEffectCount++;
@@ -413,8 +396,8 @@ public class CorridorChangeManager : MonoBehaviour
             }
 
             //Check if we should make section wave, either if it has it set to force or if settings for level allow it
-            if (currentSection.WillWave || 
-                currentLoadedLevel.AllowRandomWaving && currentLoadedLevel.WaveEffectCount < currentLoadedLevel.MaxWaveEffectCount && Random.value < 0.5f) 
+            if (currentSection.WillWave ||
+                currentLoadedLevel.AllowRandomWaving && currentLoadedLevel.WaveEffectCount < currentLoadedLevel.MaxWaveEffectCount && Random.value < 0.5f)
             {
                 currentSection.MakeWave();
                 foreach (Door currentDoor in currentSectionDoors) currentDoor.MakeWave();
@@ -429,33 +412,30 @@ public class CorridorChangeManager : MonoBehaviour
         return effectUsed;
     }
 
-    private void CleanMiceFromSection(CorridorSection section) 
+    private void CleanMiceFromSection(CorridorSection section)
     {
         if (section.EntityTracker.EntitiesInArea.Any())
         {
-            var miceInSection = mice.Where(x => section.EntityTracker.EntitiesInArea.Contains(x.gameObject)).ToArray();
+            var miceInSection = mice.Where(x => section.EntityTracker.EntitiesInArea.Contains(x.EntityGameObject)).ToArray();
             section.EntityTracker.RemoveAllEntities();
 
             foreach (MouseEntity mouseEntity in miceInSection)
             {
-                if (mouseEntity.CurrentBehaviour != MouseBehaviour.ChasedByTVMan)
-                {
-                    Destroy(mouseEntity.gameObject);
-                    mice.Remove(mouseEntity);
-                }
+                Destroy(mouseEntity.gameObject);
+                mice.Remove(mouseEntity);
             }
         }
     }
 
-    private void CleanUpTVManFromSection(CorridorSection section) 
+    private void CleanUpTVManFromSection(CorridorSection section)
     {
-        if (section.EntityTracker.TVManIsInArea) 
+        if (section.EntityTracker.TVManIsInArea)
         {
             if (GameManager.current.tvMan.CanEscapeRoom)
             {
                 //Move to nearest section
             }
-            else 
+            else
             {
                 GameManager.current.tvMan.RemoveFromPlay();
             }
@@ -510,7 +490,7 @@ public class CorridorChangeManager : MonoBehaviour
         CurrentLevel = newLevel;
         GameManager.current.tvMan.RemoveFromPlay();
         UpdateLevel();
-        
+
     }
 
     public void CheckPlayerDistance()

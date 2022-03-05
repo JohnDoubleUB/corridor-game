@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
-public class CG_CharacterController : MonoBehaviour, IHuntableEntities
+public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -27,6 +27,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntities
     public Transform EntityTransform => transform;
 
     public EntityType EntityType { get { return EntityType.Player; } }
+
+    public GameObject EntityGameObject => gameObject;
 
     public GameObject playerPencil;
     public Image playerCrosshair;
@@ -407,7 +409,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntities
         }
     }
 
-    public void OnBeingHunted()
+    public void OnBeingHunted(bool beingHunted)
     {
         print("Player is being hunted");
     }

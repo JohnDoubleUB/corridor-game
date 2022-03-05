@@ -387,18 +387,19 @@ public class TVManControllerOLD : MonoBehaviour
         else
         {
             //Get all mice that are visible and are in line of sight
-            IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == EntityType.Mouse);
+            IEnumerable<IHuntableEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.IsIlluminated && LineOfSightCheck(x.EntityTransform.position) == EntityType.Mouse);
+            //IEnumerable<MouseEntity> miceVisibleToTVMan = CorridorChangeManager.current.Mice.Where(x => x.DetectableByTVMan && LineOfSightCheck(x.transform.position) == EntityType.Mouse);
             if (miceVisibleToTVMan.Any())
             {
                 //Get all of those that are in range
-                IEnumerable<Tuple<float, MouseEntity>> miceWithinRange = miceVisibleToTVMan
-                    .Select(x => new Tuple<float, MouseEntity>(Vector3.Distance(transform.position, new Vector3(x.transform.position.x, transform.position.y, x.transform.position.z)), x))
+                IEnumerable<Tuple<float, IHuntableEntity>> miceWithinRange = miceVisibleToTVMan
+                    .Select(x => new Tuple<float, IHuntableEntity>(Vector3.Distance(transform.position, new Vector3(x.EntityTransform.position.x, transform.position.y, x.EntityTransform.position.z)), x))
                     .Where(x => x.Item1 < sightRange);
 
                 if (miceWithinRange != null && miceWithinRange.Any())
                 {
                     //Get mouse that is the closest to the player
-                    MouseEntity newTarget = miceWithinRange.OrderBy(x => x.Item1).Select(x => x.Item2).First();
+                    IHuntableEntity newTarget = miceWithinRange.OrderBy(x => x.Item1).Select(x => x.Item2).First();
                     
                     //If this isn't the current target then change it!
                     if (targetMouse != newTarget)
@@ -406,7 +407,7 @@ public class TVManControllerOLD : MonoBehaviour
 
                         //Tell mouse it's being hunted;
 
-                        targetMouse = newTarget;
+                        //targetMouse = newTarget;
                         CurrentBehaviour = TVManBehaviourOLD.PursuingMouse;
                         updateNavDestination = true;
                         return true;

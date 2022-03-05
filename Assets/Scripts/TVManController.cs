@@ -60,18 +60,19 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    private bool CanHearNoise {
-        get 
+    private bool CanHearNoise
+    {
+        get
         {
-            switch (CurrentBehaviour) 
+            switch (CurrentBehaviour)
             {
                 default:
                     return true;
             }
-        } 
+        }
     }
 
-    private bool CanReachTarget(Transform target) 
+    private bool CanReachTarget(Transform target)
     {
         return CanReachTarget(target.position);
     }
@@ -86,10 +87,12 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private TVManBehaviour currentBehaviour;
 
-    [SerializeField]
-    [ReadOnlyField]
-    private EntityType currentTargetType;
-    public EntityType CurrentTargetType { get { return currentTargetType; } }
+    public EntityType CurrentTargetType 
+    { get 
+        { 
+            return HuntedTarget != null ? HuntedTarget.EntityType : EntityType.None; 
+        } 
+    }
 
     public Transform TvManEyeLevel;
     private AudioSource audioSource;
@@ -111,6 +114,25 @@ public class TVManController : MonoBehaviour
     [SerializeField]
     [ReadOnlyField]
     private MovementTarget currentTarget;
+
+    private IHuntableEntity HuntedTarget 
+    { 
+        get 
+        { 
+            return huntedTarget;
+        }
+        set 
+        {
+            if (value != huntedTarget) 
+            {
+                huntedTarget.OnBeingHunted(false);
+                huntedTarget = value;
+                if(huntedTarget != null) huntedTarget.OnBeingHunted(true);
+            }
+        }
+    }
+
+    private IHuntableEntity huntedTarget;
 
     [SerializeField]
     [ReadOnlyField]
@@ -209,48 +231,73 @@ public class TVManController : MonoBehaviour
         {
             case TVManBehaviour.Patrolling:
                 //Patrol behaviour
-                if (validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
+                if (PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) 
+                    currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
                 break;
 
             case TVManBehaviour.Alerted:
-
-                if (interestTimer < alertTimeWithoutPerception)
+                if (PercieveNewTargets())
                 {
-                    interestTimer += Time.deltaTime;
-                }
-                else
-                {
-                    CurrentBehaviour = TVManBehaviour.Patrolling;
+                    if (interestTimer < alertTimeWithoutPerception)
+                    {
+                        interestTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        CurrentBehaviour = TVManBehaviour.Patrolling;
+                    }
                 }
                 break;
-            
+
             case TVManBehaviour.Investigating:
-
-                if (MoveTowardPosition(lastPercievedLocation, false)) 
+                if (PercieveNewTargets())
                 {
-                    CurrentBehaviour = TVManBehaviour.Alerted;
+                    if (MoveTowardPosition(lastPercievedLocation, false))
+                    {
+                        CurrentBehaviour = TVManBehaviour.Alerted;
+                    }
                 }
                 break;
 
-            
+            case TVManBehaviour.PursuingTarget:
+                //If mouse is target, constantly look for new target in case player or closer mouse is seen
+                if (CurrentTargetType == EntityType.Mouse) PercieveNewTargets();
+
+                //Move towared target, if target is reached we want to do something
+                if (MoveTowardPosition(currentTarget.TargetPosition))
+                {
+                    print("time to kill target");
+                }
+                else if (CurrentTargetType == EntityType.Player) //If target is player
+                {
+                    if (PercievePlayer()) //Check if we can still see the player
+                    {
+                        interestTimer = Mathf.Max(0f, interestTimer - (Time.deltaTime * 3)); //If we can then make sure the interest timer is decreased
+                    }
+                    else if (interestTimer < alertTimeWithoutPerception) //Otherwise increase the interest timer
+                    {
+                        interestTimer += Time.deltaTime;
+                    }
+                    else //If we have reached the interest timer limit then tvman returns to an alerted state
+                    {
+                        CurrentBehaviour = TVManBehaviour.Alerted;
+                    }
+                }
+
+                break;
+
+
         }
 
     }
 
-    private bool UpdateNavAgent()
-    {
-        UseNavMesh = IsCurrentlyOnNavMesh;
-        return UseNavMesh;
-    }
-
-    /*Behaviour scripts Update functions START*/
-
-
-
-
-    /*Behaviour scripts Update functions END*/
     private void OnBehaviourChange()
     {
+        if (CurrentBehaviour != TVManBehaviour.PursuingTarget)
+        {
+            HuntedTarget = null;
+        }
+
         switch (CurrentBehaviour)
         {
             case TVManBehaviour.None:
@@ -267,8 +314,11 @@ public class TVManController : MonoBehaviour
             case TVManBehaviour.Idle:
             case TVManBehaviour.Alerted:
                 if (UseNavMesh) agent.ResetPath();
+                break;
 
-
+            case TVManBehaviour.PursuingTarget:
+                UpdateNavAgent();
+                if (UseNavMesh) agent.ResetPath();
                 break;
                 //case TVManBehaviour.PursuingTarget:
                 //case TVManBehaviour.KillingTarget:
@@ -276,6 +326,30 @@ public class TVManController : MonoBehaviour
                 //    break;
         }
     }
+
+    private bool UpdateNavAgent()
+    {
+        UseNavMesh = IsCurrentlyOnNavMesh;
+        return UseNavMesh;
+    }
+
+    /*Behaviour scripts Update functions START*/
+
+    private bool PercieveNewTargets() 
+    {
+        IHuntableEntity newTarget = FindHighestPriorityVisibleTarget();
+        if (newTarget != null) 
+        {
+            HuntedTarget = newTarget;
+            currentTarget = newTarget.EntityTransform.ToMovementTarget();
+            CurrentBehaviour = TVManBehaviour.PursuingTarget;
+            return true;
+        }
+
+        return false;
+    }
+
+    /*Behaviour scripts Update functions END*/
 
     private void OnSectionMove()
     {
@@ -288,12 +362,62 @@ public class TVManController : MonoBehaviour
         UpdatePatrol();
     }
 
-    //public void UpdatePatrolAndAgent(bool enableNavAgent = true) 
-    //{
-    //    UseNavMesh = enableNavAgent ? IsCurrentlyOnNavMesh : false;
-    //    UpdateNavAgent();
-    //    UpdatePatrol();
-    //}
+
+    private IHuntableEntity FindHighestPriorityVisibleTarget()
+    {
+        //Criteria; is in sight angle (cone), Is in sight range (Radius of tvman), is illuminated (visible ), is in sight line
+
+        if (PercievePlayer()) return GameManager.current.playerController;
+
+        //Get all huntable entities
+        List<IHuntableEntity> huntableEntities = CorridorChangeManager.current.Mice;
+
+        //Find anything within sight range of tvman
+        //Then check for things
+        if (huntableEntities != null && huntableEntities.Any())
+        {
+            //Find entities within sight and range
+            IEnumerable<Tuple<IHuntableEntity, Vector3, float>> entitiesInSightAngleRangeVisibility = huntableEntities
+                .Select(x =>
+                {
+                    Vector3 lookPosition = new Vector3(x.EntityTransform.position.x, transform.position.y, x.EntityTransform.position.z);
+                    return new Tuple<IHuntableEntity, Vector3, float>(x, lookPosition, Vector3.Distance(transform.position, lookPosition));
+                })
+                .Where(x => x.Item1.IsIlluminated && IsWithinSightAngle(x.Item2) && x.Item3 < sightRange);
+
+            return entitiesInSightAngleRangeVisibility != null && entitiesInSightAngleRangeVisibility.Any() ?
+                entitiesInSightAngleRangeVisibility.OrderBy(x => x.Item3).Select(x => x.Item1).FirstOrDefault(x => LineOfSightCheck(x))
+                : null;
+        }
+
+        return null;
+    }
+
+    private bool PercievePlayer() 
+    {
+        IHuntableEntity playerEntity = GameManager.current.playerController;
+        Vector3 lookPosition = new Vector3(playerEntity.EntityTransform.position.x, transform.position.y, playerEntity.EntityTransform.position.z);
+        return playerEntity.IsIlluminated && IsWithinSightAngle(lookPosition) && Vector3.Distance(transform.position, lookPosition) < sightRange && LineOfSightCheck(playerEntity);
+    }
+
+    private bool IsWithinSightAngle(Vector3 target)
+    {
+        return transform.GetAngleToTarget(target) < sightConeAngle;
+    }
+
+    //returns true if it spots the object
+    private bool LineOfSightCheck(IHuntableEntity entity, out RaycastHit hitResult)
+    {
+        return Physics.Linecast(TvManEyeLevel.position, entity.EntityTransform.position, out hitResult, lineOfSightMask)
+            && hitResult.collider.gameObject.CompareTag(entity.EntityGameObject.tag)
+            && hitResult.collider.gameObject == entity.EntityGameObject;
+    }
+
+
+    private bool LineOfSightCheck(IHuntableEntity entity)
+    {
+        return LineOfSightCheck(entity, out RaycastHit _);
+    }
 
     private void OnNavMeshUpdate()
     {
