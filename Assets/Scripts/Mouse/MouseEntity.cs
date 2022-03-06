@@ -15,7 +15,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     public AudioClip[] MouseThrowNoises;
     public AudioClip[] MouseLandNoises;
     public AudioClip[] MouseSqueaks;
-    
+
     public bool alwaysGetDetectedByTVMan;
 
     public bool IsVisible { get { return visibleAfterThrownTimer < visibleAfterThrownForSeconds; } }
@@ -52,15 +52,25 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     public float maxWanderTime = 10f; //This is to precent the mouse from getting stuck trying to wander to a point 
 
+
+    [SerializeField]
+    [ReadOnlyField]
     private MouseBehaviour currentBehaviour;
 
 
-    public bool IsIlluminated { get { return isIlluminated; } }
-    private bool isIlluminated;
+    public bool IsIlluminated { get { return IsVisible && CurrentBehaviour != MouseBehaviour.Held && CurrentBehaviour != MouseBehaviour.Thrown; } }
 
 
     private bool detectableByTVMan;
     public bool DetectableByTVMan { get { return detectableByTVMan; } }
+
+    private bool IsCurrentlyOnNavMesh
+    {
+        get
+        {
+            return NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas);
+        }
+    }
 
     public MouseBehaviour CurrentBehaviour
     {
@@ -75,7 +85,11 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
             if (agent.isActiveAndEnabled) agent.isStopped = !needsToMove;
 
-            if (isBeingHeld || needsToMove) mouseAnimator.Play(isFleeing && isNewBehaviour ? "Startled" : "Idle", 0);
+            if (value == MouseBehaviour.BeingKilled) 
+            {
+                mouseAnimator.Play("Scared", 0);
+            }
+            else if (isBeingHeld || needsToMove) mouseAnimator.Play(isFleeing && isNewBehaviour ? "Startled" : "Idle", 0);
 
             if (isNewBehaviour || isFleeing)
             {
@@ -86,13 +100,15 @@ public class MouseEntity : InteractableObject, IHuntableEntity
                 fleeTimer = 0f;
                 SetMouseOverallSpeedMultiplier(isFleeing ? fleeSpeedMultiplier : 1);
             }
+            
+
 
         }
     }
 
     public EntityType EntityType => EntityType.Mouse;
-    public Transform EntityTransform => transform;
-    public GameObject EntityGameObject => gameObject;
+    public Transform EntityTransform { get { return transform; } }
+    public GameObject EntityGameObject { get { return gameObject; } }
 
 
     private List<AudioSource> throwNoises = new List<AudioSource>();
@@ -151,6 +167,14 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     private Vector3 initialPosition;
 
+    private bool CanHearNoise
+    {
+        get
+        {
+            return CurrentBehaviour != MouseBehaviour.Freeze && CurrentBehaviour != MouseBehaviour.Held && CurrentBehaviour != MouseBehaviour.Thrown && CurrentBehaviour != MouseBehaviour.ChasedByTVMan && CurrentBehaviour != MouseBehaviour.BeingKilled;
+        }
+    }
+
     private void Awake()
     {
         defaultSpeed = agent.speed;
@@ -179,20 +203,21 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         }
     }
 
-    private void SetPickedUp(bool pickedUp)
+    private void SetPickedUp(bool pickedUp, bool beingKilled = false)
     {
-        CurrentBehaviour = pickedUp ? MouseBehaviour.Held : MouseBehaviour.Idle;
+        CurrentBehaviour = beingKilled ? MouseBehaviour.BeingKilled : pickedUp ? MouseBehaviour.Held : MouseBehaviour.Idle;
         agent.enabled = !pickedUp;
+        if (agent.enabled) agent.ResetPath();
         IsInteractable = !pickedUp;
         mouseBobber.AllowMouseBob = !pickedUp;
-        mouseAnimator.Play("Startled", 0);
-        if (!pickedUp && MouseLandNoises != null && MouseLandNoises.Any()) 
-        { 
+        if(!beingKilled) mouseAnimator.Play("Startled", 0);
+        if (!pickedUp && MouseLandNoises != null && MouseLandNoises.Any())
+        {
             transform.PlayClipAtTransform(MouseLandNoises[Random.Range(0, MouseLandNoises.Length)], true, noiseVolume, true, 0, true, landNoiseRadius);
-            
-            foreach (AudioSource throwNoise in throwNoises) 
+
+            foreach (AudioSource throwNoise in throwNoises)
             {
-                if (throwNoise != null) 
+                if (throwNoise != null)
                 {
                     throwNoise.Stop();
                     Destroy(throwNoise.gameObject);
@@ -246,7 +271,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         MovementAmount = Vector3.Distance(transform.position, entityPosition);
         behaviourJustChanged = false;
 
-        CheckIfAndTransitionToChased();
+        //CheckIfAndTransitionToChased();
         BehaviourUpdate();
         MouseSqueak();
 
@@ -256,10 +281,10 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         //if (destroyIfOffNavMesh) DestroyIfOffNavigatableArea();
 
         if (IsVisible) visibleAfterThrownTimer += Time.deltaTime;
-        
+
     }
 
-    private void DestroyIfOffNavigatableArea() 
+    private void DestroyIfOffNavigatableArea()
     {
         if (!agent.isOnNavMesh)
         {
@@ -272,13 +297,13 @@ public class MouseEntity : InteractableObject, IHuntableEntity
                 offNavMeshTimer += Time.deltaTime;
             }
         }
-        else 
+        else
         {
             offNavMeshTimer = 0f;
         }
     }
 
-    private void BehaviourUpdate() 
+    private void BehaviourUpdate()
     {
         switch (CurrentBehaviour)
         {
@@ -302,6 +327,9 @@ public class MouseEntity : InteractableObject, IHuntableEntity
                 Behaviour_Freeze();
                 break;
 
+            case MouseBehaviour.BeingKilled:
+                transform.Rotate(Random.value * 3, Random.value * 3, Random.value * 3, Space.World);
+                break;
             case MouseBehaviour.Held:
                 break;
 
@@ -314,7 +342,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         }
     }
 
-    private void MouseSqueak() 
+    private void MouseSqueak()
     {
         switch (CurrentBehaviour)
         {
@@ -336,23 +364,9 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         }
     }
 
-    private void PlayMouseSqueak() 
+    private void PlayMouseSqueak(bool parentToMouse = true)
     {
-        if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], true, noiseVolume, true, 0, false);
-    }
-
-    private void CheckIfAndTransitionToChased() 
-    {
-        switch (CurrentBehaviour) 
-        {
-            case MouseBehaviour.Idle:
-            case MouseBehaviour.Freeze:
-            case MouseBehaviour.Look:
-            case MouseBehaviour.Wander:
-            case MouseBehaviour.FleeingFromNoise:
-                if (IsBeingChased) CurrentBehaviour = MouseBehaviour.ChasedByTVMan;
-                break;
-        }
+        if (MouseSqueaks != null && MouseSqueaks.Any()) transform.PlayClipAtTransform(MouseSqueaks[Random.Range(0, MouseSqueaks.Length)], parentToMouse, noiseVolume, true, 0, false);
     }
 
     private void Behaviour_Freeze()
@@ -411,7 +425,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         {
             CurrentBehaviour = MouseBehaviour.Idle;
         }
-        else 
+        else
         {
             behaviourTimer += Time.deltaTime;
         }
@@ -470,7 +484,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         currentIdleDelay = Random.Range(Mathf.Max(idleDelay - idleDelayVariation, 1f), idleDelayVariation + idleDelay);
     }
 
-    private void GenerateRandomSqueakDelay() 
+    private void GenerateRandomSqueakDelay()
     {
         currentSqueakDelay = Random.Range(Mathf.Max(squeakDelay - squeakDelayVariation, 1f), squeakDelayVariation + squeakDelay);
     }
@@ -489,24 +503,19 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     private void OnNoiseMade(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin)
     {
-        if (noiseOrigin != NoiseOrigin.Mouse && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
+        if (CanHearNoise && noiseOrigin != NoiseOrigin.Mouse && Vector2.Distance(new Vector3(transform.position.x, transform.position.z), new Vector3(noisePosition.x, noisePosition.z)) < noiseRadius) ReactToNoise(noisePosition);
     }
 
     private void ReactToNoise(Vector3 noisePosition)
     {
-        if (CurrentBehaviour != MouseBehaviour.Freeze && CurrentBehaviour != MouseBehaviour.Held && CurrentBehaviour != MouseBehaviour.Thrown)
-        {
-            lastNoiseHeard = noisePosition;
-            
+        lastNoiseHeard = noisePosition;
+        Vector3 hitPos = noisePosition;
+        hitPos.y = transform.position.y;
+        Vector3 opposite = (transform.position - hitPos).normalized;
 
-            Vector3 hitPos = noisePosition;
-            hitPos.y = transform.position.y;
-            Vector3 opposite = (transform.position - hitPos).normalized;
+        agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
 
-            agent.SetDestination(GetNewRandomDestination(transform.position, opposite, 1f, 20f));
-
-            CurrentBehaviour = MouseBehaviour.FleeingFromNoise;
-        }
+        CurrentBehaviour = MouseBehaviour.FleeingFromNoise;
     }
 
     private void SetMouseOverallSpeedMultiplier(float multiplier)
@@ -523,6 +532,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     private void OnDestroy()
     {
         AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
+        PlayMouseSqueak(false);
     }
 
 
@@ -540,8 +550,8 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         mouseRB.transform.forward = forwardVector;
         mouseRB.LaunchAtTarget(target, Vector3.one * 600, magnitude);
         CurrentBehaviour = MouseBehaviour.Thrown;
-        
-        if (MouseThrowNoises != null && MouseThrowNoises.Any() && Random.value <= ThrowNoiseChance) 
+
+        if (MouseThrowNoises != null && MouseThrowNoises.Any() && Random.value <= ThrowNoiseChance)
         {
             throwNoises.Add(transform.PlayClipAtTransform(MouseThrowNoises[Random.Range(0, MouseThrowNoises.Length)], true, noiseVolume, true, 0, false));
         }
@@ -555,13 +565,17 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     public void OnBeingHunted(bool beingHunted)
     {
-        print("Mouse is being hunted");
+        //SetPickedUp(false);
+        //if (CurrentBehaviour == MouseBehaviour.BeingKilled) Destroy(gameObject);
+        CurrentBehaviour = beingHunted ? MouseBehaviour.ChasedByTVMan : MouseBehaviour.Idle;
     }
 
     public void OnEntityKilled()
     {
-        print("Mouse has been killed");
+        SetPickedUp(true, true);
     }
+
+    
 }
 
 
@@ -574,5 +588,6 @@ public enum MouseBehaviour
     Freeze,
     Held,
     Thrown,
-    ChasedByTVMan
+    ChasedByTVMan,
+    BeingKilled
 }

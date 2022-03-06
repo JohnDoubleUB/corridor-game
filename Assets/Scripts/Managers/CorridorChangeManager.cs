@@ -206,8 +206,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false)
     {
-        //TODO: This communicates with tvman
-        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
+        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && (GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.None /* or max distance from player threshold?*/))
         {
             GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }

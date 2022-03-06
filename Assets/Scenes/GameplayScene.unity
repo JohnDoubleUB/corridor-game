@@ -4754,7 +4754,6 @@ MonoBehaviour:
     albedo2: {fileID: 2800000, guid: 0a5513528633047409de4790a47a3e31, type: 3}
   MousePrefab: {fileID: 3363048708282944199, guid: 5efe1d3c343b84a438ede38fa511fd71,
     type: 3}
-  Mice: []
 --- !u!114 &1838609638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6325,6 +6324,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7100503525392875018, guid: 94ba505b572010e419639b0cad2babd3,
+        type: 3}
+      propertyPath: killLight
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7100503525392875018, guid: 94ba505b572010e419639b0cad2babd3,
         type: 3}

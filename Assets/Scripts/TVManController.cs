@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +18,7 @@ public class TVManController : MonoBehaviour
     public float sightConeAngle = 30f;
 
     public float alertTimeWithoutPerception = 5f;
+    public float timeToKill = 2f;
 
     public bool UseNavMesh
     {
@@ -37,6 +39,11 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private float interestTimer;
 
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float killTimer;
+
     [SerializeField]
     [ReadOnlyField]
     private Vector3 lastPercievedLocation;
@@ -55,6 +62,7 @@ public class TVManController : MonoBehaviour
             {
                 currentBehaviour = value;
                 interestTimer = 0;
+                killTimer = 0;
                 OnBehaviourChange();
             }
         }
@@ -66,6 +74,12 @@ public class TVManController : MonoBehaviour
         {
             switch (CurrentBehaviour)
             {
+                case TVManBehaviour.PursuingTarget:
+                    return CurrentTargetType != EntityType.Player;
+                
+                case TVManBehaviour.KillingTarget:
+                    return false;
+
                 default:
                     return true;
             }
@@ -127,8 +141,13 @@ public class TVManController : MonoBehaviour
             {
                 if (huntedTarget != null) huntedTarget.OnBeingHunted(false);
                 huntedTarget = value;
-                if(huntedTarget != null) huntedTarget.OnBeingHunted(true);
+                if (huntedTarget != null) 
+                { 
+                    huntedTarget.OnBeingHunted(true);
+                }
             }
+
+            IsHunting = value != null;
         }
     }
 
@@ -266,7 +285,14 @@ public class TVManController : MonoBehaviour
                 //Move towared target, if target is reached we want to do something
                 if (MoveTowardPosition(currentTarget.TargetPosition))
                 {
-                    print("time to kill target");
+                    if (killTimer < timeToKill)
+                    {
+                        killTimer += Time.deltaTime;
+                    }
+                    else 
+                    {
+                        CurrentBehaviour = TVManBehaviour.KillingTarget;
+                    }
                 }
                 else if (CurrentTargetType == EntityType.Player) //If target is player
                 {
@@ -277,6 +303,7 @@ public class TVManController : MonoBehaviour
                     else if (interestTimer < alertTimeWithoutPerception) //Otherwise increase the interest timer
                     {
                         interestTimer += Time.deltaTime;
+                        killTimer = Mathf.Max(0f, killTimer - Time.deltaTime);
                     }
                     else //If we have reached the interest timer limit then tvman returns to an alerted state
                     {
@@ -293,7 +320,7 @@ public class TVManController : MonoBehaviour
 
     private void OnBehaviourChange()
     {
-        if (CurrentBehaviour != TVManBehaviour.PursuingTarget)
+        if (CurrentBehaviour != TVManBehaviour.PursuingTarget && CurrentBehaviour != TVManBehaviour.KillingTarget)
         {
             HuntedTarget = null;
         }
@@ -320,10 +347,19 @@ public class TVManController : MonoBehaviour
                 UpdateNavAgent();
                 if (UseNavMesh) agent.ResetPath();
                 break;
-                //case TVManBehaviour.PursuingTarget:
-                //case TVManBehaviour.KillingTarget:
-                //    if (IsCurrentlyOnNavMesh) UseNavMesh = true;
-                //    break;
+
+            case TVManBehaviour.KillingTarget:
+                if (HuntedTarget != null && HuntedTarget.EntityType != EntityType.None)
+                {
+                    UseNavMesh = false;
+                    KillHuntableEntity(HuntedTarget);
+                }
+                else 
+                {
+                    UseNavMesh = IsCurrentlyOnNavMesh;
+                    CurrentBehaviour = TVManBehaviour.Patrolling;
+                }
+                break;
         }
     }
 
@@ -347,6 +383,44 @@ public class TVManController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void KillHuntableEntity(IHuntableEntity entity) 
+    {
+        if (entity.EntityType == EntityType.None) return;
+
+        if (entity.EntityType == EntityType.Mouse)
+        {
+            //Kill mouse
+            entity.OnEntityKilled();
+            KillMouse(entity);
+
+        }
+        else 
+        {
+            //Kill player
+        }
+    }
+
+    private async void KillMouse(IHuntableEntity entity) 
+    {
+        Transform entityTransform = entity.EntityTransform;
+        Vector3 positionAtTimeOfPickup = entityTransform.position;
+        Vector3 target = TvManEyeLevel.position - (Vector3.up * 0.2f);
+
+        float positionValue = 0;
+        float smoothedPositionValue;
+        float pickupSpeedMultiplier = 0.2f;
+
+        while (positionValue < 1f) 
+        {
+            positionValue += Time.deltaTime * pickupSpeedMultiplier;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            entityTransform.position = Vector3.Slerp(positionAtTimeOfPickup, target, smoothedPositionValue);
+            await Task.Yield();
+        }
+
+        CurrentBehaviour = TVManBehaviour.Patrolling;        
     }
 
     /*Behaviour scripts Update functions END*/
