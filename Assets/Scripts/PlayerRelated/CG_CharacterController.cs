@@ -191,7 +191,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     void Start()
     {
-        pSXMaterial.SetFloat("_TransitionToAlternate", 0);
+       // pSXMaterial.SetFloat("_TransitionToAlternate", 0);
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
