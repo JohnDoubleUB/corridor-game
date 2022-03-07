@@ -1602,7 +1602,7 @@ MeshRenderer:
   m_RenderingLayerMask: 128
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 055de6c542650fd4ba6edcb7e0151ad2, type: 2}
+  - {fileID: 2100000, guid: 6529b400c9d32b649b34322a8bd5e1e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5928,8 +5928,8 @@ MonoBehaviour:
   isIlluminated: 0
   isJumping: 0
   isCrouching: 0
-  testProjectilePrefab: {fileID: 3970294111391420244, guid: 8105781a3b30c54439ae721bd4e400ac,
-    type: 3}
+  isInNotepad: 0
+  pSXMaterial: {fileID: 2100000, guid: 6529b400c9d32b649b34322a8bd5e1e4, type: 2}
 --- !u!65 &2067456600
 BoxCollider:
   m_ObjectHideFlags: 0
