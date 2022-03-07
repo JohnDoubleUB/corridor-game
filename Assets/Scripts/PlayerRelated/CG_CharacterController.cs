@@ -191,7 +191,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     void Start()
     {
-       // pSXMaterial.SetFloat("_TransitionToAlternate", 0);
+        pSXMaterial.SetFloat("_TransitionToAlternate", 0);
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -468,11 +468,11 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
         while (positionValue < 1f)
         {
-            positionValue += Time.deltaTime * 0.3f;
+            positionValue += Time.deltaTime * 0.2f;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
             transform.rotation = Quaternion.Lerp(currentPlayerRotation, newPlayerRotation, smoothedPositionValue);//Quaternion.RotateTowards(currentPlayerRotation, newPlayerRotation, smoothedPositionValue * 50f);
             playerCamera.transform.rotation = Quaternion.Lerp(currentCameraRotation, newCameraRotation, smoothedPositionValue);
-            pSXMaterial.SetFloat("_TransitionToAlternate", positionValue);
+            pSXMaterial.SetFloat("_TransitionToAlternate", smoothedPositionValue);
             await Task.Yield();
         }
 

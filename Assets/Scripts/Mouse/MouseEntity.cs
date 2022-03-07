@@ -569,15 +569,14 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         //SetPickedUp(false);
         if (!beingHunted && CurrentBehaviour == MouseBehaviour.BeingKilled) 
         {
-            CorridorChangeManager.current.RemoveMouseFromList(this);
             Destroy(gameObject); 
-
         }
         CurrentBehaviour = beingHunted ? MouseBehaviour.ChasedByTVMan : MouseBehaviour.Idle;
     }
 
     public void OnEntityKilled()
     {
+        CorridorChangeManager.current.RemoveMouseFromList(this);
         SetPickedUp(true, true);
     }
 
