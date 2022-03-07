@@ -139,7 +139,12 @@ public class TVManController : MonoBehaviour
         {
             if (value != huntedTarget) 
             {
-                if (huntedTarget != null) huntedTarget.OnBeingHunted(false);
+                if (huntedTarget != null) 
+                {
+                    //if (huntedTarget.IsBeingKilled) Destroy(huntedTarget.EntityGameObject);
+                    //else 
+                        huntedTarget.OnBeingHunted(false); 
+                }
                 huntedTarget = value;
                 if (huntedTarget != null) 
                 { 
@@ -357,7 +362,7 @@ public class TVManController : MonoBehaviour
                 else 
                 {
                     UseNavMesh = IsCurrentlyOnNavMesh;
-                    CurrentBehaviour = TVManBehaviour.Patrolling;
+                    CurrentBehaviour = TVManBehaviour.Alerted;
                 }
                 break;
         }
@@ -398,6 +403,8 @@ public class TVManController : MonoBehaviour
         }
         else 
         {
+
+            entity.OnEntityKilled();
             //Kill player
         }
     }

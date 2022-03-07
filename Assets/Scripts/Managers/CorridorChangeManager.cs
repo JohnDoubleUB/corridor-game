@@ -104,6 +104,11 @@ public class CorridorChangeManager : MonoBehaviour
         currentLevelChangeTracking = CurrentLevel;
     }
 
+    public void RemoveMouseFromList(MouseEntity mouse)
+    {
+        if(mice.Contains(mouse)) mice.Remove(mouse);
+    }
+
     private LevelData_Loaded GetCurrentLevelData
     {
         get

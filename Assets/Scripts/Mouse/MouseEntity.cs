@@ -85,7 +85,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
             if (agent.isActiveAndEnabled) agent.isStopped = !needsToMove;
 
-            if (value == MouseBehaviour.BeingKilled) 
+            if (value == MouseBehaviour.BeingKilled)
             {
                 mouseAnimator.Play("Scared", 0);
             }
@@ -100,14 +100,14 @@ public class MouseEntity : InteractableObject, IHuntableEntity
                 fleeTimer = 0f;
                 SetMouseOverallSpeedMultiplier(isFleeing ? fleeSpeedMultiplier : 1);
             }
-            
+
 
 
         }
     }
 
     public EntityType EntityType => EntityType.Mouse;
-    public Transform EntityTransform { get { return transform; } }
+    public Transform EntityTransform { get { return this != null ? transform : null; } }
     public GameObject EntityGameObject { get { return gameObject; } }
 
 
@@ -210,7 +210,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         if (agent.enabled) agent.ResetPath();
         IsInteractable = !pickedUp;
         mouseBobber.AllowMouseBob = !pickedUp;
-        if(!beingKilled) mouseAnimator.Play("Startled", 0);
+        if (!beingKilled) mouseAnimator.Play("Startled", 0);
         if (!pickedUp && MouseLandNoises != null && MouseLandNoises.Any())
         {
             transform.PlayClipAtTransform(MouseLandNoises[Random.Range(0, MouseLandNoises.Length)], true, noiseVolume, true, 0, true, landNoiseRadius);
@@ -533,6 +533,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     {
         AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
         PlayMouseSqueak(false);
+        CorridorChangeManager.current.RemoveMouseFromList(this);
     }
 
 
@@ -566,7 +567,12 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     public void OnBeingHunted(bool beingHunted)
     {
         //SetPickedUp(false);
-        //if (CurrentBehaviour == MouseBehaviour.BeingKilled) Destroy(gameObject);
+        if (!beingHunted && CurrentBehaviour == MouseBehaviour.BeingKilled) 
+        {
+            CorridorChangeManager.current.RemoveMouseFromList(this);
+            Destroy(gameObject); 
+
+        }
         CurrentBehaviour = beingHunted ? MouseBehaviour.ChasedByTVMan : MouseBehaviour.Idle;
     }
 
@@ -575,7 +581,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         SetPickedUp(true, true);
     }
 
-    
+
 }
 
 

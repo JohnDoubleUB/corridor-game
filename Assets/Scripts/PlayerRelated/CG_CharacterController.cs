@@ -18,6 +18,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
 
+    private bool beingKilledByTVMan = true;
+
     public CG_HeadBob HeadBobber;
 
     public bool IsJumping { get { return isJumping; } }
@@ -97,6 +99,10 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     [ReadOnlyField]
     private bool isCrouching;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private bool isInNotepad;
+
     public Rigidbody testProjectilePrefab;
 
     private void OnEnable()
@@ -138,16 +144,19 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private void Interact()
     {
-        if (interactingNote == null)
+        if (beingKilledByTVMan)
         {
-            if (currentInteractable != null && canInteract)
+            if (interactingNote == null)
             {
-                currentInteractable.IntiateInteract();
+                if (currentInteractable != null && canInteract)
+                {
+                    currentInteractable.IntiateInteract();
+                }
             }
-        }
-        else
-        {
-            interactingNote.PutDownItem();
+            else
+            {
+                interactingNote.PutDownItem();
+            }
         }
     }
 
@@ -205,99 +214,113 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
 
-        UpdateInteractable();
-        if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
-        if (!canMove) UpdateDraw();
-
-        bool playerNotBusy = canMove && interactingNote == null;
-
-        if (characterController.isGrounded)
+        if (beingKilledByTVMan)
         {
-            // We are grounded, so recalculate move direction based on axes
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            Vector3 right = transform.TransformDirection(Vector3.right);
-            //float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
-            //float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
+            UpdateInteractable();
+            if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
+            if (!canMove) UpdateDraw();
 
-            float curSpeedX = playerNotBusy ? speed * Input.GetAxis("Vertical") : 0;
-            float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
-            moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+            bool playerNotBusy = canMove && interactingNote == null;
 
-            if (isJumping)
+            if (characterController.isGrounded)
             {
-                isJumping = false;
-                if (playerLandSounds != null && playerLandSounds.Any()) footStepPosition.PlayClipAtTransform(playerLandSounds[Random.Range(0, playerLandSounds.Length)], false, 0.2f);
-            }
+                // We are grounded, so recalculate move direction based on axes
+                Vector3 forward = transform.TransformDirection(Vector3.forward);
+                Vector3 right = transform.TransformDirection(Vector3.right);
+                //float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
+                //float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
 
-            if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)
-            {
-                moveDirection.y = jumpSpeed;
-                isJumping = true;
-            }
+                float curSpeedX = playerNotBusy ? speed * Input.GetAxis("Vertical") : 0;
+                float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
+                moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-            //Just for testing
-            if (Input.GetMouseButtonDown(0) && heldMouse != null)
-            {
-                if (GetLookedAtPoint(out Vector3 target))
+                if (isJumping)
                 {
-                    heldMouse.transform.SetParent(null);
-                    heldMouse.transform.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward);
-                    heldMouse.ThrowAtTarget(target, 10f, playerCamera.transform.forward);
-                    heldMouse = null;
+                    isJumping = false;
+                    if (playerLandSounds != null && playerLandSounds.Any()) footStepPosition.PlayClipAtTransform(playerLandSounds[Random.Range(0, playerLandSounds.Length)], false, 0.2f);
                 }
-                //Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
-                //if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
+
+                if (Input.GetButtonDown("Jump") && playerNotBusy/*canMove*/)
+                {
+                    moveDirection.y = jumpSpeed;
+                    isJumping = true;
+                }
+
+                //Just for testing
+                if (Input.GetMouseButtonDown(0) && heldMouse != null)
+                {
+                    if (GetLookedAtPoint(out Vector3 target))
+                    {
+                        heldMouse.transform.SetParent(null);
+                        heldMouse.transform.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward);
+                        heldMouse.ThrowAtTarget(target, 10f, playerCamera.transform.forward);
+                        heldMouse = null;
+                    }
+                    //Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
+                    //if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
+                }
+
             }
 
+            // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
+            // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
+            // as an acceleration (ms^-2)
+            moveDirection.y -= gravity * Time.deltaTime;
+
+            // Move the controller
+            characterController.Move(moveDirection * Time.deltaTime);
+
+
+
+            // Player and Camera rotation
+            if (playerNotBusy/*canMove*/)
+            {
+                rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
+                rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
+                rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
+                playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
+                transform.eulerAngles = new Vector2(0, rotation.y);
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
+            {
+                ActivateNotepad(canMove);
+            }
+
+
+
+
+            bool crouchButtonHeld = Input.GetButton("Crouch");
+
+            if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
+            {
+                ToggleCrouching();
+            }
         }
-
-        // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
-        // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
-        // as an acceleration (ms^-2)
-        moveDirection.y -= gravity * Time.deltaTime;
-
-        // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
-
-
-
-        // Player and Camera rotation
-        if (playerNotBusy/*canMove*/)
+        else 
         {
-            rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
-            rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
-            rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
-            transform.eulerAngles = new Vector2(0, rotation.y);
-        }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
-        {
-            canMove = !canMove;
-            canInteract = !canInteract;
-            Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.Confined;
-            Cursor.visible = false;
-            NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
-            playerPencil.SetActive(!canMove);
-            playerCrosshair.enabled = canMove;
+            //transform.rotation = Quaternion.LookRotation(GameManager.current.tvMan.transform.position - transform.position, Vector3.up);
         }
-
 
         if (Input.GetButtonDown("Cancel"))
         {
             print("End game!");
             Application.Quit();
         }
-
-        bool crouchButtonHeld = Input.GetButton("Crouch");
-
-        if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
-        {
-            ToggleCrouching();
-        }
     }
 
-
+    private void ActivateNotepad(bool activate) 
+    {
+        isInNotepad = activate;
+        canMove = !activate;
+        canInteract = !activate;
+        Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.Confined;
+        Cursor.visible = false;
+        NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
+        playerPencil.SetActive(!canMove);
+        playerCrosshair.enabled = canMove;
+    }
     private bool GetLookedAtPoint(out Vector3 result)
     {
         Vector3 tempOrigin = playerCamera.transform.position;
@@ -416,6 +439,45 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     public void OnEntityKilled()
     {
+        beingKilledByTVMan = false;
+        
+        //Uncrouch, un look at note, put away notepad
+        if (IsCrouching && canUncrouch) ToggleCrouching();
+        if (interactingNote != null) interactingNote.PutDownItem();
+        if (isInNotepad) ActivateNotepad(false);
+
+        LookTowardsTVMan();
         print("Player has been killed");
+    }
+
+    private async void LookTowardsTVMan()
+    {
+        float positionValue = 0;
+        float smoothedPositionValue;
+
+        //Vector3 newPlayerRotation = transform.rotation.eulerAngles + GameManager.current.tvMan.transform.eulerAngles;
+
+        Vector3 tvManPosition = new Vector3(GameManager.current.tvMan.transform.position.x, transform.position.y, GameManager.current.tvMan.transform.position.z);
+        Quaternion newPlayerRotation = Quaternion.LookRotation(tvManPosition - transform.position, Vector3.up);
+        Quaternion currentPlayerRotation = transform.rotation;
+        Quaternion newCameraRotation = Quaternion.LookRotation((GameManager.current.tvMan.TvManEyeLevel.position - Vector3.up * 0.3f) - playerCamera.transform.position);
+        Quaternion currentCameraRotation = playerCamera.transform.rotation;
+        playerCrosshair.enabled = false;
+
+
+        while (positionValue < 1f)
+        {
+            positionValue += Time.deltaTime * 0.3f;
+            smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+            transform.rotation = Quaternion.Lerp(currentPlayerRotation, newPlayerRotation, smoothedPositionValue);//Quaternion.RotateTowards(currentPlayerRotation, newPlayerRotation, smoothedPositionValue * 50f);
+            playerCamera.transform.rotation = Quaternion.Lerp(currentCameraRotation, newCameraRotation, smoothedPositionValue);
+
+            await Task.Yield();
+        }
+
+        print("done");
+        transform.rotation = newPlayerRotation;
+
+        //transform.rotation = newPlayerRotation;
     }
 }
