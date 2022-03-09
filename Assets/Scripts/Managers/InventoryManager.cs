@@ -7,6 +7,8 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager current;
 
+
+    public Transform ScreenCenter;
     public Transform[] inventorySlotTransforms;
     public Transform[] momentoSlotTransforms;
 
@@ -68,8 +70,12 @@ public class InventoryManager : MonoBehaviour
 [System.Serializable]
 public class InventorySlot
 {
+    private Transform slotParentTransform;
     private Transform slotTransform;
+    private Vector3 slotParentInitialPosition;
     public Transform SlotTransform { get { return slotTransform; } }
+    public Transform SlotParentTransform { get { return slotParentTransform; } }
+    public Vector3 SlotParentInitialPosition { get { return slotParentInitialPosition; } }
     public bool SlotOccupied { get { return slotContent != null; } }
 
     public PickupableInteractable slotContent;
@@ -77,6 +83,9 @@ public class InventorySlot
     public InventorySlot(Transform slotTransform)
     {
         this.slotTransform = slotTransform;
+        
+        slotParentTransform = slotTransform.parent;
+        slotParentInitialPosition = slotParentTransform.localPosition;
     }
 
     public InventorySlot AddItemToContent(PickupableInteractable interactable)

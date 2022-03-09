@@ -18,7 +18,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
 
-    private bool beingKilledByTVMan = true;
+    private bool notBeingKilled = true;
 
     public CG_HeadBob HeadBobber;
 
@@ -103,7 +103,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     [ReadOnlyField]
     private bool isInNotepad;
 
-    public Material pSXMaterial; 
+    public Material pSXMaterial;
+    public Animator playerCameraAnimator;
 
     private void OnEnable()
     {
@@ -121,6 +122,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         controls.Player.Interact.performed += _ => Interact();
         pencilLayerMask = 1 << LayerMask.NameToLayer("Notepad") | 1 << LayerMask.NameToLayer("NonWritingArea");
         CorridorChangeManager.OnLevelChange += OnLevelChange;
+        if (playerCameraAnimator != null) playerCameraAnimator.Play("Idle", 0);
     }
 
     public void CandleEnterPlayerInRange(InteractableCandle candle)
@@ -144,7 +146,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private void Interact()
     {
-        if (beingKilledByTVMan)
+        if (notBeingKilled)
         {
             if (interactingNote == null)
             {
@@ -192,6 +194,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     void Start()
     {
         pSXMaterial.SetFloat("_TransitionToAlternate", 0);
+        pSXMaterial.SetFloat("_FadeToWhite", 0);
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -215,7 +218,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
 
-        if (beingKilledByTVMan)
+        if (notBeingKilled)
         {
             UpdateInteractable();
             if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
@@ -440,15 +443,25 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     public void OnEntityKilled()
     {
-        beingKilledByTVMan = false;
-        
+        SetPlayerIsBeingKilled(true);
+        //notBeingKilled = false;
+        ////Uncrouch, un look at note, put away notepad
+        //if (IsCrouching && canUncrouch) ToggleCrouching();
+        //if (interactingNote != null) interactingNote.PutDownItem();
+        //if (isInNotepad) ActivateNotepad(false);
+
+        LookTowardsTVMan();
+    }
+
+    private void SetPlayerIsBeingKilled(bool beingKilled) 
+    {
+        notBeingKilled = !beingKilled;
+        playerCrosshair.enabled = !beingKilled;
         //Uncrouch, un look at note, put away notepad
         if (IsCrouching && canUncrouch) ToggleCrouching();
         if (interactingNote != null) interactingNote.PutDownItem();
         if (isInNotepad) ActivateNotepad(false);
-
-        LookTowardsTVMan();
-        print("Player has been killed");
+        
     }
 
     private async void LookTowardsTVMan()
@@ -463,21 +476,84 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         Quaternion currentPlayerRotation = transform.rotation;
         Quaternion newCameraRotation = Quaternion.LookRotation((GameManager.current.tvMan.TvManEyeLevel.position - Vector3.up * 0.3f) - playerCamera.transform.position);
         Quaternion currentCameraRotation = playerCamera.transform.rotation;
-        playerCrosshair.enabled = false;
+        
 
 
         while (positionValue < 1f)
         {
-            positionValue += Time.deltaTime * 0.2f;
+            positionValue += Time.deltaTime;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
             transform.rotation = Quaternion.Lerp(currentPlayerRotation, newPlayerRotation, smoothedPositionValue);//Quaternion.RotateTowards(currentPlayerRotation, newPlayerRotation, smoothedPositionValue * 50f);
             playerCamera.transform.rotation = Quaternion.Lerp(currentCameraRotation, newCameraRotation, smoothedPositionValue);
-            pSXMaterial.SetFloat("_TransitionToAlternate", smoothedPositionValue);
             await Task.Yield();
         }
 
         print("done");
         transform.rotation = newPlayerRotation;
+
+        //Check if player has a momento
+
+        InventoryManager iM = InventoryManager.current;
+
+        positionValue = 0;
+
+        if (iM.HasMomento)
+        {
+            InventorySlot iS = iM.momentoSlots[0];
+
+
+            while (positionValue < 1f) 
+            {
+                //Move momentoSlot To center
+                positionValue += Time.deltaTime;
+                smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+                //iS.SlotTransform
+                iS.SlotParentTransform.localPosition = Vector3.Slerp(iS.SlotParentInitialPosition, iM.ScreenCenter.localPosition, smoothedPositionValue);
+
+                await Task.Yield();
+            }
+            
+            positionValue = 0;
+
+            while (positionValue < 1f)
+            {
+                //Move momentoSlot To center
+                positionValue += Time.deltaTime;
+                smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+                pSXMaterial.SetFloat("_FadeToWhite", smoothedPositionValue);
+                await Task.Yield();
+            }
+
+            GameManager.current.tvMan.RemoveFromPlay();
+            Destroy(iS.RemoveItemFromContents().gameObject);
+            iM.HasMomento = false;
+            SetPlayerIsBeingKilled(false);
+
+            positionValue = 0;
+
+            while (positionValue < 1f)
+            {
+                //Move momentoSlot To center
+                positionValue += Time.deltaTime * 0.5f;
+                smoothedPositionValue = Mathf.SmoothStep(1, 0, positionValue);
+                pSXMaterial.SetFloat("_FadeToWhite", smoothedPositionValue);
+                await Task.Yield();
+            }
+
+        }
+        else 
+        {
+            if (playerCameraAnimator != null) playerCameraAnimator.Play("Death", 0);
+            while (positionValue < 1f)
+            {
+                positionValue += Time.deltaTime;
+                smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
+                pSXMaterial.SetFloat("_TransitionToAlternate", smoothedPositionValue);
+                await Task.Yield();
+            }
+
+            
+        }
 
         //transform.rotation = newPlayerRotation;
     }
