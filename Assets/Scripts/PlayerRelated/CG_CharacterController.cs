@@ -540,6 +540,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 await Task.Yield();
             }
 
+
+            iS.SlotParentTransform.position = iS.SlotParentInitialPosition;
         }
         else 
         {
