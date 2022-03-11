@@ -246,6 +246,7 @@ public class PlinthNotifierAndItem
     public bool HasCorrectItem;
 }
 
+[System.Serializable]
 public class PlinthControllerData : PuzzleElementControllerData
 {
     public bool[] PlinthItemsPlaced;

@@ -228,6 +228,7 @@ public class NumberpadController : PuzzleElementController
     }
 }
 
+[System.Serializable]
 public class NumberpadControllerData : PuzzleElementControllerData
 {
     public char[] DisabledButtons;

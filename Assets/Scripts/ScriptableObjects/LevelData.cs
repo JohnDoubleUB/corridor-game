@@ -151,6 +151,40 @@ public class LevelData_Loaded
         CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
 
     }
+
+    public LevelData_Loaded(LevelData levelData, LevelData_Serialized levelDataSerialized) 
+    {
+        this.levelData = levelData;
+
+        //Load all passwords for this level
+
+        NumberpadPasswords = levelDataSerialized.NumberpadPasswords;
+        NumberpadData = levelDataSerialized.NumberpadData;
+        GeneratedNumberpadPieces = levelDataSerialized.GeneratedNumberpadPieces;
+        CorridorLayoutData = levelDataSerialized.CorridorLayoutData.Select(x => x.Deserialized).ToArray();
+    }
+}
+
+[System.Serializable]
+public class LevelData_Serialized 
+{
+    public int ScaleEffectCount;
+    public int WaveEffectCount;
+    public string[] NumberpadPasswords;
+    public NumberpadPassword_Loaded[] NumberpadData;
+    public LayoutLevelDataSerialized[] CorridorLayoutData;
+    public char[] GeneratedNumberpadPieces;
+
+
+    public LevelData_Serialized(LevelData_Loaded levelDataLoaded) 
+    {
+        ScaleEffectCount = levelDataLoaded.ScaleEffectCount;
+        WaveEffectCount = levelDataLoaded.WaveEffectCount;
+        NumberpadPasswords = levelDataLoaded.NumberpadPasswords;
+        NumberpadData = levelDataLoaded.NumberpadData;
+        CorridorLayoutData = levelDataLoaded.CorridorLayoutData.Select(x => new LayoutLevelDataSerialized(x)).ToArray();
+        GeneratedNumberpadPieces = levelDataLoaded.GeneratedNumberpadPieces;
+    }
 }
 
 [System.Serializable]
@@ -247,6 +281,7 @@ public class NumberpadPassword
     }
 }
 
+[System.Serializable]
 public class NumberpadPassword_Loaded
 {
     public string NumberpadPassword;
@@ -285,5 +320,40 @@ public class LayoutLevelData
     public LayoutLevelData(string layoutID)
     {
         LayoutID = layoutID;
+    }
+
+    public LayoutLevelData(string LayoutID, IEnumerable<int> collectedItems, IEnumerable<int> completedPuzzles, bool HasWarped, IEnumerable<PuzzleElementControllerData> puzzleData) 
+    {
+        this.LayoutID = LayoutID;
+        this.collectedItems = collectedItems.ToList();
+        this.completedPuzzles = completedPuzzles.ToList();
+        this.HasWarped = HasWarped;
+        this.puzzleData = puzzleData.ToList();
+    }
+}
+
+public class LayoutLevelDataSerialized
+{
+    public string LayoutID;
+    public int[] collectedItems;
+    public int[] completedPuzzles;
+    public bool HasWarped;
+    public PuzzleElementControllerData[] puzzleData;
+
+    public LayoutLevelData Deserialized
+    {
+        get
+        {
+            return new LayoutLevelData(LayoutID, collectedItems, completedPuzzles, HasWarped, puzzleData);
+        }
+    }
+
+    public LayoutLevelDataSerialized(LayoutLevelData layoutLevelData)
+    {
+        LayoutID = layoutLevelData.LayoutID;
+        collectedItems = layoutLevelData.collectedItems.ToArray();
+        completedPuzzles = layoutLevelData.completedPuzzles.ToArray();
+        HasWarped = layoutLevelData.HasWarped;
+        puzzleData = layoutLevelData.puzzleData.ToArray();
     }
 }

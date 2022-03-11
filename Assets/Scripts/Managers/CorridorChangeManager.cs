@@ -70,8 +70,21 @@ public class CorridorChangeManager : MonoBehaviour
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
 
-        //Load levels
-        LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+        if (SaveSystem.LoadType == GameLoadType.New)
+        {
+            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+            SaveSystem.SaveGame(new SaveData(LoadedLevels));
+        }
+        else 
+        {
+            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+        }
+
+
+        ////Load levels
+        //LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+
+        //SaveSystem.SaveGame()
 
         UpdateLevel();
     }

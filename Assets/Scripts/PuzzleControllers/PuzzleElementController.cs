@@ -41,6 +41,7 @@ public class PuzzleElementController : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class PuzzleElementControllerData
 {
     public int PuzzleIndex;
