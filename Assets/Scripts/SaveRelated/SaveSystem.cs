@@ -7,7 +7,7 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    public static GameLoadType LoadType;
+    public static GameLoadType LoadType = GameLoadType.Existing;
     public static readonly string SaveExtension = "bathosave";
     public static string SaveName = "PlayerData";
 
@@ -69,10 +69,27 @@ public enum GameLoadType
 public class SaveData
 {
     public LevelData_Serialized[] LoadedLevels;
+    public PlayerData PlayerData;
 
     public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels) 
     {
         this.LoadedLevels = LoadedLevels.Select(x => new LevelData_Serialized(x)).ToArray();
     }
 
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData) : this(LoadedLevels) 
+    {
+        this.PlayerData = PlayerData;
+    }
+
+}
+
+[System.Serializable]
+public class PlayerData
+{
+    public bool NotepadPickedUp; //Stores whether the player has picked up the notepad
+
+    public PlayerData(CG_CharacterController characterController)
+    {
+        NotepadPickedUp = characterController.NotepadPickedUp;
+    }
 }

@@ -464,6 +464,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         
     }
 
+    public void LoadSavedPlayerData(PlayerData playerData) 
+    {
+        NotepadPickedUp = playerData.NotepadPickedUp;
+    }
+
+
+
     private async void LookTowardsTVMan()
     {
         float positionValue = 0;

@@ -70,15 +70,22 @@ public class CorridorChangeManager : MonoBehaviour
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
 
+        ////Setup of level data
+        //LoadLevelData();
+
+        ////Do things with the loaded level data
+        //UpdateLevel();
+    }
+
+    private void Start()
+    {
+
         //Setup of level data
         LoadLevelData();
 
         //Do things with the loaded level data
         UpdateLevel();
-    }
 
-    private void Start()
-    {
         SetupInitialSections();
         playerTransform = GameManager.current.player.transform;
         corridorGameParent = GameManager.current.GameParent;
@@ -106,6 +113,12 @@ public class CorridorChangeManager : MonoBehaviour
             }).ToList();
 
             //No need to save game because the game has just been loaded from a file
+
+            //Check if we have associated player data and if we do then load that
+            if (savedData.PlayerData != null) 
+            {
+                GameManager.current.playerController.LoadSavedPlayerData(savedData.PlayerData);
+            }
         }
         else
         {
@@ -116,7 +129,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(LoadedLevels));
+        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController)));
     }
 
     private bool TryLoadGame(out SaveData savedData)
@@ -246,16 +259,6 @@ public class CorridorChangeManager : MonoBehaviour
         {
             GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }
-
-
-        //if (currentLoadedLevelData.EnableTVMan && /*GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.NotInPlay &&*/ section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan)
-        //{
-        //    print("spawn tvman!");
-        //    if(putInPlayNow) GameManager.current.tvMan.PutInPlayNow(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-        //    else GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
-
-        //    section.EntityTracker.TVManInArea = GameManager.current.tvMan.gameObject;
-        //}
     }
 
     private void HandleMouseSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData)
@@ -294,6 +297,13 @@ public class CorridorChangeManager : MonoBehaviour
         {
             RenumberSections();
             UpdateLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.V)) 
+        {
+            print("saving game!");
+            SaveGame();
+            print("game saved!");
         }
     }
 
