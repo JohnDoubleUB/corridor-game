@@ -70,22 +70,10 @@ public class CorridorChangeManager : MonoBehaviour
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
         current = this;
 
-        if (SaveSystem.LoadType == GameLoadType.New)
-        {
-            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
-            SaveSystem.SaveGame(new SaveData(LoadedLevels));
-        }
-        else 
-        {
-            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
-        }
+        //Setup of level data
+        LoadLevelData();
 
-
-        ////Load levels
-        //LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
-
-        //SaveSystem.SaveGame()
-
+        //Do things with the loaded level data
         UpdateLevel();
     }
 
@@ -105,6 +93,36 @@ public class CorridorChangeManager : MonoBehaviour
         tVManPatrolPoints = corridorSections.Select(x => x.TVManPatrolLocations).ToArray();
     }
 
+    private void LoadLevelData() 
+    {
+        if (SaveSystem.LoadType != GameLoadType.New && TryLoadGame(out SaveData savedData) && savedData != null)
+        {
+            IEnumerable<LevelData_Serialized> savedLevelData = savedData.LoadedLevels.OrderBy(x => x.LevelNumber);
+
+            LoadedLevels = Levels.OrderBy(x => x.LevelNumber).Select((x, index) =>
+            {
+                LevelData_Serialized currentSerializedLevelData = savedLevelData.ElementAtOrDefault(index);
+                return currentSerializedLevelData != null && x.LevelNumber == currentSerializedLevelData.LevelNumber ? new LevelData_Loaded(x, currentSerializedLevelData) : x;
+            }).ToList();
+
+            //No need to save game because the game has just been loaded from a file
+        }
+        else
+        {
+            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+            SaveGame(); //Save the level as the player loads in
+        }
+    }
+
+    private void SaveGame()
+    {
+        SaveSystem.SaveGame(new SaveData(LoadedLevels));
+    }
+
+    private bool TryLoadGame(out SaveData savedData)
+    {
+        return SaveSystem.TryLoadGame(out savedData);
+    }
     private void UpdateLevel()
     {
         if (Levels != null && Levels.Any())
@@ -119,7 +137,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void RemoveMouseFromList(MouseEntity mouse)
     {
-        if(mice.Contains(mouse)) mice.Remove(mouse);
+        if (mice.Contains(mouse)) mice.Remove(mouse);
     }
 
     private LevelData_Loaded GetCurrentLevelData

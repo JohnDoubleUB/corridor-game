@@ -168,6 +168,7 @@ public class LevelData_Loaded
 [System.Serializable]
 public class LevelData_Serialized 
 {
+    public readonly int LevelNumber; //This is used to identify matching level data
     public int ScaleEffectCount;
     public int WaveEffectCount;
     public string[] NumberpadPasswords;
@@ -178,6 +179,7 @@ public class LevelData_Serialized
 
     public LevelData_Serialized(LevelData_Loaded levelDataLoaded) 
     {
+        LevelNumber = levelDataLoaded.LevelNumber;
         ScaleEffectCount = levelDataLoaded.ScaleEffectCount;
         WaveEffectCount = levelDataLoaded.WaveEffectCount;
         NumberpadPasswords = levelDataLoaded.NumberpadPasswords;
@@ -332,6 +334,7 @@ public class LayoutLevelData
     }
 }
 
+[System.Serializable]
 public class LayoutLevelDataSerialized
 {
     public string LayoutID;

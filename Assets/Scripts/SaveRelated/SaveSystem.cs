@@ -30,24 +30,34 @@ public static class SaveSystem
 
     public static SaveData LoadGame()
     {
+        TryLoadGame(out SaveData savedData);
+        return savedData;
+    }
+
+    public static bool TryLoadGame(out SaveData savedData)
+    {
         string path = SaveLocation;
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            SaveData savedData = (SaveData)formatter.Deserialize(stream);
+            savedData = (SaveData)formatter.Deserialize(stream);
             stream.Close();
-
-            return savedData;
+            return true;
         }
         else
         {
             Debug.LogError("Save file not found in " + path);
-            return null;
+            savedData = null;
+            return false;
         }
     }
+
 }
+
+
+
 
 public enum GameLoadType 
 {
