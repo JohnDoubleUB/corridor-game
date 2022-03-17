@@ -125,6 +125,8 @@ public class CorridorChangeManager : MonoBehaviour
             //Check if we have associated inventory data, if we do then load it
             if (savedData.InventoryData != null) 
             {
+                //TODO: Neaten this part of the code, this repeats itself and I wonder if I can shorten it down
+
                 //Momentos
                 if (savedData.InventoryData.MomentoItems != null && savedData.InventoryData.MomentoItems.Any()) 
                 {
@@ -135,6 +137,7 @@ public class CorridorChangeManager : MonoBehaviour
                         if (itemToSpawn != null) 
                         {
                             PickupableInteractable spawnedItem = Instantiate(itemToSpawn);
+                            spawnedItem.LoadItemData(momentoItem.PickupableData);
                             spawnedItem.IsInteractable = false;
 
                             //Get the appropriate inventory slot
