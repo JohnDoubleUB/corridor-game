@@ -70,7 +70,7 @@ public class SaveData
 {
     public LevelData_Serialized[] LoadedLevels;
     public PlayerData PlayerData;
-
+    public InventoryData InventoryData;
     public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels) 
     {
         this.LoadedLevels = LoadedLevels.Select(x => new LevelData_Serialized(x)).ToArray();
@@ -92,4 +92,10 @@ public class PlayerData
     {
         NotepadPickedUp = characterController.NotepadPickedUp;
     }
+}
+
+[System.Serializable]
+public class InventoryData 
+{
+
 }

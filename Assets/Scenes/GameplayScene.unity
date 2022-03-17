@@ -4936,6 +4936,7 @@ MonoBehaviour:
   - {fileID: -6298860727399313530, guid: 19fd6460ad6c6c0448c21ba9f30314b3, type: 3}
   - {fileID: 5576320997614604752, guid: 19fd6460ad6c6c0448c21ba9f30314b3, type: 3}
   - {fileID: -8210910570796072030, guid: 19fd6460ad6c6c0448c21ba9f30314b3, type: 3}
+  PickupablesIndex: {fileID: 11400000, guid: 59dccd255f7ff4c4bad3b249014be1a0, type: 2}
 --- !u!114 &1838609639
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public Texture[] DecalNumberTextures { get { return decalNumberTextures; } }
 
+    public PickupablesIndex PickupablesIndex;
+
     private Texture[] decalNumberTextures;
 
     private void Awake()
