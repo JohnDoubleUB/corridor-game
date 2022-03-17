@@ -78,6 +78,23 @@ public class PickupableInteractable : InteractableObject
         beingPickedUp = false;
     }
 
+    public virtual PickupableData GetSavableData() 
+    {
+        return new PickupableData(this);
+    }
+}
+
+[System.Serializable]
+public class PickupableData 
+{
+    public int PickupID;
+    public string ObjectName;
+
+    public PickupableData(PickupableInteractable pI) 
+    {
+        PickupID = pI.PickupID;
+        ObjectName = pI.ObjectName;
+    }
 }
 
 public enum PickupType 
