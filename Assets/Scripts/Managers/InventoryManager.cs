@@ -122,3 +122,29 @@ public class InventorySlot
         return objectToRemove;
     }
 }
+
+[System.Serializable]
+public class InventoryData
+{
+    public InventoryItemData[] InventoryItems;
+    public InventoryItemData[] MomentoItems;
+
+    public InventoryData(InventoryManager inventory)
+    {
+        InventoryItems = inventory.inventorySlots.Select((x, index) => new InventoryItemData(x, index)).ToArray();
+        MomentoItems = inventory.momentoSlots.Select((x, index) => new InventoryItemData(x, index)).ToArray();
+    }
+}
+
+[System.Serializable]
+public class InventoryItemData
+{
+    public int SlotIndex;
+    public PickupableData PickupableData;
+
+    public InventoryItemData(InventorySlot InventorySlot, int SlotIndex = 0)
+    {
+        this.SlotIndex = SlotIndex;
+        PickupableData = InventorySlot.slotContent != null ? new PickupableData(InventorySlot.slotContent) : null;
+    }
+}

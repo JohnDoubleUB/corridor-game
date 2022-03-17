@@ -119,6 +119,49 @@ public class CorridorChangeManager : MonoBehaviour
             {
                 GameManager.current.playerController.LoadSavedPlayerData(savedData.PlayerData);
             }
+
+            //Check if we have associated inventory data, if we do then load it
+            if (savedData.InventoryData != null) 
+            {
+                //Momentos
+                if (savedData.InventoryData.MomentoItems != null && savedData.InventoryData.MomentoItems.Any()) 
+                {
+                    foreach (InventoryItemData momentoItem in savedData.InventoryData.MomentoItems.Where(x => x.PickupableData != null)) 
+                    {
+                        //Create item in the world
+                        PickupableInteractable itemToSpawn = GameManager.current.PickupablesIndex.Pickupables.FirstOrDefault(x => x.PickupID == momentoItem.PickupableData.PickupID);
+                        if (itemToSpawn != null) 
+                        {
+                            PickupableInteractable spawnedItem = Instantiate(itemToSpawn);
+
+                            //Get the appropriate inventory slot
+                            InventoryManager.current.momentoSlots[momentoItem.SlotIndex].AddItemToContent(spawnedItem); //Add this item to it
+
+                            //Then finish the process of adding the item on the item itself
+                            spawnedItem.SetInInventory();
+                        }  
+                    }
+
+                    //Do the same for normal inventory items
+                    foreach (InventoryItemData inventoryItem in savedData.InventoryData.MomentoItems.Where(x => x.PickupableData != null))
+                    {
+                        //Create item in the world
+                        PickupableInteractable itemToSpawn = GameManager.current.PickupablesIndex.Pickupables.FirstOrDefault(x => x.PickupID == inventoryItem.PickupableData.PickupID);
+                        if (itemToSpawn != null)
+                        {
+                            PickupableInteractable spawnedItem = Instantiate(itemToSpawn);
+
+                            //Get the appropriate inventory slot
+                            InventoryManager.current.inventorySlots[inventoryItem.SlotIndex].AddItemToContent(spawnedItem); //Add this item to it
+
+                            //Then finish the process of adding the item on the item itself
+                            spawnedItem.SetInInventory();
+                        }
+                    }
+                }
+
+
+            }
         }
         else
         {
@@ -129,7 +172,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController)));
+        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current)));
     }
 
     private bool TryLoadGame(out SaveData savedData)

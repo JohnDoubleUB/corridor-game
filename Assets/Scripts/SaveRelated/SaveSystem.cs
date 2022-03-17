@@ -81,6 +81,10 @@ public class SaveData
         this.PlayerData = PlayerData;
     }
 
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData) : this(LoadedLevels, PlayerData)
+    {
+        this.InventoryData = InventoryData;
+    }
 }
 
 [System.Serializable]
@@ -94,8 +98,3 @@ public class PlayerData
     }
 }
 
-[System.Serializable]
-public class InventoryData 
-{
-
-}

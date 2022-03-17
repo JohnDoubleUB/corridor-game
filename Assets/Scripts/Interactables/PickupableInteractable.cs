@@ -35,13 +35,13 @@ public class PickupableInteractable : InteractableObject
 
     protected void Update()
     {
-        if (currentSlot == null && transform.localScale != defaultScale) 
+        if (currentSlot == null && transform.localScale != defaultScale)
         {
             transform.localScale = defaultScale;
         }
     }
 
-    private async void Pickup() 
+    private async void Pickup()
     {
         OnSuccessfulInteract();
         transform.parent = null;
@@ -59,29 +59,37 @@ public class PickupableInteractable : InteractableObject
         float positionValue = 0;
         float smoothedPositionValue;
         Vector3 cameraPosition;
-        
 
-        while (positionValue < 1f) 
+
+        while (positionValue < 1f)
         {
             cameraPosition = GameManager.current.playerController.playerCamera.transform.position - new Vector3(0, 0.6f, 0);
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
             transform.SetPositionAndRotation(
-                Vector3.Lerp(positionAtTimeOfPickup, cameraPosition, smoothedPositionValue), 
+                Vector3.Lerp(positionAtTimeOfPickup, cameraPosition, smoothedPositionValue),
                 Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(cameraPosition - transform.position), smoothedPositionValue * 50f)
                 );
             await Task.Yield();
         }
 
-        transform.localScale = transform.localScale * pickupScaleMultiplier;
-        if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
+        //Stuff for implementing pickup here
+        //transform.localScale = transform.localScale * pickupScaleMultiplier;
+        //if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
+        SetInInventory();
         beingPickedUp = false;
     }
 
-    public virtual PickupableData GetSavableData() 
+    public virtual PickupableData GetSavableData()
     {
         return new PickupableData(this);
     }
+
+    public void SetInInventory() 
+    {
+        transform.localScale = transform.localScale * pickupScaleMultiplier;
+        if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
+    } 
 }
 
 [System.Serializable]
