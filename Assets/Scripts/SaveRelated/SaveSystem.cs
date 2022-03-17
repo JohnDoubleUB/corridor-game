@@ -68,6 +68,7 @@ public enum GameLoadType
 [System.Serializable]
 public class SaveData
 {
+    public int CurrentLevel;
     public LevelData_Serialized[] LoadedLevels;
     public PlayerData PlayerData;
     public InventoryData InventoryData;
@@ -81,9 +82,10 @@ public class SaveData
         this.PlayerData = PlayerData;
     }
 
-    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData) : this(LoadedLevels, PlayerData)
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, int CurrentLevel = 0) : this(LoadedLevels, PlayerData)
     {
         this.InventoryData = InventoryData;
+        this.CurrentLevel = CurrentLevel;
     }
 }
 

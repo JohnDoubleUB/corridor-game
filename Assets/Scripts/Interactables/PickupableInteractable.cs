@@ -89,7 +89,12 @@ public class PickupableInteractable : InteractableObject
     {
         transform.localScale = transform.localScale * pickupScaleMultiplier;
         if (currentSlot != null) currentSlot.ParentContentsToItemSlot();
-    } 
+    }
+
+    public void LoadItemData(PickupableData itemData) 
+    {
+        ObjectName = itemData.ObjectName;
+    }
 }
 
 [System.Serializable]
