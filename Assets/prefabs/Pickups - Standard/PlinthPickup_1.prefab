@@ -60,6 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Cylinderical Piece
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
+  PickupID: 7
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}

@@ -63,6 +63,7 @@ MonoBehaviour:
   ObjectName: Strange Picture
   IsInteractable: 1
   puzzleObjectToNotifyOnInteract: {fileID: 0}
+  PickupID: 1
   pickupType: 1
   currentSlot:
     slotContent: {fileID: 0}

@@ -61,6 +61,7 @@ MonoBehaviour:
   ObjectName: 7
   IsInteractable: 1
   puzzleObjectToNotifyOnInteract: {fileID: 0}
+  PickupID: 3
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}

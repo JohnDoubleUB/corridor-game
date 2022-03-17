@@ -74,6 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: b17b1a77690563442b506f4ca5c78b77, type: 2}
     - target: {fileID: 8965826023466985456, guid: becf7f5a1e4c9ba4e86ac446f87a4b1d,
         type: 3}
+      propertyPath: PickupID
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965826023466985456, guid: becf7f5a1e4c9ba4e86ac446f87a4b1d,
+        type: 3}
       propertyPath: ObjectName
       value: Strange Metal Key
       objectReference: {fileID: 0}

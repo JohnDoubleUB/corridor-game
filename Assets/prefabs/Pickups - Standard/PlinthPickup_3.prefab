@@ -74,6 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1972190308613710872, guid: a6e177f2d9489e0469239e7ade5a27ad,
         type: 3}
+      propertyPath: PickupID
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972190308613710872, guid: a6e177f2d9489e0469239e7ade5a27ad,
+        type: 3}
       propertyPath: ObjectName
       value: Star Piece
       objectReference: {fileID: 0}

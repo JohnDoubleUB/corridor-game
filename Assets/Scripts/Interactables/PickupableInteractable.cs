@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PickupableInteractable : InteractableObject
 {
+    public int PickupID;
     public PickupType pickupType;
     public InventorySlot currentSlot;
     public float pickupSpeedMultiplier = 2.5f;

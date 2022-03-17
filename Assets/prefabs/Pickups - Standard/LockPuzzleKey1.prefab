@@ -60,6 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Steel Key
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
+  PickupID: 4
   pickupType: 0
   currentSlot:
     slotContent: {fileID: 0}
@@ -67,6 +69,7 @@ MonoBehaviour:
   pickupScaleMultiplier: 2.5
   pickupSound: {fileID: 8300000, guid: 36591a63a5929bb42bc433a36b34863e, type: 3}
   varyPickupSoundPitch: 1
+  pickupSoundVolume: 0.5
 --- !u!1 &8512045940003944528
 GameObject:
   m_ObjectHideFlags: 0

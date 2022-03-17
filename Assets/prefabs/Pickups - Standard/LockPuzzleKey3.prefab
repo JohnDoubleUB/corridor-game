@@ -74,6 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: bd3d95ece21dfd84f9b2216bfd7e4872, type: 2}
     - target: {fileID: 8965826023466985456, guid: becf7f5a1e4c9ba4e86ac446f87a4b1d,
         type: 3}
+      propertyPath: PickupID
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965826023466985456, guid: becf7f5a1e4c9ba4e86ac446f87a4b1d,
+        type: 3}
       propertyPath: ObjectName
       value: Basic Looking Key
       objectReference: {fileID: 0}
