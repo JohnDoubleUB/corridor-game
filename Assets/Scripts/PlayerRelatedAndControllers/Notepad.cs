@@ -24,6 +24,9 @@ public class Notepad : MonoBehaviour
 
     private List<LineRenderer> lineRenderers = new List<LineRenderer>();
     private List<WritingObject> writingObjects = new List<WritingObject>();
+    
+    public CustomNotepadStarts customStartObject;
+
 
     private void Update()
     {
@@ -59,6 +62,7 @@ public class Notepad : MonoBehaviour
                         Destroy(closestWriting.LineRenderer.gameObject);
                         transform.PlayClipAtTransform(eraseLineSound, false);
                         lineRenderers.Remove(closestWriting.LineRenderer);
+                        linePositions.Clear();
                         //AudioManager.current.PlayClipAt(eraseLineSound, transform.position, 1f, true);
                     }
                 }
@@ -150,7 +154,9 @@ public class Notepad : MonoBehaviour
 
     public void SaveData()
     {
-        SaveSystem.SaveNotepad(new NotepadData(lineRenderers));
+        NotepadData dataToSave = new NotepadData(lineRenderers);
+        SaveSystem.SaveNotepad(dataToSave);
+        //if (customStartObject != null) customStartObject.Varients.Add(dataToSave);
     }
 
     public void LoadData()
@@ -158,6 +164,14 @@ public class Notepad : MonoBehaviour
         if (SaveSystem.TryLoadNotepad(out NotepadData notepadData) && notepadData != null && notepadData.LineData != null && notepadData.LineData.Any())
         {
             LoadNotepadData(notepadData);
+        }
+    }
+
+    public void LoadRandomNote() 
+    {
+        if (customStartObject != null && customStartObject.Varients.Any()) 
+        {
+            LoadNotepadData(customStartObject.Varients[Random.Range(0, customStartObject.Varients.Count)]);
         }
     }
 
