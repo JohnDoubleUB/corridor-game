@@ -119,12 +119,39 @@ public class Notepad : MonoBehaviour
         writingObjects.Add(new WritingObject(lineRenderer));
     }
 
+    //For loading existing lines from a save
+    private void CreateLine(IEnumerable<Vector3> linePoints)
+    {
+        GameObject newLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
+        newLine.transform.SetParent(transform);
+        newLine.transform.localPosition = Vector3.zero;
+        LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
+        newLineRenderer.SetPositions(linePoints.ToArray());
+        lineRenderers.Add(newLineRenderer);
+        writingObjects.Add(new WritingObject(newLineRenderer));
+    }
+
     void UpdateLine(Vector3 newLinePos) 
     {
         if (lineRenderer == null) CreateLine();
         linePositions.Add(newLinePos);
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(lineRenderer.positionCount - 1, newLinePos);
+    }
+
+    public NotepadData GetSavableData() 
+    {
+        return new NotepadData(lineRenderers);
+    }
+
+    public void LoadNotepadData(NotepadData notepadData) 
+    {
+        foreach (NotepadLineData lineData in notepadData.LinePositions) 
+        {
+            IEnumerable<Vector3> lineDataPositions = lineData.Positions.Select(x => x.Deserialized());
+            if (lineDataPositions != null && lineDataPositions.Any()) continue;
+            CreateLine(lineDataPositions);
+        }
     }
 
     private class WritingObject 

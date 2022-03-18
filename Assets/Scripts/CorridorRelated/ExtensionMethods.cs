@@ -203,8 +203,15 @@ public static class ExtensionMethods
     {
         return new MovementTarget(position);
     }
+
+    public static Vector3Serialized Serialized(this Vector3 vector3) 
+    {
+        return new Vector3Serialized(vector3);
+    }
+
 }
 
+[System.Serializable]
 public struct TransformElements
 {
     public Vector3 Position;
