@@ -8,7 +8,7 @@ using UnityEngine;
 public static class SaveSystem
 {
     public static GameLoadType LoadType = GameLoadType.Existing;
-    public static GameLoadType NotepadLoadType;
+    public static GameLoadType NotepadLoadType /*= GameLoadType.Existing*/;
     public static readonly string SaveExtension = "bathosave";
     public static readonly string NoteSaveExtension = "bathonotes";
     public static string SaveName = "PlayerData";
@@ -149,7 +149,7 @@ public class PlayerData
 [System.Serializable]
 public class NotepadData
 {
-    public NotepadLineData[] LinePositions;
+    public NotepadLineData[] LineData;
 
     public NotepadData(IEnumerable<LineRenderer> lineRenderers) 
     {
@@ -159,11 +159,11 @@ public class NotepadData
         
         //IEnumerable<LineRenderer> lineRenderers;
 
-        LinePositions = lineRenderers.Select(lineRenderer =>
+        LineData = lineRenderers.Select(lineRenderer =>
         {
             Vector3[] linePoints = new Vector3[lineRenderer.positionCount];
             lineRenderer.GetPositions(linePoints);
-            return new NotepadLineData(linePoints.Select(x => x.Serialized()));
+            return new NotepadLineData(linePoints.Select(x => x.Serialized()), lineRenderer.transform.localRotation.eulerAngles.Serialized(), lineRenderer.transform.localScale.Serialized());
         }).ToArray();
     }
 }
@@ -192,10 +192,14 @@ public struct Vector3Serialized
 public struct NotepadLineData 
 {
     public Vector3Serialized[] Positions;
+    public Vector3Serialized LocalScale;
+    public Vector3Serialized LocalRotationEuler;
 
-    public NotepadLineData(IEnumerable<Vector3Serialized> Positions) 
+    public NotepadLineData(IEnumerable<Vector3Serialized> Positions, Vector3Serialized LocalRotationEuler, Vector3Serialized LocalScale) 
     {
         this.Positions = Positions.ToArray();
+        this.LocalRotationEuler = LocalRotationEuler;
+        this.LocalScale = LocalScale;
     }
 }
 

@@ -58,6 +58,7 @@ public class Notepad : MonoBehaviour
                         writingObjects.Remove(closestWriting);
                         Destroy(closestWriting.LineRenderer.gameObject);
                         transform.PlayClipAtTransform(eraseLineSound, false);
+                        lineRenderers.Remove(closestWriting.LineRenderer);
                         //AudioManager.current.PlayClipAt(eraseLineSound, transform.position, 1f, true);
                     }
                 }
@@ -120,12 +121,20 @@ public class Notepad : MonoBehaviour
     }
 
     //For loading existing lines from a save
-    private void CreateLine(IEnumerable<Vector3> linePoints)
+    private void CreateLine(NotepadLineData lineData)
     {
+        IEnumerable<Vector3> linePoints = lineData.Positions.Select(x => x.Deserialized());
+        if (linePoints == null || !linePoints.Any()) return;
+
+
         GameObject newLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         newLine.transform.SetParent(transform);
         newLine.transform.localPosition = Vector3.zero;
+        newLine.transform.localRotation = Quaternion.Euler(lineData.LocalRotationEuler.Deserialized());
+        newLine.transform.localScale = lineData.LocalScale.Deserialized();
+
         LineRenderer newLineRenderer = newLine.GetComponent<LineRenderer>();
+        newLineRenderer.positionCount = linePoints.Count();
         newLineRenderer.SetPositions(linePoints.ToArray());
         lineRenderers.Add(newLineRenderer);
         writingObjects.Add(new WritingObject(newLineRenderer));
@@ -146,7 +155,7 @@ public class Notepad : MonoBehaviour
 
     public void LoadData()
     {
-        if (SaveSystem.TryLoadNotepad(out NotepadData notepadData) && notepadData != null && notepadData.LinePositions != null && notepadData.LinePositions.Any())
+        if (SaveSystem.TryLoadNotepad(out NotepadData notepadData) && notepadData != null && notepadData.LineData != null && notepadData.LineData.Any())
         {
             LoadNotepadData(notepadData);
         }
@@ -154,11 +163,12 @@ public class Notepad : MonoBehaviour
 
     private void LoadNotepadData(NotepadData notepadData)
     {
-        foreach (NotepadLineData lineData in notepadData.LinePositions)
+        foreach (NotepadLineData lineData in notepadData.LineData)
         {
-            IEnumerable<Vector3> lineDataPositions = lineData.Positions.Select(x => x.Deserialized());
-            if (lineDataPositions != null && lineDataPositions.Any()) continue;
-            CreateLine(lineDataPositions);
+            //Put this all in createline
+            //IEnumerable<Vector3> lineDataPositions = lineData.Positions.Select(x => x.Deserialized());
+            //if (lineDataPositions == null || !lineDataPositions.Any()) continue;
+            CreateLine(lineData);
         }
     }
 

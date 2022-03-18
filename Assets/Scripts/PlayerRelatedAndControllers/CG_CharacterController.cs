@@ -68,7 +68,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     private InteractableObject currentInteractable;
 
     private GameObject notepadGameObject;
-    private Notepad notepadObject;
+    public Notepad notepadObject;
 
     private int pencilLayerMask;
 
@@ -202,6 +202,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         defaultColliderHeight = characterController.height;
         defaultMovementSpeed = speed;
         defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
+        notepadObject.LoadData();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -324,15 +325,11 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
         playerPencil.SetActive(!canMove);
         playerCrosshair.enabled = canMove;
-        
-        //if (activate)
-        //{
-        //    notepadObject.LoadData();
-        //}
-        //else 
-        //{
-        //    notepadObject.SaveData();
-        //}
+
+        if (!activate)
+        {
+            notepadObject.SaveData();
+        }
     }
     private bool GetLookedAtPoint(out Vector3 result)
     {

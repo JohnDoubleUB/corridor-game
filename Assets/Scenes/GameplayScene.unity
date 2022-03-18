@@ -6075,6 +6075,7 @@ MonoBehaviour:
   moveDirection: {x: 0, y: 0, z: 0}
   canMove: 1
   canInteract: 1
+  notepadObject: {fileID: 824808932}
   heldMouse: {fileID: 0}
   mouseHand: {fileID: 299492085}
   canUncrouch: 1
