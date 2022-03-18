@@ -202,7 +202,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         defaultColliderHeight = characterController.height;
         defaultMovementSpeed = speed;
         defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
-        notepadObject.LoadData();
+        if(SaveSystem.NotepadLoadType == GameLoadType.Existing) notepadObject.LoadData();
     }
 
     private void OnTriggerEnter(Collider other)

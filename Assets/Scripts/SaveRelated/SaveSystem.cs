@@ -8,7 +8,7 @@ using UnityEngine;
 public static class SaveSystem
 {
     public static GameLoadType LoadType = GameLoadType.Existing;
-    public static GameLoadType NotepadLoadType /*= GameLoadType.Existing*/;
+    public static GameLoadType NotepadLoadType = GameLoadType.Existing;
     public static readonly string SaveExtension = "bathosave";
     public static readonly string NoteSaveExtension = "bathonotes";
     public static string SaveName = "PlayerData";
@@ -153,13 +153,7 @@ public class NotepadData
 
     public NotepadData(IEnumerable<LineRenderer> lineRenderers) 
     {
-        //Vector3[] linePoints = new Vector3[lineRenderer.positionCount];
-        //lineRenderer.GetPositions(linePoints);
-        //NotepadLineData resulttest = new NotepadLineData(linePoints.Select(x => x.Serialized()));
-        
-        //IEnumerable<LineRenderer> lineRenderers;
-
-        LineData = lineRenderers.Select(lineRenderer =>
+        LineData = lineRenderers.Where(x => x != null).Select(lineRenderer =>
         {
             Vector3[] linePoints = new Vector3[lineRenderer.positionCount];
             lineRenderer.GetPositions(linePoints);
