@@ -165,9 +165,6 @@ public class Notepad : MonoBehaviour
     {
         foreach (NotepadLineData lineData in notepadData.LineData)
         {
-            //Put this all in createline
-            //IEnumerable<Vector3> lineDataPositions = lineData.Positions.Select(x => x.Deserialized());
-            //if (lineDataPositions == null || !lineDataPositions.Any()) continue;
             CreateLine(lineData);
         }
     }
