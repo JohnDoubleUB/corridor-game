@@ -10,7 +10,7 @@ public class Notepad : MonoBehaviour
     public List<Vector3> linePositions;
     public bool CanWrite; // Animation related
     public bool PencilOverPadArea; //To Keep track of if the pencil is over the pad
-    
+
     public AudioSource pencilDrawingSource;
     public AudioClip eraseLineSound;
     public AudioClip drawingSound;
@@ -43,7 +43,7 @@ public class Notepad : MonoBehaviour
                 }
                 isWriting = true;
             }
-            else 
+            else
             {
                 isWriting = false;
             }
@@ -71,7 +71,7 @@ public class Notepad : MonoBehaviour
 
     }
 
-    public void PlayDrawingSound(bool playSound = true) 
+    public void PlayDrawingSound(bool playSound = true)
     {
         pencilDrawingSource.transform.localPosition = currentPlayerLinePosition;
 
@@ -84,18 +84,18 @@ public class Notepad : MonoBehaviour
                 pencilDrawingSource.Play();
             }
         }
-        else 
+        else
         {
             pencilDrawingSource.Stop();
         }
     }
 
-    public void DrawAt(Vector3 drawlocation) 
+    public void DrawAt(Vector3 drawlocation)
     {
         currentPlayerLinePosition = drawlocation - transform.position;
     }
 
-    public void ClearCurrentLine() 
+    public void ClearCurrentLine()
     {
         if (lineRenderer != null)
         {
@@ -104,7 +104,7 @@ public class Notepad : MonoBehaviour
         }
     }
 
-    private void CreateLine() 
+    private void CreateLine()
     {
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
         currentLine.transform.SetParent(transform);
@@ -131,7 +131,7 @@ public class Notepad : MonoBehaviour
         writingObjects.Add(new WritingObject(newLineRenderer));
     }
 
-    void UpdateLine(Vector3 newLinePos) 
+    void UpdateLine(Vector3 newLinePos)
     {
         if (lineRenderer == null) CreateLine();
         linePositions.Add(newLinePos);
@@ -139,14 +139,22 @@ public class Notepad : MonoBehaviour
         lineRenderer.SetPosition(lineRenderer.positionCount - 1, newLinePos);
     }
 
-    public NotepadData GetSavableData() 
+    public void SaveData()
     {
-        return new NotepadData(lineRenderers);
+        SaveSystem.SaveNotepad(new NotepadData(lineRenderers));
     }
 
-    public void LoadNotepadData(NotepadData notepadData) 
+    public void LoadData()
     {
-        foreach (NotepadLineData lineData in notepadData.LinePositions) 
+        if (SaveSystem.TryLoadNotepad(out NotepadData notepadData) && notepadData != null && notepadData.LinePositions != null && notepadData.LinePositions.Any())
+        {
+            LoadNotepadData(notepadData);
+        }
+    }
+
+    private void LoadNotepadData(NotepadData notepadData)
+    {
+        foreach (NotepadLineData lineData in notepadData.LinePositions)
         {
             IEnumerable<Vector3> lineDataPositions = lineData.Positions.Select(x => x.Deserialized());
             if (lineDataPositions != null && lineDataPositions.Any()) continue;
