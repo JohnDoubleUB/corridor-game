@@ -39,6 +39,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+
+        // pausing works
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        //}
+
         TVManEffectUpdate();
     }
 
