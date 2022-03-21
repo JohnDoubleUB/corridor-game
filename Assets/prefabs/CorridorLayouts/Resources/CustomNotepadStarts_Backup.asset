@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00182b78566393c439f36f2d5cba2345, type: 3}
-  m_Name: CustomNotepadStarts 1
+  m_Name: CustomNotepadStarts_Backup
   m_EditorClassIdentifier: 
   Varients:
   - LineData:

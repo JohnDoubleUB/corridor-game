@@ -176,6 +176,8 @@ public class CorridorChangeManager : MonoBehaviour
             LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
             SaveGame(); //Save the level as the player loads in
         }
+
+        SaveSystem.LoadType = GameLoadType.Existing;
     }
 
     private void SaveGame()

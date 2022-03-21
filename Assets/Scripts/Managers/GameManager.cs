@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class GameManager : MonoBehaviour
 
     private bool isPaused;
 
+    private CursorLockMode lastCursorMode;
+    private bool lastCursorVisibility;
+
+    public GameObject pauseMenuObject;
+
     private void Awake()
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
@@ -51,13 +57,34 @@ public class GameManager : MonoBehaviour
         //    print("End game!");
         //    Application.Quit();
         //}
-        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))
+        if (/*Input.GetButtonDown("Cancel") ||*/ Input.GetKeyDown(KeyCode.P))
         {
-            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-            isPaused = Time.timeScale == 0;
+            TogglePauseGame();
         }
 
         TVManEffectUpdate();
+    }
+
+    public void TogglePauseGame() 
+    {
+        Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        isPaused = Time.timeScale == 0;
+        if (isPaused)
+        {
+            lastCursorVisibility = Cursor.visible;
+            lastCursorMode = Cursor.lockState;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        else
+        {
+            //Revert the mouse state to before it was paused
+            Cursor.lockState = lastCursorMode;
+            Cursor.visible = lastCursorVisibility;
+        }
+
+        pauseMenuObject.SetActive(isPaused);
+        //Trigger on pause event here?
     }
 
     private void TVManEffectUpdate() 
@@ -82,5 +109,11 @@ public class GameManager : MonoBehaviour
 
 
         }
+    }
+
+    public void RestartCurrentScene()
+    {
+        int scene = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
 }

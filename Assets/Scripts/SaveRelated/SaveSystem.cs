@@ -8,7 +8,7 @@ using UnityEngine;
 public static class SaveSystem
 {
     public static GameLoadType LoadType = GameLoadType.Existing;
-    public static GameLoadType NotepadLoadType;
+    public static GameLoadType NotepadLoadType = GameLoadType.Existing;
     public static readonly string SaveExtension = "bathosave";
     public static readonly string NoteSaveExtension = "bathonotes";
     public static string SaveName = "PlayerData";

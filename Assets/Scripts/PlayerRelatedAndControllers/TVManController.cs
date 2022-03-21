@@ -188,6 +188,12 @@ public class TVManController : MonoBehaviour
         BehaviourUpdate();
     }
 
+    private void OnDestroy()
+    {
+        AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
+        CorridorChangeManager.OnSectionMove -= OnSectionMove;
+        CorridorChangeManager.OnNavMeshUpdate -= OnNavMeshUpdate;
+    }
 
     private void PlayHuntingNoise()
     {

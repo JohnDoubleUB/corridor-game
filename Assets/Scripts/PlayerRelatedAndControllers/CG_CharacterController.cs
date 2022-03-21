@@ -315,9 +315,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
         playerPencil.SetActive(!canMove);
         playerCrosshair.enabled = canMove;
-
         if (!activate)
         {
+            SaveSystem.NotepadLoadType = GameLoadType.Existing;
             notepadObject.SaveData();
         }
     }
