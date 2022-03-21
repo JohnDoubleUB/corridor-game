@@ -220,7 +220,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
 
-        if (notBeingKilled)
+        if (notBeingKilled && !GameManager.current.IsPaused)
         {
             UpdateInteractable();
             if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
@@ -302,17 +302,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             {
                 ToggleCrouching();
             }
-        }
-        else 
-        {
-
-            //transform.rotation = Quaternion.LookRotation(GameManager.current.tvMan.transform.position - transform.position, Vector3.up);
-        }
-
-        if (Input.GetButtonDown("Cancel"))
-        {
-            print("End game!");
-            Application.Quit();
         }
     }
 

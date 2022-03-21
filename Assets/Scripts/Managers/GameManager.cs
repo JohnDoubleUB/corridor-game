@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
 
     private Texture[] decalNumberTextures;
 
+    public bool IsPaused { get { return isPaused; } }
+
+    private bool isPaused;
+
     private void Awake()
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
@@ -35,16 +39,23 @@ public class GameManager : MonoBehaviour
             decalNumberTextures = DecalNumberSprites.Select(x => x.ConvertSpriteToTexture()).ToArray();
             foreach (Texture decalNoTex in decalNumberTextures) decalNoTex.filterMode = FilterMode.Point;
         }
+
+        if (Time.timeScale != 1) Time.timeScale = 1;
     }
 
     private void Update()
     {
 
-        // pausing works
-        //if (Input.GetKeyDown(KeyCode.P))
+        //if (Input.GetButtonDown("Cancel"))
         //{
-        //    Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        //    print("End game!");
+        //    Application.Quit();
         //}
+        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))
+        {
+            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+            isPaused = Time.timeScale == 0;
+        }
 
         TVManEffectUpdate();
     }
