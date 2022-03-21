@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         //    print("End game!");
         //    Application.Quit();
         //}
-        if (/*Input.GetButtonDown("Cancel") ||*/ Input.GetKeyDown(KeyCode.P))
+        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))
         {
             TogglePauseGame();
         }

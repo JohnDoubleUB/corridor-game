@@ -180,7 +180,7 @@ public class CorridorChangeManager : MonoBehaviour
         SaveSystem.LoadType = GameLoadType.Existing;
     }
 
-    private void SaveGame()
+    public void SaveGame()
     {
         SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
     }
@@ -352,12 +352,12 @@ public class CorridorChangeManager : MonoBehaviour
             UpdateLevel();
         }
 
-        if (Input.GetKeyDown(KeyCode.V)) 
-        {
-            print("saving game!");
-            SaveGame();
-            print("game saved!");
-        }
+        //if (Input.GetKeyDown(KeyCode.V)) 
+        //{
+        //    print("saving game!");
+        //    SaveGame();
+        //    print("game saved!");
+        //}
     }
 
     private void LateUpdate()

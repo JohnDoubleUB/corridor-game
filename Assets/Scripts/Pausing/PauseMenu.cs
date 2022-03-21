@@ -27,4 +27,10 @@ public class PauseMenu : MonoBehaviour
         PauseGame();
         RevertToLastCheckpoint();
     }
+
+    public void SaveGame_Debug() 
+    {
+        PauseGame();
+        CorridorChangeManager.current.SaveGame();
+    }
 }
