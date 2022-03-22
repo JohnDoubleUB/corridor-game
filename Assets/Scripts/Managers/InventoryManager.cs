@@ -56,7 +56,7 @@ public class InventoryManager : MonoBehaviour
         }
 
 
-        HasMomento = !AnyFreeMomentoSlots;
+        UpdateMomentoStatus();
 
         return freeSlot;
     }
@@ -64,6 +64,44 @@ public class InventoryManager : MonoBehaviour
     public InventorySlot MoveInteractableToInventory(PickupableInteractable interactable)
     {
         return MoveInteractableToInventory(interactable, out InteractableObject _);
+    }
+
+    public void UpdateMomentoStatus() 
+    {
+        HasMomento = !AnyFreeMomentoSlots;
+    }
+
+    public void LoadSavedInventoryData(IEnumerable<InventoryItemData> inventoryItemData, IEnumerable<InventoryItemData> momentoItemData) 
+    {
+        CreateInventoryItemsFromData(inventoryItemData);
+        CreateInventoryItemsFromData(momentoItemData, PickupType.Momento);
+    }
+
+    public void CreateInventoryItemsFromData(IEnumerable<InventoryItemData> itemData, PickupType pickupType = PickupType.Standard)
+    {
+        if (itemData != null && itemData.Any())
+        {
+            bool itemsAreMomentos = pickupType == PickupType.Momento;
+
+            foreach (InventoryItemData inventoryItem in itemData.Where(x => x.PickupableData != null))
+            {
+                PickupableInteractable itemToSpawn = GameManager.current.PickupablesIndex.Pickupables.FirstOrDefault(x => x.PickupID == inventoryItem.PickupableData.PickupID);
+                if (itemToSpawn != null)
+                {
+                    PickupableInteractable spawnedItem = Instantiate(itemToSpawn);
+                    spawnedItem.LoadItemData(inventoryItem.PickupableData);
+                    spawnedItem.IsInteractable = false;
+
+                    //Get the appropriate inventory slot
+                    spawnedItem.currentSlot = (itemsAreMomentos ? momentoSlots : inventorySlots).ElementAt(inventoryItem.SlotIndex).AddItemToContent(spawnedItem); //Add this item to it
+
+                    //Then finish the process of adding the item on the item itself
+                    spawnedItem.SetInInventory();
+
+                    if (itemsAreMomentos) UpdateMomentoStatus(); //This should fix the bug with tvman killing you even if you have a momento (Hopefully)
+                }
+            }
+        }
     }
 }
 
