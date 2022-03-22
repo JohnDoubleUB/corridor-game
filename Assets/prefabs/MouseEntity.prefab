@@ -397,6 +397,10 @@ MonoBehaviour:
   chanceToStand: 0.5
   safeDistanceFromSound: 4
   maxWanderTime: 10
+  currentBehaviour: 0
+  enableDebug: 0
+  targetDebug: {fileID: 3409405379888189887, guid: 6bb4b2e31c34a6441b4b4e6e72d88971,
+    type: 3}
   MovementAmount: 0
   currentIdleDelay: 0
   destinationsSinceLastIdleStand: 0

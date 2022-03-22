@@ -64,6 +64,10 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     private bool detectableByTVMan;
     public bool DetectableByTVMan { get { return detectableByTVMan; } }
 
+    public bool enableDebug = true;
+    public DebugObject targetDebug;
+    private List<DebugObject> debugObjects = new List<DebugObject>();
+
     private bool IsCurrentlyOnNavMesh
     {
         get
@@ -229,6 +233,8 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     private async void PlayerPickup()
     {
+        DestroyAllDebug();
+
         isHeld = false;
         CurrentBehaviour = MouseBehaviour.Held;
 
@@ -263,6 +269,28 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
         isHeld = true;
+    }
+
+    private void DestroyAllDebug()
+    {
+        if (debugObjects.Any())
+        {
+            foreach (DebugObject dO in debugObjects)
+            {
+                Destroy(dO.gameObject);
+            }
+        }
+
+        debugObjects.Clear();
+    }
+
+    private void CreateDebugObjectAtPosition(Vector3 position, string optionalText = "", GameObject relatedObject = null) 
+    {
+        DebugObject newObject = Instantiate(targetDebug, position, Quaternion.Euler(Vector3.zero));
+        newObject.TextObject.text = optionalText;
+        newObject.RelatedObject = relatedObject;
+
+        debugObjects.Add(newObject);
     }
 
     // Update is called once per frame
@@ -465,7 +493,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     private void Behaviour_Thrown()
     {
         Vector3 positionButGround = new Vector3(transform.position.x, initialPosition.y, transform.position.z);
-        if (Vector3.Distance(transform.position, entityPosition) < 0.05f || Vector3.Distance(transform.position, positionButGround) < 0.2f)
+        if ((behaviourTimer > 1f && MovementAmount < 0.001f) || Vector3.Distance(transform.position, positionButGround) < 0.2f)
         {
             Vector3 dir = (transform.position - entityPosition).normalized;
 
@@ -475,6 +503,10 @@ public class MouseEntity : InteractableObject, IHuntableEntity
             transform.position = NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, NavMesh.AllAreas) ? new Vector3(hit.position.x, newPosition.y, hit.position.z) : newPosition;
             SetPickedUp(false);
             visibleAfterThrownTimer = 0f;
+        }
+        else 
+        {
+            behaviourTimer += Time.deltaTime;
         }
     }
 
@@ -534,6 +566,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         AudioManager.OnEntityNoiseAlert -= OnNoiseMade;
         PlayMouseSqueak(false);
         CorridorChangeManager.current.RemoveMouseFromList(this);
+        DestroyAllDebug();
     }
 
 
@@ -562,6 +595,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
     private void OnCollisionEnter(Collision collision)
     {
         PlayMouseSqueak();
+        if (enableDebug) CreateDebugObjectAtPosition(transform.position, collision.gameObject.name, collision.gameObject);
     }
 
     public void OnBeingHunted(bool beingHunted)

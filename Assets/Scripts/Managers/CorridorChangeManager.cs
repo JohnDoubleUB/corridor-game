@@ -129,29 +129,6 @@ public class CorridorChangeManager : MonoBehaviour
         SaveSystem.LoadType = GameLoadType.Existing;
     }
 
-    private void CreateInventoryItemsFromData(IEnumerable<InventoryItemData> itemData, IEnumerable<InventorySlot> inventorySlots)
-    {
-        if (itemData != null && itemData.Any())
-        {
-            foreach (InventoryItemData inventoryItem in itemData.Where(x => x.PickupableData != null))
-            {
-                PickupableInteractable itemToSpawn = GameManager.current.PickupablesIndex.Pickupables.FirstOrDefault(x => x.PickupID == inventoryItem.PickupableData.PickupID);
-                if (itemToSpawn != null)
-                {
-                    PickupableInteractable spawnedItem = Instantiate(itemToSpawn);
-                    spawnedItem.LoadItemData(inventoryItem.PickupableData);
-                    spawnedItem.IsInteractable = false;
-
-                    //Get the appropriate inventory slot
-                    spawnedItem.currentSlot = inventorySlots.ElementAt(inventoryItem.SlotIndex).AddItemToContent(spawnedItem); //Add this item to it
-
-                    //Then finish the process of adding the item on the item itself
-                    spawnedItem.SetInInventory();
-                }
-            }
-        }
-    }
-
     public void SaveGame()
     {
         SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
