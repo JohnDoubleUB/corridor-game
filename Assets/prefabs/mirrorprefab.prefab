@@ -244,7 +244,7 @@ MonoBehaviour:
         useOcclusionCulling: 1
         cullingMask:
           serializedVersion: 2
-          m_Bits: 2096951
+          m_Bits: 44039991
         sceneCullingMaskOverride: 0
       invertFaceCulling: 0
       flipYMode: 0

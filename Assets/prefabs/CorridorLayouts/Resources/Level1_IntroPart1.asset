@@ -10,23 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level3
+  m_Name: Level1_IntroPart1
   m_EditorClassIdentifier: 
-  LevelNumber: 3
+  LevelNumber: 1
   CorridorLayouts:
-  - {fileID: 395630380, guid: f5d70ed2bcb9f68469fe4c12c69f73d8, type: 3}
-  - {fileID: 395630380, guid: e66e21336bde09c408e17d09b24c76d7, type: 3}
-  - {fileID: 8711203481728457502, guid: 229f6d6bfcbbd3b4f9bc91c3376cf0f1, type: 3}
+  - {fileID: 395630380, guid: 945203bb41e1858478752544525d6f42, type: 3}
+  - {fileID: 8711203481728457502, guid: 07f9f42aea23d134c9f9146ee17191d8, type: 3}
+  - {fileID: 1703408278476006397, guid: 18c57f57fb71aee4b8aa72db1222b6f7, type: 3}
+  - {fileID: 8502516513757351436, guid: 3e6edf553bc14cd41abf27877596b5a6, type: 3}
   BackwardOnlyLayouts: []
-  NumberpadPasswords:
-  - possibleCharacters: 6
-    makePasswordFixed: 0
-    passwordLength: 3
-    missingKeyCount: 0
-  - possibleCharacters: 1
-    makePasswordFixed: 0
-    passwordLength: 1
-    missingKeyCount: 0
+  NumberpadPasswords: []
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
   AllowRandomWaving: 0
@@ -34,7 +27,6 @@ MonoBehaviour:
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
-  CompleteLevelTriggerOnLayoutPuzzleComplete:
-  - Name: Continue to 4
-    LayoutNumberTrigger: 0
-    LevelChange: 4
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 0
+  EnableTVMan: 0

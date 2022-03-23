@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level1
+  m_Name: Test_Level1
   m_EditorClassIdentifier: 
   LevelNumber: 1
   CorridorLayouts:
@@ -40,3 +40,5 @@ MonoBehaviour:
     LevelChange: 1
     RandomSectionRange: 0
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 1
+  EnableTVMan: 0
