@@ -32,6 +32,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public CorridorLayoutHandler[] levelCorridorPrefabs;
     public CorridorLayoutHandler[] levelCorridorBackwardPrefabs;
+    public CorridorLayoutHandler[] levelCorridorForwardPrefabs;
 
     CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
 
@@ -145,6 +146,7 @@ public class CorridorChangeManager : MonoBehaviour
             LevelData_Loaded temp = GetCurrentLevelData;
             levelCorridorPrefabs = temp.CorridorLayouts;
             levelCorridorBackwardPrefabs = temp.BackwardOnlyLayouts;
+            levelCorridorForwardPrefabs = temp.ForwardOnlyLayouts;
         }
 
         currentLevelChangeTracking = CurrentLevel;
@@ -197,7 +199,15 @@ public class CorridorChangeManager : MonoBehaviour
         {
             if (directionPositive == directionPositiveOnLevelStart || !levelCorridorBackwardPrefabs.Any())
             {
-                layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                if (!levelCorridorForwardPrefabs.Any())
+                {
+                    layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                }
+                else //Added forward only layouts
+                {
+                    layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                    section.CorridorNumber = 0;
+                }
             }
             else
             {

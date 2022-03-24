@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level1_IntroPart1
+  m_Name: Level2_IntroPart2
   m_EditorClassIdentifier: 
-  LevelNumber: 1
+  LevelNumber: 2
   CorridorLayouts:
-  - {fileID: 395630380, guid: 945203bb41e1858478752544525d6f42, type: 3}
-  - {fileID: 8711203481728457502, guid: 07f9f42aea23d134c9f9146ee17191d8, type: 3}
-  - {fileID: 1703408278476006397, guid: 18c57f57fb71aee4b8aa72db1222b6f7, type: 3}
-  - {fileID: 8502516513757351436, guid: 3e6edf553bc14cd41abf27877596b5a6, type: 3}
+  - {fileID: 8711203481728457502, guid: 9ba35fc8cacbc1242af57acfc353d75e, type: 3}
+  - {fileID: 395630380, guid: c050c1d4a619bff43869b8cc804b81cf, type: 3}
+  - {fileID: 395630380, guid: 0a3f9b9d2c1596a43ae204c38a10f05a, type: 3}
   BackwardOnlyLayouts: []
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
@@ -25,11 +24,12 @@ MonoBehaviour:
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
-  CompleteLevelTriggerOnLayoutNumber:
-  - Name: Go to next intro level
-    LayoutNumberTrigger: 2
-    LevelChange: 2
-  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount:
+  - Name: Change to next level
+    SectionCount: 10
+    LevelChange: 3
+    RandomSectionRange: 2
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
-  MaxMouseCount: 0
+  MaxMouseCount: 4
   EnableTVMan: 0

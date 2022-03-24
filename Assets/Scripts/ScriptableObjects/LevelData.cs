@@ -9,6 +9,7 @@ public class LevelData : ScriptableObject
     public int LevelNumber;
     public CorridorLayoutHandler[] CorridorLayouts;
     public CorridorLayoutHandler[] BackwardOnlyLayouts;
+    public CorridorLayoutHandler[] ForwardOnlyLayouts;
     public NumberpadPassword[] NumberpadPasswords;
 
     public bool SectionOrdersAreRandom;
@@ -98,6 +99,8 @@ public class LevelData_Loaded
     public int LevelNumber { get { return levelData.LevelNumber; } }
     public CorridorLayoutHandler[] CorridorLayouts { get { return levelData.CorridorLayouts; } }
     public CorridorLayoutHandler[] BackwardOnlyLayouts { get { return levelData.BackwardOnlyLayouts; } }
+
+    public CorridorLayoutHandler[] ForwardOnlyLayouts { get { return levelData.ForwardOnlyLayouts; } }
     public LevelSwitchTrigger[] CompleteLevelTriggerOnLayoutNumber { get { return levelData.CompleteLevelTriggerOnLayoutNumber; } }
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount { get { return levelData.CompleteLevelOnTraveledSectionCount; } }
 
