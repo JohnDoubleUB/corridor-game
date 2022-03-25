@@ -34,10 +34,10 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber:
   - Name: Go back to confuse
     LayoutNumberTrigger: 6
-    LevelChange: 1
-  - Name: Continue onto the next level
-    LayoutNumberTrigger: 2
     LevelChange: 4
+  - Name: Continue onto the next level (Change this one to level 5)
+    LayoutNumberTrigger: 2
+    LevelChange: 1
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
