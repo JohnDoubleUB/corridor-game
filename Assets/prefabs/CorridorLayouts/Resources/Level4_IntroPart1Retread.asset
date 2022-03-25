@@ -29,7 +29,7 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber:
   - Name: Go to next intro level
     LayoutNumberTrigger: 2
-    LevelChange: 2
+    LevelChange: 3
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0
