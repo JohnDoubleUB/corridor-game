@@ -10,26 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level4_IntroPart1Retread
+  m_Name: Level5_Puzzle2Part1
   m_EditorClassIdentifier: 
-  LevelNumber: 4
+  LevelNumber: 5
   CorridorLayouts:
-  - {fileID: 395630380, guid: 5e312189381ed2646b78101a611236e5, type: 3}
-  - {fileID: 8711203481728457502, guid: 4a8248315f80c1541b6633fc775230f7, type: 3}
-  - {fileID: 1703408278476006397, guid: 7c4141b0a593638449c42ae516029718, type: 3}
-  - {fileID: 8502516513757351436, guid: a95e3fdc5ff781b4f8aae7cbd7268978, type: 3}
+  - {fileID: 5260005764623999733, guid: ee012fbbc0dd6f142a2767ee69639b5c, type: 3}
+  - {fileID: 395630380, guid: 455459434000cf34b93391bbd2a94198, type: 3}
+  - {fileID: 6487505783338552277, guid: f7cf8779db716ae42b6a8b5b56550a71, type: 3}
+  - {fileID: 428038985987997184, guid: 9423a5e1ac0e04c43a684a97cf522340, type: 3}
+  - {fileID: 7785650445776822728, guid: 22748237bc6eb0b4daf6ffe3662fa893, type: 3}
   BackwardOnlyLayouts: []
   ForwardOnlyLayouts: []
-  NumberpadPasswords: []
+  NumberpadPasswords:
+  - possibleCharacters: 1234567890
+    makePasswordFixed: 0
+    passwordLength: 7
+    missingKeyCount: 2
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
-  CompleteLevelTriggerOnLayoutNumber:
-  - Name: Go to next intro level
-    LayoutNumberTrigger: 1
-    LevelChange: 3
+  CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0
