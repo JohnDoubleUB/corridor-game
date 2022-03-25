@@ -14,6 +14,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     public CorridorMatType corridorDoorMatType;
 
     private LevelData_Loaded levelData;
+    private IEnumerable<LevelData_Loaded> allLevelData;
     
     [HideInInspector]
     public LayoutLevelData LayoutData;
@@ -91,6 +92,7 @@ public class CorridorLayoutHandler : MonoBehaviour
         {
             this.sectionDoor = sectionDoor;
             levelData = currentLevelData;
+            this.allLevelData = allLevelData;
             LayoutData = currentLevelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
 
 
@@ -202,7 +204,9 @@ public class CorridorLayoutHandler : MonoBehaviour
                     //TODO: Unify this and store all missing keys over the entire game in a single ordered list? Also add fixed missing keys option
                     if (pickup.IsGeneratedNumberKey)
                     {
-                        pickup.SpawnedPickup.Pickup.ObjectName = levelData.GeneratedNumberpadPieces[pickup.PuzzlePieceId].ToString();
+                        LevelData_Loaded numberpadPieceLevel = pickup.IsForCurrentLevel ? levelData : allLevelData.FirstOrDefault(x => x.LevelNumber == pickup.LevelNumber);
+
+                        if(numberpadPieceLevel != null) pickup.SpawnedPickup.Pickup.ObjectName = numberpadPieceLevel.GeneratedNumberpadPieces[pickup.PuzzlePieceId].ToString();
                     }
 
                 }
@@ -248,6 +252,8 @@ public class PickupSpawn
     public bool PickedUp;
     public bool IsGeneratedNumberKey;
     public int PuzzlePieceId = -1;
+    public int LevelNumber = -1;
+    public bool IsForCurrentLevel { get { return LevelNumber == -1; } }
 }
 
 public struct PickupAndParent
