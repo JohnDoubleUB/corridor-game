@@ -85,13 +85,13 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
-    public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded levelData)
+    public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded currentLevelData, IEnumerable<LevelData_Loaded> allLevelData)
     {
         if (!layoutIntitated)
         {
             this.sectionDoor = sectionDoor;
-            this.levelData = levelData;
-            LayoutData = levelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
+            levelData = currentLevelData;
+            LayoutData = currentLevelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
 
 
 
@@ -105,10 +105,10 @@ public class CorridorLayoutHandler : MonoBehaviour
             {
                 puzzleElement = PuzzleElements[i];
 
-                if (puzzleElement is NumberpadController && levelData != null)
+                if (puzzleElement is NumberpadController && currentLevelData != null)
                 {
                     NumberpadController numberpadElement = (NumberpadController)puzzleElement;
-                    NumberpadPassword_Loaded numberpadData = levelData.NumberpadData[numberPadCount];
+                    NumberpadPassword_Loaded numberpadData = currentLevelData.NumberpadData[numberPadCount];
 
 
                     numberpadElement.password = numberpadData.NumberpadPassword;
@@ -126,11 +126,12 @@ public class CorridorLayoutHandler : MonoBehaviour
                 puzzleElement.LayoutHandler = this;
             }
 
-
             foreach (DecalClueObject clueObject in DecalClueObjects)
             {
+                LevelData_Loaded clueLevel = !clueObject.IsForCurrentLevel && allLevelData.Any() ? allLevelData.FirstOrDefault(x => x.LevelNumber == clueObject.ClueLevel) : currentLevelData;
+
                 //clueObject.clue = levelData.NumberpadPasswords[clueObject.ClueNumber];
-                clueObject.clue = levelData.NumberpadData[clueObject.ClueNumber].NumberpadPassword;
+                if (clueLevel != null) clueObject.clue = clueLevel.NumberpadData[clueObject.ClueNumber].NumberpadPassword;
             }
 
             PlacePickupables();

@@ -117,7 +117,7 @@ public class CorridorChangeManager : MonoBehaviour
 
             //Check if we have associated player data and if we do then load that
             if (savedData.PlayerData != null) GameManager.current.playerController.LoadSavedPlayerData(savedData.PlayerData);
-  
+
             //Check if we have associated inventory data, if we do then load it
             if (savedData.InventoryData != null) InventoryManager.current.LoadSavedInventoryData(savedData.InventoryData.InventoryItems, savedData.InventoryData.MomentoItems);
         }
@@ -126,6 +126,8 @@ public class CorridorChangeManager : MonoBehaviour
             LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
             SaveGame(); //Save the level as the player loads in
         }
+
+
 
         SaveSystem.LoadType = GameLoadType.Existing;
     }
@@ -217,7 +219,7 @@ public class CorridorChangeManager : MonoBehaviour
         }
         if (layoutGameObj != null)
         {
-            layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData);
+            layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData, LoadedLevels);
             section.CurrentLayout = layoutGameObj;
 
             int layoutMeshType = (int)layoutGameObj.corridorMeshType;
