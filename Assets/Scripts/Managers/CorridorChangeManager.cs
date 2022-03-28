@@ -64,6 +64,13 @@ public class CorridorChangeManager : MonoBehaviour
     private Transform[][] tVManPatrolPoints;
     public Transform[][] TVManPatrolPoints { get { return tVManPatrolPoints; } }
 
+    [ReadOnlyField]
+    [SerializeField]
+    private int sectionForwardCounter = 0;
+    [ReadOnlyField]
+    [SerializeField]
+    private int sectionBackwardCounter = 0;
+
     private void Awake()
     {
         //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
@@ -204,16 +211,24 @@ public class CorridorChangeManager : MonoBehaviour
                 if (!levelCorridorForwardPrefabs.Any())
                 {
                     layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                    sectionForwardCounter = 0;
+                    sectionBackwardCounter = 0;
                 }
                 else //Added forward only layouts
                 {
-                    layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                    /*Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
+                    layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Mathf.Abs(sectionForwardCounter) % levelCorridorForwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                    sectionForwardCounter++;
+                    sectionBackwardCounter = 0;
                     section.CorridorNumber = 0;
                 }
             }
             else
             {
-                layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                /*levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
+                layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Mathf.Abs(sectionBackwardCounter) % levelCorridorBackwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                sectionBackwardCounter++;
+                sectionForwardCounter = 0;
                 section.CorridorNumber = 0;
             }
         }
