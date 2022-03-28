@@ -17,10 +17,10 @@ MonoBehaviour:
   - {fileID: 5260005764623999733, guid: ee012fbbc0dd6f142a2767ee69639b5c, type: 3}
   - {fileID: 395630380, guid: 455459434000cf34b93391bbd2a94198, type: 3}
   - {fileID: 6487505783338552277, guid: f7cf8779db716ae42b6a8b5b56550a71, type: 3}
+  BackwardOnlyLayouts: []
+  ForwardOnlyLayouts:
   - {fileID: 428038985987997184, guid: 9423a5e1ac0e04c43a684a97cf522340, type: 3}
   - {fileID: 7785650445776822728, guid: 22748237bc6eb0b4daf6ffe3662fa893, type: 3}
-  BackwardOnlyLayouts: []
-  ForwardOnlyLayouts: []
   NumberpadPasswords:
   - possibleCharacters: 1234567890
     makePasswordFixed: 0

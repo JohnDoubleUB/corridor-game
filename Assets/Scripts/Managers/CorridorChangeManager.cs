@@ -208,13 +208,8 @@ public class CorridorChangeManager : MonoBehaviour
         {
             if (directionPositive == directionPositiveOnLevelStart || !levelCorridorBackwardPrefabs.Any())
             {
-                if (!levelCorridorForwardPrefabs.Any())
-                {
-                    layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
-                    sectionForwardCounter = 0;
-                    sectionBackwardCounter = 0;
-                }
-                else //Added forward only layouts
+
+                if(directionPositive == directionPositiveOnLevelStart && levelCorridorForwardPrefabs.Any())//Added forward only layouts
                 {
                     /*Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
                     layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Mathf.Abs(sectionForwardCounter) % levelCorridorForwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
@@ -222,6 +217,13 @@ public class CorridorChangeManager : MonoBehaviour
                     sectionBackwardCounter = 0;
                     section.CorridorNumber = 0;
                 }
+                else
+                {
+                    layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                    sectionForwardCounter = 0;
+                    sectionBackwardCounter = 0;
+                }
+
             }
             else
             {
