@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level6_Puzzle2Part2
+  m_EditorClassIdentifier: 
+  LevelNumber: 6
+  CorridorLayouts:
+  - {fileID: 5260005764623999733, guid: 197db015644429e4891e8e0ad7cb0754, type: 3}
+  - {fileID: 395630380, guid: 34a59fec9da73a34ea0cd1e75540293c, type: 3}
+  - {fileID: 6487505783338552277, guid: 7328d3daa707e654289970a97f2d2050, type: 3}
+  BackwardOnlyLayouts: []
+  ForwardOnlyLayouts: []
+  NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
+  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 1
+  EnableTVMan: 0

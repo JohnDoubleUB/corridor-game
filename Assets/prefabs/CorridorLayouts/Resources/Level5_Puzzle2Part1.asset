@@ -21,6 +21,8 @@ MonoBehaviour:
   - {fileID: 395630380, guid: f32d37b253154d74e8d6dc108c470126, type: 3}
   - {fileID: 8711203481728457502, guid: bff8f8ebc419dbc4f9e3e52fa5d7f029, type: 3}
   - {fileID: 395630380, guid: e73625ed6925f404e98882050554ae8b, type: 3}
+  - {fileID: 6487505783338552277, guid: ee62d3de52d1aa34d991f334da662aa8, type: 3}
+  - {fileID: 5260005764623999733, guid: 1820a94c928526748a41f31e955c6202, type: 3}
   ForwardOnlyLayouts:
   - {fileID: 428038985987997184, guid: 9423a5e1ac0e04c43a684a97cf522340, type: 3}
   - {fileID: 7785650445776822728, guid: 22748237bc6eb0b4daf6ffe3662fa893, type: 3}
@@ -34,7 +36,10 @@ MonoBehaviour:
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
-  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelTriggerOnLayoutNumber:
+  - Name: Continue on to find the second numberpad key
+    LayoutNumberTrigger: 8
+    LevelChange: 6
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0
