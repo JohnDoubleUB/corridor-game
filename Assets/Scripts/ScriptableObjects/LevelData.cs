@@ -151,7 +151,8 @@ public class LevelData_Loaded
         if (allMissingCharacters != null && allMissingCharacters.Any()) GeneratedNumberpadPieces = allMissingCharacters.SelectMany(x => x).ToArray();
 
         //Generate LevelLayoutData for all the layouts
-        CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
+        //I forgot to include it in layout data!
+        CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Union(ForwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
 
     }
 
