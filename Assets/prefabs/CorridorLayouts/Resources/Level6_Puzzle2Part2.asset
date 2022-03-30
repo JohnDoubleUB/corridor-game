@@ -17,7 +17,9 @@ MonoBehaviour:
   - {fileID: 5260005764623999733, guid: 197db015644429e4891e8e0ad7cb0754, type: 3}
   - {fileID: 395630380, guid: 34a59fec9da73a34ea0cd1e75540293c, type: 3}
   - {fileID: 6487505783338552277, guid: 7328d3daa707e654289970a97f2d2050, type: 3}
-  BackwardOnlyLayouts: []
+  - {fileID: 211999534616425760, guid: 9170f13d6dc285346bc45b00279469c8, type: 3}
+  BackwardOnlyLayouts:
+  - {fileID: 395630380, guid: ceba365fb4e1d584e9184991c9bb1946, type: 3}
   ForwardOnlyLayouts: []
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
@@ -25,7 +27,10 @@ MonoBehaviour:
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
-  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelTriggerOnLayoutNumber:
+  - Name: Return to previous level
+    LayoutNumberTrigger: 3
+    LevelChange: 5
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
