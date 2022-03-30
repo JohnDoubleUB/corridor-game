@@ -32,6 +32,9 @@ MonoBehaviour:
     LayoutNumberTrigger: 3
     LevelChange: 5
   CompleteLevelOnTraveledSectionCount: []
-  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete:
+  - Name: Unlock padlock causes level to change
+    LayoutNumberTrigger: 2
+    LevelChange: 9
   MaxMouseCount: 1
   EnableTVMan: 0

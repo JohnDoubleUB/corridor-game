@@ -40,6 +40,9 @@ MonoBehaviour:
   - Name: Continue on to find the second numberpad key
     LayoutNumberTrigger: 8
     LevelChange: 6
+  - Name: Continue onto the next section
+    LayoutNumberTrigger: 3
+    LevelChange: 7
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0

@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Level7_Puzzle3Part1
   m_EditorClassIdentifier: 
   LevelNumber: 7
-  CorridorLayouts: []
+  CorridorLayouts:
+  - {fileID: 395630380, guid: 91e4bea195280e54db908e782e7eca4a, type: 3}
+  - {fileID: 395630380, guid: 3366334055d95f4449a62005bafd7cca, type: 3}
+  - {fileID: 8711203481728457502, guid: 42d5a070d67473944b2ece3ed6489e64, type: 3}
   BackwardOnlyLayouts: []
   ForwardOnlyLayouts: []
   NumberpadPasswords: []
@@ -23,7 +26,11 @@ MonoBehaviour:
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
-  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelOnTraveledSectionCount:
+  - Name: Go to next level
+    SectionCount: 4
+    LevelChange: 8
+    RandomSectionRange: 1
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
   EnableTVMan: 0
