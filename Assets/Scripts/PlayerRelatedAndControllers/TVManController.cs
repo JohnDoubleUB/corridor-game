@@ -76,7 +76,8 @@ public class TVManController : MonoBehaviour
             {
                 case TVManBehaviour.PursuingTarget:
                     return CurrentTargetType != EntityType.Player;
-                
+
+                case TVManBehaviour.None:
                 case TVManBehaviour.KillingTarget:
                     return false;
 

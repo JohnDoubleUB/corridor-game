@@ -36,7 +36,7 @@ MonoBehaviour:
   - Name: Go back to level 5
     LayoutNumberTrigger: 7
     LevelChange: 5
-  - Name: Go back to level 5 because you don't listen
+  - Name: Not listened
     LayoutNumberTrigger: 8
     LevelChange: 5
   CompleteLevelOnTraveledSectionCount: []
