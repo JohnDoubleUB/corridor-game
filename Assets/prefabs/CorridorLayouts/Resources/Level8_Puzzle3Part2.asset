@@ -25,6 +25,7 @@ MonoBehaviour:
   - {fileID: 4546759288649717939, guid: 5cc967466dec3544eb4c0e7fc84a165f, type: 3}
   - {fileID: 2586575448271484953, guid: 1ca6d4014fd981b4dba2835d67111dc4, type: 3}
   - {fileID: 8150376254744888032, guid: cfb514896946eb141830da8594668827, type: 3}
+  - {fileID: 8296163937705230940, guid: 0c920859ac297cb4a8cd4f3abb958bb3, type: 3}
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
@@ -34,6 +35,9 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber:
   - Name: Go back to level 5
     LayoutNumberTrigger: 7
+    LevelChange: 5
+  - Name: Go back to level 5 because you don't listen
+    LayoutNumberTrigger: 8
     LevelChange: 5
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
