@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level2_IntroPart2
+  m_Name: Level11_Puzzle2Part4
   m_EditorClassIdentifier: 
-  LevelNumber: 2
+  LevelNumber: 11
   CorridorLayouts:
-  - {fileID: 8711203481728457502, guid: 9ba35fc8cacbc1242af57acfc353d75e, type: 3}
-  - {fileID: 395630380, guid: c050c1d4a619bff43869b8cc804b81cf, type: 3}
-  - {fileID: 395630380, guid: 0a3f9b9d2c1596a43ae204c38a10f05a, type: 3}
+  - {fileID: 5260005764623999733, guid: da3a4dbd5ead7444ab97a1725fd3279d, type: 3}
+  - {fileID: 395630380, guid: ad4ba3008159d2d489a097ca8cbb8aed, type: 3}
+  - {fileID: 6487505783338552277, guid: 46441367566d7254e9216110400be209, type: 3}
+  - {fileID: 211999534616425760, guid: b3d385865e69add4993e20868c0fffaf, type: 3}
   BackwardOnlyLayouts: []
   ForwardOnlyLayouts: []
   NumberpadPasswords: []
@@ -26,11 +27,10 @@ MonoBehaviour:
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
-  CompleteLevelOnTraveledSectionCount:
-  - Name: Change to next level
-    SectionCount: 4
-    LevelChange: 3
-    RandomSectionRange: 2
-  CompleteLevelTriggerOnLayoutPuzzleComplete: []
-  MaxMouseCount: 4
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete:
+  - Name: Unlock padlock causes level to change
+    LayoutNumberTrigger: 2
+    LevelChange: 9
+  MaxMouseCount: 1
   EnableTVMan: 0

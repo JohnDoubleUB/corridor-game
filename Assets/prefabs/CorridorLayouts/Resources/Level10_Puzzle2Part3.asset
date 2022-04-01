@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level10_Puzzle2Part3
+  m_EditorClassIdentifier: 
+  LevelNumber: 10
+  CorridorLayouts:
+  - {fileID: 5260005764623999733, guid: 08c49775fcad83142b2aea617dbe7c79, type: 3}
+  - {fileID: 395630380, guid: a96f7006b9e85b2438036b917f9a9119, type: 3}
+  - {fileID: 6487505783338552277, guid: 73399e300d4e8b1429751e1f505f17b7, type: 3}
+  BackwardOnlyLayouts:
+  - {fileID: 395630380, guid: fa3a0d6c67e0b3f41a78db88cf88f186, type: 3}
+  - {fileID: 8711203481728457502, guid: ef5177a636bdb644d89554934ea0e87b, type: 3}
+  - {fileID: 395630380, guid: 311a094cce88b1240b8fac26fba39e05, type: 3}
+  - {fileID: 6487505783338552277, guid: 521a732759ad9b94599373f47f3593f6, type: 3}
+  - {fileID: 5260005764623999733, guid: c445b3611745a4c46bb4654b8bfb2ea8, type: 3}
+  ForwardOnlyLayouts:
+  - {fileID: 428038985987997184, guid: 3e51be31b8839ee4eb8634b16c1be0e9, type: 3}
+  - {fileID: 7785650445776822728, guid: fcc288a7e661aab47b788bc44c196e7e, type: 3}
+  NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
+  CompleteLevelTriggerOnLayoutNumber:
+  - Name: Continue on with the newly found key to 11
+    LayoutNumberTrigger: 8
+    LevelChange: 11
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 0
+  EnableTVMan: 0
