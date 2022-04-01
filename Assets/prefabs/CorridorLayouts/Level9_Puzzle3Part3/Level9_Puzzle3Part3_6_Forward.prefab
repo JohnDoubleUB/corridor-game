@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7940297237098334185}
   - component: {fileID: 5342079688157996878}
   - component: {fileID: 6664757348518449494}
+  - component: {fileID: 24843163}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -108,6 +109,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10.000001, y: 2.2204463e-16, z: 9.999999}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &24843163
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656910113281391424}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 7.185, y: 1.915, z: 5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2381667862553427538
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +227,7 @@ MonoBehaviour:
   ForceWave: 0
   sectionDoor: {fileID: 0}
   AllowTVMan: 0
-  AllowMouseSpawns: 0
+  AllowMouseSpawns: 1
   Props: []
   PuzzleElements:
   - {fileID: 736430061832940358}

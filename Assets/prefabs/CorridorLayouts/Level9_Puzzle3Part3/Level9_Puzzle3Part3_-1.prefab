@@ -150,7 +150,7 @@ MonoBehaviour:
   ForceWave: 0
   sectionDoor: {fileID: 0}
   AllowTVMan: 0
-  AllowMouseSpawns: 0
+  AllowMouseSpawns: 1
   Props: []
   PuzzleElements: []
   DecalClueObjects: []

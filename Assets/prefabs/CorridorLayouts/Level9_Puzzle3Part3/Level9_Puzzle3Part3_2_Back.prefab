@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 211999534616425761}
   - component: {fileID: 211999534616425760}
   m_Layer: 0
-  m_Name: Level9_Puzzle3Part3_2
+  m_Name: Level9_Puzzle3Part3_2_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   ForceStretch: 0
   ForceWave: 0
   sectionDoor: {fileID: 0}
-  AllowTVMan: 1
+  AllowTVMan: 0
   AllowMouseSpawns: 1
   Props: []
   PuzzleElements:

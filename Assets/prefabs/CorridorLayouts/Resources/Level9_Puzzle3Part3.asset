@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 6487505783338552277, guid: 92a6d6a68b1d8734d91eb5faef34efb4, type: 3}
   BackwardOnlyLayouts:
   - {fileID: 211999534616425760, guid: 9e656004b84555d43a7d8f7efa22faf2, type: 3}
+  - {fileID: 395630380, guid: 76be08362399fb74881959f7bb7628cf, type: 3}
   ForwardOnlyLayouts:
   - {fileID: 395630380, guid: 5231d1f079f031b4586d821c6a2a0e63, type: 3}
   - {fileID: 395630380, guid: ae05e924504316b4090884bbcff3f2a7, type: 3}
@@ -32,9 +33,6 @@ MonoBehaviour:
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
-  CompleteLevelTriggerOnLayoutPuzzleComplete:
-  - Name: Testing if this actually works
-    LayoutNumberTrigger: 6
-    LevelChange: 1
-  MaxMouseCount: 1
-  EnableTVMan: 0
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 2
+  EnableTVMan: 1
