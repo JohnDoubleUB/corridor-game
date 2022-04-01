@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    public Color toggleOnColour;
+    public Color toggleOffColour;
+
+    public Image ToggleUI_DebugButtonImage;
+    public Image ToggleVariableWalkSpeed_DebugButtonImage;
+
     public void PauseGame()
     {
         GameManager.current.TogglePauseGame();
@@ -32,5 +39,17 @@ public class PauseMenu : MonoBehaviour
     {
         PauseGame();
         CorridorChangeManager.current.SaveGame();
+    }
+
+    public void ToggleUI_Debug() 
+    {
+        GameManager.current.EnableGameUI = !GameManager.current.EnableGameUI;
+        if (ToggleUI_DebugButtonImage != null) ToggleUI_DebugButtonImage.color = GameManager.current.EnableGameUI ? toggleOffColour : toggleOnColour;
+    }
+
+    public void ToggleVariableWalkSpeed_Debug() 
+    {
+        GameManager.current.EnableVariableWalkSpeed = !GameManager.current.EnableVariableWalkSpeed;
+        if (ToggleVariableWalkSpeed_DebugButtonImage != null) ToggleVariableWalkSpeed_DebugButtonImage.color = GameManager.current.EnableVariableWalkSpeed ? toggleOnColour : toggleOffColour;
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CG_HeadBob : MonoBehaviour
 {
+    public bool enableVariableWalkSpeed;
+
     public float walkingBobbingSpeed = 14f;
     public float bobbingAmount = 0.05f;
     public CG_CharacterController controller;
@@ -23,6 +25,12 @@ public class CG_HeadBob : MonoBehaviour
     private float defaultBobbingSpeed;
     private float defaultBobbingAmount;
 
+    private float AppliedWalkingBobspeed { 
+        get 
+        {
+            return enableVariableWalkSpeed && GameManager.current != null ? walkingBobbingSpeed * GameManager.current.WalkSpeedModifier : walkingBobbingSpeed;
+        } 
+    }
 
     private void Awake()
     {
@@ -45,7 +53,7 @@ public class CG_HeadBob : MonoBehaviour
         if (Mathf.Abs(controller.moveDirection.x) > 0.1f || Mathf.Abs(controller.moveDirection.z) > 0.1f)
         {
             //Player is moving
-            timer += Time.deltaTime * walkingBobbingSpeed;
+            timer += Time.deltaTime * AppliedWalkingBobspeed;
             transform.localPosition = new Vector3(transform.localPosition.x, defaultPosY + Mathf.Sin(timer) * bobbingAmount, transform.localPosition.z);
             if(additonalBobber != null) additonalBobber.localPosition = new Vector3(additonalBobber.localPosition.x, additionalBobDefaultPosY + Mathf.Sin(timer) * bobbingAmount, additonalBobber.localPosition.z);
         }
@@ -53,7 +61,7 @@ public class CG_HeadBob : MonoBehaviour
         {
             //Idle
             timer = 0;
-            transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Lerp(transform.localPosition.y, defaultPosY, Time.deltaTime * walkingBobbingSpeed), transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Lerp(transform.localPosition.y, defaultPosY, Time.deltaTime * AppliedWalkingBobspeed), transform.localPosition.z);
             if (additonalBobber != null) additonalBobber.localPosition = new Vector3(additonalBobber.localPosition.x, Mathf.Lerp(additonalBobber.localPosition.y, additionalBobDefaultPosY, Time.deltaTime * walkingBobbingSpeed), additonalBobber.localPosition.z);
         }
 

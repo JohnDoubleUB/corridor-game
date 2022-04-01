@@ -9,6 +9,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
+    public bool enableVariableWalkSpeed;
+
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
@@ -17,6 +19,15 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
+
+    private float AppliedSpeed
+    {
+        get 
+        {
+            return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed;
+        }
+    }
+
 
     private bool notBeingKilled = true;
 
@@ -236,8 +247,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 //float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
                 //float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
 
-                float curSpeedX = playerNotBusy ? speed * Input.GetAxis("Vertical") : 0;
-                float curSpeedY = playerNotBusy ? speed * Input.GetAxis("Horizontal") : 0;
+                float curSpeedX = playerNotBusy ? AppliedSpeed * Input.GetAxis("Vertical") : 0;
+                float curSpeedY = playerNotBusy ? AppliedSpeed * Input.GetAxis("Horizontal") : 0;
                 moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
                 if (isJumping)
@@ -305,7 +316,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
-    private void ActivateNotepad(bool activate) 
+    private void ActivateNotepad(bool activate)
     {
         isInNotepad = activate;
         canMove = !activate;
@@ -449,7 +460,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         LookTowardsTVMan();
     }
 
-    private void SetPlayerIsBeingKilled(bool beingKilled) 
+    private void SetPlayerIsBeingKilled(bool beingKilled)
     {
         notBeingKilled = !beingKilled;
         playerCrosshair.enabled = !beingKilled;
@@ -457,10 +468,10 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         if (IsCrouching && canUncrouch) ToggleCrouching();
         if (interactingNote != null) interactingNote.PutDownItem();
         if (isInNotepad) ActivateNotepad(false);
-        
+
     }
 
-    public void LoadSavedPlayerData(PlayerData playerData) 
+    public void LoadSavedPlayerData(PlayerData playerData)
     {
         NotepadPickedUp = playerData.NotepadPickedUp;
     }
@@ -479,7 +490,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         Quaternion currentPlayerRotation = transform.rotation;
         Quaternion newCameraRotation = Quaternion.LookRotation((GameManager.current.tvMan.TvManEyeLevel.position - Vector3.up * 0.3f) - playerCamera.transform.position);
         Quaternion currentCameraRotation = playerCamera.transform.rotation;
-        
+
 
 
         while (positionValue < 1f)
@@ -505,7 +516,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             InventorySlot iS = iM.momentoSlots[0];
 
 
-            while (positionValue < 1f) 
+            while (positionValue < 1f)
             {
                 //Move momentoSlot To center
                 positionValue += Time.deltaTime;
@@ -515,7 +526,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
                 await Task.Yield();
             }
-            
+
             positionValue = 0;
 
             while (positionValue < 1f)
@@ -546,7 +557,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             iS.SlotParentTransform.position = iS.SlotParentInitialPosition;
         }
-        else 
+        else
         {
             if (playerCameraAnimator != null) playerCameraAnimator.Play("Death", 0);
             while (positionValue < 1f)
@@ -557,7 +568,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 await Task.Yield();
             }
 
-            
+
         }
 
         //transform.rotation = newPlayerRotation;

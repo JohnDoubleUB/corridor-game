@@ -9,9 +9,60 @@ public class GameManager : MonoBehaviour
     public static GameManager current;
     public GameObject player;
     public CG_CharacterController playerController;
+    public CG_HeadBob headBobber;
     public Camera trueCamera;
     public TVManController tvMan;
     public GameObject GameParent;
+    public Canvas GameUI;
+
+
+    public float WalkSpeedModifier { get { return walkSpeedModifier; } }
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float walkSpeedModifier = 1f;
+
+    public bool EnableVariableWalkSpeed 
+    { 
+        get 
+        { 
+            return enableVariableWalkSpeed; 
+        }
+        set 
+        {
+            if (enableVariableWalkSpeed != value) 
+            {
+                enableVariableWalkSpeed = value;
+                walkSpeedModifier = 1f;
+
+                if (headBobber != null) { headBobber.enableVariableWalkSpeed = enableVariableWalkSpeed; }
+                if (playerController != null) { playerController.enableVariableWalkSpeed = enableVariableWalkSpeed; }
+            }
+        }
+    }
+
+    public bool EnableGameUI { 
+        get 
+        { 
+            return enableGameUI; 
+        }
+        set
+        {
+            if (value != enableGameUI) 
+            {
+                enableGameUI = value;
+                if (GameUI != null) GameUI.enabled = enableGameUI;
+            }
+        } 
+    }
+
+    [ReadOnlyField]
+    [SerializeField]
+    private bool enableGameUI = true;
+
+    [ReadOnlyField]
+    [SerializeField]
+    private bool enableVariableWalkSpeed;
 
     public float maximumTVManEffectDistance = 10f;
     public bool tvManEffectEnabled = true;
@@ -63,6 +114,16 @@ public class GameManager : MonoBehaviour
         }
 
         TVManEffectUpdate();
+
+
+
+        UpdateWalkSpeedModifier();
+    }
+
+
+    public void UpdateWalkSpeedModifier() 
+    {
+        walkSpeedModifier = Mathf.Clamp(walkSpeedModifier + (Input.mouseScrollDelta.y / 50), 0, 2f);
     }
 
     public void TogglePauseGame() 
