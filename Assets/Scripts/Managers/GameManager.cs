@@ -22,6 +22,23 @@ public class GameManager : MonoBehaviour
     [ReadOnlyField]
     private float walkSpeedModifier = 1f;
 
+    public bool EnableMouseAcceleration 
+    {
+        get 
+        {
+            return playerController != null ? playerController.enableMouseAcceleration : false;
+        }
+
+        set 
+        {
+            if (playerController != null && playerController.enableMouseAcceleration != value) 
+            {
+                playerController.enableMouseAcceleration = value;
+            }
+        }
+    }
+
+
     public bool EnableVariableWalkSpeed 
     { 
         get 

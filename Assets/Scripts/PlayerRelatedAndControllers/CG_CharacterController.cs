@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
     public bool enableVariableWalkSpeed;
+    public bool enableMouseAcceleration;
 
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
@@ -19,10 +20,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
+    
+    private Vector2 velocity;
+    public Vector2 acceleration;
 
     private float AppliedSpeed
     {
-        get 
+        get
         {
             return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed;
         }
@@ -226,7 +230,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         if (other.gameObject.tag == "HideUnderable") canUncrouch = true;
     }
-
     void Update()
     {
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
@@ -263,7 +266,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                     isJumping = true;
                 }
 
-                //Just for testing
                 if (Input.GetMouseButtonDown(0) && heldMouse != null)
                 {
                     if (GetLookedAtPoint(out Vector3 target))
@@ -292,8 +294,16 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             // Player and Camera rotation
             if (playerNotBusy/*canMove*/)
             {
-                rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
-                rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
+                Vector2 wantedVelocity = GetInput() * lookSpeed;
+
+                velocity = enableMouseAcceleration ? new Vector2(
+                    Mathf.MoveTowards(velocity.x, wantedVelocity.x, acceleration.x * Time.deltaTime),
+                    Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime)) 
+                    : wantedVelocity;
+
+                rotation += velocity * Time.deltaTime;
+                //rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
+                //rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
                 rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
                 playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
                 transform.eulerAngles = new Vector2(0, rotation.y);
@@ -314,6 +324,11 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 ToggleCrouching();
             }
         }
+    }
+
+    private Vector2 GetInput() 
+    {
+        return new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
     }
 
     private void ActivateNotepad(bool activate)

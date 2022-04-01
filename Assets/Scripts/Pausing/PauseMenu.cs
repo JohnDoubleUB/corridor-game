@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
 
     public Image ToggleUI_DebugButtonImage;
     public Image ToggleVariableWalkSpeed_DebugButtonImage;
+    public Image ToggleMouseAcceleration_DebugButtonImage;
 
     public void PauseGame()
     {
@@ -51,5 +52,11 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.current.EnableVariableWalkSpeed = !GameManager.current.EnableVariableWalkSpeed;
         if (ToggleVariableWalkSpeed_DebugButtonImage != null) ToggleVariableWalkSpeed_DebugButtonImage.color = GameManager.current.EnableVariableWalkSpeed ? toggleOnColour : toggleOffColour;
+    }
+
+    public void ToggleMouseAcceleration_Debug() 
+    {
+        GameManager.current.EnableMouseAcceleration = !GameManager.current.EnableMouseAcceleration;
+        if (ToggleMouseAcceleration_DebugButtonImage != null) ToggleMouseAcceleration_DebugButtonImage.color = GameManager.current.EnableMouseAcceleration ? toggleOnColour : toggleOffColour;
     }
 }
