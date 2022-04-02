@@ -20,7 +20,8 @@ MonoBehaviour:
   - {fileID: 211999534616425760, guid: 9e656004b84555d43a7d8f7efa22faf2, type: 3}
   - {fileID: 6487505783338552277, guid: 4601f4895ea40544c94b5528f62e5945, type: 3}
   BackwardOnlyLayouts: []
-  ForwardOnlyLayouts: []
+  ForwardOnlyLayouts:
+  - {fileID: 395630380, guid: 981fe1d3762239348890f830b4e80306, type: 3}
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0
