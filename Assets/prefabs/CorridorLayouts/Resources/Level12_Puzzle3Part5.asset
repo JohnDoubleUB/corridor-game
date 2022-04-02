@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level11_Puzzle2Part4
+  m_Name: Level12_Puzzle3Part5
   m_EditorClassIdentifier: 
-  LevelNumber: 11
+  LevelNumber: 12
   CorridorLayouts:
-  - {fileID: 5260005764623999733, guid: da3a4dbd5ead7444ab97a1725fd3279d, type: 3}
-  - {fileID: 395630380, guid: ad4ba3008159d2d489a097ca8cbb8aed, type: 3}
-  - {fileID: 6487505783338552277, guid: 46441367566d7254e9216110400be209, type: 3}
-  - {fileID: 211999534616425760, guid: b3d385865e69add4993e20868c0fffaf, type: 3}
-  BackwardOnlyLayouts: []
+  - {fileID: 5260005764623999733, guid: b1597ccdae42a434c9baceb43c7ae7d8, type: 3}
+  - {fileID: 395630380, guid: 67aa497bbcf46af4c9145d483d8bd97e, type: 3}
+  - {fileID: 6487505783338552277, guid: 72dde3c286bf8374fb6e96ccef935371, type: 3}
+  BackwardOnlyLayouts:
+  - {fileID: 395630380, guid: 5b05672930281644b818a083a9f5ae73, type: 3}
+  - {fileID: 395630380, guid: 62549ef2e1c2fc1479952c757c452eb5, type: 3}
+  - {fileID: 6905459544712750803, guid: fd3ee27c5a0e3484ba32d9faab916d9e, type: 3}
+  - {fileID: 395630380, guid: b0ec641af4a96f449a1fd1284a79564d, type: 3}
   ForwardOnlyLayouts: []
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
@@ -29,8 +32,8 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete:
-  - Name: Unlock padlock causes level to change
-    LayoutNumberTrigger: 2
-    LevelChange: 12
+  - Name: Continue to final section of puzzle 3
+    LayoutNumberTrigger: 5
+    LevelChange: 9
   MaxMouseCount: 1
   EnableTVMan: 0

@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayoutHandler: {fileID: 0}
-  IsLevelTrigger: 0
+  IsLevelTrigger: 1
   SignificantInteractable: {fileID: 3372685338208122270}
   RemoveObjectIfPuzzleSolvedWhenLoaded: 1
 --- !u!1 &7418575949572918993
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7418575949572918992}
   - component: {fileID: 395630380}
   m_Layer: 0
-  m_Name: Level9_Puzzle3Part3_6_Forward
+  m_Name: Level12_Puzzle3Part5_5_Backward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,8 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf94e1f253f0a5448f4e037304e92d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutLevelNumber: 9
-  layoutNumber: 6
+  layoutLevelNumber: 12
+  layoutNumber: 5
   corridorMeshType: 0
   corridorMatType: 0
   corridorDoorMatType: 0

@@ -17,14 +17,10 @@ MonoBehaviour:
   - {fileID: 5260005764623999733, guid: 43844b0e2bb20c84a875e8575791baef, type: 3}
   - {fileID: 395630380, guid: 2d8116b475d38e3468e24a7ff9578a18, type: 3}
   - {fileID: 6487505783338552277, guid: 92a6d6a68b1d8734d91eb5faef34efb4, type: 3}
-  BackwardOnlyLayouts:
   - {fileID: 211999534616425760, guid: 9e656004b84555d43a7d8f7efa22faf2, type: 3}
-  - {fileID: 395630380, guid: 76be08362399fb74881959f7bb7628cf, type: 3}
-  ForwardOnlyLayouts:
-  - {fileID: 395630380, guid: 5231d1f079f031b4586d821c6a2a0e63, type: 3}
-  - {fileID: 395630380, guid: ae05e924504316b4090884bbcff3f2a7, type: 3}
-  - {fileID: 6905459544712750803, guid: 7a351a665be307d42b105f5d2ff16319, type: 3}
-  - {fileID: 395630380, guid: c1105bd6181c8bd40be239a2b9bab6ce, type: 3}
+  - {fileID: 6487505783338552277, guid: 4601f4895ea40544c94b5528f62e5945, type: 3}
+  BackwardOnlyLayouts: []
+  ForwardOnlyLayouts: []
   NumberpadPasswords: []
   SectionOrdersAreRandom: 0
   AllowRandomScaling: 0

@@ -33,9 +33,9 @@ MonoBehaviour:
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber:
-  - Name: Go back to level 5 (but actually 10)
+  - Name: Go back to level 5
     LayoutNumberTrigger: 7
-    LevelChange: 10
+    LevelChange: 5
   - Name: Not listened
     LayoutNumberTrigger: 8
     LevelChange: 5

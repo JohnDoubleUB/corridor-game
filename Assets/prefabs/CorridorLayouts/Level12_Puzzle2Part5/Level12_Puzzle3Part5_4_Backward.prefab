@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4116586222233009967}
   - component: {fileID: 6905459544712750803}
   m_Layer: 0
-  m_Name: Level9_Puzzle3Part3_5_Forward
+  m_Name: Level12_Puzzle3Part5_4_Forward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf94e1f253f0a5448f4e037304e92d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutLevelNumber: 9
-  layoutNumber: 5
+  layoutLevelNumber: 12
+  layoutNumber: 4
   corridorMeshType: 0
   corridorMatType: 0
   corridorDoorMatType: 0
