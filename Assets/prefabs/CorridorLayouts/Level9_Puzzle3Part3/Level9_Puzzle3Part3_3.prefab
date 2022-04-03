@@ -99,8 +99,8 @@ MonoBehaviour:
   layoutLevelNumber: 9
   layoutNumber: 3
   corridorMeshType: 1
-  corridorMatType: 3
-  corridorDoorMatType: 3
+  corridorMatType: 1
+  corridorDoorMatType: 1
   StretchAmount: 2
   ForceStretch: 0
   ForceWave: 0

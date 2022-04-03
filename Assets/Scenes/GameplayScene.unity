@@ -8245,75 +8245,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9dee13fab3b70c64ca1ec993df9dcdb3, type: 3}
---- !u!1001 &4172690578020511735
+--- !u!1001 &5355823028617986013
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918992, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 2884808280263111895, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7418575949572918993, guid: 981fe1d3762239348890f830b4e80306,
+    - target: {fileID: 5264437503541029896, guid: e4d53f8901b605945affa51303f6ca05,
         type: 3}
       propertyPath: m_Name
-      value: Level9_Puzzle3Part3_4
+      value: Level9_Puzzle3Part3_8_Directional
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 981fe1d3762239348890f830b4e80306, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: e4d53f8901b605945affa51303f6ca05, type: 3}
 --- !u!1001 &5611059561013792633
 PrefabInstance:
   m_ObjectHideFlags: 0
