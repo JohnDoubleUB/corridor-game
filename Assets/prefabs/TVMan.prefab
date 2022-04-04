@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7100503525392875019}
   - component: {fileID: 7100503525392875020}
   - component: {fileID: 834834437}
+  - component: {fileID: 917450426127743598}
   m_Layer: 0
   m_Name: TVMan
   m_TagString: TVMan
@@ -54,17 +55,25 @@ MonoBehaviour:
     m_Bits: 50331649
   BehaviourEnabled: 1
   IsHunting: 0
-  movementSpeed: 1
+  movementSpeed: 1.5
   minimumDistance: 1
   sightRange: 15
   sightConeAngle: 30
-  alertTimeWithoutPerception: 5
+  alertTimeWithoutPerception: 3
+  timeToKill: 0.1
+  delayAfterMomento: 180
+  MaxDistanceFromTarget: 40
+  ReadyToSpawn: 0
+  momentoDelayActive: 0
+  momentoDelayTimer: 0
   agent: {fileID: 7100503525392875020}
-  lastPerceivedTimer: 0
   interestTimer: 0
+  killTimer: 0
   lastPercievedLocation: {x: 0, y: 0, z: 0}
+  validPatrolPoints: []
   currentBehaviour: 0
   TvManEyeLevel: {fileID: 7100503525733031901}
+  canEscapeRoom: 0
 --- !u!82 &7100503525392875019
 AudioSource:
   m_ObjectHideFlags: 0
@@ -233,6 +242,22 @@ CapsuleCollider:
   m_Height: 2.0463262
   m_Direction: 1
   m_Center: {x: 0, y: 1.1010921, z: 0}
+--- !u!54 &917450426127743598
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7100503525392875016}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7100503525733031900
 GameObject:
   m_ObjectHideFlags: 0

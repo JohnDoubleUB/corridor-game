@@ -44,13 +44,12 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     public bool IsHeld { get { return isHeld; } }
 
-    //TODO: Make there a time limit for mouse to reach explore destination so it doesn't get stuck
     [Range(0.0f, 1.0f)]
     public float chanceToStand = 0.2f;
 
     public float safeDistanceFromSound = 4f;
 
-    public float maxWanderTime = 10f; //This is to precent the mouse from getting stuck trying to wander to a point 
+    public float maxWanderTime = 10f; //This is to prevent the mouse from getting stuck trying to wander to a point 
 
 
     [SerializeField]

@@ -63,7 +63,6 @@ public class EntityTracker : MonoBehaviour
 
     public void NotifyTVMan() 
     {
-        //TODO: This communicates with tvman
         //print("update tvman!");
         //TVManController tempController = GameManager.current.tvMan;
         //bool tvNavMeshShouldBeDisabled = section.sectionType != SectionType.Middle;

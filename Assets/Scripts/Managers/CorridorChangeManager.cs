@@ -303,8 +303,7 @@ public class CorridorChangeManager : MonoBehaviour
             mouseCount++;
             tempMouse.name = "Mouse -" + mouseCount;
             section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-            mice.Add(tempMouse); //TODO: This to be removed
-
+            mice.Add(tempMouse);
         }
     }
 

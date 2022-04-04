@@ -28,7 +28,7 @@ public class CG_HeadBob : MonoBehaviour
     private float AppliedWalkingBobspeed { 
         get 
         {
-            return enableVariableWalkSpeed && GameManager.current != null ? walkingBobbingSpeed * GameManager.current.WalkSpeedModifier : walkingBobbingSpeed;
+            return enableVariableWalkSpeed && GameManager.current != null ? walkingBobbingSpeed * GameManager.current.WalkSpeedModifier : walkingBobbingSpeed * GameManager.current.HuntingWalkSpeedModifier;
         } 
     }
 

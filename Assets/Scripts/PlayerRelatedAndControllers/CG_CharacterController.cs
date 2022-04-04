@@ -24,14 +24,18 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     private Vector2 velocity;
     public Vector2 acceleration;
 
+
+    private float huntedTimer;
+
     private float AppliedSpeed
     {
         get
         {
-            return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed;
+            return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
         }
     }
 
+    private bool isBeingHunted;
 
     private bool notBeingKilled = true;
 
@@ -120,6 +124,18 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     public Material pSXMaterial;
     public Animator playerCameraAnimator;
+
+
+    private float DistanceFromTVMan 
+    {
+        get 
+        {
+            Vector3 currentTVManLocation = GameManager.current.tvMan.transform.position;
+            currentTVManLocation.y = transform.position.y;
+
+            return Vector3.Distance(transform.position, currentTVManLocation);
+        }
+    }
 
     private void OnEnable()
     {
@@ -230,8 +246,37 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         if (other.gameObject.tag == "HideUnderable") canUncrouch = true;
     }
+
+    private void UpdateHuntedWalkSpeedModifier() 
+    {
+        if (isBeingHunted) 
+        {
+            float currentDistanceFromTVMan = DistanceFromTVMan;
+            float dangerZone = GameManager.current.PlayerHuntedDangerZone;
+            float tvManMinDistance = GameManager.current.tvMan.minimumDistance;
+
+            if (currentDistanceFromTVMan < dangerZone) //Check if player is inside of tvman danger zone
+            {
+                if (huntedTimer != GameManager.current.TimeToReachFullDanger) huntedTimer = Mathf.Min(huntedTimer + Time.deltaTime, GameManager.current.TimeToReachFullDanger);
+                float remappedDistance = currentDistanceFromTVMan.Remap(tvManMinDistance+0.5f, dangerZone, 0.2f, 1f) * huntedTimer.Remap(0, GameManager.current.TimeToReachFullDanger, 1, 0);
+                GameManager.current.HuntingWalkSpeedModifier = remappedDistance;
+                //Check how close
+            }
+            //else if(GameManager.current.HuntingWalkSpeedModifier != 1f)
+            //{
+            //    GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 10), 1f);
+            //}
+        }
+        else if (GameManager.current.HuntingWalkSpeedModifier != 1f)
+        {
+            GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 10), 1f);
+        }
+    }
+
     void Update()
     {
+        UpdateHuntedWalkSpeedModifier();
+
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
 
         if (notBeingKilled && !GameManager.current.IsPaused)
@@ -460,7 +505,17 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     public void OnBeingHunted(bool beingHunted)
     {
-        print("Player is being hunted");
+        isBeingHunted = beingHunted;
+
+        if (beingHunted) 
+        {
+            huntedTimer = 0f;
+            print("Player is being hunted");
+        }
+        else 
+        {
+            print("Player is no longer being hunted");
+        }
     }
 
     public void OnEntityKilled()

@@ -105,7 +105,7 @@ public class LevelData_Loaded
     public LevelSectionCountTrigger[] CompleteLevelOnTraveledSectionCount { get { return levelData.CompleteLevelOnTraveledSectionCount; } }
 
     public bool SectionOrdersAreRandom { get { return levelData.SectionOrdersAreRandom; } }
-    public bool AllowRandomScaling { get { return levelData.AllowRandomScaling; } } //TODO: this is a bad name, it should be RandomStretching!
+    public bool AllowRandomScaling { get { return levelData.AllowRandomScaling; } }
     public bool AllowRandomWaving { get { return levelData.AllowRandomWaving; } }
     public int MaxScaleEffectCount { get { return levelData.MaxScaleEffectCount; } }
     public int MaxWaveEffectCount { get { return levelData.MaxWaveEffectCount; } }

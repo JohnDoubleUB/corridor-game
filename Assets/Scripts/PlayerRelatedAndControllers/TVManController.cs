@@ -21,6 +21,7 @@ public class TVManController : MonoBehaviour
     public float timeToKill = 2f;
     public float delayAfterMomento = 30f;
     public float MaxDistanceFromTarget = 40f;
+    //public float EscapeDangerZone = 6f;
 
     public bool UseNavMesh
     {
@@ -42,6 +43,9 @@ public class TVManController : MonoBehaviour
 
     public bool MomentoEffectActive { get { return momentoDelayActive; } }
 
+
+    [SerializeField]
+    [ReadOnlyField]
     private float momentoDelayTimer;
 
     [SerializeField]
@@ -63,6 +67,19 @@ public class TVManController : MonoBehaviour
     [SerializeField]
     [ReadOnlyField]
     private Transform[] validPatrolPoints;
+
+    private float DistanceFromPlayer 
+    {
+        get 
+        {
+            //Get player
+            Vector3 currentPlayerLocation = GameManager.current.player.transform.position;
+            currentPlayerLocation.y = transform.position.y;
+
+            //Determine distance of tvman from player
+            return Vector3.Distance(transform.position, currentPlayerLocation);
+        } 
+    }
 
     public TVManBehaviour CurrentBehaviour
     {
@@ -345,6 +362,24 @@ public class TVManController : MonoBehaviour
                     {
                         CurrentBehaviour = TVManBehaviour.Alerted;
                     }
+
+                    //if (CurrentBehaviour != TVManBehaviour.Alerted)
+                    //{
+                    //    float currentDistanceFromPlayer = DistanceFromPlayer;
+                    //    if (DistanceFromPlayer < EscapeDangerZone)
+                    //    {
+                    //        float remappedValue = currentDistanceFromPlayer.Remap(0, 6, 0.1f, 1);
+                    //        GameManager.current.HuntingWalkSpeedModifier = remappedValue;
+                    //    }
+                    //    else 
+                    //    {
+                    //        GameManager.current.HuntingWalkSpeedModifier = 1f;
+                    //    }
+                    //}
+                    //else 
+                    //{
+                    //    GameManager.current.HuntingWalkSpeedModifier = 1f;
+                    //}
                 }
 
                 break;

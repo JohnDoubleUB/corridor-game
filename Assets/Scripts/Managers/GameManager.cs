@@ -14,13 +14,21 @@ public class GameManager : MonoBehaviour
     public TVManController tvMan;
     public GameObject GameParent;
     public Canvas GameUI;
+    public float PlayerHuntedDangerZone = 6f;
+    public float TimeToReachFullDanger = 2f;
 
+
+    public float HuntingWalkSpeedModifier { get { return huntingWalkSpeedModifier; } set { huntingWalkSpeedModifier = Mathf.Abs(value); } }
 
     public float WalkSpeedModifier { get { return walkSpeedModifier; } }
 
     [SerializeField]
     [ReadOnlyField]
     private float walkSpeedModifier = 1f;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private float huntingWalkSpeedModifier = 1f;
 
     public bool EnableMouseAcceleration 
     {
