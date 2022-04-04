@@ -19,6 +19,8 @@ public class TVManController : MonoBehaviour
 
     public float alertTimeWithoutPerception = 5f;
     public float timeToKill = 2f;
+    public float delayAfterMomento = 30f;
+    public float MaxDistanceFromTarget = 40f;
 
     public bool UseNavMesh
     {
@@ -31,6 +33,16 @@ public class TVManController : MonoBehaviour
             agent.enabled = value;
         }
     }
+
+    public bool ReadyToSpawn;
+
+    [SerializeField]
+    [ReadOnlyField]
+    private bool momentoDelayActive;
+
+    public bool MomentoEffectActive { get { return momentoDelayActive; } }
+
+    private float momentoDelayTimer;
 
     [SerializeField]
     private NavMeshAgent agent;
@@ -182,6 +194,18 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
+        if (momentoDelayActive) 
+        {
+            if (momentoDelayTimer < delayAfterMomento)
+            {
+                momentoDelayTimer += Time.deltaTime;
+            }
+            else 
+            {
+                momentoDelayActive = false;
+            }
+        }
+
         //if (movementSpeed != agent.speed) agent.speed = movementSpeed;
 
         transform.GenerateNoiseAlertAtTransform(IsHunting ? 4f : 1f, NoiseOrigin.TVMan);
@@ -521,9 +545,21 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    public void RemoveFromPlay()
+    public void RemoveFromPlay(bool momentoUsed = false)
     {
         CurrentBehaviour = TVManBehaviour.None;
+        
+        if (momentoUsed) 
+        {
+            momentoDelayTimer = 0f;
+            momentoDelayActive = true; 
+        }
+    }
+
+    public void ResetMomentoEffect() 
+    {
+        momentoDelayTimer = 0f;
+        momentoDelayActive = false;
     }
 
     public void PutInPlayOnSectionMove(Transform spawnTransform)

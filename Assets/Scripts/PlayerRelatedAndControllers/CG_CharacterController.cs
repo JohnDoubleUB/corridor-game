@@ -553,7 +553,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 await Task.Yield();
             }
 
-            GameManager.current.tvMan.RemoveFromPlay();
+            GameManager.current.tvMan.RemoveFromPlay(true);
             Destroy(iS.RemoveItemFromContents().gameObject);
             iM.HasMomento = false;
             SetPlayerIsBeingKilled(false);

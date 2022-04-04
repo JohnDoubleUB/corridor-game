@@ -286,7 +286,9 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void HandleTVManSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData, bool putInPlayNow = false)
     {
-        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && (GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.None /* or max distance from player threshold?*/))
+        if (currentLoadedLevelData.EnableTVMan && section.sectionType != SectionType.Middle && layoutGameObj.AllowTVMan && !GameManager.current.tvMan.MomentoEffectActive && 
+            (GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.None || 
+            Vector3.Distance(GameManager.current.tvMan.transform.position, GameManager.current.player.transform.position) > GameManager.current.tvMan.MaxDistanceFromTarget))
         {
             GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }
@@ -564,9 +566,9 @@ public class CorridorChangeManager : MonoBehaviour
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
         CurrentLevel = newLevel;
-        GameManager.current.tvMan.RemoveFromPlay();
+        if(!Levels[CurrentLevel].EnableTVMan) GameManager.current.tvMan.RemoveFromPlay(); //Makes tvman only despawn if the next level doesn't allow him to be there
+        GameManager.current.tvMan.ResetMomentoEffect();
         UpdateLevel();
-
     }
 
     public void CheckPlayerDistance()
