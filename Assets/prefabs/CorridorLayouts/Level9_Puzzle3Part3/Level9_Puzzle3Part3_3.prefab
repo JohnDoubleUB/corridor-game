@@ -169,7 +169,7 @@ MonoBehaviour:
     PickedUp: 0
     IsGeneratedNumberKey: 0
     PuzzlePieceId: 0
-    LevelNumber: -1
+    LevelNumber: 0
 --- !u!1 &5367023987760276737
 GameObject:
   m_ObjectHideFlags: 0
