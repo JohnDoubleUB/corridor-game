@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level13_Puzzle4Part1
+  m_EditorClassIdentifier: 
+  LevelNumber: 13
+  CorridorLayouts:
+  - {fileID: 8502516513757351436, guid: 245df3cafaf305541afe06de2ed85ac1, type: 3}
+  - {fileID: 1028531646186853634, guid: 6796594d7ac983e45bdc4fa4f7ae09d6, type: 3}
+  - {fileID: 395630380, guid: 1975cb5ba0bbeca4497d49b8c9b716ad, type: 3}
+  - {fileID: 7785650445776822728, guid: 39a5be514b5e05f46b0dd25bd006dac2, type: 3}
+  BackwardOnlyLayouts: []
+  ForwardOnlyLayouts: []
+  NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
+  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 1
+  EnableTVMan: 0

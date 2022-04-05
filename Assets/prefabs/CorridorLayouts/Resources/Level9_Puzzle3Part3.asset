@@ -35,6 +35,9 @@ MonoBehaviour:
   MaxWaveEffectCount: 0
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount: []
-  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete:
+  - Name: Continue to next level (13)
+    LayoutNumberTrigger: 3
+    LevelChange: 13
   MaxMouseCount: 2
   EnableTVMan: 1
