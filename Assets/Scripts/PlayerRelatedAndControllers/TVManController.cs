@@ -544,7 +544,10 @@ public class TVManController : MonoBehaviour
     {
         IHuntableEntity playerEntity = GameManager.current.playerController;
         Vector3 lookPosition = new Vector3(playerEntity.EntityTransform.position.x, transform.position.y, playerEntity.EntityTransform.position.z);
-        return playerEntity.IsIlluminated && IsWithinSightAngle(lookPosition) && Vector3.Distance(transform.position, lookPosition) < sightRange && LineOfSightCheck(playerEntity);
+        float distanceFromPlayer = Vector3.Distance(transform.position, lookPosition);
+        bool playerCanBePercievedAtShortDistance = (CurrentBehaviour == TVManBehaviour.Alerted || CurrentBehaviour == TVManBehaviour.PursuingTarget && CurrentTargetType == EntityType.Player) && distanceFromPlayer <= 1f;
+
+        return playerCanBePercievedAtShortDistance || playerEntity.IsIlluminated && IsWithinSightAngle(lookPosition) && distanceFromPlayer < sightRange && LineOfSightCheck(playerEntity);
     }
 
     private bool IsWithinSightAngle(Vector3 target)

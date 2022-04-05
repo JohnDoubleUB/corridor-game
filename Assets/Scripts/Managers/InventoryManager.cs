@@ -98,7 +98,10 @@ public class InventoryManager : MonoBehaviour
                     //Then finish the process of adding the item on the item itself
                     spawnedItem.SetInInventory();
 
-                    if (itemsAreMomentos) UpdateMomentoStatus(); //This should fix the bug with tvman killing you even if you have a momento (Hopefully)
+                    if (itemsAreMomentos) 
+                    {
+                        UpdateMomentoStatus(); 
+                    }//This should fix the bug with tvman killing you even if you have a momento (Hopefully)
                 }
             }
         }
