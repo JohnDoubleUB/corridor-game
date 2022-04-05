@@ -625,7 +625,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             }
 
 
-            iS.SlotParentTransform.position = iS.SlotParentInitialPosition;
+            iS.SlotParentTransform.localPosition = iS.SlotParentInitialPosition;
         }
         else
         {
