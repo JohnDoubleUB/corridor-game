@@ -159,6 +159,7 @@ MonoBehaviour:
   Props: []
   PuzzleElements:
   - {fileID: 904191704118162759}
+  - {fileID: 8154010609206119465}
   DecalClueObjects: []
   Pickups:
   - PickupItemPrefab: {fileID: 3529226280721837062, guid: d57c1c0404f631e4d91d3fc989e5366b,

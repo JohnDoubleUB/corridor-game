@@ -333,12 +333,13 @@ public class TVManController : MonoBehaviour
 
             case TVManBehaviour.PursuingTarget:
                 //If mouse is target, constantly look for new target in case player or closer mouse is seen
-                if (CurrentTargetType == EntityType.Mouse) PercieveNewTargets();
+                bool targetIsMouse = CurrentTargetType == EntityType.Mouse;
+                if (targetIsMouse) PercieveNewTargets();
 
                 //Move towared target, if target is reached we want to do something
                 if (MoveTowardPosition(currentTarget.TargetPosition))
                 {
-                    if (killTimer < timeToKill)
+                    if (targetIsMouse && killTimer < timeToKill)
                     {
                         killTimer += Time.deltaTime;
                     }

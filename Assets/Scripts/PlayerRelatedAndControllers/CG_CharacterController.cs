@@ -257,8 +257,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             if (currentDistanceFromTVMan < dangerZone) //Check if player is inside of tvman danger zone
             {
+                //float modifiedMinDistance = tvManMinDistance; //+ 0.5f;
                 if (huntedTimer != GameManager.current.TimeToReachFullDanger) huntedTimer = Mathf.Min(huntedTimer + Time.deltaTime, GameManager.current.TimeToReachFullDanger);
-                float remappedDistance = currentDistanceFromTVMan.Remap(tvManMinDistance+0.5f, dangerZone, 0.2f, 1f) * huntedTimer.Remap(0, GameManager.current.TimeToReachFullDanger, 1, 0);
+                float remappedDistance = currentDistanceFromTVMan.Remap(tvManMinDistance, dangerZone, 0, 1f) * huntedTimer.Remap(0, GameManager.current.TimeToReachFullDanger, 1, 0);
                 GameManager.current.HuntingWalkSpeedModifier = remappedDistance;
                 //Check how close
             }
