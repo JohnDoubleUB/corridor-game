@@ -565,7 +565,7 @@ public class CorridorChangeManager : MonoBehaviour
         sectionsTraveledOnCurrentLevel = 0;
         RenumberSections();
         CurrentLevel = newLevel;
-        if(!Levels[CurrentLevel].EnableTVMan) GameManager.current.tvMan.RemoveFromPlay(); //Makes tvman only despawn if the next level doesn't allow him to be there
+        if(!GetCurrentLevelData.EnableTVMan) GameManager.current.tvMan.RemoveFromPlay(); //Makes tvman only despawn if the next level doesn't allow him to be there
         GameManager.current.tvMan.ResetMomentoEffect();
         UpdateLevel();
     }

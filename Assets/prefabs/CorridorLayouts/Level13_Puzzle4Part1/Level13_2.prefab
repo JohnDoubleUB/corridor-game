@@ -1063,7 +1063,7 @@ PrefabInstance:
     - target: {fileID: 7829617602054414742, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: ConversationNumber
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67426d3e63625e4489fc8eb785f15abb, type: 3}
