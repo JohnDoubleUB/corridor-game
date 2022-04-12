@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
-  m_Name: Level14_Puzzle4Part2
+  m_Name: Level15_Puzzle4Part3
   m_EditorClassIdentifier: 
-  LevelNumber: 14
-  CorridorLayouts:
-  - {fileID: 2119348746221278011, guid: 885858d69e4360c46977bb10da8d6e61, type: 3}
-  - {fileID: 4008142150770274511, guid: d9be34cd64bfd7a4f9c07eb8956d841b, type: 3}
-  - {fileID: 212329978758199484, guid: e9558643d2cf90149aeb389f8b17a522, type: 3}
+  LevelNumber: 15
+  CorridorLayouts: []
   BackwardOnlyLayouts: []
   ForwardOnlyLayouts: []
   NumberpadPasswords: []
@@ -29,4 +26,4 @@ MonoBehaviour:
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
-  EnableTVMan: 1
+  EnableTVMan: 0
