@@ -204,23 +204,9 @@ MonoBehaviour:
   AllowTVMan: 1
   AllowMouseSpawns: 1
   Props: []
-  PuzzleElements:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  PuzzleElements: []
   DecalClueObjects: []
-  Pickups:
-  - PickupItemPrefab: {fileID: 3710080080312790725, guid: c14772bbbd23e2745b5a178bc958187c,
-      type: 3}
-    PotentialSpawnPositions:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    PickedUp: 0
-    IsGeneratedNumberKey: 1
-    PuzzlePieceId: 1
-    LevelNumber: 5
+  Pickups: []
 --- !u!1 &2119348746578737287
 GameObject:
   m_ObjectHideFlags: 0
