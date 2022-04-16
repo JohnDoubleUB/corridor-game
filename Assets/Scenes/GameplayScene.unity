@@ -4608,11 +4608,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Corridor-InitialMiddle (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 1891356515364142871, guid: 9dee13fab3b70c64ca1ec993df9dcdb3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9dee13fab3b70c64ca1ec993df9dcdb3, type: 3}
 --- !u!1 &1660178665

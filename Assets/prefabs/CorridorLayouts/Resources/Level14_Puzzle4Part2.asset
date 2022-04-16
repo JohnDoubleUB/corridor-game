@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level14_Puzzle4Part2
   m_EditorClassIdentifier: 
   LevelNumber: 14
+  IsCheckpoint: 0
+  CheckpointOnDelay: 0
   CorridorLayouts:
   - {fileID: 2119348746221278011, guid: 885858d69e4360c46977bb10da8d6e61, type: 3}
   - {fileID: 4008142150770274511, guid: d9be34cd64bfd7a4f9c07eb8956d841b, type: 3}
@@ -34,7 +36,10 @@ MonoBehaviour:
   AllowRandomWaving: 0
   MaxScaleEffectCount: 0
   MaxWaveEffectCount: 0
-  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelTriggerOnLayoutNumber:
+  - Name: Return to 13
+    LayoutNumberTrigger: 10
+    LevelChange: 13
   CompleteLevelOnTraveledSectionCount: []
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
