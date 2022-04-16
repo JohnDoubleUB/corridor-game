@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Level3_StartingArea
   m_EditorClassIdentifier: 
   LevelNumber: 3
+  IsCheckpoint: 1
   CorridorLayouts:
   - {fileID: 1028531646186853634, guid: eb9fd3f831640744a9ee7cdfbec08f6d, type: 3}
   - {fileID: 395630380, guid: cce8c150d107a5942ad733046143f5b4, type: 3}

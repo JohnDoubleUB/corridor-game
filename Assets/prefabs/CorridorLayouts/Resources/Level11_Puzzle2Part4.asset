@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Level11_Puzzle2Part4
   m_EditorClassIdentifier: 
   LevelNumber: 11
+  IsCheckpoint: 1
   CorridorLayouts:
   - {fileID: 5260005764623999733, guid: da3a4dbd5ead7444ab97a1725fd3279d, type: 3}
   - {fileID: 395630380, guid: ad4ba3008159d2d489a097ca8cbb8aed, type: 3}

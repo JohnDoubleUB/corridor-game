@@ -18,6 +18,9 @@ public class CorridorChangeManager : MonoBehaviour
     public delegate void NavMeshUpdateAction();
     public static event NavMeshUpdateAction OnNavMeshUpdate;
 
+    public delegate void SaveGameAction();
+    public static event SaveGameAction OnSaveGame;
+
     public List<CorridorSection> corridorSections;
     public List<Door> corridorDoorSegments;
 
@@ -142,6 +145,21 @@ public class CorridorChangeManager : MonoBehaviour
     public void SaveGame()
     {
         SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        OnSaveGame?.Invoke();
+    }
+
+    public async void SaveAfterTimePassedDelta(float timeSeconds = 1f) 
+    {
+        float timer = 0;
+
+        while (timer < timeSeconds) 
+        {
+            timer += Time.deltaTime;
+            await Task.Yield();
+        }
+
+        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        OnSaveGame?.Invoke();
     }
 
     private bool TryLoadGame(out SaveData savedData)
@@ -568,6 +586,11 @@ public class CorridorChangeManager : MonoBehaviour
         if(!GetCurrentLevelData.EnableTVMan) GameManager.current.tvMan.RemoveFromPlay(); //Makes tvman only despawn if the next level doesn't allow him to be there
         GameManager.current.tvMan.ResetMomentoEffect();
         UpdateLevel();
+        if (cachedCurrentLevelData.IsCheckpoint) 
+        {
+            if (!cachedCurrentLevelData.CheckPointOnDelay) SaveGame();
+            else SaveAfterTimePassedDelta(2);
+        }
     }
 
     public void CheckPlayerDistance()

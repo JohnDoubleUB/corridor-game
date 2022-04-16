@@ -8,6 +8,7 @@ public class LevelData : ScriptableObject
 {
     public int LevelNumber;
     public bool IsCheckpoint;
+    public bool CheckpointOnDelay;
     public CorridorLayoutHandler[] CorridorLayouts;
     public CorridorLayoutHandler[] BackwardOnlyLayouts;
     public CorridorLayoutHandler[] ForwardOnlyLayouts;
@@ -99,6 +100,7 @@ public class LevelData_Loaded
     private LevelData levelData;
     public int LevelNumber { get { return levelData.LevelNumber; } }
     public bool IsCheckpoint { get { return levelData.IsCheckpoint; } }
+    public bool CheckPointOnDelay { get { return levelData.CheckpointOnDelay; } }
     public CorridorLayoutHandler[] CorridorLayouts { get { return levelData.CorridorLayouts; } }
     public CorridorLayoutHandler[] BackwardOnlyLayouts { get { return levelData.BackwardOnlyLayouts; } }
 

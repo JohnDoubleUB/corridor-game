@@ -59,7 +59,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public Sprite crosshairInteract;
 
     public Text interactionPrompt;
-    public Text levelChangePrompt;
+    public Image saveGameSymbolPrompt;
+    public Image levelChangeSymbolPrompt;
 
     public Animator NotepadAnimator;
 
@@ -153,6 +154,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         controls.Player.Interact.performed += _ => Interact();
         pencilLayerMask = 1 << LayerMask.NameToLayer("Notepad") | 1 << LayerMask.NameToLayer("NonWritingArea");
         CorridorChangeManager.OnLevelChange += OnLevelChange;
+        CorridorChangeManager.OnSaveGame += OnSaveGame;
         if (playerCameraAnimator != null) playerCameraAnimator.Play("Idle", 0);
     }
 
@@ -195,30 +197,44 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private void OnLevelChange()
     {
-        ShowLevelChangePrompt();
+        ShowLevelPrompt();
     }
 
-    private async void ShowLevelChangePrompt()
+    private void OnSaveGame() 
     {
-        if (levelChangePrompt != null)
+        ShowSavePrompt();
+    }
+
+    private async Task FadeText(MaskableGraphic graphic, bool fadeIn, float timeSeconds = 1f)
+    {
+        float currentTime = 0f;
+        while (currentTime < timeSeconds)
         {
-            float positionValue = 0f;
-            float positionSmoothed;
-            Color newColor;
+            float alpha = fadeIn ? Mathf.Lerp(0f, 1f, currentTime / timeSeconds) : Mathf.Lerp(1f, 0f, currentTime / timeSeconds);
+            graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, alpha);
+            currentTime += Time.deltaTime;
+            await Task.Yield();
+        }
 
-            while (positionValue < 1)
-            {
-                positionValue += Time.deltaTime * 0.1f;
-                positionSmoothed = Mathf.SmoothStep(0, 255, positionValue);
-                newColor = levelChangePrompt.color;
-                newColor.a = positionSmoothed;
-                levelChangePrompt.color = newColor;
-                await Task.Yield();
-            }
+        graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, fadeIn ? 1f : 0f);
+    }
 
-            newColor = levelChangePrompt.color;
-            newColor.a = 0f;
-            levelChangePrompt.color = newColor;
+
+    private async void ShowLevelPrompt()
+    {
+        if (levelChangeSymbolPrompt != null) 
+        {
+            await FadeText(levelChangeSymbolPrompt, true);
+            await FadeText(levelChangeSymbolPrompt, false);
+        }
+    }
+
+    private async void ShowSavePrompt()
+    {
+        if (saveGameSymbolPrompt != null)
+        {
+            await FadeText(saveGameSymbolPrompt, true, 1.5f);
+            await FadeText(saveGameSymbolPrompt, false);
         }
     }
 
