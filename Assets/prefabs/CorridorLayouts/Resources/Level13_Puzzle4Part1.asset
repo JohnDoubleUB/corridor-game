@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level13_Puzzle4Part1
   m_EditorClassIdentifier: 
   LevelNumber: 13
+  IsCheckpoint: 1
+  CheckpointOnDelay: 1
   CorridorLayouts:
   - {fileID: 8502516513757351436, guid: 245df3cafaf305541afe06de2ed85ac1, type: 3}
   - {fileID: 1028531646186853634, guid: 6796594d7ac983e45bdc4fa4f7ae09d6, type: 3}

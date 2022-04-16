@@ -2,7 +2,9 @@
 
 Shader "Unity Answers/InvertColor"
 {
-	Properties{ _MainTex("Alpha (A) only", 2D) = "white" {} _AlphaCutOff("Alpha cut off", Range(0,1)) = 1 } SubShader{ Tags { "Queue" = "Transparent+10" } Pass { Fog { Mode Off } Blend OneMinusDstColor Zero ZWrite Off
+	Properties{ _MainTex("Alpha (A) only", 2D) = "white" {} _AlphaCutOff("Alpha cut off", Range(0,1)) = 1 _AlphaTransparency("Alpha transparency", Range(0,1)) = 1 }
+		SubShader{ Tags { "Queue" = "Transparent+10"}
+		Pass { Fog { Mode Off } Blend OneMinusDstColor Zero ZWrite Off
 
 CGPROGRAM
 #pragma vertex vert
@@ -10,6 +12,8 @@ CGPROGRAM
 
 sampler2D _MainTex;
 float _AlphaCutOff;
+float _AlphaTransparency;
+
 struct appdata
 {
 	float4 vertex : POSITION;
@@ -30,8 +34,9 @@ v2f vert(appdata v)
 half4 frag(v2f i) : COLOR
 {
 	half4 c = 1;
-	c.a = (1 - tex2D(_MainTex, i.uv.xy).a);
+	c.a = (1 - (tex2D(_MainTex, i.uv.xy).a));
 	clip(_AlphaCutOff - c.a);
+	
 	return c;
 }
 ENDCG
