@@ -5227,7 +5227,7 @@ MonoBehaviour:
   tvMan: {fileID: 158676738}
   GameParent: {fileID: 1015809491}
   GameUI: {fileID: 1896586766}
-  PlayerHuntedDangerZone: 10
+  PlayerHuntedDangerZone: 5
   TimeToReachFullDanger: 30
   walkSpeedModifier: 1
   huntingWalkSpeedModifier: 1

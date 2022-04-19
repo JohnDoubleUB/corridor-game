@@ -90,7 +90,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     private void Start()
     {
-
+        playerTransform = GameManager.current.player.transform;
         //Setup of level data
         LoadLevelData();
 
@@ -98,7 +98,7 @@ public class CorridorChangeManager : MonoBehaviour
         UpdateLevel();
 
         SetupInitialSections();
-        playerTransform = GameManager.current.player.transform;
+        
         corridorGameParent = GameManager.current.GameParent;
 
         //track player position inital
@@ -308,7 +308,8 @@ public class CorridorChangeManager : MonoBehaviour
             (GameManager.current.tvMan.CurrentBehaviour == TVManBehaviour.None || 
             Vector3.Distance(GameManager.current.tvMan.transform.position, GameManager.current.player.transform.position) > GameManager.current.tvMan.MaxDistanceFromTarget))
         {
-            GameManager.current.tvMan.PutInPlayOnSectionMove(section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
+            Transform furthestFromPlayer = section.TVManPatrolLocations.OrderByDescending(x => Vector3.Distance(x.position, playerTransform.position)).FirstOrDefault();
+            GameManager.current.tvMan.PutInPlayOnSectionMove(furthestFromPlayer != null ? furthestFromPlayer : section.TVManPatrolLocations[Random.Range(0, section.TVManPatrolLocations.Length)]);
         }
     }
 
