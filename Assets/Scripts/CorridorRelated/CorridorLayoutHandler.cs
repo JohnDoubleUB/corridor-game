@@ -28,6 +28,8 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public bool ForceWave;
 
+    private ICustomCorridorEvent[] customEvents;
+
     public string LayoutID
     {
         get
@@ -62,10 +64,12 @@ public class CorridorLayoutHandler : MonoBehaviour
     public DecalClueObject[] DecalClueObjects;
 
     public PickupSpawn[] Pickups;
+    public PrefabAndSpawnStatus[] SpawnableItems;
 
     private void Awake()
     {
         Props = GetComponentsInChildren<PropScript>();
+        customEvents = GetComponents<ICustomCorridorEvent>();
     }
 
     private void Update()
@@ -86,6 +90,26 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
+    private void SetupSpawnablePrefabs() 
+    {
+        if (LayoutData.spawnableItems.Any() && SpawnableItems.Any())
+        {
+            print("Spawning");
+            for (int i = 0; i < LayoutData.spawnableItems.Count && i < SpawnableItems.Length; i++) 
+            {
+                if (LayoutData.spawnableItems[i]) 
+                {
+                    PrefabAndSpawnStatus itemToBeSpawned = SpawnableItems[i];
+                    print("Spawning " + itemToBeSpawned.Prefab.name);
+                    GameObject spawnedItem = Instantiate(itemToBeSpawned.Prefab, itemToBeSpawned.SpawnLocation.position, itemToBeSpawned.SpawnLocation.rotation, itemToBeSpawned.SpawnLocation);
+                    spawnedItem.transform.SetParent(itemToBeSpawned.SpawnLocation);
+                    //spawnedItem.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                    //spawnedItem.transform.localPosition = Vector3.zero;
+                }
+            }
+        }
+    }
+
     public void InitiateLayout(bool sectionIsFlipped, Door sectionDoor, LevelData_Loaded currentLevelData, IEnumerable<LevelData_Loaded> allLevelData)
     {
         if (!layoutIntitated)
@@ -94,7 +118,8 @@ public class CorridorLayoutHandler : MonoBehaviour
             levelData = currentLevelData;
             this.allLevelData = allLevelData;
             LayoutData = currentLevelData.CorridorLayoutData.FirstOrDefault(x => x.LayoutID == LayoutID); // Repeats can confuse this
-
+            SetupSpawnablePrefabs();
+            
 
 
             //Setup prop parenting
@@ -241,6 +266,11 @@ public class CorridorLayoutHandler : MonoBehaviour
         }
     }
 
+    public void OnEnterCustomScripts() 
+    {
+        foreach (ICustomCorridorEvent cEvents in customEvents) 
+            cEvents.TriggerCustomEvent();
+    }
 }
 
 [System.Serializable]
@@ -254,6 +284,13 @@ public class PickupSpawn
     public int PuzzlePieceId = -1;
     public int LevelNumber = -1;
     public bool IsForCurrentLevel { get { return LevelNumber == -1; } }
+}
+
+[System.Serializable]
+public class PrefabAndSpawnStatus 
+{
+    public GameObject Prefab;
+    public Transform SpawnLocation;
 }
 
 public struct PickupAndParent

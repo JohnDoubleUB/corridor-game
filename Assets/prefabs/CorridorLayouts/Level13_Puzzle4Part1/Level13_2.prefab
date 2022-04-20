@@ -131,6 +131,23 @@ MonoBehaviour:
     IsGeneratedNumberKey: 0
     PuzzlePieceId: 0
     LevelNumber: -1
+  - PickupItemPrefab: {fileID: 1972190308613710872, guid: a6e177f2d9489e0469239e7ade5a27ad,
+      type: 3}
+    PotentialSpawnPositions:
+    - {fileID: 7200785404742799720}
+    PickedUp: 1
+    IsGeneratedNumberKey: 0
+    PuzzlePieceId: 0
+    LevelNumber: -1
+  - PickupItemPrefab: {fileID: 8210931204951336057, guid: 74bf58f1da4ee7246926efbb33abf165,
+      type: 3}
+    PotentialSpawnPositions:
+    - {fileID: 5442539529603815572}
+    PickedUp: 1
+    IsGeneratedNumberKey: 0
+    PuzzlePieceId: 0
+    LevelNumber: -1
+  SpawnableItems: []
 --- !u!1 &7785650446421573657
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +195,66 @@ MonoBehaviour:
   FakeParent: {fileID: 0}
   flipXZIfCorridorFlip: 0
   rotateY180IfCorridorFlip: 0
+--- !u!1 &7950387772439247006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5442539529603815572}
+  m_Layer: 0
+  m_Name: PuzzlePeiceMoved2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5442539529603815572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7950387772439247006}
+  m_LocalRotation: {x: -0, y: 0.16575073, z: -0, w: 0.9861677}
+  m_LocalPosition: {x: -0.988, y: 0.789, z: -0.222}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 599552758401946978}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 19.082, z: 0}
+--- !u!1 &8692475076442410548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7200785404742799720}
+  m_Layer: 0
+  m_Name: PuzzlePeiceMoved1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7200785404742799720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8692475076442410548}
+  m_LocalRotation: {x: -0, y: -0.3239939, z: -0, w: 0.94605917}
+  m_LocalPosition: {x: -0.782, y: 0.789, z: -0.302}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 599552758401946978}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -37.809002, z: 0}
 --- !u!1 &8821072734919041040
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +286,8 @@ Transform:
   - {fileID: 3067062764786056257}
   - {fileID: 463496754}
   - {fileID: 1730655350}
+  - {fileID: 7200785404742799720}
+  - {fileID: 5442539529603815572}
   m_Father: {fileID: 7785650445776822729}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -779,7 +858,7 @@ PrefabInstance:
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.10100007
+      value: -0.047
       objectReference: {fileID: 0}
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
@@ -789,7 +868,7 @@ PrefabInstance:
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.63699913
+      value: -0.601
       objectReference: {fileID: 0}
     - target: {fileID: 407469596374283876, guid: 67426d3e63625e4489fc8eb785f15abb,
         type: 3}

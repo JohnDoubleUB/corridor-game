@@ -28,7 +28,13 @@ public class CorridorChangeManager : MonoBehaviour
     public bool OnlyUseRandomAssortedCorridorLayouts;
 
     public List<LevelData> Levels;
-    private List<LevelData_Loaded> LoadedLevels;
+    private List<LevelData_Loaded> loadedLevels;
+
+    public List<LevelData_Loaded> LoadedLevels 
+    { 
+        get { return loadedLevels; }
+        private set { loadedLevels = value; }
+    }
 
     public int CurrentLevel = 1;
     private int currentLevelChangeTracking;
@@ -111,6 +117,12 @@ public class CorridorChangeManager : MonoBehaviour
         tVManPatrolPoints = corridorSections.Select(x => x.TVManPatrolLocations).ToArray();
     }
 
+    public void ReplaceLevelLayoutData(int levelIndex, int layoutIndex, LayoutLevelData replacedData) 
+    {
+        print("Replacing data for level layout: " + replacedData.LayoutID);
+        loadedLevels[levelIndex].CorridorLayoutData[layoutIndex] = replacedData;
+    }
+
     private void LoadLevelData()
     {
         if (SaveSystem.LoadType != GameLoadType.New && TryLoadGame(out SaveData savedData) && savedData != null)
@@ -119,7 +131,7 @@ public class CorridorChangeManager : MonoBehaviour
 
             IEnumerable<LevelData_Serialized> savedLevelData = savedData.LoadedLevels.OrderBy(x => x.LevelNumber);
 
-            LoadedLevels = Levels.OrderBy(x => x.LevelNumber).Select((x, index) =>
+            loadedLevels = Levels.OrderBy(x => x.LevelNumber).Select((x, index) =>
             {
                 LevelData_Serialized currentSerializedLevelData = savedLevelData.ElementAtOrDefault(index);
                 return currentSerializedLevelData != null && x.LevelNumber == currentSerializedLevelData.LevelNumber ? new LevelData_Loaded(x, currentSerializedLevelData) : x;
@@ -133,7 +145,7 @@ public class CorridorChangeManager : MonoBehaviour
         }
         else
         {
-            LoadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
+            loadedLevels = Levels.Select(x => (LevelData_Loaded)x).ToList();
             SaveGame(); //Save the level as the player loads in
         }
 
@@ -144,7 +156,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
         OnSaveGame?.Invoke();
     }
 
@@ -158,7 +170,7 @@ public class CorridorChangeManager : MonoBehaviour
             await Task.Yield();
         }
 
-        SaveSystem.SaveGame(new SaveData(LoadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
         OnSaveGame?.Invoke();
     }
 
@@ -188,7 +200,7 @@ public class CorridorChangeManager : MonoBehaviour
     {
         get
         {
-            cachedCurrentLevelData = LoadedLevels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
+            cachedCurrentLevelData = loadedLevels.FirstOrDefault(x => x.LevelNumber == CurrentLevel);
             return cachedCurrentLevelData;
         }
     }
@@ -254,7 +266,7 @@ public class CorridorChangeManager : MonoBehaviour
         }
         if (layoutGameObj != null)
         {
-            layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData, LoadedLevels);
+            layoutGameObj.InitiateLayout(section.FlipSection, sectionDoor, cachedCurrentLevelData, loadedLevels);
             section.CurrentLayout = layoutGameObj;
 
             int layoutMeshType = (int)layoutGameObj.corridorMeshType;
@@ -378,6 +390,9 @@ public class CorridorChangeManager : MonoBehaviour
     {
         //Check if player has traveled too far from world origin
         CheckPlayerDistance();
+
+        currentSection.CurrentLayout.OnEnterCustomScripts(); //Run any custom scripts
+
 
         //Get furthest away corridor piece
         Door[] currentSectionDoors = new Door[0];

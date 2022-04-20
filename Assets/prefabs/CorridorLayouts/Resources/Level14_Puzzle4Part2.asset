@@ -28,6 +28,7 @@ MonoBehaviour:
   - {fileID: 1725459185262750478, guid: f15556e16ed0cea46a886c0f61382577, type: 3}
   - {fileID: 6719108345585690067, guid: d69da0d9a6d0b204fbb95bc4a75fb3bd, type: 3}
   - {fileID: 2802848073783032700, guid: 6ca567015758ca74594213b4509c2d06, type: 3}
+  - {fileID: 2119348746221278011, guid: 0fa89009e94f7e74ea59aa156bdf9c72, type: 3}
   BackwardOnlyLayouts: []
   ForwardOnlyLayouts: []
   NumberpadPasswords: []

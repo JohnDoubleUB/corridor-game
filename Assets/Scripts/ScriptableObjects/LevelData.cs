@@ -156,7 +156,7 @@ public class LevelData_Loaded
 
         //Generate LevelLayoutData for all the layouts
         //I forgot to include it in layout data!
-        CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Union(ForwardOnlyLayouts).Select(x => new LayoutLevelData(x.LayoutID)).ToArray();
+        CorridorLayoutData = CorridorLayouts.Union(BackwardOnlyLayouts).Union(ForwardOnlyLayouts).Select(x => new LayoutLevelData(x)).ToArray();
 
     }
 
@@ -326,19 +326,36 @@ public class LayoutLevelData
     public bool HasWarped;
 
     public List<PuzzleElementControllerData> puzzleData = new List<PuzzleElementControllerData>();
+    public List<bool> spawnableItems = new List<bool>();
 
     public LayoutLevelData(string layoutID)
     {
         LayoutID = layoutID;
     }
 
-    public LayoutLevelData(string LayoutID, IEnumerable<int> collectedItems, IEnumerable<int> completedPuzzles, bool HasWarped, IEnumerable<PuzzleElementControllerData> puzzleData) 
+    public LayoutLevelData(CorridorLayoutHandler layoutHandler)
+    {
+        LayoutID = layoutHandler.LayoutID;
+        List<bool> spawnablesTemp = new List<bool>();
+        for (int i = 0; i < layoutHandler.SpawnableItems.Length; i++) spawnablesTemp.Add(false);
+        spawnableItems = spawnablesTemp;
+        
+        //ensure items set as already picked up in the prefab are that way when the game is first saved
+        var itemsNotToSpawn = layoutHandler.Pickups.Select((item, index) => new { item, index }).Where(x => x.item.PickedUp);
+        if (itemsNotToSpawn != null) 
+        {
+            collectedItems.AddRange(itemsNotToSpawn.Select(x => x.index));
+        }
+    }
+
+    public LayoutLevelData(string LayoutID, IEnumerable<int> collectedItems, IEnumerable<int> completedPuzzles, bool HasWarped, IEnumerable<PuzzleElementControllerData> puzzleData, IEnumerable<bool> spawnableItems) 
     {
         this.LayoutID = LayoutID;
         this.collectedItems = collectedItems.ToList();
         this.completedPuzzles = completedPuzzles.ToList();
         this.HasWarped = HasWarped;
         this.puzzleData = puzzleData.ToList();
+        this.spawnableItems = spawnableItems.ToList();
     }
 }
 
@@ -350,12 +367,13 @@ public class LayoutLevelDataSerialized
     public int[] completedPuzzles;
     public bool HasWarped;
     public PuzzleElementControllerData[] puzzleData;
+    public bool[] spawnableItems;
 
     public LayoutLevelData Deserialized
     {
         get
         {
-            return new LayoutLevelData(LayoutID, collectedItems, completedPuzzles, HasWarped, puzzleData);
+            return new LayoutLevelData(LayoutID, collectedItems, completedPuzzles, HasWarped, puzzleData, spawnableItems);
         }
     }
 
@@ -366,5 +384,6 @@ public class LayoutLevelDataSerialized
         completedPuzzles = layoutLevelData.completedPuzzles.ToArray();
         HasWarped = layoutLevelData.HasWarped;
         puzzleData = layoutLevelData.puzzleData.ToArray();
+        spawnableItems = layoutLevelData.spawnableItems.ToArray();
     }
 }
