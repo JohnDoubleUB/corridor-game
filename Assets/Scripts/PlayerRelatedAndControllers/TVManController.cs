@@ -48,6 +48,8 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private float momentoDelayTimer;
 
+    public float CurrentMomentoDelayTimer { get { return momentoDelayTimer; } }
+
     [SerializeField]
     private NavMeshAgent agent;
 
@@ -68,9 +70,9 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Transform[] validPatrolPoints;
 
-    private float DistanceFromPlayer 
+    private float DistanceFromPlayer
     {
-        get 
+        get
         {
             //Get player
             Vector3 currentPlayerLocation = GameManager.current.player.transform.position;
@@ -78,7 +80,7 @@ public class TVManController : MonoBehaviour
 
             //Determine distance of tvman from player
             return Vector3.Distance(transform.position, currentPlayerLocation);
-        } 
+        }
     }
 
     public TVManBehaviour CurrentBehaviour
@@ -131,11 +133,12 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private TVManBehaviour currentBehaviour;
 
-    public EntityType CurrentTargetType 
-    { get 
-        { 
-            return HuntedTarget != null ? HuntedTarget.EntityType : EntityType.None; 
-        } 
+    public EntityType CurrentTargetType
+    {
+        get
+        {
+            return HuntedTarget != null ? HuntedTarget.EntityType : EntityType.None;
+        }
     }
 
     public Transform TvManEyeLevel;
@@ -159,25 +162,25 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private MovementTarget currentTarget;
 
-    private IHuntableEntity HuntedTarget 
-    { 
-        get 
-        { 
+    private IHuntableEntity HuntedTarget
+    {
+        get
+        {
             return huntedTarget;
         }
-        set 
+        set
         {
-            if (value != huntedTarget) 
+            if (value != huntedTarget)
             {
-                if (huntedTarget != null) 
+                if (huntedTarget != null)
                 {
                     //if (huntedTarget.IsBeingKilled) Destroy(huntedTarget.EntityGameObject);
                     //else 
-                        huntedTarget.OnBeingHunted(false); 
+                    huntedTarget.OnBeingHunted(false);
                 }
                 huntedTarget = value;
-                if (huntedTarget != null) 
-                { 
+                if (huntedTarget != null)
+                {
                     huntedTarget.OnBeingHunted(true);
                 }
             }
@@ -211,13 +214,13 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
-        if (momentoDelayActive) 
+        if (momentoDelayActive)
         {
             if (momentoDelayTimer < delayAfterMomento)
             {
                 momentoDelayTimer += Time.deltaTime;
             }
-            else 
+            else
             {
                 momentoDelayActive = false;
             }
@@ -303,7 +306,7 @@ public class TVManController : MonoBehaviour
         {
             case TVManBehaviour.Patrolling:
                 //Patrol behaviour
-                if (!PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) 
+                if (!PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false))
                     currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
                 break;
 
@@ -343,7 +346,7 @@ public class TVManController : MonoBehaviour
                     {
                         killTimer += Time.deltaTime;
                     }
-                    else 
+                    else
                     {
                         CurrentBehaviour = TVManBehaviour.KillingTarget;
                     }
@@ -426,7 +429,7 @@ public class TVManController : MonoBehaviour
                     UseNavMesh = false;
                     KillHuntableEntity(HuntedTarget);
                 }
-                else 
+                else
                 {
                     UseNavMesh = IsCurrentlyOnNavMesh;
                     CurrentBehaviour = TVManBehaviour.Alerted;
@@ -443,10 +446,10 @@ public class TVManController : MonoBehaviour
 
     /*Behaviour scripts Update functions START*/
 
-    private bool PercieveNewTargets() 
+    private bool PercieveNewTargets()
     {
         IHuntableEntity newTarget = FindHighestPriorityVisibleTarget();
-        if (newTarget != null) 
+        if (newTarget != null)
         {
             HuntedTarget = newTarget;
             currentTarget = newTarget.EntityTransform.ToMovementTarget();
@@ -457,7 +460,7 @@ public class TVManController : MonoBehaviour
         return false;
     }
 
-    private void KillHuntableEntity(IHuntableEntity entity) 
+    private void KillHuntableEntity(IHuntableEntity entity)
     {
         if (entity.EntityType == EntityType.None) return;
 
@@ -468,7 +471,7 @@ public class TVManController : MonoBehaviour
             KillMouse(entity);
 
         }
-        else 
+        else
         {
 
             entity.OnEntityKilled();
@@ -476,7 +479,7 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    private async void KillMouse(IHuntableEntity entity) 
+    private async void KillMouse(IHuntableEntity entity)
     {
         Transform entityTransform = entity.EntityTransform;
         Vector3 positionAtTimeOfPickup = entityTransform.position;
@@ -486,7 +489,7 @@ public class TVManController : MonoBehaviour
         float smoothedPositionValue;
         float pickupSpeedMultiplier = 0.2f;
 
-        while (positionValue < 1f) 
+        while (positionValue < 1f)
         {
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
@@ -494,7 +497,7 @@ public class TVManController : MonoBehaviour
             await Task.Yield();
         }
 
-        CurrentBehaviour = TVManBehaviour.Patrolling;        
+        CurrentBehaviour = TVManBehaviour.Patrolling;
     }
 
     /*Behaviour scripts Update functions END*/
@@ -541,7 +544,7 @@ public class TVManController : MonoBehaviour
         return null;
     }
 
-    private bool PercievePlayer() 
+    private bool PercievePlayer()
     {
         IHuntableEntity playerEntity = GameManager.current.playerController;
         Vector3 lookPosition = new Vector3(playerEntity.EntityTransform.position.x, transform.position.y, playerEntity.EntityTransform.position.z);
@@ -584,18 +587,18 @@ public class TVManController : MonoBehaviour
         }
     }
 
-    public void RemoveFromPlay(bool momentoUsed = false)
+    public void RemoveFromPlay(bool momentoUsed = false, float delayOnTimer = 0f)
     {
         CurrentBehaviour = TVManBehaviour.None;
-        
-        if (momentoUsed) 
+
+        if (momentoUsed)
         {
             momentoDelayTimer = 0f;
-            momentoDelayActive = true; 
+            momentoDelayActive = true;
         }
     }
 
-    public void ResetMomentoEffect() 
+    public void ResetMomentoEffect()
     {
         momentoDelayTimer = 0f;
         momentoDelayActive = false;
@@ -663,6 +666,12 @@ public class TVManController : MonoBehaviour
         }
         return false;
     }
+
+    public void LoadTVManData(TVManData tvManData)
+    {
+        if (tvManData.MomentoDelayActive) RemoveFromPlay(true, tvManData.CurrentMomentoDelayTimer);
+    }
+
 }
 
 public enum TVManBehaviour

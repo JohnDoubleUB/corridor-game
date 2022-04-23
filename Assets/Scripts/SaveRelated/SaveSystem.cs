@@ -118,6 +118,7 @@ public class SaveData
     public LevelData_Serialized[] LoadedLevels;
     public PlayerData PlayerData;
     public InventoryData InventoryData;
+    public TVManData TVManData;
     public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels)
     {
         this.LoadedLevels = LoadedLevels.Select(x => new LevelData_Serialized(x)).ToArray();
@@ -133,6 +134,11 @@ public class SaveData
         this.InventoryData = InventoryData;
         this.CurrentLevel = CurrentLevel;
     }
+
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, TVManData TVManData, int CurrentLevel = 0) : this(LoadedLevels, PlayerData, InventoryData, CurrentLevel)
+    {
+        this.TVManData = TVManData;
+    }
 }
 
 [System.Serializable]
@@ -147,11 +153,24 @@ public class PlayerData
 }
 
 [System.Serializable]
+public class TVManData
+{
+    public bool MomentoDelayActive;
+    public float CurrentMomentoDelayTimer;
+
+    public TVManData(TVManController tvManController) 
+    {
+        MomentoDelayActive = tvManController.MomentoEffectActive;
+        CurrentMomentoDelayTimer = tvManController.CurrentMomentoDelayTimer;
+    }
+}
+
+[System.Serializable]
 public class NotepadData
 {
     public NotepadLineData[] LineData;
 
-    public NotepadData(IEnumerable<LineRenderer> lineRenderers) 
+    public NotepadData(IEnumerable<LineRenderer> lineRenderers)
     {
         LineData = lineRenderers.Where(x => x != null).Select(lineRenderer =>
         {
@@ -169,9 +188,9 @@ public struct Vector3Serialized
     public float y;
     public float z;
 
-    public Vector3 Deserialized() 
-    { 
-        return new Vector3(x, y, z); 
+    public Vector3 Deserialized()
+    {
+        return new Vector3(x, y, z);
     }
 
     public Vector3Serialized(Vector3 vector3)
@@ -183,13 +202,13 @@ public struct Vector3Serialized
 }
 
 [System.Serializable]
-public struct NotepadLineData 
+public struct NotepadLineData
 {
     public Vector3Serialized[] Positions;
     public Vector3Serialized LocalScale;
     public Vector3Serialized LocalRotationEuler;
 
-    public NotepadLineData(IEnumerable<Vector3Serialized> Positions, Vector3Serialized LocalRotationEuler, Vector3Serialized LocalScale) 
+    public NotepadLineData(IEnumerable<Vector3Serialized> Positions, Vector3Serialized LocalRotationEuler, Vector3Serialized LocalScale)
     {
         this.Positions = Positions.ToArray();
         this.LocalRotationEuler = LocalRotationEuler;

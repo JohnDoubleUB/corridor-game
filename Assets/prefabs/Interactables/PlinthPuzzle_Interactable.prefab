@@ -61,6 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: 
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NotifierId: 0
   AssociatedTransform: {fileID: 1740560221545365117}
   puzzleToNotify: {fileID: 0}
@@ -155,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: 
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NotifierId: 0
   AssociatedTransform: {fileID: 1740560221356299220}
   puzzleToNotify: {fileID: 0}
@@ -249,6 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: 
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NotifierId: 0
   AssociatedTransform: {fileID: 1740560222607359170}
   puzzleToNotify: {fileID: 0}
@@ -349,6 +352,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 952ec854056ec9e4790098abaf33a454, type: 3}
   - {fileID: 8300000, guid: 197a5f2d382efaf47ba873b7fc23bb64, type: 3}
   - {fileID: 8300000, guid: 6b877da987b03d4448212d55fee7ce12, type: 3}
+  PuzzleCompletedSound: {fileID: 8300000, guid: 620b7043bf33a53479a35aca57151e1c,
+    type: 3}
   plinthLowerAmount: 0.05
 --- !u!114 &4029376979616471777
 MonoBehaviour:

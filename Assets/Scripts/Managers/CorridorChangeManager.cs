@@ -142,6 +142,9 @@ public class CorridorChangeManager : MonoBehaviour
 
             //Check if we have associated inventory data, if we do then load it
             if (savedData.InventoryData != null) InventoryManager.current.LoadSavedInventoryData(savedData.InventoryData.InventoryItems, savedData.InventoryData.MomentoItems);
+
+            //Check if we have associated tvmandata
+            if (savedData.TVManData != null) GameManager.current.tvMan.LoadTVManData(savedData.TVManData);
         }
         else
         {
@@ -156,7 +159,7 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), CurrentLevel));
         OnSaveGame?.Invoke();
     }
 
@@ -170,8 +173,10 @@ public class CorridorChangeManager : MonoBehaviour
             await Task.Yield();
         }
 
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
-        OnSaveGame?.Invoke();
+
+        SaveGame();
+        //SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), CurrentLevel));
+        //OnSaveGame?.Invoke();
     }
 
     private bool TryLoadGame(out SaveData savedData)

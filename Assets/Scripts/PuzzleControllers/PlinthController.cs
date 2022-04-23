@@ -9,6 +9,7 @@ public class PlinthController : PuzzleElementController
     public PlinthNotifierAndItem[] Plinths;
     public AudioClip[] PlinthItemPlaceSounds;
     public AudioClip[] PlinthSlideDownSounds;
+    public AudioClip PuzzleCompletedSound;
 
     public float plinthLowerAmount = 1f;
     float pickupSpeedMultiplier = 1.5f;
@@ -188,6 +189,8 @@ public class PlinthController : PuzzleElementController
         }
         else 
         {
+            if(PuzzleCompletedSound != null) transform.PlayClipAtTransform(PuzzleCompletedSound, true, 1f, false, 0.3f, false);
+
             float pickupSpeedMax = pickupSpeedMultiplier / 2;
             float pickupSpeedMin = pickupSpeedMax - (pickupSpeedMax * 0.2f);
             
