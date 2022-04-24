@@ -82,6 +82,7 @@ public class CorridorLayoutHandler : MonoBehaviour
                 if (currentPickup.PickedUp) continue;
                 if (currentPickup.SpawnedPickup.ParentChanged)
                 {
+                    print("parent changed!");
                     currentPickup.PickedUp = true;
                     LayoutData.collectedItems.Add(i);
                 }
@@ -219,6 +220,8 @@ public class CorridorLayoutHandler : MonoBehaviour
                 }
                 else
                 {
+                    print("placing pickup " + pickup.PickupItemPrefab.name);
+                    pickup.PickedUp = false; //I think this will fix the issue
                     pickup.SpawnedPickup = new PickupAndParent();
                     pickup.SpawnedPickup.Parent = pickup.PotentialSpawnPositions[UnityEngine.Random.Range(0, pickup.PotentialSpawnPositions.Length)];
                     pickup.SpawnedPickup.Pickup = Instantiate(pickup.PickupItemPrefab, pickup.SpawnedPickup.Parent);

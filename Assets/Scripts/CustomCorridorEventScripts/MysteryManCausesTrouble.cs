@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MysteryManCausesTrouble : CustomCorridorEventScript
 {
-    protected new string EventTag = "MysteryManTrouble"; 
     public override void TriggerCustomEvent()
     {
         if (TriggerEvent())

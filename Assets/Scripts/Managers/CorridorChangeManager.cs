@@ -80,6 +80,8 @@ public class CorridorChangeManager : MonoBehaviour
     [SerializeField]
     private int sectionBackwardCounter = 0;
 
+    [ReadOnlyField]
+    [SerializeField]
     private List<string> eventTags = new List<string>();
 
     private void Awake()

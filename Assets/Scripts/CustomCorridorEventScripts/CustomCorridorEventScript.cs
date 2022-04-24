@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class CustomCorridorEventScript : MonoBehaviour
 {
-    protected string EventTag;
+    public string EventTag;
     public abstract void TriggerCustomEvent();
 
     protected bool TriggerEvent() 

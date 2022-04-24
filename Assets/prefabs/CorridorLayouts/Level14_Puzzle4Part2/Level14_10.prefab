@@ -110,6 +110,7 @@ MonoBehaviour:
   PuzzleElements: []
   DecalClueObjects: []
   Pickups: []
+  SpawnableItems: []
 --- !u!114 &533835616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac5609bf4f45fa4891a07765cf89e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventTag: MysteryManTrouble
 --- !u!1 &2802848073788598991
 GameObject:
   m_ObjectHideFlags: 0
