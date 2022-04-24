@@ -80,6 +80,8 @@ public class CorridorChangeManager : MonoBehaviour
     [SerializeField]
     private int sectionBackwardCounter = 0;
 
+    private List<string> eventTags = new List<string>();
+
     private void Awake()
     {
         //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
@@ -145,6 +147,8 @@ public class CorridorChangeManager : MonoBehaviour
 
             //Check if we have associated tvmandata
             if (savedData.TVManData != null) GameManager.current.tvMan.LoadTVManData(savedData.TVManData);
+
+            if (savedData.EventTags != null && savedData.EventTags.Any()) eventTags = savedData.EventTags.ToList();
         }
         else
         {
@@ -157,9 +161,23 @@ public class CorridorChangeManager : MonoBehaviour
         SaveSystem.LoadType = GameLoadType.Existing;
     }
 
+    //Returns true if successful
+    public bool AddEventTag(string EventTag) 
+    {
+        if (eventTags.Contains(EventTag))
+        {
+            return false;
+        }
+        else 
+        {
+            eventTags.Add(EventTag);
+            return true;
+        }
+    }
+
     public void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), CurrentLevel));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), eventTags, CurrentLevel));
         OnSaveGame?.Invoke();
     }
 

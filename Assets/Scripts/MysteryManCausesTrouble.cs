@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MysteryManCausesTrouble : MonoBehaviour, ICustomCorridorEvent
+public class MysteryManCausesTrouble : CustomCorridorEventScript
 {
-    private bool activated;
-    public void TriggerCustomEvent()
+    protected new string EventTag = "MysteryManTrouble"; 
+    public override void TriggerCustomEvent()
     {
-        if (!activated)
+        if (TriggerEvent())
         {
             //Find level 13, layout 9
             var levelAndIndex = CorridorChangeManager.current.LoadedLevels.Select((level, index) => new { level, index}).FirstOrDefault(x => x.level.LevelNumber == 13);
@@ -62,8 +62,6 @@ public class MysteryManCausesTrouble : MonoBehaviour, ICustomCorridorEvent
                     }
                 }
             }
-
-            activated = true;
         }
     }
 }

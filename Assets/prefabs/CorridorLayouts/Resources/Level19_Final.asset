@@ -18,6 +18,7 @@ MonoBehaviour:
   CorridorLayouts:
   - {fileID: 7065711882877679664, guid: a3e178cb2e7e05843bdd37b2e0a20d94, type: 3}
   - {fileID: 7065711882877679664, guid: 4ca53123197c94a45ae4141f3fd293c2, type: 3}
+  - {fileID: 7065711882877679664, guid: 37c65a2a472286542b2bf305e2d56169, type: 3}
   - {fileID: 7065711882877679664, guid: e6a13b8b94b46b349a02c050ccddc93e, type: 3}
   - {fileID: 8943546372065372439, guid: 6c3c4451bca4b59459c08ada66382e49, type: 3}
   - {fileID: 1022657490019304406, guid: b22ab0b2e7d8f8045aad8916cb407d6c, type: 3}

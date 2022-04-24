@@ -28,7 +28,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public bool ForceWave;
 
-    private ICustomCorridorEvent[] customEvents;
+    private CustomCorridorEventScript[] customEvents;
 
     public string LayoutID
     {
@@ -69,7 +69,7 @@ public class CorridorLayoutHandler : MonoBehaviour
     private void Awake()
     {
         Props = GetComponentsInChildren<PropScript>();
-        customEvents = GetComponents<ICustomCorridorEvent>();
+        customEvents = GetComponents<CustomCorridorEventScript>();
     }
 
     private void Update()
@@ -268,7 +268,7 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public void OnEnterCustomScripts() 
     {
-        foreach (ICustomCorridorEvent cEvents in customEvents) 
+        foreach (CustomCorridorEventScript cEvents in customEvents) 
             cEvents.TriggerCustomEvent();
     }
 }

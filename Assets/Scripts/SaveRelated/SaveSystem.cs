@@ -119,6 +119,7 @@ public class SaveData
     public PlayerData PlayerData;
     public InventoryData InventoryData;
     public TVManData TVManData;
+    public string[] EventTags;
     public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels)
     {
         this.LoadedLevels = LoadedLevels.Select(x => new LevelData_Serialized(x)).ToArray();
@@ -135,9 +136,10 @@ public class SaveData
         this.CurrentLevel = CurrentLevel;
     }
 
-    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, TVManData TVManData, int CurrentLevel = 0) : this(LoadedLevels, PlayerData, InventoryData, CurrentLevel)
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, TVManData TVManData, IEnumerable<string> EventTags, int CurrentLevel = 0) : this(LoadedLevels, PlayerData, InventoryData, CurrentLevel)
     {
         this.TVManData = TVManData;
+        this.EventTags = EventTags.ToArray();
     }
 }
 
