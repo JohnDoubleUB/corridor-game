@@ -11,7 +11,7 @@ public class CG_HeadBob : MonoBehaviour
     public float bobbingAmount = 0.05f;
     public CG_CharacterController controller;
     public Transform additonalBobber;
-    
+
     public Transform footStepPosition;
     public AudioClip[] footSteps;
 
@@ -25,15 +25,19 @@ public class CG_HeadBob : MonoBehaviour
     private float defaultBobbingSpeed;
     private float defaultBobbingAmount;
 
-    private float AppliedWalkingBobspeed { 
-        get 
+    private Vector3 originalPosition;
+
+    private float AppliedWalkingBobspeed
+    {
+        get
         {
             return enableVariableWalkSpeed && GameManager.current != null ? walkingBobbingSpeed * GameManager.current.WalkSpeedModifier : walkingBobbingSpeed * GameManager.current.HuntingWalkSpeedModifier;
-        } 
+        }
     }
 
     private void Awake()
     {
+        originalPosition = transform.localPosition;
         defaultBobbingSpeed = walkingBobbingSpeed;
         defaultBobbingAmount = bobbingAmount;
     }
@@ -50,12 +54,17 @@ public class CG_HeadBob : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        FootstepUpdate();
+    }
+
+    private void FootstepUpdate()
+    {
         if (Mathf.Abs(controller.moveDirection.x) > 0.1f || Mathf.Abs(controller.moveDirection.z) > 0.1f)
         {
             //Player is moving
             timer += Time.deltaTime * AppliedWalkingBobspeed;
             transform.localPosition = new Vector3(transform.localPosition.x, defaultPosY + Mathf.Sin(timer) * bobbingAmount, transform.localPosition.z);
-            if(additonalBobber != null) additonalBobber.localPosition = new Vector3(additonalBobber.localPosition.x, additionalBobDefaultPosY + Mathf.Sin(timer) * bobbingAmount, additonalBobber.localPosition.z);
+            if (additonalBobber != null) additonalBobber.localPosition = new Vector3(additonalBobber.localPosition.x, additionalBobDefaultPosY + Mathf.Sin(timer) * bobbingAmount, additonalBobber.localPosition.z);
         }
         else
         {
@@ -70,21 +79,21 @@ public class CG_HeadBob : MonoBehaviour
             PlayFootStep();
             stepTaken = true;
         }
-        else if (stepTaken && transform.localPosition.y >= defaultPosY) 
+        else if (stepTaken && transform.localPosition.y >= defaultPosY)
         {
             stepTaken = false;
         }
     }
 
-    private void PlayFootStep() 
+    private void PlayFootStep()
     {
-        if (footSteps.Any() && !controller.IsJumping && !controller.IsCrouching) 
+        if (footSteps.Any() && !controller.IsJumping && !controller.IsCrouching)
         {
             footStepPosition.PlayClipAtTransform(footSteps[Random.Range(0, footSteps.Length)], false, 0.2f, true, 0, true, 4f);
         }
     }
 
-    public void SetCrouching(bool enableCrouching) 
+    public void SetCrouching(bool enableCrouching)
     {
         bobbingAmount = enableCrouching ? defaultBobbingAmount / 1.3f : defaultBobbingAmount;
         walkingBobbingSpeed = enableCrouching ? defaultBobbingSpeed / 2 : defaultBobbingSpeed;

@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public CG_CharacterController playerController;
     public CG_HeadBob headBobber;
+    public CG_CameraShaker cameraShaker;
     public Camera trueCamera;
     public TVManController tvMan;
     public GameObject GameParent;
@@ -184,12 +185,14 @@ public class GameManager : MonoBehaviour
                 float remappedValue = distanceFromPlayer.Remap(maximumTVManEffectDistance, tvMan.minimumDistance + 0.5f, 0f, 1f);
                 MaterialManager.current.alternateBlend = remappedValue;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, remappedValue);
+                cameraShaker.shakeEffect = remappedValue;
 
             }
             else if (MaterialManager.current.alternateBlend != 0 || AudioManager.current.FirstPersonPlayerSource.isPlaying) 
             {
                 MaterialManager.current.alternateBlend = 0;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, 0f);
+                cameraShaker.shakeEffect = 0f;
             }
             //MaterialManager.current.alternateBlend = Mathf.Lerp(0f, 1f, )
 
