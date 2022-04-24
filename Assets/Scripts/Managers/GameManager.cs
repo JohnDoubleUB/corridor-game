@@ -186,6 +186,7 @@ public class GameManager : MonoBehaviour
                 MaterialManager.current.alternateBlend = remappedValue;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, remappedValue);
                 cameraShaker.shakeEffect = remappedValue;
+                playerController.pSXMaterial.SetFloat("_InterferenceAmount", remappedValue);
 
             }
             else if (MaterialManager.current.alternateBlend != 0 || AudioManager.current.FirstPersonPlayerSource.isPlaying) 
@@ -193,6 +194,7 @@ public class GameManager : MonoBehaviour
                 MaterialManager.current.alternateBlend = 0;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, 0f);
                 cameraShaker.shakeEffect = 0f;
+                playerController.pSXMaterial.SetFloat("_InterferenceAmount", 0);
             }
             //MaterialManager.current.alternateBlend = Mathf.Lerp(0f, 1f, )
 

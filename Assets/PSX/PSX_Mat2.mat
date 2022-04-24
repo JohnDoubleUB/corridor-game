@@ -26,6 +26,10 @@ Material:
         m_Texture: {fileID: 8400000, guid: fcc9d4d2062773e44a94e593a95f85d5, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Texture2D_BE4E5F57:
+        m_Texture: {fileID: 8400000, guid: 3173a1c44a765d943a474fe2376c4975, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -71,6 +75,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _InterferenceAmount: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
