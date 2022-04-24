@@ -7,6 +7,7 @@ public class MysteryManCausesTrouble : CustomCorridorEventScript
 {
     public override void TriggerCustomEvent()
     {
+        if (CorridorChangeManager.current.EventTagPresent(EventTag)) return;
         //Find level 13, layout 9
         var levelAndIndex = CorridorChangeManager.current.LoadedLevels.Select((level, index) => new { level, index }).FirstOrDefault(x => x.level.LevelNumber == 13);
 

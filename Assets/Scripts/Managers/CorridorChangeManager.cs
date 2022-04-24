@@ -163,10 +163,15 @@ public class CorridorChangeManager : MonoBehaviour
         SaveSystem.LoadType = GameLoadType.Existing;
     }
 
+    public bool EventTagPresent(string EventTag) 
+    {
+        return eventTags.Contains(EventTag);
+    }
+
     //Returns true if successful
     public bool AddEventTag(string EventTag) 
     {
-        if (eventTags.Contains(EventTag))
+        if (EventTagPresent(EventTag))
         {
             return false;
         }
