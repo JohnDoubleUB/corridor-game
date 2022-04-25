@@ -28,6 +28,8 @@ public class AudioManager : MonoBehaviour
 
     private bool playFromFirstPersonAudioSource;
 
+    private List<AudioSource> tempAudios = new List<AudioSource>();
+
     private void Awake()
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
@@ -118,12 +120,29 @@ public class AudioManager : MonoBehaviour
 
         if (noiseCanBeHeardByEntities) GenerateNoiseAlert(pos, noiseAlertRadius, noiseOrigin); //OnEntityNoiseAlert?.Invoke(pos, noiseAlertRadius, noiseOrigin);
 
+        //Added this to try and stop issues where temp audio isn't cleaned up
+        ClearNullTempAudiosFromList();
+        tempAudios.Add(aSource);
+
         return aSource; // return the AudioSource reference
+    }
+
+    private void ClearNullTempAudiosFromList() 
+    {
+        tempAudios = tempAudios.Where(x => x != null).ToList();
     }
 
     public void GenerateNoiseAlert(Vector3 position, float noiseAlertRadius = 10f, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified) 
     {
         OnEntityNoiseAlert?.Invoke(position, noiseAlertRadius, noiseOrigin);
+    }
+
+    private void OnDestroy()
+    {
+        foreach (AudioSource tempSource in tempAudios)
+        {
+            if (tempSource != null) Destroy(tempSource.gameObject);
+        }
     }
 }
 
