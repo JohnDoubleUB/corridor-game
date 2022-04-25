@@ -27,11 +27,16 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private float huntedTimer;
 
+    [SerializeField]
+    [ReadOnlyField]
+    private float _appliedSpeed;
     private float AppliedSpeed
     {
         get
         {
-            return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
+            _appliedSpeed = enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
+            return _appliedSpeed;
+            //return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
         }
     }
 
@@ -271,14 +276,24 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             float dangerZone = GameManager.current.PlayerHuntedDangerZone;
             float tvManMinDistance = GameManager.current.tvMan.minimumDistance;
 
-            if (currentDistanceFromTVMan < dangerZone) //Check if player is inside of tvman danger zone
+            if (GameManager.current.tvMan.CanSeeTarget)
             {
-                //float modifiedMinDistance = tvManMinDistance; //+ 0.5f;
-                if (huntedTimer != GameManager.current.TimeToReachFullDanger) huntedTimer = Mathf.Min(huntedTimer + Time.deltaTime, GameManager.current.TimeToReachFullDanger);
-                float remappedDistance = currentDistanceFromTVMan.Remap(tvManMinDistance, dangerZone, 0, 1f) * huntedTimer.Remap(0, GameManager.current.TimeToReachFullDanger, 1, 0);
-                GameManager.current.HuntingWalkSpeedModifier = remappedDistance;
-                //Check how close
+                if (currentDistanceFromTVMan < dangerZone) //Check if player is inside of tvman danger zone
+                {
+                    //float modifiedMinDistance = tvManMinDistance; //+ 0.5f;
+                    if (huntedTimer != GameManager.current.TimeToReachFullDanger) huntedTimer = Mathf.Min(huntedTimer + Time.deltaTime, GameManager.current.TimeToReachFullDanger);
+                    float remappedDistance = currentDistanceFromTVMan.Remap(tvManMinDistance, dangerZone, 0, 1f) * huntedTimer.Remap(0, GameManager.current.TimeToReachFullDanger, 1, 0);
+                    GameManager.current.HuntingWalkSpeedModifier = remappedDistance;
+                    //Check how close
+                }
             }
+            else 
+            {
+                GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 100), 1f);
+            }
+            //Force tvman to kill player if he can't move, (to prevent softlock)
+            if (_appliedSpeed < 0.02f) GameManager.current.tvMan.ForceKillTarget();
+            
             //else if(GameManager.current.HuntingWalkSpeedModifier != 1f)
             //{
             //    GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 10), 1f);

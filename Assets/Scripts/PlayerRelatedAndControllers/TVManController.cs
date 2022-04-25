@@ -70,6 +70,10 @@ public class TVManController : MonoBehaviour
     [ReadOnlyField]
     private Transform[] validPatrolPoints;
 
+    public bool CanSeeTarget { get { return canSeeTarget; } }
+
+    private bool canSeeTarget;
+
     private float DistanceFromPlayer
     {
         get
@@ -342,6 +346,7 @@ public class TVManController : MonoBehaviour
                 //Move towared target, if target is reached we want to do something
                 if (MoveTowardPosition(currentTarget.TargetPosition))
                 {
+                    canSeeTarget = true;
                     if (targetIsMouse && killTimer < timeToKill)
                     {
                         killTimer += Time.deltaTime;
@@ -349,22 +354,26 @@ public class TVManController : MonoBehaviour
                     else
                     {
                         CurrentBehaviour = TVManBehaviour.KillingTarget;
+                        canSeeTarget = false;
                     }
                 }
                 else if (CurrentTargetType == EntityType.Player) //If target is player
                 {
                     if (PercievePlayer()) //Check if we can still see the player
                     {
+                        canSeeTarget = true;
                         interestTimer = Mathf.Max(0f, interestTimer - (Time.deltaTime * 3)); //If we can then make sure the interest timer is decreased
                     }
                     else if (interestTimer < alertTimeWithoutPerception) //Otherwise increase the interest timer
                     {
+                        canSeeTarget = false;
                         interestTimer += Time.deltaTime;
                         killTimer = Mathf.Max(0f, killTimer - Time.deltaTime);
                     }
                     else //If we have reached the interest timer limit then tvman returns to an alerted state
                     {
                         CurrentBehaviour = TVManBehaviour.Alerted;
+                        canSeeTarget = false;
                     }
 
                     //if (CurrentBehaviour != TVManBehaviour.Alerted)
@@ -436,6 +445,11 @@ public class TVManController : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void ForceKillTarget() 
+    {
+        CurrentBehaviour = TVManBehaviour.KillingTarget;
     }
 
     private bool UpdateNavAgent()
