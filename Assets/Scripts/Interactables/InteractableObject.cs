@@ -9,6 +9,11 @@ public class InteractableObject : MonoBehaviour
 
     public SignificantObjectController puzzleObjectToNotifyOnInteract;
 
+    public void ForceInteract() 
+    {
+        OnInteract();
+    }
+
     public void IntiateInteract() 
     {
         if (IsInteractable) OnInteract();

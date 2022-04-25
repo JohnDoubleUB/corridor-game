@@ -10,6 +10,7 @@ public class InteractableCandle : InteractableObject
     public AudioClip candleOffSound;
     public float candleSoundVolume = 1f;
     public float candleSoundRadius = 0.2f;
+    public bool startUnlit;
     
 
     public bool IsIlluminatingPlayer
@@ -30,6 +31,7 @@ public class InteractableCandle : InteractableObject
     {
         meshMat = CandleMesh.materials[0];
         MaterialManager.current.TrackMaterials(meshMat);
+        if (startUnlit) OnInteract();
     }
 
     protected override void OnInteract()

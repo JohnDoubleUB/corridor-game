@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     public Canvas GameUI;
     public float PlayerHuntedDangerZone = 6f;
     public float TimeToReachFullDanger = 2f;
+    
+    public bool ForceTVManEffect;
+    [Range(0, 1f)]
+    public float forcedEffectValue;
 
 
     public float HuntingWalkSpeedModifier { get { return huntingWalkSpeedModifier; } set { huntingWalkSpeedModifier = Mathf.Abs(value); } }
@@ -188,7 +192,14 @@ public class GameManager : MonoBehaviour
 
     private void TVManEffectUpdate() 
     {
-        if (tvMan != null && player != null && MaterialManager.current != null && AudioManager.current != null) 
+        if (ForceTVManEffect) 
+        {
+            MaterialManager.current.alternateBlend = forcedEffectValue;
+            AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, forcedEffectValue);
+            cameraShaker.shakeEffect = forcedEffectValue;
+            playerController.pSXMaterial.SetFloat("_InterferenceAmount", forcedEffectValue);
+        }
+        else if (tvMan != null && player != null && MaterialManager.current != null && AudioManager.current != null) 
         {
             float distanceFromPlayer = Vector3.Distance(tvMan.transform.position, player.transform.position);
 
