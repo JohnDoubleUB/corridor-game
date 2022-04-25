@@ -126,6 +126,18 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale != 1) Time.timeScale = 1;
     }
 
+    private void Start()
+    {
+        ResetPSXMat();
+    }
+
+    public void ResetPSXMat() 
+    {
+        playerController.pSXMaterial.SetFloat("_InterferenceAmount", 0);
+        playerController.pSXMaterial.SetFloat("_TransitionToAlternate", 0);
+        playerController.pSXMaterial.SetFloat("_FadeToWhite", 0);
+    }
+
     private void Update()
     {
 
@@ -204,6 +216,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartCurrentScene()
     {
+        ResetPSXMat();
         int scene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
