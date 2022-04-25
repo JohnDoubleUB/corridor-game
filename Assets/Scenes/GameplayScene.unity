@@ -3960,6 +3960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc16e23ac68cab24bad36af601e2faa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSprite: {fileID: 1583393753}
 --- !u!1 &1435231572 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4869942047132044416, guid: f32b440fe64c6d84fa9187a259a644f3,
@@ -6490,6 +6491,7 @@ MonoBehaviour:
   - {fileID: 170585520}
   - {fileID: 1336907175}
   acceleration: {x: 400, y: 400}
+  _appliedSpeed: 0
   HeadBobber: {fileID: 963194229}
   playerPencil: {fileID: 653852192}
   playerCrosshair: {fileID: 718060826}
