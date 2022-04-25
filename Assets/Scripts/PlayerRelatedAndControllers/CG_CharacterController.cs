@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
+    public bool cutsceneMode;
     public bool enableVariableWalkSpeed;
     public bool enableMouseAcceleration;
 
@@ -319,7 +320,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             bool playerNotBusy = canMove && interactingNote == null;
 
-            if (characterController.isGrounded)
+            if (!cutsceneMode && characterController.isGrounded)
             {
                 // We are grounded, so recalculate move direction based on axes
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -358,6 +359,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             }
 
+            if(cutsceneMode) moveDirection = Vector3.zero;
             // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
             // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
             // as an acceleration (ms^-2)
@@ -386,7 +388,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 transform.eulerAngles = new Vector2(0, rotation.y);
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
+            if (!cutsceneMode && Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
             {
                 ActivateNotepad(canMove);
             }
@@ -396,7 +398,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             bool crouchButtonHeld = Input.GetButton("Crouch");
 
-            if (crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
+            if (!cutsceneMode && crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
             {
                 ToggleCrouching();
             }
@@ -565,12 +567,29 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     private void SetPlayerIsBeingKilled(bool beingKilled)
     {
         notBeingKilled = !beingKilled;
-        playerCrosshair.enabled = !beingKilled;
+        ShowCrosshair(!beingKilled);
         //Uncrouch, un look at note, put away notepad
+        CancelAllActions();
+
+    }
+
+    public void CancelAllActions() 
+    {
         if (IsCrouching && canUncrouch) ToggleCrouching();
         if (interactingNote != null) interactingNote.PutDownItem();
         if (isInNotepad) ActivateNotepad(false);
+    }
 
+    public void ShowCrosshair(bool show) 
+    {
+        playerCrosshair.enabled = show;
+    }
+
+    public void EnableCutsceneMode(bool cutsceneMode) 
+    {
+        this.cutsceneMode = cutsceneMode;
+        ShowCrosshair(!cutsceneMode);
+        CancelAllActions();
     }
 
     public void LoadSavedPlayerData(PlayerData playerData)
