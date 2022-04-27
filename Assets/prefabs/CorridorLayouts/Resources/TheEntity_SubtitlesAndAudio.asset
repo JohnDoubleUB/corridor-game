@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TheEntity_SubtitlesAndAudio
   m_EditorClassIdentifier: 
   SubtitleColours:
-  - {r: 1, g: 0.6084906, b: 0.6084906, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
   Conversations:
   - ConversationName: 1_When I first made your acquaintance, you asked me if I was
       divine.

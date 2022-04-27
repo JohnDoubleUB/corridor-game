@@ -61,11 +61,12 @@ MonoBehaviour:
   ObjectName: StrangeLetter
   IsInteractable: 1
   puzzleObjectToNotifyOnInteract: {fileID: 0}
+  PickupID: 0
   pickupType: 1
   currentSlot:
     slotContent: {fileID: 0}
   pickupSpeedMultiplier: 2.5
-  pickupScaleMultiplier: 1
+  pickupScaleMultiplier: 0.8
   pickupSound: {fileID: 8300000, guid: 93994bdebae605446ad226491e8140b0, type: 3}
   varyPickupSoundPitch: 0
   pickupSoundVolume: 0.5

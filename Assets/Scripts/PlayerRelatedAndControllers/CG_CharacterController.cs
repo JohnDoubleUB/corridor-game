@@ -21,6 +21,10 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
     public Text[] DialogueBoxes;
+
+    public Image DialogueBoxBackground;
+    private bool dialoguePresent;
+    private float dialogueBoxValue = 0;
     
     private Vector2 velocity;
     public Vector2 acceleration;
@@ -246,6 +250,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     void Start()
     {
+        DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, 0);
         pSXMaterial.SetFloat("_TransitionToAlternate", 0);
         pSXMaterial.SetFloat("_FadeToWhite", 0);
         characterController = GetComponent<CharacterController>();
@@ -306,8 +311,23 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
+    private void UpdateDialogueBoxBackground() 
+    {
+        if (DialogueBoxes.Any(x => !string.IsNullOrEmpty(x.text)) && dialogueBoxValue != 1f)
+        {
+            dialogueBoxValue = Mathf.Min(dialogueBoxValue + Time.deltaTime, 1f);
+            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
+        }
+        else if (dialogueBoxValue != 0f)
+        {
+            dialogueBoxValue = Mathf.Max(dialogueBoxValue - Time.deltaTime, 0f);
+            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
+        }
+    }
+
     void Update()
     {
+        UpdateDialogueBoxBackground();
         UpdateHuntedWalkSpeedModifier();
 
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);

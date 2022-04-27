@@ -25,6 +25,12 @@ public class RadioInteractable : InteractableObject
     private Conversation conversationToPlay;
     private bool reachedEndOfDialogue;
 
+    public delegate void EndOfAudioAction();
+    public event EndOfAudioAction OnEndOfDialogue;
+
+    public bool playRadioDroneSound = true;
+    public bool allowDialogueSkipWithInput;
+
     private void Awake()
     {
         RadioSpeaker.clip = RadioDroneSound;
@@ -54,16 +60,16 @@ public class RadioInteractable : InteractableObject
             radioAnimatorBack.Play(radioOn ? "On" : "Off");
         }
 
-        transform.PlayClipAtTransform(RadioOnOffSound);
+        if(RadioOnOffSound != null) transform.PlayClipAtTransform(RadioOnOffSound);
         //AudioManager.current.PlayClipAt(RadioOnOffSound, transform.position, 1f, true);
 
         if (radioOn)
         {
-            if(!PlayDialogue()) RadioSpeaker.Play();
+            if(!PlayDialogue() && playRadioDroneSound) RadioSpeaker.Play();
         }
         else 
         {
-            RadioSpeaker.Stop();
+            if(playRadioDroneSound) RadioSpeaker.Stop();
             PauseDialogue();
         }
     }
@@ -73,7 +79,7 @@ public class RadioInteractable : InteractableObject
         if (radioOn) 
         {
             
-            if (!reachedEndOfDialogue && conversationToPlay != null && !DialogueAudioSources[0].isPlaying) 
+            if ((allowDialogueSkipWithInput && GameManager.current.playerController.cutsceneMode && Input.anyKeyDown) || !reachedEndOfDialogue && conversationToPlay != null && !DialogueAudioSources[0].isPlaying) 
             {
                 PlayNextDialoguePart();
             }
@@ -145,6 +151,7 @@ public class RadioInteractable : InteractableObject
         }
         else 
         {
+            //We reached the end of dialogue
             reachedEndOfDialogue = true;
 
             ClearPlayerSubtitles();
@@ -154,7 +161,10 @@ public class RadioInteractable : InteractableObject
                 aS.Stop();
                 aS.clip = null;
             }
-            RadioSpeaker.Play();
+
+            OnEndOfDialogue?.Invoke();
+
+            if(playRadioDroneSound) RadioSpeaker.Play();
         }
     }
 

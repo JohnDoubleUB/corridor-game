@@ -118,7 +118,7 @@ Material:
     - Vector1_CD1FEB73: 0
     - _AlphaClip: 0
     - _AlternateTexture: 0
-    - _AlternateTextureSwitch: 1
+    - _AlternateTextureSwitch: 0
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
