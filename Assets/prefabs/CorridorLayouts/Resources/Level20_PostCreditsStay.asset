@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09eab9795ab3cd47bd66c8e34085755, type: 3}
+  m_Name: Level20_PostCreditsStay
+  m_EditorClassIdentifier: 
+  LevelNumber: 20
+  IsCheckpoint: 0
+  CheckpointOnDelay: 0
+  CorridorLayouts:
+  - {fileID: 2182428914619831727, guid: 04b49463745cd1746a1655e993a57676, type: 3}
+  - {fileID: 7042256475020299464, guid: 6f763e3589d8025429c00385e03386c1, type: 3}
+  - {fileID: 2856822664313502817, guid: 3f5f03c86a1afeb4596489b330297bbc, type: 3}
+  BackwardOnlyLayouts: []
+  ForwardOnlyLayouts: []
+  NumberpadPasswords: []
+  SectionOrdersAreRandom: 0
+  AllowRandomScaling: 0
+  AllowRandomWaving: 0
+  MaxScaleEffectCount: 0
+  MaxWaveEffectCount: 0
+  CompleteLevelTriggerOnLayoutNumber: []
+  CompleteLevelOnTraveledSectionCount: []
+  CompleteLevelTriggerOnLayoutPuzzleComplete: []
+  MaxMouseCount: 1
+  EnableTVMan: 0

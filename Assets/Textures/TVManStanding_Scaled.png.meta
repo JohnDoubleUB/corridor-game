@@ -1,0 +1,392 @@
+fileFormatVersion: 2
+guid: 337222598591cf74bb65c588ff570538
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2658508655630435752
+    second: TVManStanding_Scaled_0
+  - first:
+      213: 9120565954455799647
+    second: TVManStanding_Scaled_1
+  - first:
+      213: 3316485187146706539
+    second: TVManStanding_Scaled_2
+  - first:
+      213: -6781976075170619404
+    second: TVManStanding_Scaled_3
+  - first:
+      213: -5835062646827246948
+    second: TVManStanding_Scaled_4
+  - first:
+      213: -2956286897735451986
+    second: TVManStanding_Scaled_5
+  - first:
+      213: 6957225115447530798
+    second: TVManStanding_Scaled_6
+  - first:
+      213: 4399855634646265747
+    second: TVManStanding_Scaled_7
+  - first:
+      213: -993747659737847466
+    second: TVManStanding_Scaled_8
+  - first:
+      213: -1461858887781299207
+    second: TVManStanding_Scaled_9
+  - first:
+      213: -3156109910934105904
+    second: TVManStanding_Scaled_10
+  - first:
+      213: -7135348887402655272
+    second: TVManStanding_Scaled_11
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a54723798be4e420800000000000000
+      internalID: 2658508655630435752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_1
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f570cd9a962c29e70800000000000000
+      internalID: 9120565954455799647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_2
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6e69bac4b5860e20800000000000000
+      internalID: 3316485187146706539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_3
+      rect:
+        serializedVersion: 2
+        x: 1014
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ffd14c21b491e1a0800000000000000
+      internalID: -6781976075170619404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_4
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9a16bd2071b50fa0800000000000000
+      internalID: -5835062646827246948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_5
+      rect:
+        serializedVersion: 2
+        x: 1690
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaa3656cab829f6d0800000000000000
+      internalID: -2956286897735451986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_6
+      rect:
+        serializedVersion: 2
+        x: 2028
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e251daca1670d8060800000000000000
+      internalID: 6957225115447530798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_7
+      rect:
+        serializedVersion: 2
+        x: 2366
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39f6716636d6f0d30800000000000000
+      internalID: 4399855634646265747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_8
+      rect:
+        serializedVersion: 2
+        x: 2704
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65923f0c4cf7532f0800000000000000
+      internalID: -993747659737847466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_9
+      rect:
+        serializedVersion: 2
+        x: 3042
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fb4c0a361f66bbe0800000000000000
+      internalID: -1461858887781299207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_10
+      rect:
+        serializedVersion: 2
+        x: 3380
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d0deaef1ce3334d0800000000000000
+      internalID: -3156109910934105904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TVManStanding_Scaled_11
+      rect:
+        serializedVersion: 2
+        x: 3718
+        y: 0
+        width: 338.66666
+        height: 1150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d1d2e9ddf52afc90800000000000000
+      internalID: -7135348887402655272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 737552aca93ae064aad328874a0201ac
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

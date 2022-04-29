@@ -166,6 +166,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         CorridorChangeManager.OnLevelChange += OnLevelChange;
         CorridorChangeManager.OnSaveGame += OnSaveGame;
         if (playerCameraAnimator != null) playerCameraAnimator.Play("Idle", 0);
+
+        pSXMaterial.SetFloat("_TransitionToAlternate", 0);
+        pSXMaterial.SetFloat("_FadeToWhite", 0);
     }
 
     public void CandleEnterPlayerInRange(InteractableCandle candle)

@@ -28,6 +28,9 @@ public class RadioInteractable : InteractableObject
     public delegate void EndOfAudioAction();
     public event EndOfAudioAction OnEndOfDialogue;
 
+    public delegate void NextDialoguePartAction(int partNo);
+    public event NextDialoguePartAction OnNextDialoguePart;
+
     public bool playRadioDroneSound = true;
     public bool allowDialogueSkipWithInput;
 
@@ -139,6 +142,11 @@ public class RadioInteractable : InteractableObject
             DialoguePart currentPart = conversationToPlay.DialogueParts[DialoguePartNo];
 
             ClearPlayerSubtitles();
+
+            //Trigger change dialogue event
+
+
+            OnNextDialoguePart?.Invoke(DialoguePartNo);
 
             for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
             {

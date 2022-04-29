@@ -188,6 +188,17 @@ public class CorridorChangeManager : MonoBehaviour
         OnSaveGame?.Invoke();
     }
 
+    public void SaveGameOnLevel(int level)
+    {
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), eventTags, level));
+        OnSaveGame?.Invoke();
+    }
+
+    public void CreateNewSave() 
+    {
+        SaveSystem.SaveGame(new SaveData(Levels.Select(x => (LevelData_Loaded)x).ToList(), null, null, null, new List<string>(), 1));
+    }
+
     public async void SaveAfterTimePassedDelta(float timeSeconds = 1f) 
     {
         float timer = 0;

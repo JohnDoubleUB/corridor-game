@@ -51,4 +51,9 @@ public class FinalCutsceneAnimationHandler : MonoBehaviour
     {
         foreach (InteractableCandle afterCCandle in afterCutsceneCandles) afterCCandle.ForceInteract();
     }
+
+    public void ChangeTVManAnimation(CutsceneTVManAnimation animation = CutsceneTVManAnimation.Default)
+    {
+        endingEvent.PlayAnimation(animation);
+    }
 }
