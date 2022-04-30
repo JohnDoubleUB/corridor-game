@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetPSXMat()
     {
-        playerController.ResetPSXMat();
+        playerController.PSXRenderer.ResetMat();
     }
 
     private void Update()
@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
             MaterialManager.current.alternateBlend = forcedEffectValue;
             AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, forcedEffectValue);
             cameraShaker.shakeEffect = forcedEffectValue;
-            playerController.PSX_InterferenceAmount = forcedEffectValue;
+            playerController.PSXRenderer.InterferenceAmount = forcedEffectValue;
         }
         else if (tvMan != null && player != null && MaterialManager.current != null && AudioManager.current != null) 
         {
@@ -193,14 +193,14 @@ public class GameManager : MonoBehaviour
                 MaterialManager.current.alternateBlend = remappedValue;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, remappedValue);
                 cameraShaker.shakeEffect = remappedValue;
-                playerController.PSX_InterferenceAmount = remappedValue;
+                playerController.PSXRenderer.InterferenceAmount = remappedValue;
             }
             else if (MaterialManager.current.alternateBlend != 0 || AudioManager.current.FirstPersonPlayerSource.isPlaying) 
             {
                 MaterialManager.current.alternateBlend = 0;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, 0f);
                 cameraShaker.shakeEffect = 0f;
-                playerController.PSX_InterferenceAmount = 0;
+                playerController.PSXRenderer.InterferenceAmount = 0;
             }
         }
     }

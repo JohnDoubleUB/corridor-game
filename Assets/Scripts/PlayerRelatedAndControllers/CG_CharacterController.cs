@@ -9,45 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
-    [SerializeField]
-    private MeshRenderer RenderTexture;
-    private Material sharedRenderTextureMaterial;
-
-    public float PSX_FadeToWhite
-    {
-        get
-        {
-            return GetSharedRenderTextureMaterial().GetFloat("_FadeToWhite");
-        }
-        set
-        {
-            GetSharedRenderTextureMaterial().SetFloat("_FadeToWhite", value);
-        }
-    }
-
-    public float PSX_AlternateTransistion
-    {
-        get
-        {
-            return GetSharedRenderTextureMaterial().GetFloat("_TransitionToAlternate");
-        }
-        set
-        {
-            GetSharedRenderTextureMaterial().SetFloat("_TransitionToAlternate", value);
-        }
-    }
-
-    public float PSX_InterferenceAmount
-    {
-        get
-        {
-            return GetSharedRenderTextureMaterial().GetFloat("_InterferenceAmount");
-        }
-        set
-        {
-            GetSharedRenderTextureMaterial().SetFloat("_InterferenceAmount", value);
-        }
-    }
+    public PSXRendererHandler PSXRenderer;
 
     public bool cutsceneMode;
     public bool enableVariableWalkSpeed;
@@ -81,7 +43,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         {
             _appliedSpeed = enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
             return _appliedSpeed;
-            //return enableVariableWalkSpeed && GameManager.current != null ? speed * GameManager.current.WalkSpeedModifier : speed * GameManager.current.HuntingWalkSpeedModifier;
         }
     }
 
@@ -206,13 +167,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         if (playerCameraAnimator != null) playerCameraAnimator.Play("Idle", 0);
     }
 
-    private Material GetSharedRenderTextureMaterial()
-    {
-        if (sharedRenderTextureMaterial != null) return sharedRenderTextureMaterial;
-        else if (RenderTexture != null) sharedRenderTextureMaterial = RenderTexture.sharedMaterial;
-        return sharedRenderTextureMaterial;
-    }
-
     public void CandleEnterPlayerInRange(InteractableCandle candle)
     {
         if (!candlesInRangeOfPlayer.Contains(candle)) candlesInRangeOfPlayer.Add(candle);
@@ -296,7 +250,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     void Start()
     {
         DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, 0);
-        ResetPSXMat();
+        PSXRenderer.ResetMat();
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -306,13 +260,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
         if (SaveSystem.NotepadLoadType == GameLoadType.Existing) notepadObject.LoadData();
         else notepadObject.LoadRandomNote();
-    }
-
-    public void ResetPSXMat()
-    {
-        PSX_AlternateTransistion = 0;
-        PSX_InterferenceAmount = 0;
-        PSX_FadeToWhite = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -391,8 +338,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 // We are grounded, so recalculate move direction based on axes
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                //float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
-                //float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
 
                 float curSpeedX = playerNotBusy ? AppliedSpeed * Input.GetAxis("Vertical") : 0;
                 float curSpeedY = playerNotBusy ? AppliedSpeed * Input.GetAxis("Horizontal") : 0;
@@ -721,7 +666,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 //Move momentoSlot To center
                 positionValue += Time.deltaTime;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-                PSX_FadeToWhite = smoothedPositionValue;
+                PSXRenderer.FadeToWhite = smoothedPositionValue;
                 await Task.Yield();
             }
 
@@ -737,7 +682,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 //Move momentoSlot To center
                 positionValue += Time.deltaTime * 0.5f;
                 smoothedPositionValue = Mathf.SmoothStep(1, 0, positionValue);
-                PSX_FadeToWhite = smoothedPositionValue;
+                PSXRenderer.FadeToWhite = smoothedPositionValue;
                 await Task.Yield();
             }
 
@@ -751,7 +696,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             {
                 positionValue += Time.deltaTime;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-                PSX_AlternateTransistion = smoothedPositionValue;
+                PSXRenderer.AlternateTransistion = smoothedPositionValue;
                 await Task.Yield();
             }
 

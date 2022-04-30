@@ -23,7 +23,7 @@ public class FinalCutsceneAnimationHandler : MonoBehaviour
         
         if (setPlayerScreenBrightness) 
         {
-            if(GameManager.current.playerController.PSX_FadeToWhite != playerScreenBrightness) GameManager.current.playerController.PSX_FadeToWhite = playerScreenBrightness;
+            if(GameManager.current.playerController.PSXRenderer.FadeToWhite != playerScreenBrightness) GameManager.current.playerController.PSXRenderer.FadeToWhite = playerScreenBrightness;
         }
     }
 

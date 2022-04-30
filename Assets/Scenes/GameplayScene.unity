@@ -5291,6 +5291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1815808234}
+  - component: {fileID: 1815808235}
   m_Layer: 0
   m_Name: PSX Renderer
   m_TagString: Untagged
@@ -5314,6 +5315,19 @@ Transform:
   m_Father: {fileID: 963194228}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1815808235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815808233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d8d410d5dd6fa43a00c3e5e0a3042c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RenderTexture: {fileID: 474945542}
 --- !u!1 &1822478684
 GameObject:
   m_ObjectHideFlags: 0
@@ -6720,6 +6734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ab84f1555e7a2439f16dc7d19193af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PSXRenderer: {fileID: 1815808235}
   cutsceneMode: 0
   enableVariableWalkSpeed: 0
   enableMouseAcceleration: 0
@@ -6763,7 +6778,6 @@ MonoBehaviour:
   isJumping: 0
   isCrouching: 0
   isInNotepad: 0
-  pSXMaterial: {fileID: 2100000, guid: 6529b400c9d32b649b34322a8bd5e1e4, type: 2}
   playerCameraAnimator: {fileID: 1435179079}
 --- !u!65 &2067456600
 BoxCollider:
