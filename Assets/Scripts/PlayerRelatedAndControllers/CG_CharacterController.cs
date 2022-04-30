@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
     public PSXRendererHandler PSXRenderer;
+    public CG_UIHandler UIHandler;
 
     public bool cutsceneMode;
     public bool enableVariableWalkSpeed;
@@ -25,7 +26,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public Text[] DialogueBoxes;
 
     public Image DialogueBoxBackground;
-    private bool dialoguePresent;
     private float dialogueBoxValue = 0;
 
     private Vector2 velocity;
@@ -63,15 +63,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public GameObject EntityGameObject => gameObject;
 
     public GameObject playerPencil;
-    public Image playerCrosshair;
     public Text momentoText;
-
-    public Sprite crosshairNormal;
-    public Sprite crosshairInteract;
-
-    public Text interactionPrompt;
-    public Image saveGameSymbolPrompt;
-    public Image levelChangeSymbolPrompt;
 
     public Animator NotepadAnimator;
 
@@ -115,7 +107,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     [SerializeField]
     [ReadOnlyField]
     private bool canUncrouch = true;
-
 
     [SerializeField]
     [ReadOnlyField]
@@ -182,8 +173,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         interactingNote = note;
         bool isInteractingWithNote = interactingNote != null;
 
-        playerCrosshair.enabled = !isInteractingWithNote;
-        interactionPrompt.enabled = !isInteractingWithNote;
+        UIHandler.CrosshairVisibilty = !isInteractingWithNote;
+        UIHandler.InteractionPromptVisiblity = !isInteractingWithNote;
     }
 
     private void Interact()
@@ -206,45 +197,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private void OnLevelChange()
     {
-        ShowLevelPrompt();
+        UIHandler.ShowLevelPrompt();
     }
 
     private void OnSaveGame()
     {
-        ShowSavePrompt();
-    }
 
-    private async Task FadeText(MaskableGraphic graphic, bool fadeIn, float timeSeconds = 1f)
-    {
-        float currentTime = 0f;
-        while (currentTime < timeSeconds)
-        {
-            float alpha = fadeIn ? Mathf.Lerp(0f, 1f, currentTime / timeSeconds) : Mathf.Lerp(1f, 0f, currentTime / timeSeconds);
-            graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, alpha);
-            currentTime += Time.deltaTime;
-            await Task.Yield();
-        }
-
-        graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, fadeIn ? 1f : 0f);
-    }
-
-
-    private async void ShowLevelPrompt()
-    {
-        if (levelChangeSymbolPrompt != null)
-        {
-            await FadeText(levelChangeSymbolPrompt, true);
-            await FadeText(levelChangeSymbolPrompt, false);
-        }
-    }
-
-    private async void ShowSavePrompt()
-    {
-        if (saveGameSymbolPrompt != null)
-        {
-            await FadeText(saveGameSymbolPrompt, true, 1.5f);
-            await FadeText(saveGameSymbolPrompt, false);
-        }
+        UIHandler.ShowSavePrompt();
     }
 
     void Start()
@@ -364,8 +323,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                         heldMouse.ThrowAtTarget(target, 10f, playerCamera.transform.forward);
                         heldMouse = null;
                     }
-                    //Rigidbody newProjectile = Instantiate(testProjectilePrefab, playerCamera.transform.position + playerCamera.transform.TransformDirection(Vector3.forward), Quaternion.identity);
-                    //if (GetLookedAtPoint(out Vector3 target)) newProjectile.LaunchAtTarget(target, 10f);
                 }
 
             }
@@ -430,7 +387,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         Cursor.visible = false;
         NotepadAnimator.Play(canMove ? "Dequip" : "Equip");
         playerPencil.SetActive(!canMove);
-        playerCrosshair.enabled = canMove;
+        UIHandler.CrosshairVisibilty = canMove;
         if (!activate)
         {
             SaveSystem.NotepadLoadType = GameLoadType.Existing;
@@ -479,13 +436,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                     currentInteractableGameObject = lookedAtObject.collider.gameObject;
                     currentInteractable = currentInteractableGameObject.GetComponent<InteractableObject>();
 
-                    interactionPrompt.text = currentInteractable.IsInteractable ? currentInteractable.ObjectName : "";
-                    if (currentInteractable.IsInteractable) playerCrosshair.sprite = crosshairInteract;
+                    UIHandler.InteractionText = currentInteractable.IsInteractable ? currentInteractable.ObjectName : "";
+                    if (currentInteractable.IsInteractable) UIHandler.CurrentCrosshairType = CrosshairType.Interacting;
                 }
-                else if (currentInteractable.IsInteractable != (playerCrosshair.sprite == crosshairInteract))
+                else if (currentInteractable.IsInteractable != (UIHandler.CurrentCrosshairType == CrosshairType.Interacting))
                 {
                     //This makes it so that the interact crosshair updates if the interactable state changes while being looked at
-                    playerCrosshair.sprite = currentInteractable.IsInteractable ? crosshairInteract : crosshairNormal;
+                    UIHandler.CurrentCrosshairType = currentInteractable.IsInteractable ? CrosshairType.Interacting : CrosshairType.Default;
                 }
             }
             else
@@ -496,8 +453,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 {
                     currentInteractableGameObject = null;
                     currentInteractable = null;
-                    interactionPrompt.text = "";
-                    playerCrosshair.sprite = crosshairNormal;
+                    UIHandler.InteractionText = string.Empty;
+                    UIHandler.CurrentCrosshairType = CrosshairType.Default;
                 }
             }
         }
@@ -566,20 +523,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public void OnEntityKilled()
     {
         SetPlayerIsBeingKilled(true);
-        //notBeingKilled = false;
-        ////Uncrouch, un look at note, put away notepad
-        //if (IsCrouching && canUncrouch) ToggleCrouching();
-        //if (interactingNote != null) interactingNote.PutDownItem();
-        //if (isInNotepad) ActivateNotepad(false);
-
         LookTowardsTVMan();
     }
 
     private void SetPlayerIsBeingKilled(bool beingKilled)
     {
         notBeingKilled = !beingKilled;
-        ShowCrosshair(!beingKilled);
-        //Uncrouch, un look at note, put away notepad
+        UIHandler.CrosshairVisibilty = !beingKilled;
         CancelAllActions();
 
     }
@@ -591,15 +541,10 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         if (isInNotepad) ActivateNotepad(false);
     }
 
-    public void ShowCrosshair(bool show)
-    {
-        playerCrosshair.enabled = show;
-    }
-
     public void EnableCutsceneMode(bool cutsceneMode)
     {
         this.cutsceneMode = cutsceneMode;
-        ShowCrosshair(!cutsceneMode);
+        UIHandler.CrosshairVisibilty = !cutsceneMode;
         CancelAllActions();
     }
 
@@ -607,8 +552,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         NotepadPickedUp = playerData.NotepadPickedUp;
     }
-
-
 
     private async void LookTowardsTVMan()
     {
@@ -702,7 +645,5 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
 
         }
-
-        //transform.rotation = newPlayerRotation;
     }
 }

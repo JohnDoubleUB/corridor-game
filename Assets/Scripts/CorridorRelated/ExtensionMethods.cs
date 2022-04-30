@@ -1,10 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class ExtensionMethods
 {
+    public static async Task FadeMaskableGraphic(this MaskableGraphic graphic, bool fadeIn, float timeSeconds = 1f)
+    {
+        float currentTime = 0f;
+        while (currentTime < timeSeconds)
+        {
+            float alpha = fadeIn ? Mathf.Lerp(0f, 1f, currentTime / timeSeconds) : Mathf.Lerp(1f, 0f, currentTime / timeSeconds);
+            graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, alpha);
+            currentTime += Time.deltaTime;
+            await Task.Yield();
+        }
+
+        graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, fadeIn ? 1f : 0f);
+    }
+
 
     public static float Remap(this float value, float from1, float to1, float from2, float to2)
     {
