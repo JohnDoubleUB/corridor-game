@@ -9,6 +9,46 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 {
+    [SerializeField]
+    private MeshRenderer RenderTexture;
+    private Material sharedRenderTextureMaterial;
+
+    public float PSX_FadeToWhite
+    {
+        get
+        {
+            return GetSharedRenderTextureMaterial().GetFloat("_FadeToWhite");
+        }
+        set
+        {
+            GetSharedRenderTextureMaterial().SetFloat("_FadeToWhite", value);
+        }
+    }
+
+    public float PSX_AlternateTransistion
+    {
+        get
+        {
+            return GetSharedRenderTextureMaterial().GetFloat("_TransitionToAlternate");
+        }
+        set
+        {
+            GetSharedRenderTextureMaterial().SetFloat("_TransitionToAlternate", value);
+        }
+    }
+
+    public float PSX_InterferenceAmount
+    {
+        get
+        {
+            return GetSharedRenderTextureMaterial().GetFloat("_InterferenceAmount");
+        }
+        set
+        {
+            GetSharedRenderTextureMaterial().SetFloat("_InterferenceAmount", value);
+        }
+    }
+
     public bool cutsceneMode;
     public bool enableVariableWalkSpeed;
     public bool enableMouseAcceleration;
@@ -25,7 +65,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public Image DialogueBoxBackground;
     private bool dialoguePresent;
     private float dialogueBoxValue = 0;
-    
+
     private Vector2 velocity;
     public Vector2 acceleration;
 
@@ -102,7 +142,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private int pencilLayerMask;
 
-
     private List<InteractableCandle> candlesInRangeOfPlayer = new List<InteractableCandle>();
     private float defaultColliderHeight;
     private float defaultMovementSpeed;
@@ -133,13 +172,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     [ReadOnlyField]
     private bool isInNotepad;
 
-    public Material pSXMaterial;
     public Animator playerCameraAnimator;
 
 
-    private float DistanceFromTVMan 
+    private float DistanceFromTVMan
     {
-        get 
+        get
         {
             Vector3 currentTVManLocation = GameManager.current.tvMan.transform.position;
             currentTVManLocation.y = transform.position.y;
@@ -166,9 +204,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         CorridorChangeManager.OnLevelChange += OnLevelChange;
         CorridorChangeManager.OnSaveGame += OnSaveGame;
         if (playerCameraAnimator != null) playerCameraAnimator.Play("Idle", 0);
+    }
 
-        pSXMaterial.SetFloat("_TransitionToAlternate", 0);
-        pSXMaterial.SetFloat("_FadeToWhite", 0);
+    private Material GetSharedRenderTextureMaterial()
+    {
+        if (sharedRenderTextureMaterial != null) return sharedRenderTextureMaterial;
+        else if (RenderTexture != null) sharedRenderTextureMaterial = RenderTexture.sharedMaterial;
+        return sharedRenderTextureMaterial;
     }
 
     public void CandleEnterPlayerInRange(InteractableCandle candle)
@@ -213,7 +255,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         ShowLevelPrompt();
     }
 
-    private void OnSaveGame() 
+    private void OnSaveGame()
     {
         ShowSavePrompt();
     }
@@ -235,7 +277,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private async void ShowLevelPrompt()
     {
-        if (levelChangeSymbolPrompt != null) 
+        if (levelChangeSymbolPrompt != null)
         {
             await FadeText(levelChangeSymbolPrompt, true);
             await FadeText(levelChangeSymbolPrompt, false);
@@ -254,8 +296,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     void Start()
     {
         DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, 0);
-        pSXMaterial.SetFloat("_TransitionToAlternate", 0);
-        pSXMaterial.SetFloat("_FadeToWhite", 0);
+        ResetPSXMat();
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -265,6 +306,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
         if (SaveSystem.NotepadLoadType == GameLoadType.Existing) notepadObject.LoadData();
         else notepadObject.LoadRandomNote();
+    }
+
+    public void ResetPSXMat()
+    {
+        PSX_AlternateTransistion = 0;
+        PSX_InterferenceAmount = 0;
+        PSX_FadeToWhite = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -277,9 +325,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         if (other.gameObject.tag == "HideUnderable") canUncrouch = true;
     }
 
-    private void UpdateHuntedWalkSpeedModifier() 
+    private void UpdateHuntedWalkSpeedModifier()
     {
-        if (isBeingHunted) 
+        if (isBeingHunted)
         {
             float currentDistanceFromTVMan = DistanceFromTVMan;
             float dangerZone = GameManager.current.PlayerHuntedDangerZone;
@@ -296,17 +344,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                     //Check how close
                 }
             }
-            else 
+            else
             {
                 GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 100), 1f);
             }
             //Force tvman to kill player if he can't move, (to prevent softlock)
             if (_appliedSpeed < 0.02f) GameManager.current.tvMan.ForceKillTarget();
-            
-            //else if(GameManager.current.HuntingWalkSpeedModifier != 1f)
-            //{
-            //    GameManager.current.HuntingWalkSpeedModifier = Mathf.Min(GameManager.current.HuntingWalkSpeedModifier + (Time.deltaTime / 10), 1f);
-            //}
         }
         else if (GameManager.current.HuntingWalkSpeedModifier != 1f)
         {
@@ -314,7 +357,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
-    private void UpdateDialogueBoxBackground() 
+    private void UpdateDialogueBoxBackground()
     {
         if (DialogueBoxes.Any(x => !string.IsNullOrEmpty(x.text)) && dialogueBoxValue != 1f)
         {
@@ -382,7 +425,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             }
 
-            if(cutsceneMode) moveDirection = Vector3.zero;
+            if (cutsceneMode) moveDirection = Vector3.zero;
             // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
             // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
             // as an acceleration (ms^-2)
@@ -400,7 +443,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
                 velocity = enableMouseAcceleration ? new Vector2(
                     Mathf.MoveTowards(velocity.x, wantedVelocity.x, acceleration.x * Time.deltaTime),
-                    Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime)) 
+                    Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime))
                     : wantedVelocity;
 
                 rotation += velocity * Time.deltaTime;
@@ -428,7 +471,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
-    private Vector2 GetInput() 
+    private Vector2 GetInput()
     {
         return new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
     }
@@ -564,12 +607,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     {
         isBeingHunted = beingHunted;
 
-        if (beingHunted) 
+        if (beingHunted)
         {
             huntedTimer = 0f;
             print("Player is being hunted");
         }
-        else 
+        else
         {
             print("Player is no longer being hunted");
         }
@@ -596,19 +639,19 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     }
 
-    public void CancelAllActions() 
+    public void CancelAllActions()
     {
         if (IsCrouching && canUncrouch) ToggleCrouching();
         if (interactingNote != null) interactingNote.PutDownItem();
         if (isInNotepad) ActivateNotepad(false);
     }
 
-    public void ShowCrosshair(bool show) 
+    public void ShowCrosshair(bool show)
     {
         playerCrosshair.enabled = show;
     }
 
-    public void EnableCutsceneMode(bool cutsceneMode) 
+    public void EnableCutsceneMode(bool cutsceneMode)
     {
         this.cutsceneMode = cutsceneMode;
         ShowCrosshair(!cutsceneMode);
@@ -678,7 +721,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 //Move momentoSlot To center
                 positionValue += Time.deltaTime;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-                pSXMaterial.SetFloat("_FadeToWhite", smoothedPositionValue);
+                PSX_FadeToWhite = smoothedPositionValue;
                 await Task.Yield();
             }
 
@@ -694,7 +737,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 //Move momentoSlot To center
                 positionValue += Time.deltaTime * 0.5f;
                 smoothedPositionValue = Mathf.SmoothStep(1, 0, positionValue);
-                pSXMaterial.SetFloat("_FadeToWhite", smoothedPositionValue);
+                PSX_FadeToWhite = smoothedPositionValue;
                 await Task.Yield();
             }
 
@@ -708,7 +751,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             {
                 positionValue += Time.deltaTime;
                 smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
-                pSXMaterial.SetFloat("_TransitionToAlternate", smoothedPositionValue);
+                PSX_AlternateTransistion = smoothedPositionValue;
                 await Task.Yield();
             }
 

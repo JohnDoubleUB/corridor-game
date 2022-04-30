@@ -130,35 +130,19 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale != 1) Time.timeScale = 1;
     }
 
-    private void Start()
+    public void ResetPSXMat()
     {
-        ResetPSXMat();
-    }
-
-    public void ResetPSXMat() 
-    {
-        playerController.pSXMaterial.SetFloat("_InterferenceAmount", 0);
-        playerController.pSXMaterial.SetFloat("_TransitionToAlternate", 0);
-        playerController.pSXMaterial.SetFloat("_FadeToWhite", 0);
+        playerController.ResetPSXMat();
     }
 
     private void Update()
     {
-
-        //if (Input.GetButtonDown("Cancel"))
-        //{
-        //    print("End game!");
-        //    Application.Quit();
-        //}
         if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))
         {
             TogglePauseGame();
         }
 
         TVManEffectUpdate();
-
-
-
         UpdateWalkSpeedModifier();
     }
 
@@ -197,7 +181,7 @@ public class GameManager : MonoBehaviour
             MaterialManager.current.alternateBlend = forcedEffectValue;
             AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, forcedEffectValue);
             cameraShaker.shakeEffect = forcedEffectValue;
-            playerController.pSXMaterial.SetFloat("_InterferenceAmount", forcedEffectValue);
+            playerController.PSX_InterferenceAmount = forcedEffectValue;
         }
         else if (tvMan != null && player != null && MaterialManager.current != null && AudioManager.current != null) 
         {
@@ -209,19 +193,15 @@ public class GameManager : MonoBehaviour
                 MaterialManager.current.alternateBlend = remappedValue;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, remappedValue);
                 cameraShaker.shakeEffect = remappedValue;
-                playerController.pSXMaterial.SetFloat("_InterferenceAmount", remappedValue);
-
+                playerController.PSX_InterferenceAmount = remappedValue;
             }
             else if (MaterialManager.current.alternateBlend != 0 || AudioManager.current.FirstPersonPlayerSource.isPlaying) 
             {
                 MaterialManager.current.alternateBlend = 0;
                 AudioManager.current.SetCreakingVolumeAt(AudioSourceType.FirstPersonPlayer, 0f);
                 cameraShaker.shakeEffect = 0f;
-                playerController.pSXMaterial.SetFloat("_InterferenceAmount", 0);
+                playerController.PSX_InterferenceAmount = 0;
             }
-            //MaterialManager.current.alternateBlend = Mathf.Lerp(0f, 1f, )
-
-
         }
     }
 
