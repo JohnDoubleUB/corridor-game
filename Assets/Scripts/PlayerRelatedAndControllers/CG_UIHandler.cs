@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,8 @@ public class CG_UIHandler : MonoBehaviour
     private Image levelChangeSymbolPrompt;
     [SerializeField]
     private Text interactionPrompt;
+    [SerializeField]
+    private Text momentoText;
 
     [SerializeField]
     private Image playerCrosshair;
@@ -20,6 +23,20 @@ public class CG_UIHandler : MonoBehaviour
     [SerializeField]
     private Sprite crosshairInteract;
 
+    [SerializeField]
+    public Text[] dialogueBoxes;
+    [SerializeField]
+    private Image DialogueBoxBackground;
+
+    private float dialogueBoxValue = 0;
+
+    public Text[] DialogueBoxes 
+    {
+        get 
+        {
+            return dialogueBoxes;
+        }
+    }
 
     public bool InteractionPromptVisiblity 
     {
@@ -54,6 +71,18 @@ public class CG_UIHandler : MonoBehaviour
         set 
         {
             if (interactionPrompt != null) interactionPrompt.text = value;
+        }
+    }
+
+    public bool MomentoTextVisibility 
+    {
+        get 
+        {
+            return momentoText != null && momentoText.enabled; 
+        }
+        set 
+        {
+            if (momentoText != null) momentoText.enabled = value;
         }
     }
 
@@ -109,6 +138,30 @@ public class CG_UIHandler : MonoBehaviour
         {
             playerCrosshair.sprite = crosshairInteract;
         }
+    }
+
+    private void UpdateDialogueBoxBackground()
+    {
+        if (dialogueBoxes.Any(x => !string.IsNullOrEmpty(x.text)) && dialogueBoxValue != 1f)
+        {
+            dialogueBoxValue = Mathf.Min(dialogueBoxValue + Time.deltaTime, 1f);
+            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
+        }
+        else if (dialogueBoxValue != 0f)
+        {
+            dialogueBoxValue = Mathf.Max(dialogueBoxValue - Time.deltaTime, 0f);
+            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
+        }
+    }
+
+    private void Update()
+    {
+        UpdateDialogueBoxBackground();
+    }
+
+    private void Start()
+    {
+        DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, 0);
     }
 }
 

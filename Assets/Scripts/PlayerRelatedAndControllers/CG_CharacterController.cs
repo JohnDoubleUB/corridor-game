@@ -23,14 +23,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
-    public Text[] DialogueBoxes;
-
-    public Image DialogueBoxBackground;
-    private float dialogueBoxValue = 0;
 
     private Vector2 velocity;
     public Vector2 acceleration;
-
 
     private float huntedTimer;
 
@@ -63,7 +58,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public GameObject EntityGameObject => gameObject;
 
     public GameObject playerPencil;
-    public Text momentoText;
 
     public Animator NotepadAnimator;
 
@@ -208,7 +202,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     void Start()
     {
-        DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, 0);
         PSXRenderer.ResetMat();
         characterController = GetComponent<CharacterController>();
         rotation.y = transform.eulerAngles.y;
@@ -263,23 +256,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
-    private void UpdateDialogueBoxBackground()
-    {
-        if (DialogueBoxes.Any(x => !string.IsNullOrEmpty(x.text)) && dialogueBoxValue != 1f)
-        {
-            dialogueBoxValue = Mathf.Min(dialogueBoxValue + Time.deltaTime, 1f);
-            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
-        }
-        else if (dialogueBoxValue != 0f)
-        {
-            dialogueBoxValue = Mathf.Max(dialogueBoxValue - Time.deltaTime, 0f);
-            DialogueBoxBackground.color = new Color(DialogueBoxBackground.color.r, DialogueBoxBackground.color.g, DialogueBoxBackground.color.b, dialogueBoxValue);
-        }
-    }
-
     void Update()
     {
-        UpdateDialogueBoxBackground();
         UpdateHuntedWalkSpeedModifier();
 
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
@@ -287,7 +265,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         if (notBeingKilled && !GameManager.current.IsPaused)
         {
             UpdateInteractable();
-            if (InventoryManager.current.HasMomento != momentoText.enabled) momentoText.enabled = InventoryManager.current.HasMomento;
+            if (InventoryManager.current.HasMomento != UIHandler.MomentoTextVisibility) UIHandler.MomentoTextVisibility = InventoryManager.current.HasMomento;
             if (!canMove) UpdateDraw();
 
             bool playerNotBusy = canMove && interactingNote == null;
@@ -349,8 +327,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                     : wantedVelocity;
 
                 rotation += velocity * Time.deltaTime;
-                //rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
-                //rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
                 rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
                 playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
                 transform.eulerAngles = new Vector2(0, rotation.y);

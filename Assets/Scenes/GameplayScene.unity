@@ -5706,9 +5706,14 @@ MonoBehaviour:
   saveGameSymbolPrompt: {fileID: 1537445158}
   levelChangeSymbolPrompt: {fileID: 1591383463}
   interactionPrompt: {fileID: 1237934485}
+  momentoText: {fileID: 158990646}
   playerCrosshair: {fileID: 718060826}
   crosshairNormal: {fileID: 21300000, guid: ab9616cf53ccfb54aab75f350c713d0c, type: 3}
   crosshairInteract: {fileID: 21300000, guid: d2fda874ffa02974db3cde63df27f24e, type: 3}
+  dialogueBoxes:
+  - {fileID: 170585520}
+  - {fileID: 1336907175}
+  DialogueBoxBackground: {fileID: 212216690}
 --- !u!1 &1946021334
 GameObject:
   m_ObjectHideFlags: 0
@@ -6773,10 +6778,6 @@ MonoBehaviour:
   _appliedSpeed: 0
   HeadBobber: {fileID: 963194229}
   playerPencil: {fileID: 653852192}
-  playerCrosshair: {fileID: 718060826}
-  momentoText: {fileID: 158990646}
-  crosshairNormal: {fileID: 21300000, guid: ab9616cf53ccfb54aab75f350c713d0c, type: 3}
-  crosshairInteract: {fileID: 21300000, guid: d2fda874ffa02974db3cde63df27f24e, type: 3}
   NotepadAnimator: {fileID: 235820161}
   footStepPosition: {fileID: 230452652}
   playerLandSounds:

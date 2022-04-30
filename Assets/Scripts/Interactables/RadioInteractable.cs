@@ -105,8 +105,8 @@ public class RadioInteractable : InteractableObject
                 {
                     DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
                     DialogueAudioSources[i].Play();
-                    GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
-                    GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
+                    GameManager.current.playerController.UIHandler.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                    GameManager.current.playerController.UIHandler.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
                 }
             }
             else
@@ -115,8 +115,8 @@ public class RadioInteractable : InteractableObject
 
                 for (int i = 0; i < DialogueAudioSources.Length && i < currentPart.Dialogues.Count; i++)
                 {
-                    GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
-                    GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
+                    GameManager.current.playerController.UIHandler.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                    GameManager.current.playerController.UIHandler.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
                 }
 
             }
@@ -153,8 +153,8 @@ public class RadioInteractable : InteractableObject
                 DialogueAudioSources[i].clip = currentPart.Dialogues[i].DialogueAudio;
                 DialogueAudioSources[i].Play();
 
-                GameManager.current.playerController.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
-                GameManager.current.playerController.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
+                GameManager.current.playerController.UIHandler.DialogueBoxes[i].text = currentPart.Dialogues[i].Subtitles;
+                GameManager.current.playerController.UIHandler.DialogueBoxes[i].color = DialogueToPlay.SubtitleColours[currentPart.Dialogues[i].SubtitleColour];
             }
         }
         else 
@@ -178,7 +178,7 @@ public class RadioInteractable : InteractableObject
 
     private void ClearPlayerSubtitles() 
     {
-        foreach (Text tb in GameManager.current.playerController.DialogueBoxes) tb.text = "";
+        foreach (Text tb in GameManager.current.playerController.UIHandler.DialogueBoxes) tb.text = "";
     }
 
     private void OnDestroy()
