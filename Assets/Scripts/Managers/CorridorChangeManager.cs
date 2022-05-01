@@ -234,7 +234,14 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void RemoveMouseFromList(MouseEntity mouse)
     {
-        if (mice.Contains(mouse)) mice.Remove(mouse);
+        try
+        {
+            if (mice.Contains(mouse)) mice.Remove(mouse);
+        }
+        catch (System.Exception e) 
+        {
+            Debug.LogError("An error Occured while removing a mouse, the error was caught, Stack Trace: " + e.StackTrace + ", Message: " + e.Message);
+        }
     }
 
     private LevelData_Loaded GetCurrentLevelData
@@ -369,13 +376,20 @@ public class CorridorChangeManager : MonoBehaviour
     private void HandleMouseSpawningForSection(CorridorSection section, CorridorLayoutHandler layoutGameObj, LevelData_Loaded currentLoadedLevelData)
     {
         //Check if mouse can be spawned here
-        if (layoutGameObj.AllowMouseSpawns && mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+        try
         {
-            MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
-            mouseCount++;
-            tempMouse.name = "Mouse -" + mouseCount;
-            section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
-            mice.Add(tempMouse);
+            if (layoutGameObj.AllowMouseSpawns && mice.Count < currentLoadedLevelData.MaxMouseCount && !section.EntityTracker.TVManIsInArea)
+            {
+                MouseEntity tempMouse = Instantiate(MousePrefab, section.GetMouseSpawnLocations(1)[0], Quaternion.identity, null);
+                mouseCount++;
+                tempMouse.name = "Mouse -" + mouseCount;
+                section.EntityTracker.AddDistinctEntities(tempMouse.gameObject);
+                mice.Add(tempMouse);
+            }
+        }
+        catch (System.Exception e) 
+        {
+            Debug.LogError("An error occured while spawning mouse for layout: " + layoutGameObj.LayoutID + ", the error was caught, Stack Trace: " + e.StackTrace + ", Message: " + e.Message);
         }
     }
 
