@@ -348,7 +348,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             }
 
 
-            if (!cutsceneMode && Input.GetButtonDown("Crouch") && ((isCrouching && canUncrouch) || !isCrouching)) 
+            if (!isInNotepad && !cutsceneMode && Input.GetButtonDown("Crouch") && ((isCrouching && canUncrouch) || !isCrouching)) 
             {
                 ToggleCrouching();
             }
@@ -373,7 +373,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         characterController.height = isCrouching ? crouchingColliderHeight : standingColliderHeight;
         characterController.center = isCrouching ? new Vector3(0f, -crouchingColliderHeight * 1.5f, 0f) : Vector3.zero;
         speed = isCrouching ? crouchingMovementSpeed : standingMovementSpeed;
-        //CameraOffsetTransform.localPosition = isCrouching ? crouchingCameraTransformOffset : standingCameraTransformOffset;
     }
 
     private Vector2 GetInput()
