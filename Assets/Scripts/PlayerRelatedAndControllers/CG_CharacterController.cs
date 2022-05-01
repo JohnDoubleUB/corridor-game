@@ -16,6 +16,9 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public bool enableVariableWalkSpeed;
     public bool enableMouseAcceleration;
 
+    public float crouchingAmount = 4f;
+    public AnimationCurve cameraCrouchingAnimationCurve;
+
     public float speed = 7.5f;
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
@@ -90,10 +93,15 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     private int pencilLayerMask;
 
     private List<InteractableCandle> candlesInRangeOfPlayer = new List<InteractableCandle>();
-    private float defaultColliderHeight;
-    private float defaultMovementSpeed;
+    private float standingColliderHeight;
+    private float crouchingColliderHeight;
+    private float standingMovementSpeed;
+    private float crouchingMovementSpeed;
 
-    private Vector3 defaultCameraTransformOffset;
+    private float cameraCrouchingAmount;
+
+    private Vector3 standingCameraTransformOffset;
+    private Vector3 crouchingCameraTransformOffset;
 
     public MouseEntity heldMouse;
     public Transform mouseHand;
@@ -207,9 +215,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         rotation.y = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;// ? does this fix the initial mouse visibility issue?
-        defaultColliderHeight = characterController.height;
-        defaultMovementSpeed = speed;
-        defaultCameraTransformOffset = CameraOffsetTransform.localPosition;
+        standingColliderHeight = characterController.height;
+        crouchingColliderHeight = standingColliderHeight / crouchingAmount;
+        standingMovementSpeed = speed;
+        crouchingMovementSpeed = standingMovementSpeed / crouchingAmount;
+        standingCameraTransformOffset = CameraOffsetTransform.localPosition;
+        crouchingCameraTransformOffset = new Vector3(standingCameraTransformOffset.x, standingCameraTransformOffset.y - crouchingAmount * 0.3f, standingCameraTransformOffset.z);
         if (SaveSystem.NotepadLoadType == GameLoadType.Existing) notepadObject.LoadData();
         else notepadObject.LoadRandomNote();
     }
@@ -315,7 +326,6 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             characterController.Move(moveDirection * Time.deltaTime);
 
 
-
             // Player and Camera rotation
             if (playerNotBusy/*canMove*/)
             {
@@ -338,15 +348,32 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             }
 
 
-
-
-            bool crouchButtonHeld = Input.GetButton("Crouch");
-
-            if (!cutsceneMode && crouchButtonHeld != isCrouching && ((isCrouching && canUncrouch) || !isCrouching))
+            if (!cutsceneMode && Input.GetButtonDown("Crouch") && ((isCrouching && canUncrouch) || !isCrouching)) 
             {
                 ToggleCrouching();
             }
+
+            if (isCrouching && cameraCrouchingAmount != 1 || !isCrouching && cameraCrouchingAmount != 0) 
+            {
+                cameraCrouchingAmount = cameraCrouchingAnimationCurve.Evaluate(Mathf.Clamp(isCrouching ? cameraCrouchingAmount + Time.deltaTime * crouchingAmount : cameraCrouchingAmount - Time.deltaTime * crouchingAmount, 0, 1));
+                CameraOffsetTransform.localPosition = Vector3.Lerp(standingCameraTransformOffset, crouchingCameraTransformOffset, cameraCrouchingAmount);
+            }
         }
+    }
+
+
+    private void ToggleCrouching()
+    {
+        //Crouching amount
+        isCrouching = !isCrouching;
+
+        //Tell headbobber we are crouching
+        HeadBobber.SetCrouching(isCrouching);
+        
+        characterController.height = isCrouching ? crouchingColliderHeight : standingColliderHeight;
+        characterController.center = isCrouching ? new Vector3(0f, -crouchingColliderHeight * 1.5f, 0f) : Vector3.zero;
+        speed = isCrouching ? crouchingMovementSpeed : standingMovementSpeed;
+        //CameraOffsetTransform.localPosition = isCrouching ? crouchingCameraTransformOffset : standingCameraTransformOffset;
     }
 
     private Vector2 GetInput()
@@ -384,16 +411,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         return resultBool;
     }
 
-    private void ToggleCrouching()
-    {
-        float downAmount = 4f;
-        isCrouching = !isCrouching;
-        HeadBobber.SetCrouching(isCrouching);
-        characterController.height = isCrouching ? defaultColliderHeight / downAmount : defaultColliderHeight;
-        speed = isCrouching ? defaultMovementSpeed / downAmount : defaultMovementSpeed;
-        if (!isCrouching) transform.position += Vector3.up * (defaultColliderHeight / (downAmount / 2));
-        CameraOffsetTransform.localPosition = isCrouching ? new Vector3(defaultCameraTransformOffset.x, defaultCameraTransformOffset.y / downAmount, defaultCameraTransformOffset.z) : defaultCameraTransformOffset;
-    }
+
 
     private void UpdateInteractable(bool showDebug = false)
     {

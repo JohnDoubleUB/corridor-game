@@ -22,8 +22,10 @@ public class CG_HeadBob : MonoBehaviour
 
     private bool stepTaken = false;
 
-    private float defaultBobbingSpeed;
-    private float defaultBobbingAmount;
+    private float standingBobbingSpeed;
+    private float crouchingBobbingSpeed;
+    private float standingBobbingAmount;
+    private float crouchingBobbingAmount;
 
     private Vector3 originalPosition;
 
@@ -38,8 +40,10 @@ public class CG_HeadBob : MonoBehaviour
     private void Awake()
     {
         originalPosition = transform.localPosition;
-        defaultBobbingSpeed = walkingBobbingSpeed;
-        defaultBobbingAmount = bobbingAmount;
+        standingBobbingSpeed = walkingBobbingSpeed;
+        standingBobbingAmount = bobbingAmount;
+        crouchingBobbingAmount = standingBobbingAmount / 1.3f;
+        crouchingBobbingSpeed = standingBobbingSpeed / 2;
     }
 
 
@@ -95,7 +99,7 @@ public class CG_HeadBob : MonoBehaviour
 
     public void SetCrouching(bool enableCrouching)
     {
-        bobbingAmount = enableCrouching ? defaultBobbingAmount / 1.3f : defaultBobbingAmount;
-        walkingBobbingSpeed = enableCrouching ? defaultBobbingSpeed / 2 : defaultBobbingSpeed;
+        bobbingAmount = enableCrouching ? crouchingBobbingAmount : standingBobbingAmount;
+        walkingBobbingSpeed = enableCrouching ? crouchingBobbingSpeed : standingBobbingSpeed;
     }
 }

@@ -6627,7 +6627,7 @@ CharacterController:
   m_Radius: 0.18
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.1
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &2067456597
@@ -6763,6 +6763,31 @@ MonoBehaviour:
   cutsceneMode: 0
   enableVariableWalkSpeed: 0
   enableMouseAcceleration: 0
+  crouchingAmount: 4
+  cameraCrouchingAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   speed: 3
   jumpSpeed: 5
   gravity: 20
@@ -6770,10 +6795,6 @@ MonoBehaviour:
   lookSpeed: 40
   lookXLimit: 70
   NotepadPickedUp: 0
-  DialogueBoxes:
-  - {fileID: 170585520}
-  - {fileID: 1336907175}
-  DialogueBoxBackground: {fileID: 212216690}
   acceleration: {x: 400, y: 400}
   _appliedSpeed: 0
   HeadBobber: {fileID: 963194229}
@@ -6809,7 +6830,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.3739554, y: 0.5373225, z: 0.37399855}
-  m_Center: {x: -0, y: 0.4, z: 0}
+  m_Center: {x: -0, y: -0.03, z: 0}
 --- !u!1 &2080288299
 GameObject:
   m_ObjectHideFlags: 0
