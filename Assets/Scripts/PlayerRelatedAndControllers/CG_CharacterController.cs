@@ -355,7 +355,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
             if (isCrouching && cameraCrouchingAmount != 1 || !isCrouching && cameraCrouchingAmount != 0) 
             {
-                cameraCrouchingAmount = cameraCrouchingAnimationCurve.Evaluate(Mathf.Clamp(isCrouching ? cameraCrouchingAmount + Time.deltaTime * crouchingAmount : cameraCrouchingAmount - Time.deltaTime * crouchingAmount, 0, 1));
+                //TODO: Curve was being used here but there were issues with this not working as intended needs more investigation if we want to use this to make the animation smoother
+                cameraCrouchingAmount = Mathf.Clamp(isCrouching ? cameraCrouchingAmount + Time.deltaTime * crouchingAmount : cameraCrouchingAmount - Time.deltaTime * crouchingAmount, 0, 1);
                 CameraOffsetTransform.localPosition = Vector3.Lerp(standingCameraTransformOffset, crouchingCameraTransformOffset, cameraCrouchingAmount);
             }
         }
