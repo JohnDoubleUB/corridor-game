@@ -11,6 +11,7 @@ public class AudioTrackEvent : CustomCorridorEventScript
     {
         if (OnlyTriggerOnce ? TriggerEvent() : !triggeredThisInstance)
         {
+            Debug.Log("AudioTrackEvent Activated - Tag: " + EventTag);
             AudioManager.current.SetTracksActive(TrackState.EnabledTracks);
             triggeredThisInstance = true;
         }

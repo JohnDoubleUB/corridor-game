@@ -58,6 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4672820137492066230}
   - component: {fileID: 651714396525714406}
+  - component: {fileID: 4114463466271771951}
   m_Layer: 0
   m_Name: Level15_-1
   m_TagString: Untagged
@@ -109,6 +110,21 @@ MonoBehaviour:
   DecalClueObjects: []
   Pickups: []
   SpawnableItems: []
+--- !u!114 &4114463466271771951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5485944105679308168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d58f00df2c3f943916d46c6db86892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventTag: Track_GotPastTheLastPuzzle2
+  TrackState: {fileID: 11400000, guid: da4cf4385ecb53f43ad0bbeae5a430a6, type: 2}
+  OnlyTriggerOnce: 0
 --- !u!1 &7112722862230640701
 GameObject:
   m_ObjectHideFlags: 0

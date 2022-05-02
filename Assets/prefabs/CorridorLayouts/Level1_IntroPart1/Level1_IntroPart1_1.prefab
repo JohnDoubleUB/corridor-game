@@ -116,7 +116,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1703408278476006396}
   - component: {fileID: 1703408278476006397}
-  - component: {fileID: 5680799675091529346}
   m_Layer: 0
   m_Name: Level1_IntroPart1_1
   m_TagString: Untagged
@@ -171,21 +170,6 @@ MonoBehaviour:
   DecalClueObjects: []
   Pickups: []
   SpawnableItems: []
---- !u!114 &5680799675091529346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703408278476006394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22d58f00df2c3f943916d46c6db86892, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EventTag: Track_SeesNotepad
-  TrackState: {fileID: 11400000, guid: 556a7c8b1dd83ba46a9f51b0521122de, type: 2}
-  OnlyTriggerOnce: 1
 --- !u!1 &1765502707615446104
 GameObject:
   m_ObjectHideFlags: 0

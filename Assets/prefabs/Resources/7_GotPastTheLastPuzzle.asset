@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eaafad63f43a534b89f84749d8a2962, type: 3}
+  m_Name: 7_GotPastTheLastPuzzle
+  m_EditorClassIdentifier: 
+  EnabledTracks:
+    Track0: 1
+    Track1: 1
+    Track2: 1
+    Track3: 1
+    Track4: 0
+    Track5: 0

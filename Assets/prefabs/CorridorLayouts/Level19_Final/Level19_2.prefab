@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 358704676972405196}
   - component: {fileID: 7065711882877679664}
+  - component: {fileID: -6946224091009356843}
   m_Layer: 0
   m_Name: Level19_2
   m_TagString: Untagged
@@ -61,6 +62,21 @@ MonoBehaviour:
   DecalClueObjects: []
   Pickups: []
   SpawnableItems: []
+--- !u!114 &-6946224091009356843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358704676972405197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d58f00df2c3f943916d46c6db86892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventTag: Track_FinalEvent
+  TrackState: {fileID: 11400000, guid: beb484a5ebe75e045acabeda4beaeebb, type: 2}
+  OnlyTriggerOnce: 0
 --- !u!1 &1925404296608423020
 GameObject:
   m_ObjectHideFlags: 0

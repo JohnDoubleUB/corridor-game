@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 211999534616425761}
   - component: {fileID: 211999534616425760}
+  - component: {fileID: 949385113923977043}
   m_Layer: 0
-  m_Name: Level9_Puzzle3Part3_2_Back
+  m_Name: Level9_Puzzle3Part3_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,6 +124,22 @@ MonoBehaviour:
     IsGeneratedNumberKey: 0
     PuzzlePieceId: 0
     LevelNumber: 0
+  SpawnableItems: []
+--- !u!114 &949385113923977043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211999534616425767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d58f00df2c3f943916d46c6db86892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventTag: Track_HasSecondKey
+  TrackState: {fileID: 11400000, guid: 1d77f9f46f7d10b4093057325c19149c, type: 2}
+  OnlyTriggerOnce: 1
 --- !u!1 &211999535122307993
 GameObject:
   m_ObjectHideFlags: 0
