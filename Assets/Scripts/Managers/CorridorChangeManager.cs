@@ -151,6 +151,9 @@ public class CorridorChangeManager : MonoBehaviour
             if (savedData.TVManData != null) GameManager.current.tvMan.LoadTVManData(savedData.TVManData);
 
             if (savedData.EventTags != null && savedData.EventTags.Any()) eventTags = savedData.EventTags.ToList();
+
+            //Load Active audio tracks
+            AudioManager.current.SetTracksActive(savedData.EnabledTracks);
         }
         else
         {
@@ -184,19 +187,27 @@ public class CorridorChangeManager : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), eventTags, CurrentLevel));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, 
+            new PlayerData(GameManager.current.playerController), 
+            new InventoryData(InventoryManager.current), 
+            new TVManData(GameManager.current.tvMan), 
+            AudioManager.current.ActiveTracks, 
+            eventTags, 
+            CurrentLevel)
+            );
+
         OnSaveGame?.Invoke();
     }
 
     public void SaveGameOnLevel(int level)
     {
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), eventTags, level));
+        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), AudioManager.current.ActiveTracks, eventTags, level));
         OnSaveGame?.Invoke();
     }
 
     public void CreateNewSave() 
     {
-        SaveSystem.SaveGame(new SaveData(Levels.Select(x => (LevelData_Loaded)x).ToList(), null, null, null, new List<string>(), 1));
+        SaveSystem.SaveGame(new SaveData(Levels.Select(x => (LevelData_Loaded)x).ToList(), null, null, null, AudioManager.current.ActiveTracks, new List<string>(), 1));
     }
 
     public async void SaveAfterTimePassedDelta(float timeSeconds = 1f) 

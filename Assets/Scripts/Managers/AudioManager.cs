@@ -20,9 +20,17 @@ public class AudioManager : MonoBehaviour
 
     public List<MusicMixerTrack> AmbientTracks;
 
-    public int enabledTracksAtStart = 4;
-
     public float pitchVariation = 0.2f;
+
+    public MusicTrackState DefaultMusicTrackState;
+
+    public EnabledMusicTracks ActiveTracks 
+    {
+        get 
+        {
+            return new EnabledMusicTracks(AmbientTracks.Select(x => x.trackOn).ToArray());
+        }
+    }
 
     private bool initialUpdate = true;
 
@@ -37,10 +45,7 @@ public class AudioManager : MonoBehaviour
 
         AmbientTracks = AmbientTrackMixer.FindMatchingGroups("Master").Where(x => x.name != "Master").Select(x => new MusicMixerTrack(x.name, AmbientTrackMixer)).ToList();
 
-        for (int i = 0; i < AmbientTracks.Count; i++)
-        {
-            if (i >= enabledTracksAtStart) AmbientTracks[i].trackOn = false;
-        }
+        if (DefaultMusicTrackState != null) SetTracksActive(DefaultMusicTrackState.EnabledTracks);
     }
 
     public void SetCreakingVolumeAt(AudioSourceType audioSource, float volume)
@@ -71,6 +76,19 @@ public class AudioManager : MonoBehaviour
     public MusicMixerTrack GetAmbientTrackByIndex(int index) 
     {
         return AmbientTracks[index];
+    }
+
+    public void SetTracksActive(EnabledMusicTracks enabledTracks) 
+    {
+        SetTracksActive(enabledTracks.TrackList);
+    }
+
+    public void SetTracksActive(bool[] enabledTracks) 
+    {
+        for (int i = 0; i < enabledTracks.Length && i < AmbientTracks.Count; i++) 
+        {
+            AmbientTracks[i].trackOn = enabledTracks[i];
+        }
     }
 
     private void Update()

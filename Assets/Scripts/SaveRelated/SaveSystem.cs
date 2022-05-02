@@ -119,6 +119,7 @@ public class SaveData
     public PlayerData PlayerData;
     public InventoryData InventoryData;
     public TVManData TVManData;
+    public EnabledMusicTracks EnabledTracks;
     public string[] EventTags;
     public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels)
     {
@@ -136,10 +137,11 @@ public class SaveData
         this.CurrentLevel = CurrentLevel;
     }
 
-    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, TVManData TVManData, IEnumerable<string> EventTags, int CurrentLevel = 0) : this(LoadedLevels, PlayerData, InventoryData, CurrentLevel)
+    public SaveData(IEnumerable<LevelData_Loaded> LoadedLevels, PlayerData PlayerData, InventoryData InventoryData, TVManData TVManData, EnabledMusicTracks EnabledTracks, IEnumerable<string> EventTags, int CurrentLevel = 0) : this(LoadedLevels, PlayerData, InventoryData, CurrentLevel)
     {
         this.TVManData = TVManData;
         this.EventTags = EventTags.ToArray();
+        this.EnabledTracks = EnabledTracks;
     }
 }
 

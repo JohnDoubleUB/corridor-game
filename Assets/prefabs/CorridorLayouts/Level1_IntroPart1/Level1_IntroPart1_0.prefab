@@ -323,6 +323,7 @@ MonoBehaviour:
   PuzzleElements: []
   DecalClueObjects: []
   Pickups: []
+  SpawnableItems: []
 --- !u!65 &207659580402005603
 BoxCollider:
   m_ObjectHideFlags: 0
