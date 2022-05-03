@@ -315,11 +315,11 @@ MonoBehaviour:
   passwordLength: 4
   PossiblePasswords:
   - password: MYLO
-    levelChange: 20
+    levelChange: 21
   - password: JOHN
-    levelChange: 20
+    levelChange: 22
   - password: JOAN
-    levelChange: 20
+    levelChange: 23
   DisplayText: {fileID: 3084903606357157753}
   passwordGapCharacter: 95
   buttonPressSound: {fileID: 8300000, guid: e653ef01418a9c44f9a43fc007ccfa6a, type: 3}
