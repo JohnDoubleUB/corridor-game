@@ -80,6 +80,7 @@ Transform:
   - {fileID: 6692377058111296258}
   - {fileID: 1896656937}
   - {fileID: 9068485350122438454}
+  - {fileID: 4447659310972637327}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -265,6 +266,53 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0, z: 0.5}
   m_Size: {x: 1.5, y: 1.5, z: 1}
   m_FadeFactor: 1
+--- !u!1 &8393818887812872895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4447659310972637327}
+  - component: {fileID: 3655766121138109953}
+  m_Layer: 0
+  m_Name: EasterEggNumberPad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4447659310972637327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8393818887812872895}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 1.169, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 9126897659517574731}
+  m_Father: {fileID: 1372210568181471216}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3655766121138109953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8393818887812872895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8803e244a427d419bf527bf1b96e21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FakeParent: {fileID: 0}
+  flipXZIfCorridorFlip: 0
+  rotateY180IfCorridorFlip: 1
 --- !u!1001 &1346570900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -489,6 +537,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8078242671351508322, guid: 8b96529df88a3df44b3e5718b20e8c03,
     type: 3}
   m_PrefabInstance: {fileID: 3241386197754166880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6081696149185374774
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4447659310972637327}
+    m_Modifications:
+    - target: {fileID: 3084903606452597884, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_Name
+      value: EasterEggNumberpad_Interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.089
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.914
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0000029653306
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180.00002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 934a47eb8933f674db44093640bbf82d, type: 3}
+--- !u!4 &9126897659517574731 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3084903606452597885, guid: 934a47eb8933f674db44093640bbf82d,
+    type: 3}
+  m_PrefabInstance: {fileID: 6081696149185374774}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8502516514064083265
 PrefabInstance:

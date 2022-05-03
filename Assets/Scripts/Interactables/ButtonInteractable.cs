@@ -12,7 +12,8 @@ public class ButtonInteractable : InteractableObject
 
     public Text buttonText;
 
-    public NumberpadController numberPadController;
+    public ButtonRecievingPuzzleController buttonRecievingPuzzleController;
+
     public MeshRenderer buttonMesh;
 
     private bool buttonPushed;
@@ -40,7 +41,8 @@ public class ButtonInteractable : InteractableObject
         if (!buttonPushed) 
         {
             buttonPushed = true;
-            if (numberPadController != null) numberPadController.InputCharacter(ObjectName.ToCharArray()[0], transform);
+            if (buttonRecievingPuzzleController != null) buttonRecievingPuzzleController.InputCharacter(ObjectName.ToCharArray()[0], transform);
+            //if (buttonReciever != null) buttonReciever.InputCharacter(ObjectName.ToCharArray()[0], transform);
             //timer = 0;
         }
     }

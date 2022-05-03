@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumberpadController : PuzzleElementController
+public class NumberpadController : ButtonRecievingPuzzleController
 {
     public string password = "12345";
     public Text DisplayText;
@@ -123,7 +123,7 @@ public class NumberpadController : PuzzleElementController
         if (DisplayText != null) DisplayText.text = blankPassword;
     }
 
-    public void InputCharacter(char character, Transform inputLocation = null)
+    public override void InputCharacter(char character, Transform inputLocation = null)
     {
         if (!checkingPassword && !PuzzleSolved)
         {
