@@ -563,7 +563,7 @@ public class TVManController : MonoBehaviour
         IHuntableEntity playerEntity = GameManager.current.playerController;
         Vector3 lookPosition = new Vector3(playerEntity.EntityTransform.position.x, transform.position.y, playerEntity.EntityTransform.position.z);
         float distanceFromPlayer = Vector3.Distance(transform.position, lookPosition);
-        //bool playerCanBePercievedAtShortDistance = (CurrentBehaviour == TVManBehaviour.Alerted || CurrentBehaviour == TVManBehaviour.PursuingTarget && CurrentTargetType == EntityType.Player) && distanceFromPlayer <= 1f;
+        //bool playerCanBePercievedAtShortDistance = (CurrentBehaviour == TVManBehaviour.Alerted || CurrentBehaviour == TVManBehaviour.PursuingTarget && CurrentTargetType == EntityType.Player) && distanceFromPlayer <= 1f; //This is the old line
         bool playerCanBePercievedAtShortDistance = (CurrentBehaviour == TVManBehaviour.Alerted || CurrentBehaviour == TVManBehaviour.Investigating || CurrentBehaviour == TVManBehaviour.PursuingTarget && CurrentTargetType == EntityType.Player) && distanceFromPlayer <= 1.1f; //Slight change
         return playerCanBePercievedAtShortDistance || playerEntity.IsIlluminated && IsWithinSightAngle(lookPosition) && distanceFromPlayer < sightRange && LineOfSightCheck(playerEntity);
     }
