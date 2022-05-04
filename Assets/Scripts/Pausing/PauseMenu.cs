@@ -36,6 +36,11 @@ public class PauseMenu : MonoBehaviour
         RevertToLastCheckpoint();
     }
 
+    public void GenerateTestingLog() 
+    {
+        GameManager.current.ConsoleLogger.GenerateTestingLog();
+    }
+
     public void SaveGame_Debug() 
     {
         PauseGame();

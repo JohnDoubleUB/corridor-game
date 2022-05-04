@@ -477,6 +477,8 @@ public class CorridorChangeManager : MonoBehaviour
 
         if (currentSection.sectionType != SectionType.Middle)
         {
+            GameManager.current.ConsoleLogger.LogSectionChange(currentSection.CurrentLayout.LayoutID, true);
+
             sectionsTraveledOnCurrentLevel++;
 
             //Check if we are in a trigger section or not
@@ -540,6 +542,10 @@ public class CorridorChangeManager : MonoBehaviour
             ApplyCorridorEffects(currentSection, currentSectionDoors, currentLevelDataTemp);
             //after delay notify objects that piece has moved
             OnSectionMoveAfterDelay(2);
+        }
+        else 
+        {
+            GameManager.current.ConsoleLogger.LogSectionChange(currentSection.CurrentLayout.LayoutID);
         }
     }
 
@@ -678,6 +684,8 @@ public class CorridorChangeManager : MonoBehaviour
             if (!cachedCurrentLevelData.CheckPointOnDelay) SaveGame();
             else SaveAfterTimePassedDelta(2);
         }
+
+        GameManager.current.ConsoleLogger.LogSectionChange("Level changed to: " + newLevel, false);
     }
 
     public void CheckPlayerDistance()

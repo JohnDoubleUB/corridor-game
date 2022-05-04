@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager current;
+    public DebugStuff.ConsoleToGUI ConsoleLogger;
     public GameObject player;
     public CG_CharacterController playerController;
     public CG_HeadBob headBobber;

@@ -11,10 +11,14 @@ public static class SaveSystem
     public static GameLoadType NotepadLoadType = GameLoadType.Existing;
     public static readonly string SaveExtension = "bathosave";
     public static readonly string NoteSaveExtension = "bathonotes";
+    public static readonly string DebugSaveExtension = "bathodebug";
     public static string SaveName = "PlayerData";
+    public static string DebugSaveName = "DebugData";
 
     private static string SaveLocation => Application.persistentDataPath + "/" + SaveName + "." + SaveExtension;
     private static string NotepadSaveLocation => Application.persistentDataPath + "/" + SaveName + "." + NoteSaveExtension;
+
+    private static string DebugSaveLocation => Application.persistentDataPath + "/" + DebugSaveName + "." + DebugSaveExtension;
 
     public static void SaveGame(SaveData saveData)
     {
@@ -57,8 +61,6 @@ public static class SaveSystem
         }
     }
 
-
-
     public static void SaveNotepad(NotepadData notepadData)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -98,6 +100,47 @@ public static class SaveSystem
             notepadData = null;
             return false;
         }
+    }
+
+    public static void SaveTestingData(CG_TestingData testingData)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = DebugSaveLocation;
+
+        //File.Exists ensures that we replace the file if it already exists and don't encounter errors
+        FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
+
+
+        formatter.Serialize(stream, testingData.Serialize());
+        stream.Close();
+
+        Debug.Log("Debug File saved: " + path);
+    }
+
+    public static bool TryLoadTestingData(out CG_TestingData testingData)
+    {
+        string path = DebugSaveLocation;
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            testingData = ((CG_TestingData_Serialized)formatter.Deserialize(stream)).Deserialize();
+            stream.Close();
+            return true;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            testingData = null;
+            return false;
+        }
+    }
+
+    public static CG_TestingData LoadTestingData()
+    {
+        TryLoadTestingData(out CG_TestingData testingData);
+        return testingData;
     }
 
 }
