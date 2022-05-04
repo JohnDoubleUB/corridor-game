@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level2_IntroPart2
   m_EditorClassIdentifier: 
   LevelNumber: 2
+  IsCheckpoint: 0
+  CheckpointOnDelay: 0
   CorridorLayouts:
   - {fileID: 8711203481728457502, guid: 9ba35fc8cacbc1242af57acfc353d75e, type: 3}
   - {fileID: 395630380, guid: c050c1d4a619bff43869b8cc804b81cf, type: 3}
@@ -28,7 +30,7 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutNumber: []
   CompleteLevelOnTraveledSectionCount:
   - Name: Change to next level
-    SectionCount: 4
+    SectionCount: 5
     LevelChange: 3
     RandomSectionRange: 2
   CompleteLevelTriggerOnLayoutPuzzleComplete: []

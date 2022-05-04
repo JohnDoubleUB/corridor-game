@@ -18,6 +18,7 @@ public class RadioInteractable : InteractableObject
     public bool radioOn;
 
     public DialogueWithSubtitles DialogueToPlay;
+    public AudioClip AudioToPlay;
     public int ConversationNumber = 0;
     public int DialoguePartNo = 0;
 
@@ -43,6 +44,9 @@ public class RadioInteractable : InteractableObject
 
 
         DialoguePartNo = 0;
+
+        if(AudioToPlay != null) DialogueAudioSources[0].clip = AudioToPlay;
+
         if (DialogueToPlay) 
         {
             conversationToPlay = DialogueToPlay.Conversations.FirstOrDefault(x => x.ConversationNo == ConversationNumber);
@@ -68,12 +72,26 @@ public class RadioInteractable : InteractableObject
 
         if (radioOn)
         {
-            if(!PlayDialogue() && playRadioDroneSound) RadioSpeaker.Play();
+            if (AudioToPlay != null)
+            {
+                DialogueAudioSources[0].Play();
+            }
+            else
+            {
+                if (!PlayDialogue() && playRadioDroneSound) RadioSpeaker.Play();
+            }
         }
         else 
         {
-            if(playRadioDroneSound) RadioSpeaker.Stop();
-            PauseDialogue();
+            if (AudioToPlay != null)
+            {
+                DialogueAudioSources[0].Pause();
+            }
+            else
+            {
+                if (playRadioDroneSound) RadioSpeaker.Stop();
+                PauseDialogue();
+            }
         }
     }
 

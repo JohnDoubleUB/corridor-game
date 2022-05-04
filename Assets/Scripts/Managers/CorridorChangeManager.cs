@@ -98,6 +98,11 @@ public class CorridorChangeManager : MonoBehaviour
         //UpdateLevel();
     }
 
+    public void RegisterHuntableEntity(IHuntableEntity huntableEntity) 
+    {
+        mice.Add(huntableEntity);
+    }
+
     private void Start()
     {
         playerTransform = GameManager.current.player.transform;

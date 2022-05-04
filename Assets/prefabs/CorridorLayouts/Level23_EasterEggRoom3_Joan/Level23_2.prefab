@@ -51,7 +51,7 @@ MonoBehaviour:
   layoutNumber: 2
   corridorMeshType: 0
   corridorMatType: 3
-  corridorDoorMatType: 0
+  corridorDoorMatType: 1
   StretchAmount: 2
   ForceStretch: 0
   ForceWave: 0
