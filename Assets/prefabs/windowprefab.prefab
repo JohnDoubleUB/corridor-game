@@ -645,7 +645,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChanceToTrigger: 0.5
   WindowAnimator: {fileID: 8136881842687830017}
-  LightningAudio: {fileID: 8300000, guid: 2916c5c4e9bd14f479c18e37d67d5da0, type: 3}
+  LightningAudio: {fileID: 8300000, guid: 49a8657deb78bbb418a4d5cd617140d6, type: 3}
+  currentlyPlaying: 0
 --- !u!65 &5354702552376857246
 BoxCollider:
   m_ObjectHideFlags: 0
