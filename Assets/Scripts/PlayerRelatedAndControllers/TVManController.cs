@@ -344,7 +344,12 @@ public class TVManController : MonoBehaviour
                 if (targetIsMouse) PercieveNewTargets();
 
                 //Move towared target, if target is reached we want to do something
-                if (MoveTowardPosition(currentTarget.TargetPosition))
+                if (currentTarget.IsTargetNull)
+                {
+                    CurrentBehaviour = TVManBehaviour.Alerted;
+                    canSeeTarget = false;
+                }
+                else if (MoveTowardPosition(currentTarget.TargetPosition))
                 {
                     canSeeTarget = true;
                     if (targetIsMouse && killTimer < timeToKill)
@@ -471,6 +476,12 @@ public class TVManController : MonoBehaviour
             return true;
         }
 
+        //else
+        //{
+        //    HuntedTarget = null;
+        //}
+
+
         return false;
     }
 
@@ -503,7 +514,7 @@ public class TVManController : MonoBehaviour
         float smoothedPositionValue;
         float pickupSpeedMultiplier = 0.2f;
 
-        while (positionValue < 1f)
+        while (positionValue < 1f && entity != null && entity.EntityTransform != null)
         {
             positionValue += Time.deltaTime * pickupSpeedMultiplier;
             smoothedPositionValue = Mathf.SmoothStep(0, 1, positionValue);
@@ -712,7 +723,15 @@ public class MovementTarget
     private Vector3 targetPosition;
     private bool isTransform;
 
-    public Vector3 TargetPosition { get { return isTransform ? targetTransform.position : targetPosition; } }
+    private Vector3 lastPosition;
+    public bool IsTargetNull { get { return isTransform && targetTransform == null; } }
+    public Vector3 TargetPosition 
+    { 
+        get 
+        { 
+            return isTransform && targetTransform.position != null ? targetTransform.position : targetPosition; 
+        } 
+    }
     public Transform TargetTransform { get { return targetTransform; } }
     public bool IsTransform { get { return isTransform; } }
     public MovementTarget(Transform TargetTrasform)

@@ -86,7 +86,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
             bool needsToMove = isFleeing || value == MouseBehaviour.Wander;
             bool isBeingHeld = value == MouseBehaviour.Held;
 
-            if (agent.isActiveAndEnabled) agent.isStopped = !needsToMove;
+            if (agent != null && agent.isActiveAndEnabled) agent.isStopped = !needsToMove;
 
             if (value == MouseBehaviour.BeingKilled)
             {
@@ -554,7 +554,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         float speedMult = defaultSpeed * multiplier;
         float angularSpeedMult = defaultAngularSpeed * multiplier;
         float accelerationMult = defaultAcceleration * multiplier;
-
+        if (agent == null) return;
         if (agent.speed != speedMult) agent.speed = speedMult;
         if (agent.angularSpeed != angularSpeedMult) agent.angularSpeed = angularSpeedMult;
         if (accelerationMult != defaultAcceleration) agent.acceleration = accelerationMult;
