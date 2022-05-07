@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour
     private bool lastCursorVisibility;
 
     public GameObject pauseMenuObject;
+    public Animator pauseUIAnimator;
 
     private void Awake()
     {
@@ -171,7 +172,11 @@ public class GameManager : MonoBehaviour
             Cursor.visible = lastCursorVisibility;
         }
 
+        //pauseMenuCanvas.
+        //pauseMenuCanvas.enabled = isPaused;
         pauseMenuObject.SetActive(isPaused);
+        if (isPaused && pauseUIAnimator != null) pauseUIAnimator.Play("Opening", 0);
+        
         //Trigger on pause event here?
     }
 
