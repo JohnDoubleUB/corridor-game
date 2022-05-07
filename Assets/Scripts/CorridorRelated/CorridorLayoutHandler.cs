@@ -271,8 +271,11 @@ public class CorridorLayoutHandler : MonoBehaviour
 
     public void OnEnterCustomScripts() 
     {
-        foreach (CustomCorridorEventScript cEvents in customEvents) 
-            cEvents.TriggerCustomEvent();
+        if (customEvents.Any())
+        {
+            foreach (CustomCorridorEventScript cEvents in customEvents)
+                cEvents.TriggerCustomEvent();
+        }
     }
 }
 

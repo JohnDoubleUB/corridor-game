@@ -43,7 +43,13 @@ public class CorridorChangeManager : MonoBehaviour
     public CorridorLayoutHandler[] levelCorridorBackwardPrefabs;
     public CorridorLayoutHandler[] levelCorridorForwardPrefabs;
 
-    CorridorSection[] GetOrderedSections { get { return corridorSections.OrderByDescending(x => x.transform.position.x).ToArray(); } }
+    CorridorSection[] GetOrderedSections 
+    { 
+        get 
+        { 
+            return corridorSections != null && corridorSections.Any() ? corridorSections.OrderByDescending(x => x.transform.position.x).ToArray() : new CorridorSection[0]; 
+        } 
+    }
 
     private Transform playerTransform;
 
@@ -432,35 +438,28 @@ public class CorridorChangeManager : MonoBehaviour
             RenumberSections();
             UpdateLevel();
         }
-
-        //if (Input.GetKeyDown(KeyCode.V)) 
-        //{
-        //    print("saving game!");
-        //    SaveGame();
-        //    print("game saved!");
-        //}
     }
 
     private void LateUpdate()
     {
-        if (playerReachedMaxDistance)
-        {
-            Vector3 playerCurrentPos = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
-            Vector3 playerIntialPos = new Vector3(playerInitialPosition.x, 0, playerInitialPosition.z);
+        //if (playerReachedMaxDistance)
+        //{
+        //    Vector3 playerCurrentPos = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
+        //    Vector3 playerIntialPos = new Vector3(playerInitialPosition.x, 0, playerInitialPosition.z);
 
-            corridorGameParent.transform.position = playerIntialPos - playerCurrentPos;
-            foreach (Transform child in corridorGameChildren) child.SetParent(null);
-            corridorGameParent.transform.position = Vector3.zero;
-            foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
+        //    corridorGameParent.transform.position = playerIntialPos - playerCurrentPos;
+        //    foreach (Transform child in corridorGameChildren) child.SetParent(null);
+        //    corridorGameParent.transform.position = Vector3.zero;
+        //    foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
 
-            playerReachedMaxDistance = false;
-        }
+        //    playerReachedMaxDistance = false;
+        //}
     }
 
     public void OnPlayerEnter(CorridorSection currentSection)
     {
         //Check if player has traveled too far from world origin
-        CheckPlayerDistance();
+        //CheckPlayerDistance();
 
         currentSection.CurrentLayout.OnEnterCustomScripts(); //Run any custom scripts
 
@@ -478,7 +477,6 @@ public class CorridorChangeManager : MonoBehaviour
         if (currentSection.sectionType != SectionType.Middle)
         {
             GameManager.current.ConsoleLogger.LogSectionChange(currentSection.CurrentLayout.LayoutID, true);
-
             sectionsTraveledOnCurrentLevel++;
 
             //Check if we are in a trigger section or not

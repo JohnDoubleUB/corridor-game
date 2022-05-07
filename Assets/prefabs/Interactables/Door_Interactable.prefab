@@ -489,7 +489,7 @@ MonoBehaviour:
   navMeshObstacle: {fileID: 2049405308}
   doorCollisions:
   - {fileID: 4794502269050283136}
-  - {fileID: 0}
+  - {fileID: 4350535605522874099}
   doorMeshes:
   - {fileID: 5928317442152465879}
   - {fileID: 6383146642553761109}
