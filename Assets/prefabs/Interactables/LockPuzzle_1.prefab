@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 3220749852667323518}
   - component: {fileID: 1953926138467167195}
   - component: {fileID: 4393624488252497681}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: LockLoopMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 7838384096831135278}
   - component: {fileID: 5414311397286750948}
   - component: {fileID: 876623766}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: LockMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,6 +516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectName: Bronze Plate Padlock
   IsInteractable: 1
+  puzzleObjectToNotifyOnInteract: {fileID: 0}
   NotifierId: 0
   AssociatedTransform: {fileID: 0}
   puzzleToNotify: {fileID: 0}
