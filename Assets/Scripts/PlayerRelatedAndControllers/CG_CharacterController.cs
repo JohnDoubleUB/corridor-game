@@ -272,6 +272,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         UpdateHuntedWalkSpeedModifier();
 
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
+        UIHandler.PlayerVisibilityPrompt = !isIlluminated;
 
         if (notBeingKilled && !GameManager.current.IsPaused)
         {

@@ -15,6 +15,8 @@ public class CG_UIHandler : MonoBehaviour
     private Text interactionPrompt;
     [SerializeField]
     private Text momentoText;
+    [SerializeField]
+    private Text visibilityPrompt;
 
     [SerializeField]
     private Image playerCrosshair;
@@ -59,6 +61,19 @@ public class CG_UIHandler : MonoBehaviour
         set
         {
             if (playerCrosshair != null) playerCrosshair.enabled = value;
+            if (visibilityPrompt != null) visibilityPrompt.enabled = value;
+        }
+    }
+
+    public bool PlayerVisibilityPrompt 
+    {
+        get
+        {
+            return visibilityPrompt != null && visibilityPrompt.enabled && !string.IsNullOrEmpty(visibilityPrompt.text);
+        }
+        set
+        {
+            if (visibilityPrompt != null) visibilityPrompt.text = value ? "HIDDEN" : string.Empty;
         }
     }
 
