@@ -69,7 +69,13 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     public Transform CameraOffsetTransform;
 
-    CharacterController characterController;
+    private CharacterController characterController;
+    
+    public Vector3 GetCapsuleColliderCenter 
+    {
+        get { return characterController.transform.position + characterController.center; }
+    }
+    
     [HideInInspector]
     public Vector3 moveDirection = Vector3.zero;
     Vector2 rotation = Vector2.zero;

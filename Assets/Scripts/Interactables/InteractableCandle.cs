@@ -94,7 +94,8 @@ public class InteractableCandle : InteractableObject
         RaycastHit hitResult = new RaycastHit();
         lineOfSightToPlayer = toggleLight && 
             inRangeOfPlayer &&
-            Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out hitResult, lineOfSightMask) &&
+            //Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.transform.position, out hitResult, lineOfSightMask) &&
+            Physics.Linecast(CandleParticle.transform.position, GameManager.current.playerController.GetCapsuleColliderCenter, out hitResult, lineOfSightMask) &&
             hitResult.collider.tag == "Player";
 
         if (lineOfSightToPlayer) Debug.DrawLine(CandleParticle.transform.position, hitResult.point, Color.red);
