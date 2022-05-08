@@ -146,6 +146,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
+    public Vector3 EntityColliderPosition => GetCapsuleColliderCenter;
+
     private void OnEnable()
     {
         controls.Enable();

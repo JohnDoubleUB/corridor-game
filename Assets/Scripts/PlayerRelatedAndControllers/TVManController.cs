@@ -587,7 +587,7 @@ public class TVManController : MonoBehaviour
     //returns true if it spots the object
     private bool LineOfSightCheck(IHuntableEntity entity, out RaycastHit hitResult)
     {
-        return Physics.Linecast(TvManEyeLevel.position, entity.EntityTransform.position, out hitResult, lineOfSightMask)
+        return Physics.Linecast(TvManEyeLevel.position, entity.EntityColliderPosition, out hitResult, lineOfSightMask)
             && hitResult.collider.gameObject.CompareTag(entity.EntityGameObject.tag)
             && hitResult.collider.gameObject == entity.EntityGameObject;
     }

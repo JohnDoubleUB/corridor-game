@@ -111,6 +111,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     public EntityType EntityType => EntityType.Mouse;
     public Transform EntityTransform { get { return this != null ? transform : null; } }
+    public Vector3 EntityColliderPosition => this != null ? transform.position : Vector3.zero;
     public GameObject EntityGameObject { get { return gameObject; } }
 
 
