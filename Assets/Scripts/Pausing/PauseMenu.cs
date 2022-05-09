@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,5 +65,39 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.current.EnableMouseAcceleration = !GameManager.current.EnableMouseAcceleration;
         if (ToggleMouseAcceleration_DebugButtonImage != null) ToggleMouseAcceleration_DebugButtonImage.color = GameManager.current.EnableMouseAcceleration ? toggleOnColour : toggleOffColour;
+    }
+
+    public void GibMeAchievementPlz_Debug() 
+    {
+        if (Steamworks.SteamClient.IsValid) 
+        {
+            Steamworks.Data.Achievement Ach = Steamworks.SteamUserStats.Achievements.FirstOrDefault(x => x.Identifier == "ACH_WIN_ONE_GAME");
+            Ach.Trigger();
+        }
+    }
+
+
+    public async void DisplayIcon(Steamworks.Data.Achievement ach) 
+    {
+        Task<Steamworks.Data.Image?> icon = ach.GetIconAsync();
+        await icon;
+
+        if (icon != null && icon.Result != null && icon.Result.HasValue) 
+        {
+
+            Steamworks.Data.Image img = icon.Result.Value;
+            Texture2D newTexture = new Texture2D((int)img.Width, (int)img.Height, TextureFormat.RGBA32, false, false);
+            newTexture.LoadRawTextureData(img.Data);
+            newTexture.Apply();
+        }
+    }
+
+    public void GetThatAchievementAwayFromMe_Debug()
+    {
+        if (Steamworks.SteamClient.IsValid)
+        {
+            Steamworks.Data.Achievement Ach = Steamworks.SteamUserStats.Achievements.FirstOrDefault(x => x.Identifier == "ACH_WIN_ONE_GAME");
+            Ach.Clear();
+        }
     }
 }

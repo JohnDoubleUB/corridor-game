@@ -13,8 +13,8 @@ public class SteamIntegration : MonoBehaviour
             print("steamworks not intiallized");
             try
             {
-                Steamworks.SteamClient.Init(1981590);
-
+                Steamworks.SteamClient.Init(480/*1981590*/); //Achievments can only be accessed once a game is published, We're using spacewar rn
+                print("Client name: " + Steamworks.SteamClient.Name);
             }
             catch (System.Exception e)
             {
