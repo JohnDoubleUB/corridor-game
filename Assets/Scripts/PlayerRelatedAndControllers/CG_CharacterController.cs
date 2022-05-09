@@ -345,7 +345,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                     Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime))
                     : wantedVelocity;
 
-                rotation += velocity * Time.deltaTime;
+                rotation += velocity;
                 rotation.x = Mathf.Clamp(rotation.x, -lookXLimit, lookXLimit);
                 playerCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0);
                 transform.eulerAngles = new Vector2(0, rotation.y);
