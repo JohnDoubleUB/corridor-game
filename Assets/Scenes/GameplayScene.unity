@@ -6858,7 +6858,7 @@ MonoBehaviour:
   jumpSpeed: 5
   gravity: 20
   playerCamera: {fileID: 963194227}
-  lookSpeed: 40
+  lookSpeed: 5
   lookXLimit: 70
   NotepadPickedUp: 0
   acceleration: {x: 400, y: 400}
