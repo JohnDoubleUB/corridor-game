@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Identifier: ACH_STAY
   NiceName: Chose To Stay
-  UnlockedImage: {fileID: 0}
-  LockedImage: {fileID: 0}
+  UnlockedImage: {fileID: 21300000, guid: d2453f817e2bc5f4d829b2d371b8eca6, type: 3}
+  LockedImage: {fileID: 21300000, guid: 066d1a936f2af8445a68a7f8bfe5f3f3, type: 3}
   Description: Chose to stay in the corridor.

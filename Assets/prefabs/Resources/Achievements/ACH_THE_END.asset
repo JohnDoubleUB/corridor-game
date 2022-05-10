@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 222e27fc576c43e44aae8fb61da4e4f3, type: 3}
-  m_Name: ACH_LEAVE
+  m_Name: ACH_THE_END
   m_EditorClassIdentifier: 
-  Identifier: ACH_LEAVE
-  NiceName: Chose To Leave
-  UnlockedImage: {fileID: 21300000, guid: 4d986ab5c0f927e49aed919485d723b9, type: 3}
-  LockedImage: {fileID: 21300000, guid: 4b4eeff89e0ed9541a82264aeb9b58d6, type: 3}
-  Description: Chose to leave the corridor.
+  Identifier: ACH_THE_END
+  NiceName: The End
+  UnlockedImage: {fileID: 21300000, guid: d252a9929b7366142a17a2c4e3688187, type: 3}
+  LockedImage: {fileID: 21300000, guid: 9c9f75426e65b9a4cbf1ae1a7119b9e9, type: 3}
+  Description: Finished the game.
