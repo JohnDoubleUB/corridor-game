@@ -351,7 +351,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 transform.eulerAngles = new Vector2(0, rotation.y);
             }
 
-            if (!cutsceneMode && Input.GetKeyDown(KeyCode.LeftShift) && NotepadPickedUp && interactingNote == null)
+            if (!cutsceneMode && Input.GetKeyDown(KeyCode.LeftShift) && !Input.GetKeyDown(KeyCode.Tab) && NotepadPickedUp && interactingNote == null)
             {
                 ActivateNotepad(canMove);
             }

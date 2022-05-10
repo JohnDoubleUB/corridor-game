@@ -1,41 +1,59 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SteamIntegration : MonoBehaviour
 {
+    public bool EnableSteamIntegration = true;
+    public uint AppId;
+    public bool UseTestAppId = true;
+
+    private static SteamIntegration current;
+
+    public static bool SteamIntegrationEnabled 
+    {
+        get 
+        {
+            return current != null ? current.EnableSteamIntegration : false;
+        }
+    }
+
     void Awake()
     {
+        if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
+        current = this;
 
-        if (!Steamworks.SteamClient.IsValid)
+
+        if (EnableSteamIntegration)
         {
-            print("steamworks not intiallized");
-            try
+            if (!Steamworks.SteamClient.IsValid)
             {
-                Steamworks.SteamClient.Init(480/*1981590*/); //Achievments can only be accessed once a game is published, We're using spacewar rn
-                print("Client name: " + Steamworks.SteamClient.Name);
+                try
+                {
+                    Steamworks.SteamClient.Init(UseTestAppId ? 480 : AppId); //Achievments can only be accessed once a game is published, We're using spacewar rn
+                    print("Client name: " + Steamworks.SteamClient.Name);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.Log(e);
+
+                }
             }
-            catch (System.Exception e)
+            else
             {
-                Debug.Log(e);
-
+                print("steamworks initialized");
             }
-        }
-        else
-        {
-            print("steamworks initialized");
-        }
 
-        if (Steamworks.SteamClient.IsValid) OnBeingValid();
-
+            if (Steamworks.SteamClient.IsValid) OnBeingValid();
+        }
     }
 
     private void OnBeingValid()
     {
         PrintYourName();
         Steamworks.SteamFriends.OnGameOverlayActivated += OnOverlayActivated;
-
     }
 
     private void PrintYourName()
@@ -65,7 +83,44 @@ public class SteamIntegration : MonoBehaviour
 
     private void SteamShutdownProcedure() 
     {
-        Steamworks.SteamFriends.OnGameOverlayActivated -= OnOverlayActivated;
-        Steamworks.SteamClient.Shutdown();
+        if (EnableSteamIntegration)
+        {
+            Steamworks.SteamFriends.OnGameOverlayActivated -= OnOverlayActivated;
+            Steamworks.SteamClient.Shutdown();
+        }
+    }
+
+
+    //Achievement Commands
+    public static void SetAchievements(params string[] Ach_ApiNames)
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiNames.Contains(ach.Identifier)), true);
+    }
+
+    public static void ClearAchievements(params string[] Ach_ApiNames)
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiNames.Contains(ach.Identifier)), false);
+    }
+
+    public static void SetAllAchievements()
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements, true);
+    }
+
+    public static void ClearAllAchievements()
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements, false);
+    }
+
+    private static void UpdateAchievements(IEnumerable<Steamworks.Data.Achievement> Achievements, bool setAchieved = true)
+    {
+        if (Achievements != null)
+        {
+            foreach (Steamworks.Data.Achievement achievement in Achievements)
+            {
+                if (setAchieved) achievement.Trigger();
+                else achievement.Clear();
+            }
+        }
     }
 }

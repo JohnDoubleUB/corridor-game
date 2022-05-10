@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,11 +66,7 @@ public class PauseMenu : MonoBehaviour
 
     public void GibMeAchievementPlz_Debug() 
     {
-        if (Steamworks.SteamClient.IsValid) 
-        {
-            Steamworks.Data.Achievement Ach = Steamworks.SteamUserStats.Achievements.FirstOrDefault(x => x.Identifier == "ACH_WIN_ONE_GAME");
-            Ach.Trigger();
-        }
+        SteamIntegration.SetAchievements("ACH_WIN_ONE_GAME");
     }
 
 
@@ -94,10 +87,6 @@ public class PauseMenu : MonoBehaviour
 
     public void GetThatAchievementAwayFromMe_Debug()
     {
-        if (Steamworks.SteamClient.IsValid)
-        {
-            Steamworks.Data.Achievement Ach = Steamworks.SteamUserStats.Achievements.FirstOrDefault(x => x.Identifier == "ACH_WIN_ONE_GAME");
-            Ach.Clear();
-        }
+        SteamIntegration.ClearAchievements("ACH_WIN_ONE_GAME");
     }
 }
