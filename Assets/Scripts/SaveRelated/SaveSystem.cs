@@ -12,13 +12,15 @@ public static class SaveSystem
     public static readonly string SaveExtension = "bathosave";
     public static readonly string NoteSaveExtension = "bathonotes";
     public static readonly string DebugSaveExtension = "bathodebug";
+    public static readonly string AchievementSaveExtension = "bathoach";
     public static string SaveName = "PlayerData";
     public static string DebugSaveName = "DebugData";
+    public static string AchievementSaveName = "Achievements";
 
     private static string SaveLocation => Application.persistentDataPath + "/" + SaveName + "." + SaveExtension;
     private static string NotepadSaveLocation => Application.persistentDataPath + "/" + SaveName + "." + NoteSaveExtension;
-
     private static string DebugSaveLocation => Application.persistentDataPath + "/" + DebugSaveName + "." + DebugSaveExtension;
+    private static string AchievementSaveLocation => Application.persistentDataPath + "/" + AchievementSaveName + "." + AchievementSaveExtension;
 
     public static void SaveGame(SaveData saveData)
     {
@@ -260,6 +262,55 @@ public struct NotepadLineData
         this.Positions = Positions.ToArray();
         this.LocalRotationEuler = LocalRotationEuler;
         this.LocalScale = LocalScale;
+    }
+}
+
+[System.Serializable]
+public struct AchievementData
+{
+    public string Identifier;
+    public bool Achieved;
+}
+
+[System.Serializable]
+public class AchievementSaveData
+{
+    public AchievementData[] AchievementData;
+
+    public AchievementSaveData(IEnumerable<string> identifiers)
+    {
+        if (identifiers != null && identifiers.Any()) AchievementData = identifiers.Select(x => new AchievementData() { Identifier = x, Achieved = false }).ToArray();
+    }
+
+    public AchievementSaveData(IEnumerable<Steamworks.Data.Achievement> achievements)
+    {
+        if (achievements != null && achievements.Any()) AchievementData = ConvertSteamAchievementsToAchievementData(achievements).ToArray();
+    }
+
+    private IEnumerable<AchievementData> ConvertSteamAchievementsToAchievementData(IEnumerable<Steamworks.Data.Achievement> achievements)
+    {
+        return achievements.Select(x => new AchievementData() { Identifier = x.Identifier, Achieved = x.State });
+    }
+
+    public void UpdateAchievementDataFromSteam(IEnumerable<Steamworks.Data.Achievement> achievements)
+    {
+        if (achievements != null && achievements.Any() && achievements.Count() > AchievementData.Length)
+        {
+            AchievementData = ConvertSteamAchievementsToAchievementData(achievements).Union(AchievementData, new AchievementDataComparer()).ToArray();
+        }
+    }
+}
+
+public class AchievementDataComparer : IEqualityComparer<AchievementData>
+{
+    public bool Equals(AchievementData x, AchievementData y)
+    {
+        return x.Identifier == y.Identifier;
+    }
+
+    public int GetHashCode(AchievementData obj)
+    {
+        return obj.Identifier.GetHashCode();
     }
 }
 

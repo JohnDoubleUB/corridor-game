@@ -12,18 +12,17 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
     public Text Description;
     public float textFadeSpeed = 4f;
 
-    //private Color defaultColor = new Color(0.9f, 0.9f, 0.9f);
     private bool isHovered;
 
     private float currentTextTransparencyValue = 0f;
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         if (Achievement != null)
         {
             if (AchievementImage != null)
             {
-                AchievementImage.sprite = Achievement.LockedImage;
+                SetUnachieved();
                 AchievementImage.color = Color.white;
             }
 
@@ -40,6 +39,16 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
             }
 
         }
+    }
+
+    public void SetAchieved()
+    {
+        AchievementImage.sprite = Achievement.UnlockedImage;
+    }
+
+    public void SetUnachieved()
+    {
+        AchievementImage.sprite = Achievement.LockedImage;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

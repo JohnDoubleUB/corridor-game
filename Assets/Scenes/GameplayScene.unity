@@ -6796,6 +6796,7 @@ GameObject:
   - component: {fileID: 1838609637}
   - component: {fileID: 1838609638}
   - component: {fileID: 1838609639}
+  - component: {fileID: 1838609640}
   m_Layer: 0
   m_Name: CorridorManager
   m_TagString: Untagged
@@ -6960,6 +6961,19 @@ MonoBehaviour:
   pitchVariation: 0.2
   DefaultMusicTrackState: {fileID: 11400000, guid: e83349a1bc84a084a94c5cbc0d4a7a54,
     type: 2}
+--- !u!114 &1838609640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838609635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e1edd4c4be6104ca7838670b2afca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AchievementButtons: []
 --- !u!1 &1896586762
 GameObject:
   m_ObjectHideFlags: 0
