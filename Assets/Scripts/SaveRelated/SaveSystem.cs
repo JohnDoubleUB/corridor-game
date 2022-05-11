@@ -23,7 +23,7 @@ public static class SaveSystem
     private static string AchievementSaveLocation => Application.persistentDataPath + "/" + AchievementSaveName + "." + AchievementSaveExtension;
 
 
-    private static void _SaveDataToFile<TSerializableObject>(TSerializableObject saveableObject, string path) 
+    private static void _SaveDataToFile<TSerializableObject>(TSerializableObject serializableObject, string path) 
     {
         BinaryFormatter formatter = new BinaryFormatter();
 
@@ -31,15 +31,32 @@ public static class SaveSystem
         FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
 
 
-        formatter.Serialize(stream, saveableObject);
+        formatter.Serialize(stream, serializableObject);
         stream.Close();
 
-        Debug.Log("File saved: " + path);
+        Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
+    }
+    private static bool _TryLoadDataFromFile<TSerializableObject>(string path, out TSerializableObject serializableObject)
+    {
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            serializableObject = (TSerializableObject)formatter.Deserialize(stream);
+            stream.Close();
+            return true;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            serializableObject = default(TSerializableObject);
+            return false;
+        }
     }
 
     public static void SaveGame(SaveData saveData)
     {
-
         _SaveDataToFile(saveData, SaveLocation);
     }
 
@@ -51,29 +68,13 @@ public static class SaveSystem
 
     public static bool TryLoadGame(out SaveData savedData)
     {
-        string path = SaveLocation;
-        if (File.Exists(path))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            savedData = (SaveData)formatter.Deserialize(stream);
-            stream.Close();
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Save file not found in " + path);
-            savedData = null;
-            return false;
-        }
+        return _TryLoadDataFromFile(SaveLocation, out savedData);
     }
 
     public static void SaveNotepad(NotepadData notepadData)
     {
 
         _SaveDataToFile(notepadData, NotepadSaveLocation);
-
     }
 
     public static NotepadData LoadNotepad()
@@ -84,22 +85,7 @@ public static class SaveSystem
 
     public static bool TryLoadNotepad(out NotepadData notepadData)
     {
-        string path = NotepadSaveLocation;
-        if (File.Exists(path))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            notepadData = (NotepadData)formatter.Deserialize(stream);
-            stream.Close();
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Save file not found in " + path);
-            notepadData = null;
-            return false;
-        }
+        return _TryLoadDataFromFile(NotepadSaveLocation, out notepadData);
     }
 
     public static void SaveTestingData(CG_TestingData testingData)
@@ -109,22 +95,9 @@ public static class SaveSystem
 
     public static bool TryLoadTestingData(out CG_TestingData testingData)
     {
-        string path = DebugSaveLocation;
-        if (File.Exists(path))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            testingData = ((CG_TestingData_Serialized)formatter.Deserialize(stream)).Deserialize();
-            stream.Close();
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Save file not found in " + path);
-            testingData = null;
-            return false;
-        }
+        bool dataLoaded = _TryLoadDataFromFile(DebugSaveLocation, out CG_TestingData_Serialized testingDataSerialized);
+        testingData = testingDataSerialized.Deserialize();
+        return dataLoaded;
     }
 
     public static CG_TestingData LoadTestingData()
