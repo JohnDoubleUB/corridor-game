@@ -33,7 +33,5 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-
-    private 
 }
 

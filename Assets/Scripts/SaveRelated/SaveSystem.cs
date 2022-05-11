@@ -22,19 +22,25 @@ public static class SaveSystem
     private static string DebugSaveLocation => Application.persistentDataPath + "/" + DebugSaveName + "." + DebugSaveExtension;
     private static string AchievementSaveLocation => Application.persistentDataPath + "/" + AchievementSaveName + "." + AchievementSaveExtension;
 
-    public static void SaveGame(SaveData saveData)
+
+    private static void _SaveDataToFile<TSerializableObject>(TSerializableObject saveableObject, string path) 
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = SaveLocation;
 
         //File.Exists ensures that we replace the file if it already exists and don't encounter errors
         FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
 
 
-        formatter.Serialize(stream, saveData);
+        formatter.Serialize(stream, saveableObject);
         stream.Close();
 
         Debug.Log("File saved: " + path);
+    }
+
+    public static void SaveGame(SaveData saveData)
+    {
+
+        _SaveDataToFile(saveData, SaveLocation);
     }
 
     public static SaveData LoadGame()
@@ -65,17 +71,9 @@ public static class SaveSystem
 
     public static void SaveNotepad(NotepadData notepadData)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = NotepadSaveLocation;
 
-        //File.Exists ensures that we replace the file if it already exists and don't encounter errors
-        FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
+        _SaveDataToFile(notepadData, NotepadSaveLocation);
 
-
-        formatter.Serialize(stream, notepadData);
-        stream.Close();
-
-        Debug.Log("File saved: " + path);
     }
 
     public static NotepadData LoadNotepad()
@@ -106,17 +104,7 @@ public static class SaveSystem
 
     public static void SaveTestingData(CG_TestingData testingData)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = DebugSaveLocation;
-
-        //File.Exists ensures that we replace the file if it already exists and don't encounter errors
-        FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
-
-
-        formatter.Serialize(stream, testingData.Serialize());
-        stream.Close();
-
-        Debug.Log("Debug File saved: " + path);
+        _SaveDataToFile(testingData.Serialize(), DebugSaveLocation);
     }
 
     public static bool TryLoadTestingData(out CG_TestingData testingData)
