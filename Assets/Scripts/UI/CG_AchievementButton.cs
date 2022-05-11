@@ -41,6 +41,11 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
         }
     }
 
+    protected override void OnEnable()
+    {
+        //AchievementManager.current.LoadedButtons[Achievement.Identifier].
+    }
+
     public void SetAchieved()
     {
         AchievementImage.sprite = Achievement.UnlockedImage;

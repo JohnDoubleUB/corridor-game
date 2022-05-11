@@ -92,14 +92,24 @@ public class SteamIntegration : MonoBehaviour
 
 
     //Achievement Commands
-    public static void SetAchievements(params string[] Ach_ApiNames)
+    public static void SetAchievements(IEnumerable<string> Ach_ApiNames)
     {
         if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiNames.Contains(ach.Identifier)), true);
     }
 
-    public static void ClearAchievements(params string[] Ach_ApiNames)
+    public static void SetAchievement(string Ach_ApiName) 
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiName == ach.Identifier), true);
+    }
+
+    public static void ClearAchievements(IEnumerable<string> Ach_ApiNames)
     {
         if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiNames.Contains(ach.Identifier)), false);
+    }
+
+    public static void ClearAchievement(string Ach_ApiName)
+    {
+        if (Steamworks.SteamClient.IsValid) UpdateAchievements(Steamworks.SteamUserStats.Achievements.Where(ach => Ach_ApiName == ach.Identifier), false);
     }
 
     public static void SetAllAchievements()

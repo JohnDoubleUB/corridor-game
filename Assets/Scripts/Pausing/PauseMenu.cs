@@ -16,18 +16,18 @@ public class PauseMenu : MonoBehaviour
         GameManager.current.TogglePauseGame();
     }
 
-    public void QuitGame() 
+    public void QuitGame()
     {
         print("End game!");
         Application.Quit();
     }
 
-    public void RevertToLastCheckpoint() 
+    public void RevertToLastCheckpoint()
     {
         GameManager.current.RestartCurrentScene();
     }
 
-    public void StartNewGame() 
+    public void StartNewGame()
     {
         SaveSystem.LoadType = GameLoadType.New;
         SaveSystem.NotepadLoadType = GameLoadType.New;
@@ -35,47 +35,47 @@ public class PauseMenu : MonoBehaviour
         RevertToLastCheckpoint();
     }
 
-    public void GenerateTestingLog() 
+    public void GenerateTestingLog()
     {
         GameManager.current.ConsoleLogger.GenerateTestingLog();
     }
 
-    public void SaveGame_Debug() 
+    public void SaveGame_Debug()
     {
         PauseGame();
         CorridorChangeManager.current.SaveGame();
     }
 
-    public void ToggleUI_Debug() 
+    public void ToggleUI_Debug()
     {
         GameManager.current.EnableGameUI = !GameManager.current.EnableGameUI;
         if (ToggleUI_DebugButtonImage != null) ToggleUI_DebugButtonImage.color = GameManager.current.EnableGameUI ? toggleOffColour : toggleOnColour;
     }
 
-    public void ToggleVariableWalkSpeed_Debug() 
+    public void ToggleVariableWalkSpeed_Debug()
     {
         GameManager.current.EnableVariableWalkSpeed = !GameManager.current.EnableVariableWalkSpeed;
         if (ToggleVariableWalkSpeed_DebugButtonImage != null) ToggleVariableWalkSpeed_DebugButtonImage.color = GameManager.current.EnableVariableWalkSpeed ? toggleOnColour : toggleOffColour;
     }
 
-    public void ToggleMouseAcceleration_Debug() 
+    public void ToggleMouseAcceleration_Debug()
     {
         GameManager.current.EnableMouseAcceleration = !GameManager.current.EnableMouseAcceleration;
         if (ToggleMouseAcceleration_DebugButtonImage != null) ToggleMouseAcceleration_DebugButtonImage.color = GameManager.current.EnableMouseAcceleration ? toggleOnColour : toggleOffColour;
     }
 
-    public void GibMeAchievementPlz_Debug() 
+    public void GibMeAchievementPlz_Debug()
     {
-        SteamIntegration.SetAchievements("ACH_WIN_ONE_GAME");
+        SteamIntegration.SetAchievements(new string[] { "ACH_WIN_ONE_GAME" });
     }
 
 
-    public async void DisplayIcon(Steamworks.Data.Achievement ach) 
+    public async void DisplayIcon(Steamworks.Data.Achievement ach)
     {
         Task<Steamworks.Data.Image?> icon = ach.GetIconAsync();
         await icon;
 
-        if (icon != null && icon.Result != null && icon.Result.HasValue) 
+        if (icon != null && icon.Result != null && icon.Result.HasValue)
         {
 
             Steamworks.Data.Image img = icon.Result.Value;
@@ -87,6 +87,6 @@ public class PauseMenu : MonoBehaviour
 
     public void GetThatAchievementAwayFromMe_Debug()
     {
-        SteamIntegration.ClearAchievements("ACH_WIN_ONE_GAME");
+        SteamIntegration.ClearAchievements(new string[] { "ACH_WIN_ONE_GAME" });
     }
 }

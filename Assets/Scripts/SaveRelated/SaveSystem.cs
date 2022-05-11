@@ -55,6 +55,7 @@ public static class SaveSystem
         }
     }
 
+    //Main Game saves
     public static void SaveGame(SaveData saveData)
     {
         _SaveDataToFile(saveData, SaveLocation);
@@ -71,6 +72,7 @@ public static class SaveSystem
         return _TryLoadDataFromFile(SaveLocation, out savedData);
     }
 
+    //Notepad saves
     public static void SaveNotepad(NotepadData notepadData)
     {
 
@@ -88,6 +90,7 @@ public static class SaveSystem
         return _TryLoadDataFromFile(NotepadSaveLocation, out notepadData);
     }
 
+    //Test data saving
     public static void SaveTestingData(CG_TestingData testingData)
     {
         _SaveDataToFile(testingData.Serialize(), DebugSaveLocation);
@@ -106,6 +109,22 @@ public static class SaveSystem
         return testingData;
     }
 
+    //Achievement saving
+    public static void SaveAchievements(AchievementSaveData achievementSaveData) 
+    {
+        _SaveDataToFile(achievementSaveData, AchievementSaveLocation);
+    }
+
+    public static AchievementSaveData LoadAchievements() 
+    {
+        TryLoadAchievements(out AchievementSaveData achievementSaveData);
+        return achievementSaveData;
+    }
+
+    public static bool TryLoadAchievements(out AchievementSaveData achievementSaveData) 
+    {
+        return _TryLoadDataFromFile(AchievementSaveLocation, out achievementSaveData);
+    }
 }
 
 
@@ -258,6 +277,17 @@ public class AchievementSaveData
         if (achievements != null && achievements.Any() && achievements.Count() > AchievementData.Length)
         {
             AchievementData = ConvertSteamAchievementsToAchievementData(achievements).Union(AchievementData, new AchievementDataComparer()).ToArray();
+        }
+    }
+
+    public void UpdateAchievementByIdentifier(string identifier, bool setAchieved = true) 
+    {
+        if (AchievementData != null)
+        {
+            for (int i = 0; i < AchievementData.Length; i++)
+            {
+                if (AchievementData[i].Identifier == identifier) AchievementData[i].Achieved = setAchieved;
+            }
         }
     }
 }
