@@ -22,7 +22,6 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
         {
             if (AchievementImage != null)
             {
-                SetUnachieved();
                 AchievementImage.color = Color.white;
             }
 
@@ -43,7 +42,14 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
 
     protected override void OnEnable()
     {
-        //AchievementManager.current.LoadedButtons[Achievement.Identifier].
+        if (AchievementManager.current.IsAchieved(Achievement.Identifier))
+        {
+            SetAchieved();
+        }
+        else 
+        {
+            SetUnachieved();
+        }
     }
 
     public void SetAchieved()

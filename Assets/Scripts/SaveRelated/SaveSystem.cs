@@ -290,6 +290,11 @@ public class AchievementSaveData
             }
         }
     }
+
+    public Dictionary<string, AchievementData> GetAchievementDictionary() 
+    {
+        return AchievementData.ToDictionary(x => x.Identifier);
+    }
 }
 
 public class AchievementDataComparer : IEqualityComparer<AchievementData>

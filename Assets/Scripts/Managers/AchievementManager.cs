@@ -9,9 +9,15 @@ public class AchievementManager : MonoBehaviour
 
     public CG_AchievementButton[] AchievementButtons;
     public AchievementSaveData AchievementSaveData;
+    private Dictionary<string, AchievementData> LoadedAchievements = new Dictionary<string, AchievementData>();
 
     //private List<KeyValuePair<string, CG_AchievementButton>> loadedButtons = new List<KeyValuePair<string, CG_AchievementButton>>();
-    public Dictionary<string, CG_AchievementButton> LoadedButtons = new Dictionary<string, CG_AchievementButton>();
+    //public Dictionary<string, CG_AchievementButton> LoadedButtons = new Dictionary<string, CG_AchievementButton>();
+
+    public bool IsAchieved(string AchievementIdentifer) 
+    {
+        return LoadedAchievements.ContainsKey(AchievementIdentifer) && LoadedAchievements[AchievementIdentifer].Achieved;
+    }
 
     private void Awake()
     {
@@ -22,11 +28,13 @@ public class AchievementManager : MonoBehaviour
     public void TriggerAchievement(string AchievementIdentifer) 
     {
         //Check this is an achievement
-        if (LoadedButtons.ContainsKey(AchievementIdentifer)) 
+        if (LoadedAchievements.ContainsKey(AchievementIdentifer)) 
         {
             SteamIntegration.SetAchievement(AchievementIdentifer);
             AchievementSaveData.UpdateAchievementByIdentifier(AchievementIdentifer);
+            LoadedAchievements[AchievementIdentifer] = new AchievementData() { Identifier = AchievementIdentifer, Achieved = true };
             SaveSystem.SaveAchievements(AchievementSaveData);
+
         }
     }
 
@@ -34,7 +42,6 @@ public class AchievementManager : MonoBehaviour
     {
         if (AchievementButtons != null && AchievementButtons.Any())
         {
-            LoadedButtons = AchievementButtons.ToDictionary(x => x.Achievement.Identifier);
             if (Steamworks.SteamClient.IsValid)
             {
                 if (SaveSystem.TryLoadAchievements(out AchievementSaveData loadedData))
@@ -55,25 +62,10 @@ public class AchievementManager : MonoBehaviour
             }
             else
             {
-                AchievementSaveData = new AchievementSaveData(LoadedButtons.Select(x => x.Key));
+                AchievementSaveData = new AchievementSaveData(AchievementButtons.Select(x => x.Achievement.Identifier));
             }
 
-            //Once we have dealt with loading data
-            ////update the achievement buttons in the menu
-            //if (loadedButtons != null && loadedButtons.Any() && AchievementSaveData != null && AchievementSaveData.AchievementData.Any())
-            //{
-            //    foreach (AchievementData ad in AchievementSaveData.AchievementData)
-            //    {
-            //        if (ad.Achieved)
-            //        {
-            //            loadedButtons[ad.Identifier].SetAchieved();
-            //        }
-            //        else
-            //        {
-            //            loadedButtons[ad.Identifier].SetUnachieved();
-            //        }
-            //    }
-            //}
+            LoadedAchievements = AchievementSaveData.GetAchievementDictionary();
         }
     }
 
