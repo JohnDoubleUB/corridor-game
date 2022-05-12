@@ -129,23 +129,6 @@ public static class SaveSystem
         achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
         return result;
     }
-
-    //Achievement saving
-    //public static void SaveAchievements(AchievementSaveData achievementSaveData) 
-    //{
-    //    _SaveDataToFile(achievementSaveData, AchievementSaveLocation);
-    //}
-
-    //public static AchievementSaveData LoadAchievements() 
-    //{
-    //    TryLoadAchievements(out AchievementSaveData achievementSaveData);
-    //    return achievementSaveData;
-    //}
-
-    //public static bool TryLoadAchievements(out AchievementSaveData achievementSaveData) 
-    //{
-    //    return _TryLoadDataFromFile(AchievementSaveLocation, out achievementSaveData);
-    //}
 }
 
 

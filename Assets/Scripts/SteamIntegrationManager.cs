@@ -92,6 +92,7 @@ public class SteamIntegrationManager : MonoBehaviour
 
     private void SteamShutdownProcedure()
     {
+        print("shut down steam");
         if (EnableSteamIntegration)
         {
             Steamworks.SteamFriends.OnGameOverlayActivated -= OnOverlayActivated;

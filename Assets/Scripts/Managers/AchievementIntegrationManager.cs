@@ -7,6 +7,8 @@ public class AchievementIntegrationManager : SteamIntegrationManager
 {
     public static AchievementIntegrationManager current;
 
+
+    [Header("Achievement Integration Data")]
     public CG_AchievementData[] CGAchievementData;
     
     protected new void Awake()
@@ -47,11 +49,8 @@ public class AchievementIntegrationManager : SteamIntegrationManager
 
     public void SetAchievement(string Identifier, bool Achieved = true) 
     {
-        if (allGameAchievements.TryGetValue(Identifier, out bool result) && result != Achieved) 
-        {
-            allGameAchievements[Identifier] = Achieved;
-            SetSteamAchievement(Identifier, Achieved);
-        }
+        SetSteamAchievement(Identifier, Achieved);
+        if (allGameAchievements.TryGetValue(Identifier, out bool result) && result != Achieved) allGameAchievements[Identifier] = Achieved;
     }
 
     private Dictionary<string, bool> CombineAchievementDataAsDistinctFavouringTrue(Dictionary<string, bool> dict1, Dictionary<string, bool> dict2)
@@ -87,6 +86,17 @@ public class AchievementIntegrationManager : SteamIntegrationManager
         }
 
         return newDict;
+    }
+
+    public bool IsAchieved(string Identifier) 
+    {
+        return allGameAchievements.TryGetValue(Identifier, out bool result) && result;
+    }
+
+    private new void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+        SaveAchievementsLocally();
     }
 }
 

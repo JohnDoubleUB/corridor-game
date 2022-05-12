@@ -42,7 +42,7 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
 
     protected override void OnEnable()
     {
-        if (false)
+        if (AchievementIntegrationManager.current.IsAchieved(Achievement.Identifier))
         {
             SetAchieved();
         }

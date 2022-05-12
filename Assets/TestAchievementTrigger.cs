@@ -8,11 +8,15 @@ public class TestAchievementTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("hiii");
-        if (!hasOccured) 
+        if (!hasOccured)
         {
-
-            //AchievementManager.current.TriggerAchievement("ACH_WIN_ONE_GAME");
+            AchievementIntegrationManager.current.SetAchievement("ACH_WIN_ONE_GAME");
             hasOccured = true;
+        }
+        else 
+        {
+            AchievementIntegrationManager.current.SetAchievement("ACH_WIN_ONE_GAME", false);
+            hasOccured = false;
         }
 
     }
