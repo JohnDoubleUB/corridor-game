@@ -53,6 +53,16 @@ public class AchievementIntegrationManager : SteamIntegrationManager
         if (allGameAchievements.TryGetValue(Identifier, out bool result) && result != Achieved) allGameAchievements[Identifier] = Achieved;
     }
 
+    public void ClearAllAchievements() 
+    {
+        foreach (CG_AchievementData aD in CGAchievementData) 
+        {
+            SetSteamAchievement(aD.Identifier, false);
+            allGameAchievements[aD.Identifier] = false;
+        }
+        SaveAchievementsLocally();
+    }
+
     private Dictionary<string, bool> CombineAchievementDataAsDistinctFavouringTrue(Dictionary<string, bool> dict1, Dictionary<string, bool> dict2)
     {
         Dictionary<string, bool> newDict;
@@ -99,9 +109,9 @@ public class AchievementIntegrationManager : SteamIntegrationManager
         SaveAchievementsLocally();
     }
 
-    private void Start()
-    {
-        SetAchievement("ACH_WIN_ONE_GAME", false);
-    }
+    //private void Start()
+    //{
+    //    SetAchievement("ACH_WIN_ONE_GAME", false);
+    //}
 }
 

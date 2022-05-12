@@ -89,4 +89,11 @@ public class PauseMenu : MonoBehaviour
     {
         //SteamIntegrationManager.ClearAchievements(new string[] { "ACH_WIN_ONE_GAME" });
     }
+
+
+    public void ClearAllAchievements() 
+    {
+        AchievementIntegrationManager.current.ClearAllAchievements();
+        GameManager.current.TogglePauseGame();
+    }
 }
