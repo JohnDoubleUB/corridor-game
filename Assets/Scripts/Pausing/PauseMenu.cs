@@ -66,7 +66,7 @@ public class PauseMenu : MonoBehaviour
 
     public void GibMeAchievementPlz_Debug()
     {
-        SteamIntegration.SetAchievements(new string[] { "ACH_WIN_ONE_GAME" });
+        //SteamIntegrationManager.SetAchievements(new string[] { "ACH_WIN_ONE_GAME" });
     }
 
 
@@ -87,6 +87,6 @@ public class PauseMenu : MonoBehaviour
 
     public void GetThatAchievementAwayFromMe_Debug()
     {
-        SteamIntegration.ClearAchievements(new string[] { "ACH_WIN_ONE_GAME" });
+        //SteamIntegrationManager.ClearAchievements(new string[] { "ACH_WIN_ONE_GAME" });
     }
 }

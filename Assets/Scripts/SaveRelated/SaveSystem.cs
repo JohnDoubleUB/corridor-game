@@ -109,22 +109,43 @@ public static class SaveSystem
         return testingData;
     }
 
+
+
+    //Achievement saving V2
+    public static void SaveAchievementsDictionary(Dictionary<string, bool> achievementsData) 
+    {
+        _SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
+    }
+
+    public static Dictionary<string, bool> LoadAchievementsDictionary() 
+    {
+        TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData);
+        return achievementsData;
+    }
+
+    public static bool TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData)
+    {
+        bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
+        achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
+        return result;
+    }
+
     //Achievement saving
-    public static void SaveAchievements(AchievementSaveData achievementSaveData) 
-    {
-        _SaveDataToFile(achievementSaveData, AchievementSaveLocation);
-    }
+    //public static void SaveAchievements(AchievementSaveData achievementSaveData) 
+    //{
+    //    _SaveDataToFile(achievementSaveData, AchievementSaveLocation);
+    //}
 
-    public static AchievementSaveData LoadAchievements() 
-    {
-        TryLoadAchievements(out AchievementSaveData achievementSaveData);
-        return achievementSaveData;
-    }
+    //public static AchievementSaveData LoadAchievements() 
+    //{
+    //    TryLoadAchievements(out AchievementSaveData achievementSaveData);
+    //    return achievementSaveData;
+    //}
 
-    public static bool TryLoadAchievements(out AchievementSaveData achievementSaveData) 
-    {
-        return _TryLoadDataFromFile(AchievementSaveLocation, out achievementSaveData);
-    }
+    //public static bool TryLoadAchievements(out AchievementSaveData achievementSaveData) 
+    //{
+    //    return _TryLoadDataFromFile(AchievementSaveLocation, out achievementSaveData);
+    //}
 }
 
 
@@ -246,67 +267,27 @@ public struct NotepadLineData
 }
 
 [System.Serializable]
-public struct AchievementData
+public class SerializableDictionary<TSerializableKey, TSerializableValue>
 {
-    public string Identifier;
-    public bool Achieved;
-}
+    private _SerializedPair<TSerializableKey, TSerializableValue>[] serializedPairs;
 
-[System.Serializable]
-public class AchievementSaveData
-{
-    public AchievementData[] AchievementData;
-
-    public AchievementSaveData(IEnumerable<string> identifiers)
+    public Dictionary<TSerializableKey, TSerializableValue> Deserialize()
     {
-        if (identifiers != null && identifiers.Any()) AchievementData = identifiers.Select(x => new AchievementData() { Identifier = x, Achieved = false }).ToArray();
+        Dictionary<TSerializableKey, TSerializableValue> deserializedDict = new Dictionary<TSerializableKey, TSerializableValue>();
+        foreach (_SerializedPair<TSerializableKey, TSerializableValue> pair in serializedPairs) deserializedDict.Add(pair.Key, pair.Value);
+        return deserializedDict;
     }
 
-    public AchievementSaveData(IEnumerable<Steamworks.Data.Achievement> achievements)
+    public SerializableDictionary(Dictionary<TSerializableKey, TSerializableValue> DictionaryToSerialize)
     {
-        if (achievements != null && achievements.Any()) AchievementData = ConvertSteamAchievementsToAchievementData(achievements).ToArray();
+        serializedPairs = DictionaryToSerialize.Select(x => new _SerializedPair<TSerializableKey, TSerializableValue>() { Key = x.Key, Value = x.Value }).ToArray();
     }
 
-    private IEnumerable<AchievementData> ConvertSteamAchievementsToAchievementData(IEnumerable<Steamworks.Data.Achievement> achievements)
+    [System.Serializable]
+    struct _SerializedPair<TKey, TValue>
     {
-        return achievements.Select(x => new AchievementData() { Identifier = x.Identifier, Achieved = x.State });
-    }
-
-    public void UpdateAchievementDataFromSteam(IEnumerable<Steamworks.Data.Achievement> achievements)
-    {
-        if (achievements != null && achievements.Any() && achievements.Count() > AchievementData.Length)
-        {
-            AchievementData = ConvertSteamAchievementsToAchievementData(achievements).Union(AchievementData, new AchievementDataComparer()).ToArray();
-        }
-    }
-
-    public void UpdateAchievementByIdentifier(string identifier, bool setAchieved = true) 
-    {
-        if (AchievementData != null)
-        {
-            for (int i = 0; i < AchievementData.Length; i++)
-            {
-                if (AchievementData[i].Identifier == identifier) AchievementData[i].Achieved = setAchieved;
-            }
-        }
-    }
-
-    public Dictionary<string, AchievementData> GetAchievementDictionary() 
-    {
-        return AchievementData.ToDictionary(x => x.Identifier);
-    }
-}
-
-public class AchievementDataComparer : IEqualityComparer<AchievementData>
-{
-    public bool Equals(AchievementData x, AchievementData y)
-    {
-        return x.Identifier == y.Identifier;
-    }
-
-    public int GetHashCode(AchievementData obj)
-    {
-        return obj.Identifier.GetHashCode();
+        public TKey Key;
+        public TValue Value;
     }
 }
 

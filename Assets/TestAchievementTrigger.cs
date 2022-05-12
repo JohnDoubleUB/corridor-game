@@ -11,7 +11,7 @@ public class TestAchievementTrigger : MonoBehaviour
         if (!hasOccured) 
         {
 
-            AchievementManager.current.TriggerAchievement("ACH_WIN_ONE_GAME");
+            //AchievementManager.current.TriggerAchievement("ACH_WIN_ONE_GAME");
             hasOccured = true;
         }
 
