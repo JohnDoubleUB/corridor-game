@@ -36,3 +36,5 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
   EnableTVMan: 1
+  AcheivementTriggers:
+  - ACH_PUZZLE_FIVE

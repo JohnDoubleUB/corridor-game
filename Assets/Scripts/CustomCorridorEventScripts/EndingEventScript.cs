@@ -69,6 +69,7 @@ public class EndingEventScript : CustomCorridorEventScript
     {
         GameManager.current.playerController.EnableCutsceneMode(false);
         GameManager.current.ForceTVManEffect = false;
+        AchievementIntegrationManager.current.SetAchievement("ACH_THE_END");
     }
 
     public void PlayAnimation(CutsceneTVManAnimation cutsceneAnimation) 

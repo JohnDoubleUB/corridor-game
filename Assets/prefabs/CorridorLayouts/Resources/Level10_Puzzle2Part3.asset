@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level10_Puzzle2Part3
   m_EditorClassIdentifier: 
   LevelNumber: 10
+  IsCheckpoint: 0
+  CheckpointOnDelay: 0
   CorridorLayouts:
   - {fileID: 5260005764623999733, guid: 08c49775fcad83142b2aea617dbe7c79, type: 3}
   - {fileID: 395630380, guid: a96f7006b9e85b2438036b917f9a9119, type: 3}
@@ -40,3 +42,5 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0
   EnableTVMan: 0
+  AcheivementTriggers:
+  - ACH_PUZZLE_THREE

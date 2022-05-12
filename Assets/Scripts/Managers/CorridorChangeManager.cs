@@ -90,6 +90,8 @@ public class CorridorChangeManager : MonoBehaviour
     [SerializeField]
     private List<string> eventTags = new List<string>();
 
+    private bool hasPiperAchievement;
+
     private void Awake()
     {
         //loadedCorridorResourceMeshes = CorridorMeshVarients.Select(x => Resources.Load<Mesh>(x.name)).ToArray();
@@ -130,6 +132,9 @@ public class CorridorChangeManager : MonoBehaviour
         corridorGameChildren.AddRange(corridorSections.Select(x => x.transform).Concat(corridorDoorSegments.Select(x => x.transform)).ToArray());
         foreach (Transform child in corridorGameChildren) child.SetParent(corridorGameParent.transform);
         tVManPatrolPoints = corridorSections.Select(x => x.TVManPatrolLocations).ToArray();
+
+        //Check if at this point the Piper achievement has been obtained
+        hasPiperAchievement = AchievementIntegrationManager.current.IsAchieved("ACH_THE_PIPER");
     }
 
     public void ReplaceLevelLayoutData(int levelIndex, int layoutIndex, LayoutLevelData replacedData) 
@@ -438,6 +443,29 @@ public class CorridorChangeManager : MonoBehaviour
             RenumberSections();
             UpdateLevel();
         }
+
+        AchievementCheckUpdate();
+    }
+
+    private void AchievementCheckUpdate()
+    {
+        if (!hasPiperAchievement && mice.Count > 2)
+        {
+            int miceThatMeetRequirement = 0;
+            foreach (IHuntableEntity m in mice)
+            {
+                if (m != null && m.EntityTransform != null && Vector3.Distance(m.EntityTransform.position, playerTransform.position) < 3f && m.EntityTransform.GetAngleToTarget(playerTransform.position) > 90)
+                {
+                    miceThatMeetRequirement++;
+                }
+
+                if (miceThatMeetRequirement > 2)
+                {
+                    AchievementIntegrationManager.current.SetAchievement("ACH_THE_PIPER");
+                    hasPiperAchievement = true;
+                }
+            }
+        }
     }
 
     private void LateUpdate()
@@ -681,6 +709,12 @@ public class CorridorChangeManager : MonoBehaviour
         {
             if (!cachedCurrentLevelData.CheckPointOnDelay) SaveGame();
             else SaveAfterTimePassedDelta(2);
+        }
+
+        //Register any achievements related to this level being loaded
+        if (cachedCurrentLevelData.AchievementTriggers != null) 
+        {
+            foreach (string achTrigger in cachedCurrentLevelData.AchievementTriggers) AchievementIntegrationManager.current.SetAchievement(achTrigger);
         }
 
         GameManager.current.ConsoleLogger.LogSectionChange("Level changed to: " + newLevel, false);

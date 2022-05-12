@@ -31,6 +31,9 @@ public class LevelData : ScriptableObject
     public int MaxMouseCount = 1;
     public bool EnableTVMan;
 
+    [Header("Achievement Triggers")]
+    public string[] AcheivementTriggers;
+
     public bool GetIfLevelTriggerAndReturnLevelChange(CorridorLayoutHandler corridorLayout, out int LevelToChangeTo)
     {
         if (CompleteLevelTriggerOnLayoutNumber.Any())
@@ -113,6 +116,8 @@ public class LevelData_Loaded
     public bool AllowRandomWaving { get { return levelData.AllowRandomWaving; } }
     public int MaxScaleEffectCount { get { return levelData.MaxScaleEffectCount; } }
     public int MaxWaveEffectCount { get { return levelData.MaxWaveEffectCount; } }
+
+    public string[] AchievementTriggers { get { return levelData.AcheivementTriggers; } }
 
     public int ScaleEffectCount;
     public int WaveEffectCount;

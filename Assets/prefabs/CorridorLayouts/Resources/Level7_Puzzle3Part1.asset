@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Level7_Puzzle3Part1
   m_EditorClassIdentifier: 
   LevelNumber: 7
+  IsCheckpoint: 0
+  CheckpointOnDelay: 0
   CorridorLayouts:
   - {fileID: 395630380, guid: 91e4bea195280e54db908e782e7eca4a, type: 3}
   - {fileID: 395630380, guid: 3366334055d95f4449a62005bafd7cca, type: 3}
@@ -34,3 +36,5 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 1
   EnableTVMan: 0
+  AcheivementTriggers:
+  - ACH_PUZZLE_TWO

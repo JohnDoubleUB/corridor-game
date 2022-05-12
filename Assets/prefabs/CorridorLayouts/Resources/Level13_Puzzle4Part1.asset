@@ -47,3 +47,5 @@ MonoBehaviour:
     LevelChange: 15
   MaxMouseCount: 1
   EnableTVMan: 1
+  AcheivementTriggers:
+  - ACH_PUZZLE_FOUR

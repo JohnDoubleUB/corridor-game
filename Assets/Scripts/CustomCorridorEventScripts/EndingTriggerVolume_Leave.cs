@@ -9,6 +9,7 @@ public class EndingTriggerVolume_Leave : MonoBehaviour
         if (other.gameObject.tag == "Player") 
         {
             print("End game!");
+            AchievementIntegrationManager.current.SetAchievement("ACH_LEAVE");
             CorridorChangeManager.current.CreateNewSave();
             Application.Quit();
         }

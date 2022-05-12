@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelNumber: 5
   IsCheckpoint: 1
+  CheckpointOnDelay: 0
   CorridorLayouts:
   - {fileID: 5260005764623999733, guid: ee012fbbc0dd6f142a2767ee69639b5c, type: 3}
   - {fileID: 395630380, guid: 455459434000cf34b93391bbd2a94198, type: 3}
@@ -48,3 +49,5 @@ MonoBehaviour:
   CompleteLevelTriggerOnLayoutPuzzleComplete: []
   MaxMouseCount: 0
   EnableTVMan: 0
+  AcheivementTriggers:
+  - ACH_PUZZLE_ONE
