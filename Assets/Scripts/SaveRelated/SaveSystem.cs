@@ -88,7 +88,6 @@ public static class SaveSystem
             serializableObject = default(TSerializableObject);
             return false;
         }
-        OrderedItem
     }
 
     //Main Game saves
