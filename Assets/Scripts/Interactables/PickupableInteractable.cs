@@ -103,6 +103,8 @@ public class PickupableData
     public int PickupID;
     public string ObjectName;
 
+    public PickupableData() { }
+
     public PickupableData(PickupableInteractable pI) 
     {
         PickupID = pI.PickupID;

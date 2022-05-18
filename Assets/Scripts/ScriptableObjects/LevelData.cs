@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelData", menuName = "ScriptableObjects/LevelDataScriptableObject", order = 1)]
@@ -181,7 +182,7 @@ public class LevelData_Loaded
 [System.Serializable]
 public class LevelData_Serialized 
 {
-    public readonly int LevelNumber; //This is used to identify matching level data
+    public int LevelNumber; //This is used to identify matching level data
     public int ScaleEffectCount;
     public int WaveEffectCount;
     public string[] NumberpadPasswords;
@@ -189,7 +190,7 @@ public class LevelData_Serialized
     public LayoutLevelDataSerialized[] CorridorLayoutData;
     public char[] GeneratedNumberpadPieces;
 
-
+    public LevelData_Serialized() { }
     public LevelData_Serialized(LevelData_Loaded levelDataLoaded) 
     {
         LevelNumber = levelDataLoaded.LevelNumber;
@@ -302,6 +303,8 @@ public class NumberpadPassword_Loaded
     public string NumberpadPassword;
     public char[] MissingCharacters;
 
+    public NumberpadPassword_Loaded() { }
+
     public NumberpadPassword_Loaded(NumberpadPassword numberpadData)
     {
         NumberpadPassword = numberpadData.GenerateRandomPassword();
@@ -368,6 +371,7 @@ public class LayoutLevelData
 public class LayoutLevelDataSerialized
 {
     public string LayoutID;
+    [XmlArrayAttribute]
     public int[] collectedItems;
     public int[] completedPuzzles;
     public bool HasWarped;
@@ -381,6 +385,8 @@ public class LayoutLevelDataSerialized
             return new LayoutLevelData(LayoutID, collectedItems, completedPuzzles, HasWarped, puzzleData, spawnableItems);
         }
     }
+
+    public LayoutLevelDataSerialized() { }
 
     public LayoutLevelDataSerialized(LayoutLevelData layoutLevelData)
     {

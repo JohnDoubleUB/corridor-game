@@ -253,6 +253,8 @@ public class PlinthNotifierAndItem
 public class PlinthControllerData : PuzzleElementControllerData
 {
     public bool[] PlinthItemsPlaced;
+
+    public PlinthControllerData() { }
     public PlinthControllerData(PlinthController plinthController) : base(plinthController)
     {
         PlinthItemsPlaced = plinthController.Plinths.Select(x => x.HasCorrectItem).ToArray();

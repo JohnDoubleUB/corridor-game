@@ -88,12 +88,14 @@ public static class SaveSystem
             serializableObject = default(TSerializableObject);
             return false;
         }
+        OrderedItem
     }
 
     //Main Game saves
     public static void SaveGame(SaveData saveData)
     {
-        _SaveDataToFile(saveData, SaveLocation);
+        //_SaveDataToFile(saveData, SaveLocation);
+        _SaveDataToXMLFile(saveData, SaveLocation);
     }
 
     public static SaveData LoadGame()
@@ -104,7 +106,8 @@ public static class SaveSystem
 
     public static bool TryLoadGame(out SaveData savedData)
     {
-        return _TryLoadDataFromFile(SaveLocation, out savedData);
+        //return _TryLoadDataFromFile(SaveLocation, out savedData);
+        return _TryLoadDataFromXMLFile(SaveLocation, out savedData);
     }
 
     //Notepad saves

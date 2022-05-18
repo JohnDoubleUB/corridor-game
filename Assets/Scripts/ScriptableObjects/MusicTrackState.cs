@@ -9,9 +9,19 @@ public class MusicTrackState : ScriptableObject
 }
 
 [System.Serializable]
-public struct EnabledMusicTracks
+public struct EnabledMusicTracks //TODO: does this need to be a class?
 {
     public bool Track0, Track1, Track2, Track3, Track4, Track5;
+
+    //public EnabledMusicTracks() 
+    //{
+    //    Track0 = false;
+    //    Track1 = false;
+    //    Track2 = false;
+    //    Track3 = false;
+    //    Track4 = false;
+    //    Track5 = false;
+    //}
 
     public EnabledMusicTracks(bool[] enabledTracks) 
     {

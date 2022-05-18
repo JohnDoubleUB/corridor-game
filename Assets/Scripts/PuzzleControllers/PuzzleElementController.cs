@@ -42,10 +42,15 @@ public class PuzzleElementController : MonoBehaviour
 }
 
 [System.Serializable]
+[System.Xml.Serialization.XmlInclude(typeof(NumberpadControllerData))]
+[System.Xml.Serialization.XmlInclude(typeof(PlinthControllerData))]
 public class PuzzleElementControllerData
 {
     public int PuzzleIndex;
     public bool PuzzleSolved;
+
+   
+    public PuzzleElementControllerData() { }
 
     public PuzzleElementControllerData(PuzzleElementController puzzleElementController) 
     {

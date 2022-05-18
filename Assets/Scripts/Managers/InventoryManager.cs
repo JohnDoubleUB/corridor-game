@@ -170,6 +170,8 @@ public class InventoryData
     public InventoryItemData[] InventoryItems;
     public InventoryItemData[] MomentoItems;
 
+    public InventoryData() { }
+
     public InventoryData(InventoryManager inventory)
     {
         InventoryItems = inventory.inventorySlots.Select((x, index) => new InventoryItemData(x, index)).ToArray();
@@ -182,6 +184,8 @@ public class InventoryItemData
 {
     public int SlotIndex;
     public PickupableData PickupableData;
+
+    public InventoryItemData() { }
 
     public InventoryItemData(InventorySlot InventorySlot, int SlotIndex = 0)
     {

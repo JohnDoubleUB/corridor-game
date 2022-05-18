@@ -233,6 +233,8 @@ public class NumberpadControllerData : PuzzleElementControllerData
 {
     public char[] DisabledButtons;
 
+    public NumberpadControllerData() { }
+
     public NumberpadControllerData(NumberpadController numberpadController) : base(numberpadController)
     {
         DisabledButtons = numberpadController.disabledButtons.ToArray();
