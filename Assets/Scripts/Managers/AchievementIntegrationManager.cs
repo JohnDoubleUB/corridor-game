@@ -30,7 +30,7 @@ public class AchievementIntegrationManager : SteamIntegrationManager
     }
     protected override void OnSteamInvalid()
     {
-        if (SaveSystem.TryLoadAchievementsDictionary(out Dictionary<string, bool> savedAchievementsData))
+        if (SaveSystem.TryLoadAchievementsDictionary(out Dictionary<string, bool> savedAchievementsData) && savedAchievementsData.Any())
         {
             allGameAchievements = savedAchievementsData;
         }

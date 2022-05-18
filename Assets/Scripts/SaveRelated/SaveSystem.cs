@@ -93,7 +93,6 @@ public static class SaveSystem
     //Main Game saves
     public static void SaveGame(SaveData saveData)
     {
-        //_SaveDataToFile(saveData, SaveLocation);
         _SaveDataToXMLFile(saveData, SaveLocation);
     }
 
@@ -105,7 +104,6 @@ public static class SaveSystem
 
     public static bool TryLoadGame(out SaveData savedData)
     {
-        //return _TryLoadDataFromFile(SaveLocation, out savedData);
         return _TryLoadDataFromXMLFile(SaveLocation, out savedData);
     }
 
@@ -150,7 +148,8 @@ public static class SaveSystem
     //Achievement saving V2
     public static void SaveAchievementsDictionary(Dictionary<string, bool> achievementsData)
     {
-        _SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
+        //_SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
+        _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
     }
 
     public static Dictionary<string, bool> LoadAchievementsDictionary()
@@ -161,7 +160,8 @@ public static class SaveSystem
 
     public static bool TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData)
     {
-        bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
+        //bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
+        bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
         achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
         return result;
     }
