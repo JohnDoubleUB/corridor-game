@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace DebugStuff
@@ -30,6 +32,50 @@ namespace DebugStuff
 
         private void Awake()
         {
+
+            string fileName = Application.persistentDataPath + "/" + "test" + "." + "bin";
+
+
+            //using (var stream = File.Open(fileName, FileMode.Create))
+            //{
+            //    using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+            //    {
+            //        writer.Write(1.250F);
+            //        writer.Write(@"c:\Temp");
+            //        writer.Write(10);
+            //        writer.Write(true);
+            //        writer.Write("test2");
+   
+            //    }
+            //}
+
+            //float aspectRatio;
+            //string tempDirectory;
+            //int autoSaveTime;
+            //bool showStatusBar;
+            //string test2;
+
+            //if (File.Exists(fileName))
+            //{
+            //    using (var stream = File.Open(fileName, FileMode.Open))
+            //    {
+            //        using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+            //        {
+            //            aspectRatio = reader.ReadSingle();
+            //            tempDirectory = reader.ReadString();
+            //            autoSaveTime = reader.ReadInt32();
+            //            showStatusBar = reader.ReadBoolean();
+            //            test2 = reader.ReadString();
+            //        }
+            //    }
+
+            //    Debug.Log("Aspect ratio set to: " + aspectRatio);
+            //    Debug.Log("Temp directory is: " + tempDirectory);
+            //    Debug.Log("Auto save time set to: " + autoSaveTime);
+            //    Debug.Log("Show status bar: " + showStatusBar);
+            //    Debug.Log("Other test: " + test2);
+            //}
+
             if (EnableDebugLogs)
             {
                 TestingData = SaveSystem.LoadType == GameLoadType.Existing && SaveSystem.TryLoadTestingData(out CG_TestingData testData) ? testData : new CG_TestingData();
@@ -69,7 +115,7 @@ namespace DebugStuff
 
         public void LogSectionChange(string sectionChange, bool uniqueChange = false)
         {
-            if (EnableDebugLogs)
+            if (EnableDebugLogs && TestingData != null)
             {
                 TestingData.CorridorPieceLog.Add(sectionChange);
                 if (uniqueChange) TestingData.CorridorPieceChangeCount++;

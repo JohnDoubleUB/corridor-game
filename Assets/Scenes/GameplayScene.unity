@@ -5926,7 +5926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnableSteamIntegration: 0
   AppId: 1981590
-  UseTestAppId: 1
+  UseTestAppId: 0
   CGAchievementData:
   - {fileID: 11400000, guid: 7212b06f870cd20439f744c2e6aec205, type: 2}
   - {fileID: 11400000, guid: f01432fc37b1aa9499a36e967aebfde2, type: 2}
