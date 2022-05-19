@@ -155,6 +155,8 @@ public class CG_TestingData_Serialized
     public int SessionStartCount;
     public int SessionQuitCount;
 
+    public CG_TestingData_Serialized() { }
+
     public CG_TestingData Deserialize()
     {
         CG_TestingData tD = new CG_TestingData();

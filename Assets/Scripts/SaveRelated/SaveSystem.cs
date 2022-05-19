@@ -15,6 +15,8 @@ public static class SaveSystem
     public static string SaveName = "PlayerData";
     public static string DebugSaveName = "DebugData";
     public static string AchievementSaveName = "Achievements";
+    public static bool VersioningMustMatch = true;
+    public static bool PrefixAllXml = false;
 
     private static string SaveLocation => Application.persistentDataPath + "/" + SaveName + "." + SaveExtension;
     private static string NotepadSaveLocation => Application.persistentDataPath + "/" + SaveName + "." + NoteSaveExtension;
@@ -37,13 +39,16 @@ public static class SaveSystem
 
     private static void _SaveDataToXMLFile<TSerializableObject>(TSerializableObject serializableObject, string path)
     {
-        path += ".xml";
-        XmlSerializer serializer = new XmlSerializer(typeof(TSerializableObject));
+        if(PrefixAllXml) path += ".xml";
+
+        //XmlSerializer serializer = new XmlSerializer(typeof(TSerializableObject));
+        XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
 
         //File.Exists ensures that we replace the file if it already exists and don't encounter errors
         FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
 
-        serializer.Serialize(stream, serializableObject);
+        serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
+
         stream.Close();
 
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
@@ -68,25 +73,44 @@ public static class SaveSystem
         }
     }
 
-    private static bool _TryLoadDataFromXMLFile<TSerializableObject>(string path, out TSerializableObject serializableObject)
+    private static bool _TryLoadDataFromXMLFile<TSerializableObject>(string path, out TSerializableObject serializableObject, bool? versioningMustMatchOverride = null)
     {
-        path += ".xml";
+        if(PrefixAllXml) path += ".xml";
 
-        if (File.Exists(path))
+        //Check if versioning is going to need to match
+        bool versioningMustMatch = versioningMustMatchOverride != null && versioningMustMatchOverride.HasValue ? versioningMustMatchOverride.Value : VersioningMustMatch;
+
+        if (File.Exists(path) && ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObjectWithMetaData))
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TSerializableObject));
-
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            serializableObject = (TSerializableObject)serializer.Deserialize(stream);
-            stream.Close();
+            serializableObject = deserializedObjectWithMetaData.SerializedObject;
             return true;
         }
         else
         {
-            Debug.LogWarning("Save file not found in " + path + " , Please create a save before trying to load.");
+            Debug.LogWarning("Valid Save File not found in " + path + ". VersioningMustMatch is set to: " + versioningMustMatch.ToString());
             serializableObject = default(TSerializableObject);
             return false;
+        }
+
+        //Returns true if the metadata meets the metadata requirements, i.e. matching versions
+        bool ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObject) 
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            try
+            {
+                deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(stream);
+                stream.Close();
+                return versioningMustMatch ? deserializedObject.Version == Application.version : true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("Failed to Deserialize file: " + path + " but exception was handled, Invalid XML, could be an old save file?, Error: " + e);
+                deserializedObject = default(SerializedXmlWithMetaData<TSerializableObject>);
+                stream.Close();
+                return false;
+            }
         }
     }
 
@@ -127,12 +151,12 @@ public static class SaveSystem
     //Test data saving
     public static void SaveTestingData(CG_TestingData testingData)
     {
-        _SaveDataToFile(testingData.Serialize(), DebugSaveLocation);
+        _SaveDataToXMLFile(testingData.Serialize(), DebugSaveLocation);
     }
 
     public static bool TryLoadTestingData(out CG_TestingData testingData)
     {
-        bool dataLoaded = _TryLoadDataFromFile(DebugSaveLocation, out CG_TestingData_Serialized testingDataSerialized);
+        bool dataLoaded = _TryLoadDataFromXMLFile(DebugSaveLocation, out CG_TestingData_Serialized testingDataSerialized);
         testingData = testingDataSerialized != null ? testingDataSerialized.Deserialize() : null;
         return dataLoaded;
     }
@@ -173,10 +197,14 @@ public enum GameLoadType
     Existing
 }
 
-
-
-public class SimpleTestData 
+public struct SerializedXmlWithMetaData<TSerializableObject> 
 {
-    public string testOne;
-    public int testTwo;
+    public string Version;
+    public TSerializableObject SerializedObject;
+
+    public SerializedXmlWithMetaData(TSerializableObject SerializedObject) 
+    {
+        this.SerializedObject = SerializedObject;
+        Version = Application.version;
+    }
 }
