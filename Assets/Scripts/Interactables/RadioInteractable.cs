@@ -11,6 +11,7 @@ public class RadioInteractable : InteractableObject
     public AudioClip RadioDroneSound;
     
     public AudioSource RadioSpeaker;
+
     public float RadioSpeakerDefaultVolume = 0.5f;
 
     public GameObject DialogueAudioSourceObject;
@@ -23,6 +24,8 @@ public class RadioInteractable : InteractableObject
     public int DialoguePartNo = 0;
 
     private AudioSource[] DialogueAudioSources;
+    private float[] dialogueAudioSourceDefaultVolumes;
+
     private Conversation conversationToPlay;
     private bool reachedEndOfDialogue;
 
@@ -35,12 +38,15 @@ public class RadioInteractable : InteractableObject
     public bool playRadioDroneSound = true;
     public bool allowDialogueSkipWithInput;
 
+    private float volumeMultiplier;
+
     private void Awake()
     {
         RadioSpeaker.clip = RadioDroneSound;
         RadioSpeaker.volume = RadioSpeakerDefaultVolume;
 
         if (DialogueAudioSourceObject != null) DialogueAudioSources = DialogueAudioSourceObject.GetComponents<AudioSource>();
+        dialogueAudioSourceDefaultVolumes = DialogueAudioSources.Select(x => x.volume).ToArray();
 
 
         DialoguePartNo = 0;
@@ -99,7 +105,14 @@ public class RadioInteractable : InteractableObject
     {
         if (radioOn) 
         {
-            
+            if (volumeMultiplier != AudioManager.current.SoundVolumeMultiplier)
+            {
+                volumeMultiplier = AudioManager.current.SoundVolumeMultiplier;
+                RadioSpeaker.volume = RadioSpeakerDefaultVolume * volumeMultiplier;
+                for (int i = 0; i < DialogueAudioSources.Length; i++) DialogueAudioSources[i].volume = dialogueAudioSourceDefaultVolumes[i] * volumeMultiplier;
+            }
+
+
             if ((allowDialogueSkipWithInput && GameManager.current.playerController.cutsceneMode && Input.anyKeyDown) || !reachedEndOfDialogue && conversationToPlay != null && !DialogueAudioSources[0].isPlaying) 
             {
                 PlayNextDialoguePart();

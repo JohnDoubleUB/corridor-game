@@ -78,6 +78,18 @@ public class CG_AchievementButton : UIBehaviour, IEventSystemHandler, IPointerEn
         }
     }
 
+    protected override void OnDisable()
+    {
+        currentTextTransparencyValue = 0f;
+        if (AchievementImage != null)
+        {
+            AchievementImage.color = Color.white;
+            isHovered = false;
+        }
+        if (NiceName != null) NiceName.color = new Color(NiceName.color.r, NiceName.color.g, NiceName.color.b, currentTextTransparencyValue);
+        if (Description != null) Description.color = new Color(Description.color.r, Description.color.g, Description.color.b, currentTextTransparencyValue);
+    }
+
     public void Update()
     {
         bool valueHasChanged = false;

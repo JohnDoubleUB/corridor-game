@@ -109,10 +109,12 @@ AudioMixerController:
     name: LFlute
   - guid: e3b141c17ac9ee341b0dc80f0693586e
     name: LWires
-  - guid: 23157132931ce9648b70c0fd243357a8
-    name: VSciFi
+  - guid: aadc89c8b862b364893d801c2f6bda18
+    name: MasterVolume
   - guid: 505f152ec2632094188b1454e0024ed6
     name: VCluster
+  - guid: 23157132931ce9648b70c0fd243357a8
+    name: VSciFi
   m_AudioMixerGroupViews:
   - guids:
     - 74232fe605b62694daab878e670de7ce
@@ -175,6 +177,7 @@ AudioMixerSnapshotController:
   m_SnapshotID: 9c4d33bd9c4f86244b92bc5bab744e32
   m_FloatValues:
     9e586af727142024f8a59223d722b122: 0.27000841
+    aadc89c8b862b364893d801c2f6bda18: 0.04171297
   m_TransitionOverrides: {}
 --- !u!243 &527000048469553497
 AudioMixerGroupController:

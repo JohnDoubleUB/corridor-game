@@ -26,13 +26,14 @@ public static class SaveSystem
     private static void _SaveDataToFile<TSerializableObject>(TSerializableObject serializableObject, string path)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-       
+
 
         //File.Exists ensures that we replace the file if it already exists and don't encounter errors
-        FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
 
-        formatter.Serialize(stream, serializableObject);
-        stream.Close();
+        using (FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
+        {
+            formatter.Serialize(stream, serializableObject);
+        }
 
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
     }
@@ -45,11 +46,12 @@ public static class SaveSystem
         XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
 
         //File.Exists ensures that we replace the file if it already exists and don't encounter errors
-        FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew);
 
-        serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
-
-        stream.Close();
+        using (FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
+        {
+            serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
+        }
+        
 
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
     }

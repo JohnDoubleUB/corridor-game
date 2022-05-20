@@ -8,6 +8,7 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager current;
+    public float SoundVolumeMultiplier = 1;
 
     public delegate void EntityNoiseAlertAction(Vector3 noisePosition, float noiseRadius, NoiseOrigin noiseOrigin = NoiseOrigin.Unspecified);
     public static event EntityNoiseAlertAction OnEntityNoiseAlert;
@@ -91,6 +92,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void SetMasterMusicVolume(float volume) 
+    {
+        if (AmbientTrackMixer != null) AmbientTrackMixer.SetFloat("MasterVolume", volume);
+    }
+
     private void Update()
     {
         if (playFromFirstPersonAudioSource && !FirstPersonPlayerSource.isPlaying)
@@ -131,7 +137,7 @@ public class AudioManager : MonoBehaviour
         aSource.spatialBlend = 0.5f;
         aSource.clip = clip; // define the clip
         aSource.pitch = pitch;
-        aSource.volume = volume;
+        aSource.volume = volume * SoundVolumeMultiplier;
 
         aSource.PlayDelayed(delayInSeconds); // start the sound
         Destroy(tempGO, clip.length + delayInSeconds); // destroy object after clip duration

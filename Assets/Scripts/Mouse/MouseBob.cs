@@ -10,6 +10,9 @@ public class MouseBob : MonoBehaviour
     public bool AllowMouseBob = true;
 
     public AudioSource mouseFootstepSource;
+    private float defaultMouseFootstepVolume;
+    private float volumeMultiplier;
+
     public AudioClip[] mouseWalkingSounds;
 
     float timer = 0;
@@ -19,6 +22,7 @@ public class MouseBob : MonoBehaviour
     void Start()
     {
         defaultPosY = transform.position.y;
+        if (mouseFootstepSource != null) defaultMouseFootstepVolume = mouseFootstepSource.volume;
     }
 
     // Update is called once per frame
@@ -29,10 +33,18 @@ public class MouseBob : MonoBehaviour
             //Player is moving
             timer += Time.deltaTime * walkingBobbingSpeed;
             transform.localPosition = new Vector3(transform.localPosition.x, defaultPosY + Mathf.Sin(timer) * bobbingAmount, transform.localPosition.z);
-            if (!mouseFootstepSource.isPlaying) 
+            if (!mouseFootstepSource.isPlaying)
             {
                 mouseFootstepSource.clip = mouseWalkingSounds[Random.Range(0, mouseWalkingSounds.Length)];
                 mouseFootstepSource.Play();
+            }
+            else 
+            {
+                if (volumeMultiplier != AudioManager.current.SoundVolumeMultiplier) 
+                {
+                    volumeMultiplier = AudioManager.current.SoundVolumeMultiplier;
+                    mouseFootstepSource.volume = defaultMouseFootstepVolume * volumeMultiplier;
+                }
             }
         }
         else

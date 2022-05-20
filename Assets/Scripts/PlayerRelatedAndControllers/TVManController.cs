@@ -200,11 +200,15 @@ public class TVManController : MonoBehaviour
     private bool canEscapeRoom;
     public bool CanEscapeRoom { get { return canEscapeRoom; } }
 
+    private float defaultVolume;
+    private float volumeMultiplier;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         initialTransform = transform.ToTransformElements();
         agent.speed = movementSpeed;
+        defaultVolume = audioSource.volume;
     }
 
 
@@ -218,6 +222,13 @@ public class TVManController : MonoBehaviour
 
     private void Update()
     {
+        //Allow for changing volume
+        if (audioSource.isPlaying && volumeMultiplier != AudioManager.current.SoundVolumeMultiplier) 
+        {
+            volumeMultiplier = AudioManager.current.SoundVolumeMultiplier;
+            audioSource.volume = defaultVolume * volumeMultiplier;
+        }
+
         if (momentoDelayActive)
         {
             if (momentoDelayTimer < delayAfterMomento)
