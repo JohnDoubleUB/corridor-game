@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -116,6 +117,10 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenuObject;
     public Animator pauseUIAnimator;
 
+    public GameObject pauseSettingsObject;
+
+    public Text versionText;
+
     private void Awake()
     {
         if (current != null) Debug.LogWarning("Oops! it looks like there might already be a " + GetType().Name + " in this scene!");
@@ -130,6 +135,8 @@ public class GameManager : MonoBehaviour
         }
 
         if (Time.timeScale != 1) Time.timeScale = 1;
+
+        if (versionText != null) versionText.text = "v" + Application.version + ".";
     }
 
     public void ResetPSXMat()
@@ -175,9 +182,18 @@ public class GameManager : MonoBehaviour
         //pauseMenuCanvas.
         //pauseMenuCanvas.enabled = isPaused;
         pauseMenuObject.SetActive(isPaused);
+        pauseSettingsObject.SetActive(false);
         if (isPaused && pauseUIAnimator != null) pauseUIAnimator.Play("Opening", 0);
         
         //Trigger on pause event here?
+    }
+
+    public void ToggleOptionsMenu() 
+    {
+        if (isPaused) 
+        {
+            pauseSettingsObject.SetActive(!pauseSettingsObject.activeInHierarchy);
+        }
     }
 
     private void TVManEffectUpdate() 

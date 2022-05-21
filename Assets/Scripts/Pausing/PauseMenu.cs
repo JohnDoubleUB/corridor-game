@@ -46,6 +46,11 @@ public class PauseMenu : MonoBehaviour
         CorridorChangeManager.current.SaveGame();
     }
 
+    public void ToggleOptionsMenu() 
+    {
+        GameManager.current.ToggleOptionsMenu();
+    }
+
     public void ToggleUI_Debug()
     {
         GameManager.current.EnableGameUI = !GameManager.current.EnableGameUI;
