@@ -144,6 +144,11 @@ public class GameManager : MonoBehaviour
         playerController.PSXRenderer.ResetMat();
     }
 
+    public void SetPSXResolution(GrungeLevel grungeLevel) 
+    {
+        playerController.PSXRenderer.SetResolution(grungeLevel);
+    }
+
     private void Update()
     {
         if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))

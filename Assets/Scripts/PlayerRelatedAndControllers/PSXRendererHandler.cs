@@ -4,6 +4,9 @@ public class PSXRendererHandler : MonoBehaviour
 {
     [SerializeField]
     private MeshRenderer RenderTexture;
+    [SerializeField]
+    private RenderTexture PSXRenderer;
+
     private Material sharedRenderTextureMaterial;
 
     public float FadeToWhite
@@ -47,6 +50,35 @@ public class PSXRendererHandler : MonoBehaviour
         AlternateTransistion = 0;
         InterferenceAmount = 0;
         FadeToWhite = 0;
+    }
+
+    public void SetResolution(GrungeLevel grungeLevel) 
+    {
+        if (PSXRenderer != null) 
+        {
+            int width;
+            int height;
+
+            if (grungeLevel.UseNative)
+            {
+                width = Screen.currentResolution.width;
+                height = Screen.currentResolution.height;
+            }
+            else 
+            {
+                width = grungeLevel.Width;
+                height = grungeLevel.Height;
+            }
+
+            if (PSXRenderer.width != width || PSXRenderer.height != height) 
+            {
+                PSXRenderer.Release();
+                PSXRenderer.width = width;
+                PSXRenderer.height = height;
+                PSXRenderer.Create();
+            }
+
+        }
     }
 
     private Material GetSharedRenderTextureMaterial()

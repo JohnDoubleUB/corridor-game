@@ -11,15 +11,20 @@ public class CG_GameSettings : MonoBehaviour
     public Slider SoundVolumeSlider;
     public Slider MusicVolumeSlider;
     public Slider LookSensitivitySlider;
+    public Dropdown grungeLevelDropdown;
 
     //ResolutionSettings
     public List<string> resolutionStrings;
     public int currentResolutionIndex;
     Resolution[] resolutions;
 
+    public GrungeLevel[] GrungeLevels;
+
     private string sVolumeSliderPref = "CG_FSoundVolume";
     private string mVolumeSliderPref = "CG_FMusicVolume";
     private string lookSensitivityPref = "CG_FLookSensitivity";
+    private string grungeLevelPref = "CG_IGrungeLevel";
+
 
     private void Start()
     {
@@ -27,6 +32,37 @@ public class CG_GameSettings : MonoBehaviour
         InitializeFullscreenSetting();
         InitializeSoundAndMusicVolumeSetting();
         InitializeLookSensitivitySetting();
+        InitializeGrungeLevelSetting();
+    }
+
+    private void InitializeGrungeLevelSetting() 
+    {
+        //Setup the dropdown options
+        if (grungeLevelDropdown != null) 
+        {
+            List<string> grungeLevelStrings = new List<string>();
+            foreach (GrungeLevel gL in GrungeLevels) 
+            {
+                grungeLevelStrings.Add(gL.Name + " (" + (gL.UseNative ? "Native Resolution" : gL.Width + " x " + gL.Height) + ")");
+            }
+
+            grungeLevelDropdown.ClearOptions();
+            grungeLevelDropdown.AddOptions(grungeLevelStrings);
+
+            if (PlayerPrefs.HasKey(grungeLevelPref))
+            {
+                int grungeLevelSetting = PlayerPrefs.GetInt(grungeLevelPref);
+                grungeLevelDropdown.value = grungeLevelSetting;
+                GameManager.current.SetPSXResolution(GrungeLevels[grungeLevelSetting]);
+            }
+            else 
+            {
+                GameManager.current.SetPSXResolution(GrungeLevels[1]); //This is the default grunge setting
+            }
+
+
+            grungeLevelDropdown.RefreshShownValue();
+        }
     }
 
     private void IntializeResolutionSetting() 
@@ -107,6 +143,11 @@ public class CG_GameSettings : MonoBehaviour
         }
     }
 
+    public void SetGrungeLevel(int grungeLevelIndex) 
+    {
+        GameManager.current.SetPSXResolution(GrungeLevels[grungeLevelIndex]);
+    }
+
     public void SetLookSensitivity(float sensitivity) 
     {
         GameManager.current.playerController.lookSpeed = sensitivity;
@@ -127,7 +168,17 @@ public class CG_GameSettings : MonoBehaviour
         if (SoundVolumeSlider != null) PlayerPrefs.SetFloat(sVolumeSliderPref, SoundVolumeSlider.value);
         if (MusicVolumeSlider != null) PlayerPrefs.SetFloat(mVolumeSliderPref, MusicVolumeSlider.value);
         if (LookSensitivitySlider != null) PlayerPrefs.SetFloat(lookSensitivityPref, LookSensitivitySlider.value);
+        if (grungeLevelDropdown != null) PlayerPrefs.SetInt(grungeLevelPref, grungeLevelDropdown.value);
     }
 
     //Continue this tutorial https://youtu.be/YOaYQrN1oYQ?t=604
+}
+
+[System.Serializable]
+public struct GrungeLevel 
+{
+    public string Name;
+    public int Width;
+    public int Height;
+    public bool UseNative;
 }
