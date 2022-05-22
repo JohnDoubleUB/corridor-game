@@ -409,6 +409,32 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         }
     }
 
+    public void DisplayMousePrompt(bool remainVisible = false) 
+    {
+        if (remainVisible)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "NotebookShift");
+            }
+        }
+        else
+        {
+            StartCoroutine(ShowMousePromptForSecondsCoroutine(2f));
+        }
+
+        IEnumerator ShowMousePromptForSecondsCoroutine(float timeToWait)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "MousePrompt");
+                yield return new WaitForSeconds(timeToWait);
+                UIPromptManager.current.SetVisibilityOfElement(false, "MousePrompt");
+            }
+        }
+    }
+
+
     public void DisplayNotepadPrompt(bool remainVisible = false)
     {
 

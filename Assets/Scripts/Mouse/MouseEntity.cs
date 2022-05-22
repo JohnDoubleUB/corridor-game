@@ -269,6 +269,8 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
         isHeld = true;
+
+        GameManager.current.playerController.DisplayMousePrompt();
     }
 
     private void DestroyAllDebug()
