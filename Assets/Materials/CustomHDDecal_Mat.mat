@@ -295,6 +295,7 @@ Material:
     - _ZTestMode: 8
     - _ZWrite: 1
     m_Colors:
+    - Color_435D6ACA: {r: 0.02, g: 0.02, b: 0.02, a: 0}
     - Vector4_5EC4650B: {r: 0, g: 0, b: 0, a: 0}
     - Vector4_C868D21C: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
