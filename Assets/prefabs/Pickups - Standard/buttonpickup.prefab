@@ -44,7 +44,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.05, y: 0.05, z: 0.017586684}
+  m_Size: {x: 0.1, y: 0.1, z: 0.03517336}
   m_Center: {x: -0.0008945465, y: 0, z: 0.0070804656}
 --- !u!114 &3710080080312790725
 MonoBehaviour:
@@ -66,7 +66,7 @@ MonoBehaviour:
   currentSlot:
     slotContent: {fileID: 0}
   pickupSpeedMultiplier: 2.5
-  pickupScaleMultiplier: 4
+  pickupScaleMultiplier: 3
   pickupSound: {fileID: 8300000, guid: 34d4aa9677c1084418bac20563af9bab, type: 3}
   varyPickupSoundPitch: 0
   pickupSoundVolume: 0.5
@@ -273,6 +273,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7a1934a0ca95bcb4caa074f4515cbf73,
         type: 3}

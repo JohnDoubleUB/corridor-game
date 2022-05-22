@@ -49,6 +49,8 @@ public class NotepadInteractable : InteractableObject
             await Task.Yield();
         }
 
+
+        GameManager.current.playerController.DisplayNotepadPrompt(true);
         Destroy(gameObject);
     }
 }

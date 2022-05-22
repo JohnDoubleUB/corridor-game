@@ -70,12 +70,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public Transform CameraOffsetTransform;
 
     private CharacterController characterController;
-    
-    public Vector3 GetCapsuleColliderCenter 
+
+    public Vector3 GetCapsuleColliderCenter
     {
         get { return characterController.transform.position + characterController.center; }
     }
-    
+
     [HideInInspector]
     public Vector3 moveDirection = Vector3.zero;
     Vector2 rotation = Vector2.zero;
@@ -357,12 +357,12 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             }
 
 
-            if (!isInNotepad && !cutsceneMode && Input.GetButtonDown("Crouch") && ((isCrouching && canUncrouch) || !isCrouching)) 
+            if (!isInNotepad && !cutsceneMode && Input.GetButtonDown("Crouch") && ((isCrouching && canUncrouch) || !isCrouching))
             {
                 ToggleCrouching();
             }
 
-            if (isCrouching && cameraCrouchingAmount != 1 || !isCrouching && cameraCrouchingAmount != 0) 
+            if (isCrouching && cameraCrouchingAmount != 1 || !isCrouching && cameraCrouchingAmount != 0)
             {
                 //TODO: Curve was being used here but there were issues with this not working as intended needs more investigation if we want to use this to make the animation smoother
                 cameraCrouchingAmount = Mathf.Clamp(isCrouching ? cameraCrouchingAmount + Time.deltaTime * crouchingAmount : cameraCrouchingAmount - Time.deltaTime * crouchingAmount, 0, 1);
@@ -379,7 +379,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
         //Tell headbobber we are crouching
         HeadBobber.SetCrouching(isCrouching);
-        
+
         characterController.height = isCrouching ? crouchingColliderHeight : standingColliderHeight;
         characterController.center = isCrouching ? new Vector3(0f, -crouchingColliderHeight * 1.5f, 0f) : Vector3.zero;
         speed = isCrouching ? crouchingMovementSpeed : standingMovementSpeed;
@@ -392,6 +392,8 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
 
     private void ActivateNotepad(bool activate)
     {
+        if (UIPromptManager.current != null) UIPromptManager.current.SetVisibilityOfElements(activate, "NotebookShift", "NotebookMouse");
+
         isInNotepad = activate;
         canMove = !activate;
         canInteract = !activate;
@@ -406,6 +408,33 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
             notepadObject.SaveData();
         }
     }
+
+    public void DisplayNotepadPrompt(bool remainVisible = false)
+    {
+
+        if (remainVisible)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "NotebookShift");
+            }
+        }
+        else
+        {
+            StartCoroutine(ShowNotepadPromptForSecondsCoroutine(2f));
+        }
+
+        IEnumerator ShowNotepadPromptForSecondsCoroutine(float timeToWait)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "NotebookShift");
+                yield return new WaitForSeconds(timeToWait);
+                if (!isInNotepad) UIPromptManager.current.SetVisibilityOfElement(false, "NotebookShift");
+            }
+        }
+    }
+
     private bool GetLookedAtPoint(out Vector3 result)
     {
         Vector3 tempOrigin = playerCamera.transform.position;
