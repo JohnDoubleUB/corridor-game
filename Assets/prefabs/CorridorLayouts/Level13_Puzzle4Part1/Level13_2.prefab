@@ -117,7 +117,7 @@ MonoBehaviour:
   ForceStretch: 0
   ForceWave: 0
   sectionDoor: {fileID: 0}
-  AllowTVMan: 1
+  AllowTVMan: 0
   AllowMouseSpawns: 1
   Props: []
   PuzzleElements: []

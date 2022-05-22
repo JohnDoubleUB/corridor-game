@@ -7,6 +7,7 @@ public class PSXRendererHandler : MonoBehaviour
     [SerializeField]
     private RenderTexture PSXRenderer;
 
+
     private Material sharedRenderTextureMaterial;
 
     public float FadeToWhite

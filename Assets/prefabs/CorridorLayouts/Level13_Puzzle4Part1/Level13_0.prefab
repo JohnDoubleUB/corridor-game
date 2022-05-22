@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7544100642754596094}
   - component: {fileID: 1028531646186853634}
   m_Layer: 0
-  m_Name: Level3_Start_-2
+  m_Name: Level13_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,12 +53,13 @@ MonoBehaviour:
   ForceStretch: 0
   ForceWave: 0
   sectionDoor: {fileID: 0}
-  AllowTVMan: 1
+  AllowTVMan: 0
   AllowMouseSpawns: 1
   Props: []
   PuzzleElements: []
   DecalClueObjects: []
   Pickups: []
+  SpawnableItems: []
 --- !u!1001 &2490920411167244644
 PrefabInstance:
   m_ObjectHideFlags: 0
