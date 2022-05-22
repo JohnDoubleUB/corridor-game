@@ -315,14 +315,26 @@ public class TVManController : MonoBehaviour
         }
     }
 
+    public void UpdatePatrolAndNavMesh() 
+    {
+        if (CurrentBehaviour == TVManBehaviour.Patrolling && !agent.enabled)
+        {
+            UpdateNavAgent();
+            UpdatePatrol();
+        }
+    }
+
     private void BehaviourUpdate()
     {
         switch (CurrentBehaviour)
         {
             case TVManBehaviour.Patrolling:
                 //Patrol behaviour
-                if (!PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false))
+                if (!PercieveNewTargets() && validPatrolPoints != null && MoveTowardPosition(currentTarget.TargetPosition, false)) 
+                {
                     currentTarget = GetNextPatrolPoint(validPatrolPoints, currentTarget.TargetTransform);
+                }
+                    
                 break;
 
             case TVManBehaviour.Alerted:

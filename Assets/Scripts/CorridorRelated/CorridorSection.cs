@@ -149,6 +149,10 @@ public class CorridorSection : MonoBehaviour
         {
             toNotifyOnPlayerEnter.OnPlayerEnter(this);
         }
+        else if (other.gameObject.tag == "TVMan") 
+        {
+            GameManager.current.tvMan.UpdatePatrolAndNavMesh();
+        }
     }
 
     public Vector3[] GetMouseSpawnLocations(int spawnLocations)
