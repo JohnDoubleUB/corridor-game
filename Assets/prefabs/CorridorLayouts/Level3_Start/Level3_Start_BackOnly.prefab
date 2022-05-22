@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3246754453840593341}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.47, z: 1.18}
+  m_LocalPosition: {x: 2.49, y: 1.47, z: 1.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7417460578673980428}
@@ -160,6 +160,7 @@ MonoBehaviour:
   DecalClueObjects:
   - {fileID: 7417460578673980429}
   Pickups: []
+  SpawnableItems: []
 --- !u!1 &5706549758046191577
 GameObject:
   m_ObjectHideFlags: 0
