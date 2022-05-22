@@ -301,9 +301,11 @@ public class CorridorChangeManager : MonoBehaviour
         else return corridorDoorSegments[3];
     }
 
-    private CorridorLayoutHandler CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true)
+    private CorridorLayoutHandler CreateCorridorPrefabForSection(CorridorSection section, Door sectionDoor, int index, bool directionPositive = true, bool initialSetup = false)
     {
         CorridorLayoutHandler layoutGameObj = null;
+
+        bool pieceCanBeDirectional = initialSetup ? section.sectionType != SectionType.Middle : true;
 
         if (OnlyUseRandomAssortedCorridorLayouts && corridorRandomPrefabs.Any())
         {
@@ -311,33 +313,66 @@ public class CorridorChangeManager : MonoBehaviour
         }
         else if (levelCorridorPrefabs != null && levelCorridorPrefabs.Any())
         {
-            if (directionPositive == directionPositiveOnLevelStart || !levelCorridorBackwardPrefabs.Any())
+
+            //NOTE: This is code is not thoroughly tested but should fix the behaviour we were getting in the second puzzle where it can be skipped
+            //direction is the same as the positive direction on level start OR we have backward prefabs#
+            bool playerTraveledForwards = directionPositive == directionPositiveOnLevelStart;
+            
+            if (pieceCanBeDirectional && playerTraveledForwards && levelCorridorForwardPrefabs.Any())
             {
-
-                if(directionPositive == directionPositiveOnLevelStart && levelCorridorForwardPrefabs.Any())//Added forward only layouts
-                {
-                    /*Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
-                    layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Mathf.Abs(sectionForwardCounter) % levelCorridorForwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
-                    sectionForwardCounter++;
-                    sectionBackwardCounter = 0;
-                    section.CorridorNumber = 0;
-                }
-                else
-                {
-                    layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
-                    sectionForwardCounter = 0;
-                    sectionBackwardCounter = 0;
-                }
-
+                //spawn forward only piece
+                layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Mathf.Abs(sectionForwardCounter) % levelCorridorForwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                sectionForwardCounter++;
+                sectionBackwardCounter = 0;
+                section.CorridorNumber = 0;
             }
-            else
+            else if(pieceCanBeDirectional && !playerTraveledForwards && levelCorridorBackwardPrefabs.Any())
             {
-                /*levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
+                //spawn backward only piece
                 layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Mathf.Abs(sectionBackwardCounter) % levelCorridorBackwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
                 sectionBackwardCounter++;
                 sectionForwardCounter = 0;
                 section.CorridorNumber = 0;
             }
+            else 
+            {
+                //spawn normal piece
+                layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+                sectionForwardCounter = 0;
+                sectionBackwardCounter = 0;
+            }
+
+
+
+            //This is the old code incase we need to revert
+
+            //if (directionPositive == directionPositiveOnLevelStart || !levelCorridorBackwardPrefabs.Any())
+            //{
+
+            //    if(directionPositive == directionPositiveOnLevelStart && levelCorridorForwardPrefabs.Any())//Added forward only layouts
+            //    {
+            //        /*Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
+            //        layoutGameObj = Instantiate(levelCorridorForwardPrefabs[Mathf.Abs(sectionForwardCounter) % levelCorridorForwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+            //        sectionForwardCounter++;
+            //        sectionBackwardCounter = 0;
+            //        section.CorridorNumber = 0;
+            //    }
+            //    else
+            //    {
+            //        layoutGameObj = Instantiate(levelCorridorPrefabs[Mathf.Abs(index) % levelCorridorPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+            //        sectionForwardCounter = 0;
+            //        sectionBackwardCounter = 0;
+            //    }
+
+            //}
+            //else
+            //{
+            //    /*levelCorridorBackwardPrefabs[Random.Range(0, levelCorridorBackwardPrefabs.Length)]*/
+            //    layoutGameObj = Instantiate(levelCorridorBackwardPrefabs[Mathf.Abs(sectionBackwardCounter) % levelCorridorBackwardPrefabs.Length], section.corridorProps.transform.position, GameManager.current != null ? GameManager.current.GameParent.transform.rotation : Quaternion.identity, section.corridorProps.transform);
+            //    sectionBackwardCounter++;
+            //    sectionForwardCounter = 0;
+            //    section.CorridorNumber = 0;
+            //}
         }
         if (layoutGameObj != null)
         {
@@ -432,7 +467,7 @@ public class CorridorChangeManager : MonoBehaviour
             if (i == 0) section.sectionType = SectionType.Back;
             else if (i == corridorSections.Count - 1) section.sectionType = SectionType.Front;
 
-            CreateCorridorPrefabForSection(section, InitialMappingsForDoorSegments(i), i);
+            CreateCorridorPrefabForSection(section, InitialMappingsForDoorSegments(i), i, true, true);
         }
     }
 
