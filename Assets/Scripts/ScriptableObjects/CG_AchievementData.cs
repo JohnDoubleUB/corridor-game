@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "AchievementData", menuName = "ScriptableObjects/AchievementDataObject", order = 1)]
 public class CG_AchievementData : ScriptableObject

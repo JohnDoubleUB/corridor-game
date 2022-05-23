@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class SignificantObjectController : PuzzleElementController
+﻿public class SignificantObjectController : PuzzleElementController
 {
     public InteractableObject SignificantInteractable;
     public bool RemoveObjectIfPuzzleSolvedWhenLoaded;

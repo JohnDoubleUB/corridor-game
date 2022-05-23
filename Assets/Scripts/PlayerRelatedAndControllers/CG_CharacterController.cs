@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class CG_CharacterController : MonoBehaviour, IHuntableEntity
