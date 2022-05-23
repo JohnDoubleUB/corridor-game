@@ -740,6 +740,8 @@ public class CorridorChangeManager : MonoBehaviour
         if(!GetCurrentLevelData.EnableTVMan) GameManager.current.tvMan.RemoveFromPlay(); //Makes tvman only despawn if the next level doesn't allow him to be there
         GameManager.current.tvMan.ResetMomentoEffect();
         UpdateLevel();
+        //If the level is set to enable the prompt, do that
+        if (cachedCurrentLevelData.TriggerEnableVisibilityPrompt) GameManager.current.playerController.VisibilityPromptEnabled = true;
         if (cachedCurrentLevelData.IsCheckpoint) 
         {
             if (!cachedCurrentLevelData.CheckPointOnDelay) SaveGame();

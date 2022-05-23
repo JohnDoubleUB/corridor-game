@@ -416,7 +416,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         {
             if (UIPromptManager.current != null)
             {
-                UIPromptManager.current.SetVisibilityOfElement(true, "NotebookShift");
+                UIPromptManager.current.SetVisibilityOfElement(true, "MousePrompt");
             }
         }
         else
@@ -431,6 +431,31 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
                 UIPromptManager.current.SetVisibilityOfElement(true, "MousePrompt");
                 yield return new WaitForSeconds(timeToWait);
                 UIPromptManager.current.SetVisibilityOfElement(false, "MousePrompt");
+            }
+        }
+    }
+
+    public void DisplayCrouchPrompt(bool remainVisible = false)
+    {
+        if (remainVisible)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "CrouchPrompt");
+            }
+        }
+        else
+        {
+            StartCoroutine(ShowCrouchPromptForSecondsCoroutine(2f));
+        }
+
+        IEnumerator ShowCrouchPromptForSecondsCoroutine(float timeToWait)
+        {
+            if (UIPromptManager.current != null)
+            {
+                UIPromptManager.current.SetVisibilityOfElement(true, "CrouchPrompt");
+                yield return new WaitForSeconds(timeToWait);
+                UIPromptManager.current.SetVisibilityOfElement(false, "CrouchPrompt");
             }
         }
     }
