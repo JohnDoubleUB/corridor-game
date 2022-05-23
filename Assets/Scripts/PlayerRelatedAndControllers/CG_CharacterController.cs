@@ -26,6 +26,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
     public bool NotepadPickedUp; //Controls if the notepad can actually be used (if the player has grabbed it in the level)
+    public bool VisibilityPromptEnabled; //Controls if the visibility prompt will be shown
 
     private Vector2 velocity;
     public Vector2 acceleration;
@@ -280,7 +281,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
         UpdateHuntedWalkSpeedModifier();
 
         isIlluminated = candlesInRangeOfPlayer.Any(x => x.IsIlluminatingPlayer);
-        UIHandler.PlayerVisibilityPrompt = !isIlluminated;
+        UIHandler.PlayerVisibilityPrompt = VisibilityPromptEnabled && !isIlluminated;
 
         if (notBeingKilled && !GameManager.current.IsPaused)
         {
@@ -609,6 +610,7 @@ public class CG_CharacterController : MonoBehaviour, IHuntableEntity
     public void LoadSavedPlayerData(PlayerData playerData)
     {
         NotepadPickedUp = playerData.NotepadPickedUp;
+        VisibilityPromptEnabled = playerData.VisibilityPromptEnabled;
     }
 
     private async void LookTowardsTVMan()

@@ -184,8 +184,6 @@ public class GameManager : MonoBehaviour
             Cursor.visible = lastCursorVisibility;
         }
 
-        //pauseMenuCanvas.
-        //pauseMenuCanvas.enabled = isPaused;
         pauseMenuObject.SetActive(isPaused);
         pauseSettingsObject.SetActive(false);
         if (isPaused && pauseUIAnimator != null) pauseUIAnimator.Play("Opening", 0);
