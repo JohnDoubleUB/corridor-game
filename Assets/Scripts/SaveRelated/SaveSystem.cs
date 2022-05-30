@@ -49,19 +49,21 @@ public static class SaveSystem
 
         XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
 
-        using (Stream stream = useEncryption ?
-            _GetEncryptedXMLStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew, CryptoStreamMode.Write) :
-            new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
+        using (Stream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
         {
-            serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
-        }
+            if (useEncryption)
+            {
+                using (Stream encryptedStream = _GetEncryptedXMLStream(stream, CryptoStreamMode.Write)) 
+                {
+                    serializer.Serialize(encryptedStream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
+                }
+            }
+            else 
+            {
+                serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
+            }
 
-        if (useEncryption) 
-        {
-            FileAttributes fileAttrs = File.GetAttributes(path);
-            fileAttrs = RemoveAttribute(fileAttrs, fileAttrs);
-            File.SetAttributes(path, fileAttrs | FileAttributes.Normal);
-            //FileAttributes test444 = File.GetAttributes(path);
+            //serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
         }
 
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
@@ -72,10 +74,8 @@ public static class SaveSystem
         return attributes & ~attributesToRemove;
     }
 
-    private static Stream _GetEncryptedXMLStream(string path, FileMode mode, CryptoStreamMode cryptoStreamMode)
+    private static Stream _GetEncryptedXMLStream(Stream unEncryptedStream, CryptoStreamMode cryptoStreamMode)
     {
-        FileStream fsEncrypted = new FileStream(path, mode);
-
         byte[] encryptionGuidAsBytes = encryptionGuid.ToByteArray();
 
         AesCryptoServiceProvider aes = new AesCryptoServiceProvider()
@@ -84,12 +84,14 @@ public static class SaveSystem
             IV = encryptionGuidAsBytes
         };
 
+
+        ICryptoTransform cryptoTransform = cryptoStreamMode == CryptoStreamMode.Write ? aes.CreateEncryptor() : aes.CreateDecryptor();
+
         CryptoStream cryptoStream = new CryptoStream(
-            fsEncrypted,
-            cryptoStreamMode == CryptoStreamMode.Write ? aes.CreateEncryptor() : aes.CreateDecryptor(),
+            unEncryptedStream,
+            cryptoTransform,
             cryptoStreamMode
             );
-
 
         return cryptoStream; //return to use
     }
@@ -120,7 +122,7 @@ public static class SaveSystem
         //Check if versioning is going to need to match
         bool versioningMustMatch = versioningMustMatchOverride != null && versioningMustMatchOverride.HasValue ? versioningMustMatchOverride.Value : VersioningMustMatch;
 
-        if (File.Exists(path) && ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObjectWithMetaData, useEncryption))
+        if (File.Exists(path) && ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObjectWithMetaData))
         {
             serializableObject = deserializedObjectWithMetaData.SerializedObject;
             return true;
@@ -133,18 +135,38 @@ public static class SaveSystem
         }
 
         //Returns true if the metadata meets the metadata requirements, i.e. matching versions
-        bool ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObject, bool isUsingEncryption)
+        bool ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObject)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
 
             bool success = false;
 
-            using (Stream stream2 = isUsingEncryption ? _GetEncryptedXMLStream(path, FileMode.Open, CryptoStreamMode.Read) : new FileStream(path, FileMode.Open))
+            using (Stream stream = new FileStream(path, FileMode.Open))
             {
                 try
                 {
-                    deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(stream2);
-                    success = versioningMustMatch ? deserializedObject.Version == Application.version : true;
+                    if (useEncryption)
+                    {
+                        try
+                        {
+                            using (Stream encryptedStream = _GetEncryptedXMLStream(stream, CryptoStreamMode.Read))
+                            {
+                                deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(encryptedStream);
+                            }
+
+                            success = versioningMustMatch ? deserializedObject.Version == Application.version : true;
+                        }
+                        catch (Exception e) 
+                        {
+                            Debug.LogWarning("Failed to decrypt file: " + path + ". Could be that this file wasn't encrypted? New File will be created. Error: " + e);
+                            deserializedObject = default(SerializedXmlWithMetaData<TSerializableObject>);
+                        }
+                    }
+                    else 
+                    {
+                        deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(stream);
+                        success = versioningMustMatch ? deserializedObject.Version == Application.version : true;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -160,7 +182,7 @@ public static class SaveSystem
     //Main Game saves
     public static void SaveGame(SaveData saveData)
     {
-        _SaveDataToXMLFile(saveData, SaveLocation);
+        _SaveDataToXMLFile(saveData, SaveLocation, true);
     }
 
     public static SaveData LoadGame()
@@ -171,7 +193,7 @@ public static class SaveSystem
 
     public static bool TryLoadGame(out SaveData savedData)
     {
-        return _TryLoadDataFromXMLFile(SaveLocation, out savedData);
+        return _TryLoadDataFromXMLFile(SaveLocation, out savedData, true, true);
     }
 
     //Notepad saves
@@ -216,7 +238,7 @@ public static class SaveSystem
     public static void SaveAchievementsDictionary(Dictionary<string, bool> achievementsData)
     {
         //_SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
-        _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation, false);
+        _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation, true);
     }
 
     public static Dictionary<string, bool> LoadAchievementsDictionary()
@@ -228,7 +250,7 @@ public static class SaveSystem
     public static bool TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData)
     {
         //bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
-        bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData, true, false);
+        bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData, true, true);
         achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
         return result;
     }
