@@ -581,6 +581,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
 
     public void ThrowAtTarget(Vector3 target, float magnitude, Vector3 forwardVector)
     {
+        AchievementIntegrationManager.current.SetAchievement("ACH_MOUSE_AS_MISSILE");
         mouseRB.isKinematic = false;
         mouseRB.transform.forward = forwardVector;
         mouseRB.LaunchAtTarget(target, Vector3.one * 600, magnitude);
@@ -604,6 +605,7 @@ public class MouseEntity : InteractableObject, IHuntableEntity
         //SetPickedUp(false);
         if (!beingHunted && CurrentBehaviour == MouseBehaviour.BeingKilled) 
         {
+            AchievementIntegrationManager.current.SetAchievement("ACH_MOUSE_MEAL");
             Destroy(gameObject); 
         }
         CurrentBehaviour = beingHunted ? MouseBehaviour.ChasedByTVMan : MouseBehaviour.Idle;
