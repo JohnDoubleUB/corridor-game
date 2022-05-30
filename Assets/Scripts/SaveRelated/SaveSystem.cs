@@ -237,7 +237,6 @@ public static class SaveSystem
     //Achievement saving V2
     public static void SaveAchievementsDictionary(Dictionary<string, bool> achievementsData)
     {
-        //_SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
         _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation, true);
     }
 
@@ -249,7 +248,6 @@ public static class SaveSystem
 
     public static bool TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData)
     {
-        //bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
         bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData, true, true);
         achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
         return result;
