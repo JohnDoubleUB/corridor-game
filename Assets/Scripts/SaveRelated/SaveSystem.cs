@@ -69,11 +69,6 @@ public static class SaveSystem
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
     }
 
-    private static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
-    {
-        return attributes & ~attributesToRemove;
-    }
-
     private static Stream _GetEncryptedXMLStream(Stream unEncryptedStream, CryptoStreamMode cryptoStreamMode)
     {
         byte[] encryptionGuidAsBytes = encryptionGuid.ToByteArray();
