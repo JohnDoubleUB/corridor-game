@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
@@ -17,6 +20,8 @@ public static class SaveSystem
     public static string AchievementSaveName = "Achievements";
     public static bool VersioningMustMatch = true;
     public static bool PrefixAllXml = false;
+    private static Guid encryptionGuid = Guid.Parse("ed1708258c5c43b688afc1aa926d5189");
+
 
     private static string SaveLocation => Application.persistentDataPath + "/" + SaveName + "." + SaveExtension;
     private static string NotepadSaveLocation => Application.persistentDataPath + "/" + SaveName + "." + NoteSaveExtension;
@@ -38,22 +43,55 @@ public static class SaveSystem
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
     }
 
-    private static void _SaveDataToXMLFile<TSerializableObject>(TSerializableObject serializableObject, string path)
+    private static void _SaveDataToXMLFile<TSerializableObject>(TSerializableObject serializableObject, string path, bool useEncryption = false)
     {
-        if(PrefixAllXml) path += ".xml";
+        if (PrefixAllXml) path += ".xml";
 
-        //XmlSerializer serializer = new XmlSerializer(typeof(TSerializableObject));
         XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
 
-        //File.Exists ensures that we replace the file if it already exists and don't encounter errors
-
-        using (FileStream stream = new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
+        using (Stream stream = useEncryption ?
+            _GetEncryptedXMLStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew, CryptoStreamMode.Write) :
+            new FileStream(path, File.Exists(path) ? FileMode.Create : FileMode.CreateNew))
         {
             serializer.Serialize(stream, new SerializedXmlWithMetaData<TSerializableObject>(serializableObject));
         }
-        
+
+        if (useEncryption) 
+        {
+            FileAttributes fileAttrs = File.GetAttributes(path);
+            fileAttrs = RemoveAttribute(fileAttrs, fileAttrs);
+            File.SetAttributes(path, fileAttrs | FileAttributes.Normal);
+            //FileAttributes test444 = File.GetAttributes(path);
+        }
 
         Debug.Log(serializableObject.GetType().ToString() + " File saved: " + path);
+    }
+
+    private static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
+    {
+        return attributes & ~attributesToRemove;
+    }
+
+    private static Stream _GetEncryptedXMLStream(string path, FileMode mode, CryptoStreamMode cryptoStreamMode)
+    {
+        FileStream fsEncrypted = new FileStream(path, mode);
+
+        byte[] encryptionGuidAsBytes = encryptionGuid.ToByteArray();
+
+        AesCryptoServiceProvider aes = new AesCryptoServiceProvider()
+        {
+            Key = encryptionGuidAsBytes,
+            IV = encryptionGuidAsBytes
+        };
+
+        CryptoStream cryptoStream = new CryptoStream(
+            fsEncrypted,
+            cryptoStreamMode == CryptoStreamMode.Write ? aes.CreateEncryptor() : aes.CreateDecryptor(),
+            cryptoStreamMode
+            );
+
+
+        return cryptoStream; //return to use
     }
 
     private static bool _TryLoadDataFromFile<TSerializableObject>(string path, out TSerializableObject serializableObject)
@@ -75,14 +113,14 @@ public static class SaveSystem
         }
     }
 
-    private static bool _TryLoadDataFromXMLFile<TSerializableObject>(string path, out TSerializableObject serializableObject, bool? versioningMustMatchOverride = null)
+    private static bool _TryLoadDataFromXMLFile<TSerializableObject>(string path, out TSerializableObject serializableObject, bool? versioningMustMatchOverride = null, bool useEncryption = false)
     {
-        if(PrefixAllXml) path += ".xml";
+        if (PrefixAllXml) path += ".xml";
 
         //Check if versioning is going to need to match
         bool versioningMustMatch = versioningMustMatchOverride != null && versioningMustMatchOverride.HasValue ? versioningMustMatchOverride.Value : VersioningMustMatch;
 
-        if (File.Exists(path) && ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObjectWithMetaData))
+        if (File.Exists(path) && ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObjectWithMetaData, useEncryption))
         {
             serializableObject = deserializedObjectWithMetaData.SerializedObject;
             return true;
@@ -95,24 +133,27 @@ public static class SaveSystem
         }
 
         //Returns true if the metadata meets the metadata requirements, i.e. matching versions
-        bool ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObject) 
+        bool ReadValidObjectWithMetaData(out SerializedXmlWithMetaData<TSerializableObject> deserializedObject, bool isUsingEncryption)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(SerializedXmlWithMetaData<TSerializableObject>));
-            FileStream stream = new FileStream(path, FileMode.Open);
 
-            try
+            bool success = false;
+
+            using (Stream stream2 = isUsingEncryption ? _GetEncryptedXMLStream(path, FileMode.Open, CryptoStreamMode.Read) : new FileStream(path, FileMode.Open))
             {
-                deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(stream);
-                stream.Close();
-                return versioningMustMatch ? deserializedObject.Version == Application.version : true;
+                try
+                {
+                    deserializedObject = (SerializedXmlWithMetaData<TSerializableObject>)serializer.Deserialize(stream2);
+                    success = versioningMustMatch ? deserializedObject.Version == Application.version : true;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning("Failed to Deserialize file: " + path + " but exception was handled, Invalid XML, could be an old save file?, Error: " + e);
+                    deserializedObject = default(SerializedXmlWithMetaData<TSerializableObject>);
+                }
             }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("Failed to Deserialize file: " + path + " but exception was handled, Invalid XML, could be an old save file?, Error: " + e);
-                deserializedObject = default(SerializedXmlWithMetaData<TSerializableObject>);
-                stream.Close();
-                return false;
-            }
+
+            return success;
         }
     }
 
@@ -175,7 +216,7 @@ public static class SaveSystem
     public static void SaveAchievementsDictionary(Dictionary<string, bool> achievementsData)
     {
         //_SaveDataToFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
-        _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation);
+        _SaveDataToXMLFile(new SerializableDictionary<string, bool>(achievementsData), AchievementSaveLocation, false);
     }
 
     public static Dictionary<string, bool> LoadAchievementsDictionary()
@@ -187,7 +228,7 @@ public static class SaveSystem
     public static bool TryLoadAchievementsDictionary(out Dictionary<string, bool> achievementsData)
     {
         //bool result = _TryLoadDataFromFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
-        bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData);
+        bool result = _TryLoadDataFromXMLFile(AchievementSaveLocation, out SerializableDictionary<string, bool> serializedAchievementsData, true, false);
         achievementsData = result && serializedAchievementsData != null ? serializedAchievementsData.Deserialize() : null;
         return result;
     }
@@ -199,12 +240,12 @@ public enum GameLoadType
     Existing
 }
 
-public struct SerializedXmlWithMetaData<TSerializableObject> 
+public struct SerializedXmlWithMetaData<TSerializableObject>
 {
     public string Version;
     public TSerializableObject SerializedObject;
 
-    public SerializedXmlWithMetaData(TSerializableObject SerializedObject) 
+    public SerializedXmlWithMetaData(TSerializableObject SerializedObject)
     {
         this.SerializedObject = SerializedObject;
         Version = Application.version;

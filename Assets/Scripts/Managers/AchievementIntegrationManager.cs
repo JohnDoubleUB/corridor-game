@@ -108,6 +108,13 @@ public class AchievementIntegrationManager : SteamIntegrationManager
         SaveAchievementsLocally();
     }
 
+
+    private new void OnDisable() 
+    {
+        base.OnDisable();
+        SaveAchievementsLocally();
+    }
+
     //private void Start()
     //{
     //    SetAchievement("ACH_WIN_ONE_GAME", false);
