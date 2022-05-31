@@ -20,13 +20,17 @@ namespace DebugStuff
         void OnDisable()
         {
             Application.logMessageReceived -= Log;
-            TestingData.SessionLogs.Add(myLog);
-            TestingData.SessionQuitCount++;
-            TestingData.CorridorPieceLog.Add("[SESSION_END]");
-            TestingData.SessionLogs.Add("[SESSION_END]");
-            if (EnableDebugLogs) SaveSystem.SaveTestingData(TestingData);
+
+            if (EnableDebugLogs) 
+            {
+                TestingData.SessionLogs.Add(myLog);
+                TestingData.SessionQuitCount++;
+                TestingData.CorridorPieceLog.Add("[SESSION_END]");
+                TestingData.SessionLogs.Add("[SESSION_END]");
+                SaveSystem.SaveTestingData(TestingData); 
+            }
         }
-        void Update() { if (Input.GetKeyDown(KeyCode.BackQuote)) { doShow = !doShow; } }
+        void Update() { if (EnableDebugLogs && Input.GetKeyDown(KeyCode.BackQuote)) { doShow = !doShow; } }
 
         private void Awake()
         {

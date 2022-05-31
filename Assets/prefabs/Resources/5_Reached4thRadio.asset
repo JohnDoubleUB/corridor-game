@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 5_Reached4thRadio
   m_EditorClassIdentifier: 
   EnabledTracks:
-    Track0: 0
+    Track0: 1
     Track1: 1
     Track2: 1
     Track3: 1

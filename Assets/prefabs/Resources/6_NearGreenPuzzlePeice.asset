@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 6_NearGreenPuzzlePeice
   m_EditorClassIdentifier: 
   EnabledTracks:
-    Track0: 0
-    Track1: 0
-    Track2: 0
+    Track0: 1
+    Track1: 1
+    Track2: 1
     Track3: 1
     Track4: 0
     Track5: 0
