@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Identifier: ACH_MOUSE_MEAL
   NiceName: Mouse Meal
-  UnlockedImage: {fileID: 21300000, guid: 531d3e431223b6c4dacdcd48ed1c104d, type: 3}
-  LockedImage: {fileID: 21300000, guid: 0bf8ecb2765ae5448b659f015d1f15fc, type: 3}
+  UnlockedImage: {fileID: 21300000, guid: 2fe1e5dbb4eb1224fa59ce64dca6e365, type: 3}
+  LockedImage: {fileID: 21300000, guid: 6760eaa234a29d54890c1f8a38c9f5b2, type: 3}
   Description: Get a mouse to be eaten by the most hostile inhabitant of the corridor.
