@@ -31,7 +31,7 @@ MonoBehaviour:
     - PartNo: 2
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: de699641238e2e14cb6dfcb086a14756, type: 3}
-        Subtitles: Leading scientist at the Institute of Modern Technology in Cambridge,
+        Subtitles: A leading scientist at the Institute of Modern Technology in Cambridge,
           Dr Joan Robinson, has published a paper on extra-dimensional leaps,
         ConversationNo: 1
         PartNo: 2
@@ -39,8 +39,8 @@ MonoBehaviour:
     - PartNo: 3
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: ed0d3adb268e8c84cbb10ffc2c32c879, type: 3}
-        Subtitles: 'putting forward theory that travel of distances outside of our
-          known universe are possible within the rules of modern physics. '
+        Subtitles: putting forward theory that travel of distances outside of our
+          known universe is possible within the rules of modern physics.
         ConversationNo: 1
         PartNo: 3
         SubtitleColour: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 3d5ed18f96b394246975dae0e6a6377d, type: 3}
         Subtitles: "The 27-year-old by the name of Harold Brown was found hanged
-          in what police are describing as a \u201Ccut and dry suicide\u201D."
+          in what police are describing as a \u201Ccut and dried suicide\u201D."
         ConversationNo: 2
         PartNo: 2
         SubtitleColour: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
     - PartNo: 5
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 5efc9039410221e4b8ed3d84aa3b6cd2, type: 3}
-        Subtitles: That would be the HCC Corporation, John.
+        Subtitles: That would be HCC, John.
         ConversationNo: 5
         PartNo: 5
         SubtitleColour: 1
@@ -181,7 +181,7 @@ MonoBehaviour:
     - PartNo: 7
       Dialogues:
       - DialogueAudio: {fileID: 8300000, guid: 4078b03c01509c74aae088ccf109ee96, type: 3}
-        Subtitles: That would also be the HCC Corporation, John!
+        Subtitles: That would also be HCC, John!
         ConversationNo: 5
         PartNo: 7
         SubtitleColour: 1
