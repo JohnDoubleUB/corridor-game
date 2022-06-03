@@ -1061,8 +1061,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EventTag: Track_PlayAllTracks
-  TrackState: {fileID: 11400000, guid: 7a0f106ec40cc564fb5fa30c7f16fdd0, type: 2}
-  OnlyTriggerOnce: 1
+  TrackState: {fileID: 11400000, guid: b49c6b1498502174e91051410defca9c, type: 2}
+  OnlyTriggerOnce: 0
 --- !u!1001 &2182428913145362376
 PrefabInstance:
   m_ObjectHideFlags: 0

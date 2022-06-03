@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eaafad63f43a534b89f84749d8a2962, type: 3}
-  m_Name: 10_Final
+  m_Name: 11_PostCredit
   m_EditorClassIdentifier: 
   EnabledTracks:
     Track0: 1
@@ -18,4 +18,4 @@ MonoBehaviour:
     Track2: 1
     Track3: 1
     Track4: 1
-    Track5: 0
+    Track5: 1
