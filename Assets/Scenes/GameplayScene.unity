@@ -2786,7 +2786,7 @@ MonoBehaviour:
     Width: 320
     Height: 180
     UseNative: 0
-  - Name: Reccomended
+  - Name: Recommended
     Width: 640
     Height: 360
     UseNative: 0
@@ -7292,6 +7292,7 @@ GameObject:
   - component: {fileID: 1003507465}
   - component: {fileID: 1003507467}
   - component: {fileID: 1003507466}
+  - component: {fileID: 1003507468}
   m_Layer: 5
   m_Name: OptionsMenu
   m_TagString: Untagged
@@ -7356,6 +7357,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1003507464}
   m_CullTransparentMesh: 0
+--- !u!114 &1003507468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003507464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dfe0162850c62a4a912c98e15c5576c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameSettingsSaveRequired: 0
+  gameSettings: {fileID: 350896592}
 --- !u!1 &1007264641
 GameObject:
   m_ObjectHideFlags: 0

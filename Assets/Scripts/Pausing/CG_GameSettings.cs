@@ -211,17 +211,17 @@ public class CG_GameSettings : MonoBehaviour
         GameManager.current.playerController.lookSpeed = sensitivity;
     }
 
-    private void OnApplicationQuit()
-    {
-        StoreSettings();
-    }
+    //private void OnApplicationQuit()
+    //{
+    //    StoreSettings();
+    //}
 
-    private void OnDisable()
-    {
-        StoreSettings();
-    }
+    //private void OnDisable()
+    //{
+    //    StoreSettings();
+    //}
 
-    private void StoreSettings() 
+    public void StoreSettings() 
     {
         if (SoundVolumeSlider != null) PlayerPrefs.SetFloat(sVolumeSliderPref, SoundVolumeSlider.value);
         if (MusicVolumeSlider != null) PlayerPrefs.SetFloat(mVolumeSliderPref, MusicVolumeSlider.value);
