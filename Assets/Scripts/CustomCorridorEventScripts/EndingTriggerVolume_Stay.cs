@@ -7,7 +7,7 @@ public class EndingTriggerVolume_Stay : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             AchievementIntegrationManager.current.SetAchievement("ACH_STAY");
-            CorridorChangeManager.current.SaveGameOnLevel(20, new EnabledMusicTracks().AssignAllTracksAs(true));
+            CorridorChangeManager.current.SaveGameOnLevel(20);
             GameManager.current.RestartCurrentScene();
         }
     }

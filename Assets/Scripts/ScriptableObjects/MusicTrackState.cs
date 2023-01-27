@@ -7,7 +7,7 @@ public class MusicTrackState : ScriptableObject
 }
 
 [System.Serializable]
-public class EnabledMusicTracks //TODO: does this need to be a class?
+public struct EnabledMusicTracks //TODO: does this need to be a class?
 {
     public bool Track0, Track1, Track2, Track3, Track4, Track5;
 
@@ -38,22 +38,6 @@ public class EnabledMusicTracks //TODO: does this need to be a class?
         //{
         //    trackList[i] = enabledTracks[i];
         //}
-    }
-
-    public EnabledMusicTracks() 
-    {
-    }
-
-    public EnabledMusicTracks AssignAllTracksAs(bool enabled) 
-    {
-        Track0 = enabled;
-        Track1 = enabled;
-        Track2 = enabled;
-        Track3 = enabled;
-        Track4 = enabled;
-        Track5 = enabled;
-
-        return this;
     }
 
     private void AssignAllTracks() 

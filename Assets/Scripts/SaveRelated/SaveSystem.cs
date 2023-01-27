@@ -18,7 +18,7 @@ public static class SaveSystem
     public static string SaveName = "PlayerData";
     public static string DebugSaveName = "DebugData";
     public static string AchievementSaveName = "Achievements";
-    public static bool VersioningMustMatch = false;
+    public static bool VersioningMustMatch = true;
     public static bool PrefixAllXml = false;
     private static Guid encryptionGuid = Guid.Parse("ed1708258c5c43b688afc1aa926d5189");
 

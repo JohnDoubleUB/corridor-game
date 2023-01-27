@@ -10,17 +10,11 @@ public class CG_GameSettings : MonoBehaviour
     public Slider MusicVolumeSlider;
     public Slider LookSensitivitySlider;
     public Dropdown grungeLevelDropdown;
-    public Dropdown targetFPSDropdown;
-    public Toggle vSyncToggle;
 
     //ResolutionSettings
     public List<string> resolutionStrings;
     public int currentResolutionIndex;
     Resolution[] resolutions;
-
-    //Framerate settings
-    [SerializeField]
-    private int[] allowedFramerates;
 
     public GrungeLevel[] GrungeLevels;
 
@@ -28,8 +22,7 @@ public class CG_GameSettings : MonoBehaviour
     private string mVolumeSliderPref = "CG_FMusicVolume";
     private string lookSensitivityPref = "CG_FLookSensitivity";
     private string grungeLevelPref = "CG_IGrungeLevel";
-    private string targetFrameRatePref = "CG_ITargetFrameRate";
-    private string vSyncPref = "CG_BVSync";
+
 
     private void Start()
     {
@@ -38,11 +31,7 @@ public class CG_GameSettings : MonoBehaviour
         InitializeSoundAndMusicVolumeSetting();
         InitializeLookSensitivitySetting();
         InitializeGrungeLevelSetting();
-        InitializeVSyncSetting();
-        IntializeTargetFramerateSetting();
     }
-
-
 
     private void InitializeGrungeLevelSetting() 
     {
@@ -100,42 +89,6 @@ public class CG_GameSettings : MonoBehaviour
         if (fullscreenToggle != null) fullscreenToggle.isOn = Screen.fullScreen;
     }
 
-    private void InitializeVSyncSetting() 
-    {
-        if (PlayerPrefs.HasKey(vSyncPref)) QualitySettings.vSyncCount = PlayerPrefs.GetInt(vSyncPref);
-        if (vSyncToggle != null) vSyncToggle.isOn = QualitySettings.vSyncCount > 0;
-    }
-
-    private void IntializeTargetFramerateSetting() 
-    {
-        //Setup the dropdown options
-        if (targetFPSDropdown != null)
-        {
-            List<string> framerateSettings = new List<string>();
-            foreach (int aF in allowedFramerates)
-            {
-                framerateSettings.Add(aF.ToString());
-            }
-
-            targetFPSDropdown.ClearOptions();
-            targetFPSDropdown.AddOptions(framerateSettings);
-
-            if (PlayerPrefs.HasKey(targetFrameRatePref))
-            {
-                int frameRateSetting = PlayerPrefs.GetInt(targetFrameRatePref);
-                targetFPSDropdown.value = frameRateSetting;
-                Application.targetFrameRate = allowedFramerates[frameRateSetting];
-            }
-            else
-            {
-                Application.targetFrameRate = allowedFramerates[0]; //This is the default grunge setting
-            }
-
-
-            targetFPSDropdown.RefreshShownValue();
-        }
-    }
-
     private void InitializeSoundAndMusicVolumeSetting() 
     {
         if (PlayerPrefs.HasKey(sVolumeSliderPref)) 
@@ -178,16 +131,6 @@ public class CG_GameSettings : MonoBehaviour
         Screen.fullScreen = isFullscreen;
     }
 
-    public void SetVSync(bool isOn) 
-    {
-        QualitySettings.vSyncCount = isOn ? 1 : 0;
-    }
-
-    public void SetTargetFramerate(int framerateIndex) 
-    {
-        Application.targetFrameRate = allowedFramerates[framerateIndex];
-    }
-
     public void SetResolution(int resolutionIndex)
     {
         Resolution newResolution = resolutions[resolutionIndex];
@@ -224,8 +167,6 @@ public class CG_GameSettings : MonoBehaviour
         if (MusicVolumeSlider != null) PlayerPrefs.SetFloat(mVolumeSliderPref, MusicVolumeSlider.value);
         if (LookSensitivitySlider != null) PlayerPrefs.SetFloat(lookSensitivityPref, LookSensitivitySlider.value);
         if (grungeLevelDropdown != null) PlayerPrefs.SetInt(grungeLevelPref, grungeLevelDropdown.value);
-        if (targetFPSDropdown != null) PlayerPrefs.SetInt(targetFrameRatePref, targetFPSDropdown.value);
-        if (vSyncToggle != null) PlayerPrefs.SetInt(vSyncPref, vSyncToggle.isOn ? 1 : 0);
     }
 
     //Continue this tutorial https://youtu.be/YOaYQrN1oYQ?t=604

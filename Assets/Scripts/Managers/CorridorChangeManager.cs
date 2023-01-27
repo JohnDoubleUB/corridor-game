@@ -220,12 +220,6 @@ public class CorridorChangeManager : MonoBehaviour
         OnSaveGame?.Invoke();
     }
 
-    public void SaveGameOnLevel(int level, EnabledMusicTracks trackSetting)
-    {
-        SaveSystem.SaveGame(new SaveData(loadedLevels, new PlayerData(GameManager.current.playerController), new InventoryData(InventoryManager.current), new TVManData(GameManager.current.tvMan), AudioManager.current.ActiveTracks, eventTags, level));
-        OnSaveGame?.Invoke();
-    }
-
     public void CreateNewSave() 
     {
         SaveSystem.SaveGame(new SaveData(Levels.Select(x => (LevelData_Loaded)x).ToList(), null, null, null, AudioManager.current.ActiveTracks, new List<string>(), 1));
