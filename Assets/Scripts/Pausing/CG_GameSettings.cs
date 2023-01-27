@@ -57,6 +57,7 @@ public class CG_GameSettings : MonoBehaviour
 
             grungeLevelDropdown.ClearOptions();
             grungeLevelDropdown.AddOptions(grungeLevelStrings);
+            grungeLevelDropdown.value = 1; //Set value as it gets zero'd after clearing all the options from the dropdown 
 
             if (PlayerPrefs.HasKey(grungeLevelPref))
             {
@@ -83,7 +84,9 @@ public class CG_GameSettings : MonoBehaviour
         {
             string newResolutionText = resolutions[i].width + " x " + resolutions[i].height + " ~ " + resolutions[i].refreshRate + "Hz";
             resolutionStrings.Add(newResolutionText);
-            if (resolutions[i].height == Screen.currentResolution.height && resolutions[i].width == Screen.width && resolutions[i].refreshRate == Screen.currentResolution.refreshRate) currentResolutionIndex = i;
+            
+            if (resolutions[i].height == Screen.currentResolution.height && resolutions[i].width == Screen.width && resolutions[i].refreshRate == Screen.currentResolution.refreshRate) 
+                currentResolutionIndex = i;
         }
 
         if (resolutionDropdown != null)

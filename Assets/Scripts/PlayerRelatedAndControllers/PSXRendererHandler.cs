@@ -55,7 +55,7 @@ public class PSXRendererHandler : MonoBehaviour
 
     public void SetResolution(GrungeLevel grungeLevel) 
     {
-        if (PSXRenderer != null) 
+        if (PSXRenderer != null)
         {
             int width;
             int height;
@@ -65,13 +65,13 @@ public class PSXRendererHandler : MonoBehaviour
                 width = Screen.currentResolution.width;
                 height = Screen.currentResolution.height;
             }
-            else 
+            else
             {
                 width = grungeLevel.Width;
                 height = grungeLevel.Height;
             }
 
-            if (PSXRenderer.width != width || PSXRenderer.height != height) 
+            if (PSXRenderer.width != width || PSXRenderer.height != height)
             {
                 PSXRenderer.Release();
                 PSXRenderer.width = width;
