@@ -131,7 +131,8 @@ public class CG_GameSettings : MonoBehaviour
             }
             else
             {
-                Application.targetFrameRate = allowedFramerates[0]; //This is the default grunge setting
+                targetFPSDropdown.value = 1; //Set default (option 2 which is 60)
+                Application.targetFrameRate = allowedFramerates[1]; //This is the default resolution setting
             }
 
 
