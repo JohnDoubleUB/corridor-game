@@ -10698,7 +10698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9878bc455ba6e0418b62a81d79eed83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnableSteamIntegration: 0
+  EnableSteamIntegration: 1
   AppId: 1981590
   UseTestAppId: 0
   CGAchievementData:
