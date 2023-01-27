@@ -61,7 +61,7 @@ public class CG_GameSettings : MonoBehaviour
 
             if (PlayerPrefs.HasKey(grungeLevelPref))
             {
-                int grungeLevelSetting = PlayerPrefs.GetInt(grungeLevelPref);
+                int grungeLevelSetting = Mathf.Max(1, PlayerPrefs.GetInt(grungeLevelPref));
                 grungeLevelDropdown.value = grungeLevelSetting;
                 GameManager.current.SetPSXResolution(GrungeLevels[grungeLevelSetting]);
             }
@@ -226,7 +226,7 @@ public class CG_GameSettings : MonoBehaviour
         if (SoundVolumeSlider != null) PlayerPrefs.SetFloat(sVolumeSliderPref, SoundVolumeSlider.value);
         if (MusicVolumeSlider != null) PlayerPrefs.SetFloat(mVolumeSliderPref, MusicVolumeSlider.value);
         if (LookSensitivitySlider != null) PlayerPrefs.SetFloat(lookSensitivityPref, LookSensitivitySlider.value);
-        if (grungeLevelDropdown != null) PlayerPrefs.SetInt(grungeLevelPref, grungeLevelDropdown.value);
+        if (grungeLevelDropdown != null) PlayerPrefs.SetInt(grungeLevelPref, Mathf.Max(1, grungeLevelDropdown.value));
         if (targetFPSDropdown != null) PlayerPrefs.SetInt(targetFrameRatePref, targetFPSDropdown.value);
         if (vSyncToggle != null) PlayerPrefs.SetInt(vSyncPref, vSyncToggle.isOn ? 1 : 0);
     }
